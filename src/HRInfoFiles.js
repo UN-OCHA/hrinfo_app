@@ -1,0 +1,263 @@
+import React from 'react';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
+class HRInfoFiles extends React.Component {
+    constructor(props) {
+      super(props);
+      this.languages = [
+        {value: 'aa', label: 'Afar' },
+        {value: 'ab', label: 'Abkhazian' },
+        {value: 'ae', label: 'Avestan'},
+        {value: 'af', label: 'Afrikaans'},
+        {value: 'ak', label: 'Akan'},
+        {value: 'am', label: 'Amharic'},
+        {value: 'ar', label: 'Arabic'},
+        {value: 'as', label: 'Assamese'},
+        {value: 'ast', label: 'Asturian'},
+        {value: 'av', label: 'Avar'},
+        {value: 'ay', label: 'Aymara'},
+        {value: 'az', label: 'Azerbaijani'},
+        {value: 'ba', label: 'Bashkir'},
+        {value: 'be', label: 'Belarusian' },
+        {value: 'bg', label: 'Bulgarian' },
+        {value: 'bh', label: 'Bihari' },
+        {value: 'bi', label: 'Bislama' },
+        {value: 'bm', label: 'Bambara' },
+        {value: 'bn', label: 'Bengali' },
+        {value: 'bo', label: 'Tibetan' },
+        {value: 'br', label: 'Breton' },
+        {value: 'bs', label: 'Bosnian' },
+        {value: 'ca', label: 'Catalan' },
+        {value: 'ce', label: 'Chechen' },
+        {value: 'ch', label: 'Chamorro' },
+        {value: 'co', label: 'Corsican' },
+        {value: 'cr', label: 'Cree' },
+        {value: 'cs', label: 'Czech' },
+        {value: 'cu', label: 'Old Slavonic' },
+        {value: 'cv', label: 'Chuvash' },
+        {value: 'cy', label: 'Welsh' },
+        {value: 'da', label: 'Danish' },
+        {value: 'de', label: 'German' },
+        {value: 'dv', label: 'Maldivian' },
+        {value: 'dz', label: 'Bhutani' },
+        {value: 'ee', label: 'Ewe' },
+        {value: 'el', label: 'Greek' },
+        {value: 'en', label: 'English' },
+        {value: 'en-gb', label: 'English, British' },
+        {value: 'eo', label: 'Esperanto' },
+        {value: 'es', label: 'Spanish' },
+        {value: 'et', label: 'Estonian' },
+        {value: 'eu', label: 'Basque' },
+        {value: 'fa', label: 'Persian' },
+        {value: 'ff', label: 'Fulah' },
+        {value: 'fi', label: 'Finnish' },
+        {value: 'fil', label: 'Filipino' },
+        {value: 'fj', label: 'Fiji' },
+        {value: 'fo', label: 'Faeroese' },
+        {value: 'fr', label: 'French' },
+        {value: 'fy', label: 'Frisian' },
+        {value: 'ga', label: 'Irish' },
+        {value: 'gd', label: 'Scots Gaelic' },
+        {value: 'gl', label: 'Galician' },
+        {value: 'gn', label: 'Guarani' },
+        {value: 'gsw-berne', label: 'Swiss German' },
+        {value: 'gu', label: 'Gujarati' },
+        {value: 'gv', label: 'Manx' },
+        {value: 'ha', label: 'Hausa' },
+        {value: 'he', label: 'Hebrew' },
+        {value: 'hi', label: 'Hindi' },
+        {value: 'ho', label: 'Hiri Motu' },
+        {value: 'hr', label: 'Croatian' },
+        {value: 'ht', label: 'Haitian Creole' },
+        {value: 'hu', label: 'Hungarian' },
+        {value: 'hy', label: 'Armenian' },
+        {value: 'hz', label: 'Herero' },
+        {value: 'ia', label: 'Interlingua' },
+        {value: 'id', label: 'Indonesian' },
+        {value: 'ie', label: 'Interlingue' },
+        {value: 'ig', label: 'Igbo' },
+        {value: 'ik', label: 'Inupiak' },
+        {value: 'is', label: 'Icelandic' },
+        {value: 'it', label: 'Italian' },
+        {value: 'iu', label: 'Inuktitut' },
+        {value: 'ja', label: 'Japanese' },
+        {value: 'jv', label: 'Javanese' },
+        {value: 'ka', label: 'Georgian' },
+        {value: 'kg', label: 'Kongo' },
+        {value: 'ki', label: 'Kikuyu' },
+        {value: 'kj', label: 'Kwanyama' },
+        {value: 'kk', label: 'Kazakh' },
+        {value: 'kl', label: 'Greenlandic' },
+        {value: 'km', label: 'Cambodian' },
+        {value: 'kn', label: 'Kannada' },
+        {value: 'ko', label: 'Korean' },
+        {value: 'kr', label: 'Kanuri' },
+        {value: 'ks', label: 'Kashmiri' },
+        {value: 'ku', label: 'Kurdish' },
+        {value: 'kv', label: 'Komi' },
+        {value: 'kw', label: 'Cornish' },
+        {value: 'ky', label: 'Kyrgyz' },
+        {value: 'la', label: 'Latin' },
+        {value: 'lb', label: 'Luxembourgish' },
+        {value: 'lg', label: 'Luganda' },
+        {value: 'ln', label: 'Lingala' },
+        {value: 'lo', label: 'Laothian' },
+        {value: 'lt', label: 'Lithuanian' },
+        {value: 'lv', label: 'Latvian' },
+        {value: 'mg', label: 'Malagasy' },
+        {value: 'mh', label: 'Marshallese' },
+        {value: 'mi', label: 'Māori' },
+        {value: 'mk', label: 'Macedonian' },
+        {value: 'ml', label: 'Malayalam' },
+        {value: 'mn', label: 'Mongolian' },
+        {value: 'mo', label: 'Moldavian' },
+        {value: 'mr', label: 'Marathi' },
+        {value: 'ms', label: 'Malay' },
+        {value: 'mt', label: 'Maltese' },
+        {value: 'my', label: 'Burmese' },
+        {value: 'na', label: 'Nauru' },
+        {value: 'nd', label: 'North Ndebele' },
+        {value: 'ne', label: 'Nepali' },
+        {value: 'ng', label: 'Ndonga' },
+        {value: 'nl', label: 'Dutch' },
+        {value: 'nb', label: 'Norwegian Bokmål' },
+        {value: 'nn', label: 'Norwegian Nynorsk' },
+        {value: 'nr', label: 'South Ndebele' },
+        {value: 'nv', label: 'Navajo' },
+        {value: 'ny', label: 'Chichewa' },
+        {value: 'oc', label: 'Occitan' },
+        {value: 'om', label: 'Oromo' },
+        {value: 'or', label: 'Oriya' },
+        {value: 'os', label: 'Ossetian' },
+        {value: 'pa', label: 'Punjabi' },
+        {value: 'pi', label: 'Pali' },
+        {value: 'pl', label: 'Polish' },
+        {value: 'ps', label: 'Pashto' },
+        {value: 'pt', label: 'Portuguese, International' },
+        {value: 'pt-pt', label: 'Portuguese, Portugal' },
+        {value: 'pt-br', label: 'Portuguese, Brazil' },
+        {value: 'qu', label: 'Quechua' },
+        {value: 'rm', label: 'Rhaeto-Romance' },
+        {value: 'rn', label: 'Kirundi' },
+        {value: 'ro', label: 'Romanian' },
+        {value: 'ru', label: 'Russian' },
+        {value: 'rw', label: 'Kinyarwanda' },
+        {value: 'sa', label: 'Sanskrit' },
+        {value: 'sc', label: 'Sardinian' },
+        {value: 'sco', label: 'Scots' },
+        {value: 'sd', label: 'Sindhi' },
+        {value: 'se', label: 'Northern Sami' },
+        {value: 'sg', label: 'Sango' },
+        {value: 'sh', label: 'Serbo-Croatian' },
+        {value: 'si', label: 'Sinhala' },
+        {value: 'sk', label: 'Slovak' },
+        {value: 'sl', label: 'Slovenian' },
+        {value: 'sm', label: 'Samoan' },
+        {value: 'sn', label: 'Shona' },
+        {value: 'so', label: 'Somali' },
+        {value: 'sq', label: 'Albanian' },
+        {value: 'sr', label: 'Serbian' },
+        {value: 'ss', label: 'Siswati' },
+        {value: 'st', label: 'Sesotho' },
+        {value: 'su', label: 'Sudanese' },
+        {value: 'sv', label: 'Swedish' },
+        {value: 'sw', label: 'Swahili' },
+        {value: 'ta', label: 'Tamil' },
+        {value: 'te', label: 'Telugu' },
+        {value: 'tg', label: 'Tajik' },
+        {value: 'th', label: 'Thai' },
+        {value: 'ti', label: 'Tigrinya' },
+        {value: 'tk', label: 'Turkmen' },
+        {value: 'tl', label: 'Tagalog' },
+        {value: 'tn', label: 'Setswana' },
+        {value: 'to', label: 'Tonga' },
+        {value: 'tr', label: 'Turkish' },
+        {value: 'ts', label: 'Tsonga' },
+        {value: 'tt', label: 'Tatar' },
+        {value: 'tw', label: 'Twi' },
+        {value: 'ty', label: 'Tahitian' },
+        {value: 'ug', label: 'Uyghur' },
+        {value: 'uk', label: 'Ukrainian' },
+        {value: 'ur', label: 'Urdu' },
+        {value: 'uz', label: 'Uzbek' },
+        {value: 've', label: 'Venda' },
+        {value: 'vi', label: 'Vietnamese' },
+        {value: 'wo', label: 'Wolof' },
+        {value: 'xh', label: 'Xhosa' },
+        {value: 'xx-lolspeak', label: 'Lolspeak' },
+        {value: 'yi', label: 'Yiddish' },
+        {value: 'yo', label: 'Yoruba' },
+        {value: 'za', label: 'Zhuang' },
+        {value: 'zh-hans', label: 'Chinese, Simplified' },
+        {value: 'zh-hant', label: 'Chinese, Traditional' },
+        {value: 'zu', label: 'Zulu' }
+      ];
+      this.state = {
+        inputNumber: 1,
+        value: [{
+          file: {},
+          language: ''
+        }]
+      };
+      this.getRow = this.getRow.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+      this.onAddBtnClick = this.onAddBtnClick.bind(this);
+    }
+
+    getRow (number) {
+      return (
+        <div className="row" key={number}>
+          <div className="col-sm-6">
+            <label>File</label><br />
+            <input type="file" name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
+          </div>
+          <div className="col-sm-6">
+            <label>Language</label>
+            <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.value[number]['language']} />
+          </div>
+        </div>
+      );
+    }
+
+    handleChange(number, type, v) {
+      let val = this.state.value;
+      val[number][type] = v;
+      this.setState({
+        value: val
+      });
+      if (this.props.onChange) {
+        this.props.onChange(val);
+      }
+    }
+
+    onAddBtnClick (event) {
+      let val = this.state.value;
+      for (let i = 0; i < this.state.inputNumber + 1; i++) {
+        if (!val[i]) {
+          val[i] = {
+            language: '',
+            file: {}
+          };
+        }
+      }
+      this.setState({
+        inputNumber: this.state.inputNumber + 1
+      });
+    }
+
+    render () {
+      let rows = [];
+      for (let i = 0; i < this.state.inputNumber; i++) {
+        rows.push(this.getRow(i));
+      }
+      return (
+        <div>
+          {rows}
+          <button onClick={this.onAddBtnClick}>Add file</button>
+        </div>
+        );
+    }
+}
+
+export default HRInfoFiles;
