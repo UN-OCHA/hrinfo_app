@@ -15,6 +15,7 @@ class App extends Component {
 
     this.state = {
       isAuthenticated: false,
+      isAuthenticating: true,
       user: {},
       token: ''
     };
@@ -29,17 +30,16 @@ class App extends Component {
     let newState = {};
     if (authenticated === true) {
       cookies.set('hid', {token: token, user: {name: user.name}}, {path: '/'});
-      console.log('created cookie');
       newState = {
-        authenticated: true,
+        isAuthenticated: true,
         user: user,
         token: token
       };
     }
     else {
-      cookies.remove('hid');
+      cookies.remove('hid', { path: '/'});
       newState = {
-        authenticated: false,
+        isAuthenticated: false,
         user: {},
         token: ''
       };
@@ -62,8 +62,14 @@ class App extends Component {
     if (cookie && cookie.token) {
       this.setState({
         isAuthenticated: true,
+        isAuthenticating: false,
         user: cookie.user,
         token: cookie.token
+      });
+    }
+    else {
+      this.setState({
+        isAuthenticating: false
       });
     }
   }
@@ -77,9 +83,10 @@ class App extends Component {
       token: this.state.token
     };
     return (
+      !this.state.isAuthenticating &&
       <div className="App container">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand" href="#">Navbar</a>
+          <a className="navbar-brand" href="/">HRInfo Admin</a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -90,7 +97,7 @@ class App extends Component {
                 <a className="nav-link" href="/home">Home <span className="sr-only">(current)</span></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/document">Add document</a>
+                <a className="nav-link" href="/documents/new">Add document</a>
               </li>
               <li className="nav-item">
                 <button className="nav-link" onClick={this.handleLogout}>Logout</button>

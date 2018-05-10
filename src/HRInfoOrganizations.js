@@ -1,12 +1,11 @@
 import React from 'react';
-import { Async } from 'react-select'
+import AsyncSelect from 'react-select/lib/Async';
 
 class HRInfoOrganizations extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [],
-      value: ''
+      items: []
     };
     this.getUrl = this.getUrl.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -14,7 +13,7 @@ class HRInfoOrganizations extends React.Component {
   }
 
   getUrl (input) {
-    return 'https://www.humanitarianresponse.info/en/api/v1.0/organizations?filter[label][value]=' + input + '&filter[label][operator]=STARTS_WITH&fields=id,label,acronym&sort=label&range=10';
+    return 'https://www.humanitarianresponse.info/en/api/v1.0/organizations?filter[label][value]=' + input + '&filter[label][operator]=STARTS_WITH&filter[acronym][value]=' + input + '&filter[acronym][operator]=CONTAINS&fields=id,label,acronym&sort=label&range=10';
   }
 
   getOptions (input) {
@@ -29,19 +28,13 @@ class HRInfoOrganizations extends React.Component {
             }
             fullLabels.push(org);
           });
-          return {
-            options: fullLabels
-          };
+          return fullLabels;
         }).catch(function(err) {
             console.log("Fetch error: ", err);
         });
   }
 
   handleChange (selectedOption) {
-    console.log(selectedOption);
-    this.setState({
-      value: selectedOption
-    });
     if (this.props.onChange) {
       this.props.onChange(selectedOption);
     }
@@ -49,14 +42,12 @@ class HRInfoOrganizations extends React.Component {
 
   render() {
     return (
-      <Async
-        name="organizations"
-        value={this.state.value}
+      <AsyncSelect
+        isMulti
         loadOptions={this.getOptions}
-        autoload={false}
+        getOptionValue={(option) => { return option.id }}
+        getOptionLabel={(option) => { return option.label}}
         onChange={this.handleChange}
-        multi={true}
-        filterOptions={false}
         />
     );
   }

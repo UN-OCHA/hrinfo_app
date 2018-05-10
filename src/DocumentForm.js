@@ -18,6 +18,7 @@ class DocumentForm extends React.Component {
       publication_date: '',
       body: '',
       operations: '',
+      organizations: [],
       editorState: EditorState.createEmpty(),
       offices: [],
       disasters: [],
@@ -66,21 +67,21 @@ class DocumentForm extends React.Component {
     const offices = this.state.operations ? (
       <div className="form-group">
         <label htmlFor="offices">Coordination hub(s)</label>
-        <HRInfoSelect type="offices" operation={this.state.operations} multi={true} onChange={(s) => this.handleSelectChange('offices', s)} />
+        <HRInfoSelect type="offices" operation={this.state.operations} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} />
       </div>
     ) : '';
 
     const disasters = this.state.operations ? (
       <div className="form-group">
         <label htmlFor="disasters">Disaster(s)</label>
-        <HRInfoSelect type="disasters" operation={this.state.operations} multi={true} onChange={(s) => this.handleSelectChange('disasters', s)} />
+        <HRInfoSelect type="disasters" operation={this.state.operations} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} />
       </div>
     ) : '';
 
     const bundles = this.state.operations ? (
       <div className="form-group">
         <label htmlFor="bundles">Cluster(s)/Sector(s)</label>
-        <HRInfoSelect type="bundles" operation={this.state.operations} multi={true} onChange={(s) => this.handleSelectChange('bundles', s)} />
+        <HRInfoSelect type="bundles" operation={this.state.operations} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} />
       </div>
     ) : '';
 
@@ -124,7 +125,7 @@ class DocumentForm extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="organizations">Organizations</label>
-          <HRInfoOrganizations />
+          <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} />
         </div>
         <div className="form-group">
           <label htmlFor="locations">Locations</label>
@@ -135,7 +136,7 @@ class DocumentForm extends React.Component {
         {disasters}
         <div className="form-group">
           <label htmlFor="themes">Themes</label>
-          <HRInfoSelect type="themes" multi={true} onChange={(s) => this.handleSelectChange('themes', s)} />
+          <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} />
         </div>
         <input type="submit" value="Submit" />
       </form>

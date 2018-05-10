@@ -42,19 +42,12 @@ class Login extends React.Component {
         .then(data => {
           if (data.user && data.token) {
             this.props.userHasAuthenticated(true, data.user, data.token);
-            //this.props.history.push('/home');
+            this.props.history.push('/home');
           }
           else {
             alert('Could not log you in');
           }
         });
-    }
-
-    componentDidMount() {
-      const cookie = this.props.userIsAuthenticated();
-      if (cookie && cookie.token) {
-        this.props.history.push('/home');
-      }
     }
 
     render() {

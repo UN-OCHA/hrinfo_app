@@ -1,13 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css';
 
 class HRInfoSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [],
-      value: ''
+      items: []
     };
     this.setBaseUrl = this.setBaseUrl.bind(this);
     this.fetchNextPage = this.fetchNextPage.bind(this);
@@ -70,9 +68,6 @@ class HRInfoSelect extends React.Component {
   }
 
   handleChange (selectedOption) {
-    this.setState({
-      value: selectedOption
-    });
     if (this.props.onChange) {
       this.props.onChange(selectedOption);
     }
@@ -86,8 +81,7 @@ class HRInfoSelect extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.operation !== this.props.operation) {
       this.setState({
-        items: [],
-        value: ''
+        items: []
       });
       this.setBaseUrl();
       this.fetchNextPage(1);
@@ -96,7 +90,7 @@ class HRInfoSelect extends React.Component {
 
   render() {
     return (
-        <Select multi={this.props.multi} id={this.props.type} name={this.props.type} onChange={this.handleChange} options={this.state.items} valueKey="id" labelKey="label" value={this.state.value} />
+        <Select isMulti={this.props.isMulti} id={this.props.type} name={this.props.type} onChange={this.handleChange} options={this.state.items} getOptionValue={(option) => { return option.id }} getOptionLabel={(option) => { return option.label}} />
     );
   }
 }

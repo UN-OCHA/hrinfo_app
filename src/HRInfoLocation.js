@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css';
 
 class HRInfoLocation extends React.Component {
   constructor(props) {
@@ -62,7 +61,7 @@ class HRInfoLocation extends React.Component {
 
   render() {
     return (
-        <Select id="locations" name="locations" onChange={this.handleChange} options={this.state.items} valueKey="id" labelKey="label" value={this.props.value} className="col-sm-3" />
+        <Select id="locations" name="locations" onChange={this.handleChange} options={this.state.items} getOptionValue={(option) => { return option.id }} getOptionLabel={(option) => { return option.label}} className="col-sm-3" />
     );
   }
 }

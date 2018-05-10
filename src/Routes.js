@@ -8,7 +8,7 @@ import UnauthenticatedRoute from "./UnauthenticatedRoute";
 
 export default ({ childProps }) =>
   <Switch>
-    <UnauthenticatedRoute exact path="/" component={Login} props={childProps} />
-    <AuthenticatedRoute path="/home" component={Home} props={childProps} />
-    <AuthenticatedRoute path="/document/new" component={DocumentForm} props={childProps} />
+    <UnauthenticatedRoute path="/" exact component={Login} props={childProps} />
+    <AuthenticatedRoute path="/home" exact component={Home} props={childProps} />
+    <AuthenticatedRoute path="/documents/new" exact component={DocumentForm} props={childProps} />
   </Switch>;
