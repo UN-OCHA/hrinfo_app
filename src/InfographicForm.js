@@ -9,7 +9,7 @@ import HRInfoOrganizations from './HRInfoOrganizations';
 import HRInfoFiles from './HRInfoFiles';
 import RelatedContent from './RelatedContent';
 
-class DocumentForm extends React.Component {
+class InfographicForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,10 +53,10 @@ class DocumentForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     let body = this.state;
-    body.document_type = body.document_types;
-    delete body.document_types;
+    body.infographic_type = body.infographic_types;
+    delete body.infographic_types;
     console.log(body);
-    fetch('https://www.humanitarianresponse.info/api/v1.0/documents', {
+    fetch('https://www.humanitarianresponse.info/api/v1.0/infographics', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -114,12 +114,12 @@ class DocumentForm extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="label">Label</label>
-          <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Document title" value={this.state.label} onChange={this.handleInputChange} />
-          <small id="labelHelp" className="form-text text-muted">Enter the title of the document.</small>
+          <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Infographic title" value={this.state.label} onChange={this.handleInputChange} />
+          <small id="labelHelp" className="form-text text-muted">Enter the title of the infographic.</small>
         </div>
         <div className="form-group">
-          <label htmlFor="document_type">Document type</label>
-          <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_types', s)} />
+          <label htmlFor="document_type">Infographic type</label>
+          <HRInfoSelect type="infographic_types" onChange={(s) => this.handleSelectChange('infographic_types', s)} />
         </div>
         <div className="form-group">
           <label htmlFor="publication_date">Original Publication Date</label>
@@ -163,4 +163,4 @@ class DocumentForm extends React.Component {
   }
 }
 
-export default DocumentForm;
+export default InfographicForm;

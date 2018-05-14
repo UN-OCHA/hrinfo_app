@@ -13,7 +13,7 @@ class HRInfoOrganizations extends React.Component {
   }
 
   getUrl (input) {
-    return 'https://www.humanitarianresponse.info/en/api/v1.0/organizations?filter[label][value]=' + input + '&filter[label][operator]=STARTS_WITH&filter[acronym][value]=' + input + '&filter[acronym][operator]=CONTAINS&fields=id,label,acronym&sort=label&range=10';
+    return 'https://www.humanitarianresponse.info/en/api/v1.0/organizations?search=' + input + '&fields=id,label,acronym&sort=label&range=10';
   }
 
   getOptions (input) {
