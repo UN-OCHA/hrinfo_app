@@ -26,7 +26,7 @@ class DocumentForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
-    this.createFieldCollection = this.createFieldCollection.bind(this);
+    this.postFieldCollections = this.postFieldCollections.bind(this);
   }
 
   handleInputChange(event) {
@@ -51,43 +51,52 @@ class DocumentForm extends React.Component {
   }
 
   uploadFiles (body) {
-    const data = new FormData();
-    data.append('file', body.files[0].file[0]);
-    data.append('filename', 'react_test.pdf');
+    const token = this.props.token;
+    const promises = [];
+    body.files.forEach(function (file) {
+      const data = new FormData();
+      data.append('file', file.file[0]);
 
-    return fetch('https://www.humanitarianresponse.info/api/files', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + this.props.token,
-      },
-      body: data,
-    }).then((response) => {
-      return response.json();
-    }).then(data => {
-      return data.data[0][0].id;
+      const prom = fetch('https://www.humanitarianresponse.info/api/files', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+        },
+        body: data,
+      }).then((response) => {
+        return response.json();
+      }).then(data => {
+        return data.data[0][0].id;
+      });
+      promises.push(prom);
     });
+    return Promise.all(promises);
   }
 
-  createFieldCollection (docid, fid, language) {
-    const body = {
-      file: fid,
-      language: language,
-      host_entity: docid
-    };
-    return fetch('https://www.humanitarianresponse.info/api/v1.0/files_collection', {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Authorization': 'Bearer ' + this.props.token,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
+  async postFieldCollections (docid, field_collections) {
+    const token = this.props.token;
+    for (const fc of field_collections) {
+      const body = {
+        file: fc.file,
+        language: fc.language,
+        host_entity: docid
+      };
+      await fetch('https://www.humanitarianresponse.info/api/v1.0/files_collection', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+    }
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const token = this.props.token;
+    let doc = {};
     let body = this.state.doc;
     body.document_type = body.document_type.id;
     delete body.related_content;
@@ -105,13 +114,21 @@ class DocumentForm extends React.Component {
           body[field][i] = body[field][i].id;
         }
       }
-    })
+    });
+    body.files.forEach(function (file, index) {
+      if (file.language) {
+        body.files[index].language = file.language.value;
+      }
+    });
+    console.log('submitted form');
     console.log(body);
     let field_collections = [];
 
     this.uploadFiles(body)
-      .then(fid => {
-        body.files[0].file = fid;
+      .then(fids => {
+        body.files.forEach(function (file, index) {
+          body.files[index].file = fids[index];
+        });
         field_collections = body.files;
         delete body.files;
         return fetch('https://www.humanitarianresponse.info/api/v1.0/documents', {
@@ -128,15 +145,11 @@ class DocumentForm extends React.Component {
         return results.json();
       })
       .then(data => {
-        let docid = data.data[0].id;
-        console.log(docid);
-        return this.createFieldCollection(docid, field_collections[0].file, field_collections[0].language);
+        doc = data.data[0];
+        return this.postFieldCollections(doc.id, field_collections);
       })
       .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        console.log(data);
+        alert('Your document was successfully uploaded: ' + doc.id);
       });
   }
 
@@ -250,7 +263,7 @@ class DocumentForm extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="document_type">Document type</label>
-          <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} />
+          <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} required={true} />
         </div>
         <div className="form-group">
           <label htmlFor="publication_date">Original Publication Date</label>

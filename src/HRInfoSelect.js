@@ -105,7 +105,8 @@ class HRInfoSelect extends React.Component {
           options={this.state.items}
           getOptionValue={(option) => { return option.id }}
           getOptionLabel={(option) => { return option.label}}
-          value={this.props.value} />
+          value={this.props.value}
+          required={this.props.required} />
     );
   }
 }

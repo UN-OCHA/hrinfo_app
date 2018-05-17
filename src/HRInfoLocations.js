@@ -97,7 +97,7 @@ class HRInfoLocations extends React.Component {
     return (
       <div>
         {rows}
-        <button onClick={this.onAddBtnClick}>Add location</button>
+        <button type="button" onClick={this.onAddBtnClick}>Add location</button>
       </div>
       );
   }

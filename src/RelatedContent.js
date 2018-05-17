@@ -67,7 +67,7 @@ class RelatedContent extends React.Component {
       return (
         <div>
           {rows}
-          <button onClick={this.onAddBtnClick}>Add related content</button>
+          <button type="button" onClick={this.onAddBtnClick}>Add related content</button>
         </div>
         );
     }

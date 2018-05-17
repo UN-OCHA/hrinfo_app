@@ -253,7 +253,7 @@ class HRInfoFiles extends React.Component {
       return (
         <div>
           {rows}
-          <button onClick={this.onAddBtnClick}>Add file</button>
+          <button type="button" onClick={this.onAddBtnClick}>Add file</button>
         </div>
         );
     }
