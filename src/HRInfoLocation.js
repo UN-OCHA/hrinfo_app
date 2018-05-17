@@ -61,7 +61,15 @@ class HRInfoLocation extends React.Component {
 
   render() {
     return (
-        <Select id="locations" name="locations" onChange={this.handleChange} options={this.state.items} getOptionValue={(option) => { return option.id }} getOptionLabel={(option) => { return option.label}} className="col-sm-3" />
+        <Select
+          id="locations"
+          name="locations"
+          onChange={this.handleChange}
+          options={this.state.items}
+          getOptionValue={(option) => { return option.id }}
+          getOptionLabel={(option) => { return option.label}}
+          value={this.props.value}
+          className="col-sm-3" />
     );
   }
 }

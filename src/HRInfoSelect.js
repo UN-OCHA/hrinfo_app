@@ -18,7 +18,7 @@ class HRInfoSelect extends React.Component {
       this.baseUrl += '&fields=id,label';
     }
     if (this.props.operation) {
-      this.baseUrl += '&filter[operation]=' + this.props.operation;
+      this.baseUrl += '&filter[operation]=' + this.props.operation.id;
     }
     this.baseUrl += '&page=';
   }
@@ -79,7 +79,14 @@ class HRInfoSelect extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.operation !== this.props.operation) {
+    if (this.props.type === 'document_types' && this.props.value) {
+      for (let i = 0; i < this.state.items.length; i++) {
+        if (this.state.items[i].id === parseInt(this.props.value.id, 10)) {
+          this.props.value.label = this.state.items[i].label;
+        }
+      }
+    }
+    if (prevProps.operation && prevProps.operation.id !== this.props.operation.id) {
       this.setState({
         items: []
       });
@@ -90,7 +97,15 @@ class HRInfoSelect extends React.Component {
 
   render() {
     return (
-        <Select isMulti={this.props.isMulti} id={this.props.type} name={this.props.type} onChange={this.handleChange} options={this.state.items} getOptionValue={(option) => { return option.id }} getOptionLabel={(option) => { return option.label}} />
+        <Select
+          isMulti={this.props.isMulti}
+          id={this.props.type}
+          name={this.props.type}
+          onChange={this.handleChange}
+          options={this.state.items}
+          getOptionValue={(option) => { return option.id }}
+          getOptionLabel={(option) => { return option.label}}
+          value={this.props.value} />
     );
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 
-class HRInfoOrganizations extends React.Component {
+class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +13,7 @@ class HRInfoOrganizations extends React.Component {
   }
 
   getUrl (input) {
-    return 'https://www.humanitarianresponse.info/en/api/v1.0/organizations?search=' + input + '&fields=id,label,acronym&sort=label&range=10';
+    return 'https://www.humanitarianresponse.info/en/api/v1.0/documents?filter[label][value]=' + input + '&filter[label][operator]=CONTAINS&fields=id,label,acronym&sort=label&range=10';
   }
 
   getOptions (input) {
@@ -21,14 +21,7 @@ class HRInfoOrganizations extends React.Component {
         .then(results => {
             return results.json();
         }).then(data => {
-          let fullLabels = [];
-          data.data.forEach(function (org) {
-            if (org.acronym) {
-              org.label = org.label + ' (' + org.acronym + ')';
-            }
-            fullLabels.push(org);
-          });
-          return fullLabels;
+          return data.data;
         }).catch(function(err) {
             console.log("Fetch error: ", err);
         });
@@ -43,15 +36,13 @@ class HRInfoOrganizations extends React.Component {
   render() {
     return (
       <AsyncSelect
-        isMulti
         loadOptions={this.getOptions}
         getOptionValue={(option) => { return option.id }}
         getOptionLabel={(option) => { return option.label}}
         onChange={this.handleChange}
-        value={this.props.value}
         />
     );
   }
 }
 
-export default HRInfoOrganizations;
+export default Search;

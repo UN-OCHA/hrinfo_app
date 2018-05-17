@@ -16,15 +16,15 @@ class HRInfoLocations extends React.Component {
 
   getRow (number) {
     const locations1 = this.state.locations[number][0] ? (
-      <HRInfoLocation level="1" parent={this.state.locations[number][0]} row={number} onChange={this.handleChange} value={this.state.locations[number][1]} />
+      <HRInfoLocation level="1" parent={this.state.locations[number][0].id} row={number} onChange={this.handleChange} value={this.state.locations[number][1]} />
     ) : '';
 
     const locations2 = this.state.locations[number][1] ? (
-      <HRInfoLocation level="2" parent={this.state.locations[number][1]} row={number} onChange={this.handleChange} value={this.state.locations[number][2]} />
+      <HRInfoLocation level="2" parent={this.state.locations[number][1].id} row={number} onChange={this.handleChange} value={this.state.locations[number][2]} />
     ) : '';
 
     const locations3 = this.state.locations[number][2] ? (
-      <HRInfoLocation level="3" parent={this.state.locations[number][2]} row={number} onChange={this.handleChange} value={this.state.locations[number][3]} />
+      <HRInfoLocation level="3" parent={this.state.locations[number][2].id} row={number} onChange={this.handleChange} value={this.state.locations[number][3]} />
     ) : '';
 
     return (
@@ -44,7 +44,7 @@ class HRInfoLocations extends React.Component {
       state["locations"][row][i] = '';
     }
     if (selected && selected.id) {
-      state["locations"][row][level] = selected.id;
+      state["locations"][row][level] = selected;
     }
     this.setState(state);
     if (this.props.onChange) {
@@ -63,6 +63,30 @@ class HRInfoLocations extends React.Component {
       inputNumber: this.state.inputNumber + 1,
       locations: locations
     });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.value) {
+      let same = true;
+      if (!Array.isArray(prevProps.value) && Array.isArray(this.props.value)) {
+        same = false;
+      }
+      else {
+        for (let i = 0; i < this.props.value.length; i++) {
+            for (let j = 0; j < this.props.value[i].length; j++) {
+              if (this.props.value[i][j].id !== prevProps.value[i][j].id) {
+                same = false;
+              }
+            }
+        }
+      }
+      if (!same) {
+        this.setState({
+          locations: this.props.value,
+          inputNumber: this.props.value.length
+        });
+      }
+    }
   }
 
   render () {
