@@ -3,6 +3,7 @@ import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import Select from 'react-select';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoOrganizations from './HRInfoOrganizations';
@@ -17,7 +18,13 @@ class DocumentForm extends React.Component {
         label: '',
         publication_date: ''
       },
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
+      languages: [
+        { value: 'en', label: 'English'},
+        { value: 'fr', label: 'French' },
+        { value: 'es', label: 'Spanish' },
+        { value: 'ru', label: 'Russian' }
+      ]
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -102,11 +109,6 @@ class DocumentForm extends React.Component {
     delete body.related_content;
     body.operation = [body.operation.id];
     body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
-    body.body = {
-      format: 'panopoly_html_text',
-      summary: '',
-      value: body.body
-    };
     const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
     selectFields.forEach(function (field) {
       if (body[field]) {
@@ -120,6 +122,7 @@ class DocumentForm extends React.Component {
         body.files[index].language = file.language.value;
       }
     });
+    body.language = body.language.value;
     console.log('submitted form');
     console.log(body);
     let field_collections = [];
@@ -252,6 +255,10 @@ class DocumentForm extends React.Component {
     return (
       <div>
       <form onSubmit={this.handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="language">Language</label>
+          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} />
+        </div>
         <div className="form-group">
           <label htmlFor="operations">Operation</label>
           <HRInfoSelect type="operations" onChange={(s) => this.handleSelectChange('operation', s)} value={this.state.doc.operation} />
