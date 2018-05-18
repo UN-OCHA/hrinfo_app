@@ -257,7 +257,7 @@ class DocumentForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <div className="form-group">
           <label htmlFor="language">Language</label>
-          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} />
+          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} />
         </div>
         <div className="form-group">
           <label htmlFor="operations">Operation</label>
