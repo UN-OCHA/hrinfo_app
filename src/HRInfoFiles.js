@@ -1,5 +1,8 @@
 import React from 'react';
 import Select from 'react-select';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+
 
 class HRInfoFiles extends React.Component {
     constructor(props) {
@@ -194,14 +197,17 @@ class HRInfoFiles extends React.Component {
       ];
       this.state = {
         inputNumber: 1,
+        files: [''],
+        languages: [''],
         value: [{
-          file: {},
+          file: '',
           language: ''
         }]
       };
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.onAddBtnClick = this.onAddBtnClick.bind(this);
+      this.finalizeChange = this.finalizeChange.bind(this);
     }
 
     getRow (number) {
@@ -209,11 +215,19 @@ class HRInfoFiles extends React.Component {
         <div className="row" key={number}>
           <div className="col-sm-6">
             <label>File</label><br />
-            <input type="file" name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
+            {this.state.files[number] === '' ?
+              <input type="file" id={'files_' + number } name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } /> : ''
+            }
+            {this.state.files[number] === 'uploading' ?
+              <FontAwesomeIcon icon={faSpinner} pulse fixedWidth /> : ''
+            }
+            {typeof this.state.files[number] === 'object' ?
+              <a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a> : ''
+            }
           </div>
           <div className="col-sm-6">
             <label>Language</label>
-            <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.value[number]['language']} />
+            <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
           </div>
         </div>
       );
@@ -221,12 +235,46 @@ class HRInfoFiles extends React.Component {
 
     handleChange(number, type, v) {
       let val = this.state.value;
-      val[number][type] = v;
-      this.setState({
-        value: val
-      });
+      if (type === 'file') {
+        let files = this.state.files;
+        const that = this;
+        const token = this.props.token;
+        const data = new FormData();
+        data.append('file', v[0]);
+        files[number] = 'uploading';
+        this.setState({
+          files: files
+        });
+
+        fetch('https://www.humanitarianresponse.info/api/files', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+          },
+          body: data,
+        }).then((response) => {
+          return response.json();
+        }).then(data => {
+          files[number] = data.data[0][0];
+          that.setState({
+            files: files
+          });
+          that.finalizeChange();
+        });
+      }
+      else {
+        let languages = this.state.languages;
+        languages[number] = v;
+        this.finalizeChange();
+      }
+    }
+
+    finalizeChange() {
       if (this.props.onChange) {
-        this.props.onChange(val);
+        this.props.onChange({
+          files: this.state.files,
+          languages: this.state.languages
+        });
       }
     }
 
@@ -236,7 +284,7 @@ class HRInfoFiles extends React.Component {
         if (!val[i]) {
           val[i] = {
             language: '',
-            file: {}
+            file: ''
           };
         }
       }

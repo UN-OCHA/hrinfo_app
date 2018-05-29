@@ -32,7 +32,6 @@ class DocumentForm extends React.Component {
     this.onEditorStateChange = this.onEditorStateChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.uploadFiles = this.uploadFiles.bind(this);
     this.postFieldCollections = this.postFieldCollections.bind(this);
   }
 
@@ -49,35 +48,11 @@ class DocumentForm extends React.Component {
   }
 
   handleSelectChange (name, selected) {
-    console.log(selected);
     let doc = this.state.doc;
     doc[name] = selected;
     this.setState({
       doc: doc
     });
-  }
-
-  uploadFiles (body) {
-    const token = this.props.token;
-    const promises = [];
-    body.files.forEach(function (file) {
-      const data = new FormData();
-      data.append('file', file.file[0]);
-
-      const prom = fetch('https://www.humanitarianresponse.info/api/files', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + token,
-        },
-        body: data,
-      }).then((response) => {
-        return response.json();
-      }).then(data => {
-        return data.data[0][0].id;
-      });
-      promises.push(prom);
-    });
-    return Promise.all(promises);
   }
 
   async postFieldCollections (docid, field_collections) {
@@ -117,32 +92,26 @@ class DocumentForm extends React.Component {
         }
       }
     });
-    body.files.forEach(function (file, index) {
-      if (file.language) {
-        body.files[index].language = file.language.value;
+    let field_collections = [];
+    body.files.files.forEach(function (file, index) {
+      let fc = {};
+      if (body.files.languages[index]) {
+        fc.language = body.files.languages[index].value;
       }
+      fc.file = file.id;
+      field_collections.push(fc);
     });
     body.language = body.language.value;
-    console.log('submitted form');
-    console.log(body);
-    let field_collections = [];
+    delete body.files;
 
-    this.uploadFiles(body)
-      .then(fids => {
-        body.files.forEach(function (file, index) {
-          body.files[index].file = fids[index];
-        });
-        field_collections = body.files;
-        delete body.files;
-        return fetch('https://www.humanitarianresponse.info/api/v1.0/documents', {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
-          });
+    fetch('https://www.humanitarianresponse.info/api/v1.0/documents', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       })
       .then(results => {
         return results.json();
@@ -278,7 +247,7 @@ class DocumentForm extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="files">Files</label>
-          <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} />
+          <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} />
         </div>
         <div className="form-group">
           <label htmlFor="body">Body</label>
