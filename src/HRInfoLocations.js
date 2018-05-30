@@ -7,11 +7,14 @@ class HRInfoLocations extends React.Component {
     super(props);
     this.state = {
       locations: [[]],
-      inputNumber: 1
+      inputNumber: 1,
+      status: 'initial'
     };
     this.getRow = this.getRow.bind(this);
     this.onAddBtnClick = this.onAddBtnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+    this.getInitialLocations = this.getInitialLocations.bind(this);
   }
 
   getRow (number) {
@@ -37,6 +40,15 @@ class HRInfoLocations extends React.Component {
     );
   }
 
+  getLocation (url) {
+    return fetch(url)
+    .then((response) => {
+      return response.json();
+    }).then(data => {
+      return data.data[0];
+    });
+  }
+
   handleChange (row, level, selected) {
     let state = {};
     state['locations'] = this.state.locations;
@@ -46,6 +58,7 @@ class HRInfoLocations extends React.Component {
     if (selected && selected.id) {
       state["locations"][row][level] = selected;
     }
+    state['status'] = 'ready';
     this.setState(state);
     if (this.props.onChange) {
       this.props.onChange(state['locations']);
@@ -61,31 +74,46 @@ class HRInfoLocations extends React.Component {
     }
     this.setState({
       inputNumber: this.state.inputNumber + 1,
-      locations: locations
+      locations: locations,
+      status: 'ready'
     });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.value) {
-      let same = true;
-      if (!Array.isArray(prevProps.value) && Array.isArray(this.props.value)) {
-        same = false;
-      }
-      else {
-        for (let i = 0; i < this.props.value.length; i++) {
-            for (let j = 0; j < this.props.value[i].length; j++) {
-              if (this.props.value[i][j].id !== prevProps.value[i][j].id) {
-                same = false;
-              }
-            }
-        }
-      }
-      if (!same) {
-        this.setState({
-          locations: this.props.value,
-          inputNumber: this.props.value.length
+  getInitialLocations () {
+    const that = this;
+    let locations = [];
+    let allPromises = [];
+    let inputNumber = 0;
+    this.props.value.forEach(function (loc, index) {
+      inputNumber++;
+      allPromises.push(that.getLocation('https://www.humanitarianresponse.info/api/v1.0/locations/' + loc.id)
+      .then(function (data) {
+        let promises = [];
+        data.parents.forEach(function (parent) {
+          promises.push(that.getLocation(parent));
         });
-      }
+        return Promise.all(promises);
+      })
+      .then(function (values) {
+        locations.push(values.reverse());
+      }));
+    });
+    Promise.all(allPromises)
+      .then(function () {
+        that.setState({
+          status: 'ready',
+          locations: locations,
+          inputNumber: inputNumber
+        });
+        if (that.props.onChange) {
+          that.props.onChange(locations);
+        }
+      });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.value && this.state.status === 'initial') {
+      this.getInitialLocations();
     }
   }
 

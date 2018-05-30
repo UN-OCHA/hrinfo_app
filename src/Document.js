@@ -34,6 +34,7 @@ class Document extends React.Component {
           {this.state.doc &&
             <div>
               <p>{this.state.doc.label}</p>
+              <a href={ 'https://www.humanitarianresponse.info/node/' + this.props.match.params.id } target="blank">View this document in humanitarianresponse.info</a><br />
               <a href={'/documents/' + this.props.match.params.id + '/edit'}>Edit this document</a>
             </div>
           }

@@ -4,6 +4,8 @@ import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoOrganizations from './HRInfoOrganizations';
@@ -24,7 +26,8 @@ class DocumentForm extends React.Component {
         { value: 'fr', label: 'French' },
         { value: 'es', label: 'Spanish' },
         { value: 'ru', label: 'Russian' }
-      ]
+      ],
+      status: ''
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -77,6 +80,9 @@ class DocumentForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.setState({
+      status: 'submitting'
+    });
     const token = this.props.token;
     let doc = {};
     let body = this.state.doc;
@@ -92,6 +98,17 @@ class DocumentForm extends React.Component {
         }
       }
     });
+    let locations = [];
+    body.locations.forEach(function (location, index) {
+      let last = 0;
+      for (let j = 0; j < location.length; j++) {
+        if (typeof location[j] === 'object') {
+          last = j;
+        }
+      }
+      locations.push(location[last].id);
+    });
+    body.locations = locations;
     let field_collections = [];
     body.files.files.forEach(function (file, index) {
       let fc = {};
@@ -121,7 +138,7 @@ class DocumentForm extends React.Component {
         return this.postFieldCollections(doc.id, field_collections);
       })
       .then(res => {
-        alert('Your document was successfully uploaded: ' + doc.id);
+        this.props.history.push('/documents/' + doc.id);
       });
   }
 
@@ -170,18 +187,11 @@ class DocumentForm extends React.Component {
     if (this.props.match.params.id) {
       const doc = await this.getDocument();
       doc.operation = doc.operation[0];
-      /*doc.locations = [[
-        181,
-        47257,
-        47278,
-        47236
-      ]];*/
-      doc.locations = [[
-        {id: 181, label: 'Afghanistan'},
-        {id: 47257, label: 'Capital'},
-        {id: 47278, label: 'Kabul'},
-        {id: 47236, label: 'Kabul'}
-      ]];
+      this.state.languages.forEach(function (lang) {
+        if (doc.language === lang.value) {
+          doc.language = lang;
+        }
+      });
       let state = {
         doc: doc
       };
@@ -234,8 +244,7 @@ class DocumentForm extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="label">Label</label>
-          <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Document title" value={this.state.doc.label} onChange={this.handleInputChange} />
-          <small id="labelHelp" className="form-text text-muted">Enter the title of the document.</small>
+          <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
         </div>
         <div className="form-group">
           <label htmlFor="document_type">Document type</label>
@@ -277,7 +286,12 @@ class DocumentForm extends React.Component {
           <label htmlFor="themes">Themes</label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
         </div>
-        <input type="submit" value="Submit" />
+        {this.state.status === '' &&
+          <input type="submit" value="Submit" />
+        }
+        {this.state.status === 'submitting' &&
+          <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
+        }
       </form>
       {this.props.match.params.id &&
         <button className="btn btn-default btn-alert" onClick={this.handleDelete}>Delete</button>

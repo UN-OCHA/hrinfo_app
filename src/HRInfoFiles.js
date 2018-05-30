@@ -199,10 +199,7 @@ class HRInfoFiles extends React.Component {
         inputNumber: 1,
         files: [''],
         languages: [''],
-        value: [{
-          file: '',
-          language: ''
-        }]
+        status: ''
       };
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);
@@ -234,7 +231,6 @@ class HRInfoFiles extends React.Component {
     }
 
     handleChange(number, type, v) {
-      let val = this.state.value;
       if (type === 'file') {
         let files = this.state.files;
         const that = this;
@@ -279,18 +275,41 @@ class HRInfoFiles extends React.Component {
     }
 
     onAddBtnClick (event) {
-      let val = this.state.value;
+      let files = this.state.files;
       for (let i = 0; i < this.state.inputNumber + 1; i++) {
-        if (!val[i]) {
-          val[i] = {
-            language: '',
-            file: ''
-          };
+        if (!files[i]) {
+          files[i] = '';
+
         }
       }
       this.setState({
         inputNumber: this.state.inputNumber + 1
       });
+    }
+
+    componentDidUpdate() {
+      if (this.props.value && this.state.status === '') {
+        const that = this;
+        let state = {
+          inputNumber: 0,
+          files: [],
+          languages: [],
+          status: 'updated'
+        };
+        this.props.value.forEach(function (fc) {
+          fc.fid = fc.file.fid;
+          fc.uri = fc.file.url;
+          fc.label = fc.file.filename;
+          state.files.push(fc);
+          that.languages.forEach(function (l) {
+            if (l.value === fc.language) {
+              state.languages.push(l);
+            }
+          });
+          state.inputNumber++;
+        });
+        this.setState(state);
+      }
     }
 
     render () {
