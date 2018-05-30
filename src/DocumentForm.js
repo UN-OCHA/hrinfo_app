@@ -66,8 +66,14 @@ class DocumentForm extends React.Component {
         language: fc.language,
         host_entity: docid
       };
-      await fetch('https://www.humanitarianresponse.info/api/v1.0/files_collection', {
-        method: 'POST',
+      let url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection';
+      let httpMethod = 'POST';
+      if (fc.item_id !== '') {
+        url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection/' + fc.item_id;
+        httpMethod = 'PATCH';
+      }
+      await fetch(url, {
+        method: httpMethod,
         body: JSON.stringify(body),
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -85,44 +91,61 @@ class DocumentForm extends React.Component {
     });
     const token = this.props.token;
     let doc = {};
-    let body = this.state.doc;
+    let body = JSON.stringify(this.state.doc);
+    body = JSON.parse(body);
     body.document_type = body.document_type.id;
-    delete body.related_content;
-    body.operation = [body.operation.id];
+    body.operation = [parseInt(body.operation.id, 10)];
     body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
     const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
     selectFields.forEach(function (field) {
       if (body[field]) {
         for (let i = 0; i < body[field].length; i++) {
-          body[field][i] = body[field][i].id;
+          body[field][i] = parseInt(body[field][i].id, 10);
         }
       }
     });
-    let locations = [];
-    body.locations.forEach(function (location, index) {
-      let last = 0;
-      for (let j = 0; j < location.length; j++) {
-        if (typeof location[j] === 'object') {
-          last = j;
+    if (body.locations) {
+      let locations = [];
+      body.locations.forEach(function (location, index) {
+        let last = 0;
+        for (let j = 0; j < location.length; j++) {
+          if (typeof location[j] === 'object') {
+            last = j;
+          }
         }
-      }
-      locations.push(location[last].id);
-    });
-    body.locations = locations;
+        locations.push(parseInt(location[last].id, 10));
+      });
+      body.locations = locations;
+    }
     let field_collections = [];
     body.files.files.forEach(function (file, index) {
       let fc = {};
       if (body.files.languages[index]) {
         fc.language = body.files.languages[index].value;
       }
-      fc.file = file.id;
+      fc.file = file.id ? file.id : file.fid;
+      fc.file = parseInt(fc.file, 10);
+      fc.item_id = '';
+      if (body.files.collections[index]) {
+        fc.item_id = parseInt(body.files.collections[index], 10);
+      }
       field_collections.push(fc);
     });
-    body.language = body.language.value;
     delete body.files;
+    body.language = body.language.value;
 
-    fetch('https://www.humanitarianresponse.info/api/v1.0/documents', {
-        method: 'POST',
+    let httpMethod = 'POST';
+    let url = 'https://www.humanitarianresponse.info/api/v1.0/documents';
+    if (body.id) {
+      httpMethod = 'PATCH';
+      url = 'https://www.humanitarianresponse.info/api/v1.0/documents/' + body.id;
+      delete body.created;
+      delete body.changed;
+      delete body.url;
+    }
+
+    fetch(url, {
+        method: httpMethod,
         body: JSON.stringify(body),
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -269,7 +292,7 @@ class DocumentForm extends React.Component {
         </div>
         <div className="form-group">
           <label htmlFor="related_content">Related Content</label>
-          <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} />
+          <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
         </div>
         <div className="form-group">
           <label htmlFor="organizations">Organizations</label>

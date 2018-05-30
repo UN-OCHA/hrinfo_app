@@ -8,7 +8,8 @@ class RelatedContent extends React.Component {
         value: [{
           title: '',
           url: ''
-        }]
+        }],
+        status: 'initial'
       };
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);
@@ -36,6 +37,7 @@ class RelatedContent extends React.Component {
       let val = this.state.value;
       val[number][elt] = value;
       this.setState({
+        status: 'ready',
         value: val
       });
       if (this.props.onChange) {
@@ -57,6 +59,16 @@ class RelatedContent extends React.Component {
         inputNumber: this.state.inputNumber + 1,
         value: val
       });
+    }
+
+    componentDidUpdate() {
+      if (this.props.value && this.state.status === 'initial') {
+        this.setState({
+          status: 'ready',
+          value: this.props.value,
+          inputNumber: this.props.value.length
+        });
+      }
     }
 
     render () {

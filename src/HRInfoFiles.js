@@ -197,6 +197,7 @@ class HRInfoFiles extends React.Component {
       ];
       this.state = {
         inputNumber: 1,
+        collections: [''],
         files: [''],
         languages: [''],
         status: ''
@@ -204,7 +205,7 @@ class HRInfoFiles extends React.Component {
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.onAddBtnClick = this.onAddBtnClick.bind(this);
-      this.finalizeChange = this.finalizeChange.bind(this);
+      this.chnageState = this.changeState.bind(this);
     }
 
     getRow (number) {
@@ -231,6 +232,11 @@ class HRInfoFiles extends React.Component {
     }
 
     handleChange(number, type, v) {
+      if (this.state.status === '') {
+        this.setState({
+          status: 'ready'
+        });
+      }
       if (type === 'file') {
         let files = this.state.files;
         const that = this;
@@ -252,24 +258,27 @@ class HRInfoFiles extends React.Component {
           return response.json();
         }).then(data => {
           files[number] = data.data[0][0];
-          that.setState({
+          that.changeState({
             files: files
           });
-          that.finalizeChange();
         });
       }
       else {
         let languages = this.state.languages;
         languages[number] = v;
-        this.finalizeChange();
+        this.changeState({
+          languages: languages
+        });
       }
     }
 
-    finalizeChange() {
+    changeState(newState) {
+      this.setState(newState);
       if (this.props.onChange) {
         this.props.onChange({
-          files: this.state.files,
-          languages: this.state.languages
+          files: newState.files ? newState.files : this.state.files,
+          languages: newState.languages ? newState.languages : this.state.languages,
+          collections: newState.collections ? newState.collections : this.state.collections
         });
       }
     }
@@ -292,11 +301,13 @@ class HRInfoFiles extends React.Component {
         const that = this;
         let state = {
           inputNumber: 0,
+          collections: [],
           files: [],
           languages: [],
           status: 'updated'
         };
         this.props.value.forEach(function (fc) {
+          state.collections.push(fc.item_id);
           fc.fid = fc.file.fid;
           fc.uri = fc.file.url;
           fc.label = fc.file.filename;
@@ -308,7 +319,7 @@ class HRInfoFiles extends React.Component {
           });
           state.inputNumber++;
         });
-        this.setState(state);
+        this.changeState(state);
       }
     }
 
