@@ -49,6 +49,7 @@ class HRInfoOrganizations extends React.Component {
         getOptionLabel={(option) => { return option.label}}
         onChange={this.handleChange}
         value={this.props.value}
+        className={this.props.className}
         />
     );
   }

@@ -7,3 +7,20 @@ body {
 .rdw-editor-main {
   height: 275px !important;
 }
+
+.was-validated .is-invalid__control {
+  border-color: #dc3545 !important;
+}
+
+.was-validated .is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.was-validated .is-valid__control {
+  border-color: #28a745 !important;
+}
+
+.form-group.required > label:after {
+  content:"*";
+  color: #dc3545;
+}

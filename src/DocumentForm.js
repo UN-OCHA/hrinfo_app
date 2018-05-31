@@ -33,6 +33,8 @@ class DocumentForm extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onEditorStateChange = this.onEditorStateChange.bind(this);
+    this.validateForm = this.validateForm.bind(this);
+    this.isValid = this.isValid.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.postFieldCollections = this.postFieldCollections.bind(this);
@@ -53,6 +55,15 @@ class DocumentForm extends React.Component {
   handleSelectChange (name, selected) {
     let doc = this.state.doc;
     doc[name] = selected;
+    let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
+    if (name === 'spaces') {
+      doc.spaces.forEach(function (val) {
+        if (val.type === 'operations') {
+          hasOperation = true;
+        }
+      });
+    }
+    doc.hasOperation = hasOperation;
     this.setState({
       doc: doc
     });
@@ -84,8 +95,50 @@ class DocumentForm extends React.Component {
     }
   }
 
+  isValid (value) {
+    if (typeof value === 'undefined') {
+      return false;
+    }
+    if (!value) {
+      return false;
+    }
+    if (Array.isArray(value) && value.length === 0) {
+      return false;
+    }
+    if (value.files && value.files.length === 0) {
+      return false;
+    }
+    if (typeof value === 'string' && value === 'und') {
+      return false;
+    }
+    return true;
+  }
+
+  validateForm () {
+    const doc = this.state.doc;
+    if (this.isValid(doc.language) &&
+      this.isValid(doc.spaces) &&
+      this.isValid(doc.label) &&
+      this.isValid(doc.document_type) &&
+      this.isValid(doc.publication_date) &&
+      this.isValid(doc.files) &&
+      this.isValid(doc.organizations)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
+    const isValid = this.validateForm();
+    if (!isValid) {
+      this.setState({
+        status: 'was-validated'
+      });
+      return;
+    }
     this.setState({
       status: 'submitting'
     });
@@ -94,7 +147,18 @@ class DocumentForm extends React.Component {
     let body = JSON.stringify(this.state.doc);
     body = JSON.parse(body);
     body.document_type = body.document_type.id;
-    body.operation = [parseInt(body.operation.id, 10)];
+    body.operation = [];
+    body.space = [];
+    body.spaces.forEach(function (sp) {
+      if (sp.type === 'operations') {
+        body.operation.push(sp.id);
+      }
+      else {
+        body.space.push(sp.id);
+      }
+    });
+    delete body.spaces;
+    delete body.hasOperation;
     body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
     const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
     selectFields.forEach(function (field) {
@@ -178,7 +242,8 @@ class DocumentForm extends React.Component {
         .then(results => {
           return results.json();
         }).then(data => {
-          console.log(data);
+          alert('Document was deleted successfully');
+          this.props.history.push('/home');
         }).catch(function(err) {
           console.log("Fetch error: ", err);
         });
@@ -209,7 +274,20 @@ class DocumentForm extends React.Component {
   async componentDidMount() {
     if (this.props.match.params.id) {
       const doc = await this.getDocument();
-      doc.operation = doc.operation[0];
+      doc.spaces = [];
+      doc.operation.forEach(function (op) {
+        if (op) {
+          doc.hasOperation = true;
+          op.type = "operations";
+          doc.spaces.push(op);
+        }
+      });
+      doc.space.forEach(function (sp) {
+        if (sp) {
+          sp.type = "spaces";
+          doc.spaces.push(sp);
+        }
+      });
       this.state.languages.forEach(function (lang) {
         if (doc.language === lang.value) {
           doc.language = lang;
@@ -231,24 +309,24 @@ class DocumentForm extends React.Component {
   }
 
   render() {
-    const offices = this.state.doc.operation ? (
+    const offices = this.state.doc.hasOperation ? (
       <div className="form-group">
         <label htmlFor="offices">Coordination hub(s)</label>
-        <HRInfoSelect type="offices" operation={this.state.doc.operation} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
+        <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
       </div>
     ) : '';
 
-    const disasters = this.state.doc.operation ? (
+    const disasters = this.state.doc.hasOperation ? (
       <div className="form-group">
         <label htmlFor="disasters">Disaster(s)</label>
-        <HRInfoSelect type="disasters" operation={this.state.doc.operation} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
+        <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
       </div>
     ) : '';
 
-    const bundles = this.state.doc.operation ? (
+    const bundles = this.state.doc.hasOperation ? (
       <div className="form-group">
         <label htmlFor="bundles">Cluster(s)/Sector(s)</label>
-        <HRInfoSelect type="bundles" operation={this.state.doc.operation} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
+        <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
       </div>
     ) : '';
 
@@ -256,30 +334,48 @@ class DocumentForm extends React.Component {
 
     return (
       <div>
-      <form onSubmit={this.handleSubmit}>
-        <div className="form-group">
+      <form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated': ''}>
+        <div className="form-group required">
           <label htmlFor="language">Language</label>
-          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} />
+          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
+          <div className="invalid-feedback">
+            Please select a language
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="operations">Operation</label>
-          <HRInfoSelect type="operations" onChange={(s) => this.handleSelectChange('operation', s)} value={this.state.doc.operation} />
+        <div className="form-group required">
+          <label htmlFor="spaces">Space</label>
+          <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
+          <div className="invalid-feedback">
+            You must select an operation or a space
+          </div>
         </div>
-        <div className="form-group">
+        <div className="form-group required">
           <label htmlFor="label">Label</label>
           <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
+          <div className="invalid-feedback">
+            Please enter a document title
+          </div>
         </div>
-        <div className="form-group">
+        <div className="form-group required">
           <label htmlFor="document_type">Document type</label>
-          <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} required={true} />
+          <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type) ? 'is-valid' : 'is-invalid'} />
+          <div className="invalid-feedback">
+            You must select a document type
+          </div>
         </div>
-        <div className="form-group">
+        <div className="form-group required">
           <label htmlFor="publication_date">Original Publication Date</label>
-          <input type="date" className="form-control" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} />
+          <input type="date" className="form-control" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
+          <div className="invalid-feedback">
+            You must enter a publication date
+          </div>
         </div>
-        <div className="form-group">
+        <div className="form-group required">
           <label htmlFor="files">Files</label>
-          <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} />
+          <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files) ? 'is-valid' : 'is-invalid'} />
+          <div className="invalid-feedback">
+            You must add at least one file
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="body">Body</label>
@@ -294,9 +390,12 @@ class DocumentForm extends React.Component {
           <label htmlFor="related_content">Related Content</label>
           <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
         </div>
-        <div className="form-group">
+        <div className="form-group required">
           <label htmlFor="organizations">Organizations</label>
-          <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} />
+          <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
+          <div className="invalid-feedback">
+            You must select at least one organization
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="locations">Locations</label>
@@ -309,7 +408,7 @@ class DocumentForm extends React.Component {
           <label htmlFor="themes">Themes</label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
         </div>
-        {this.state.status === '' &&
+        {this.state.status !== 'submitting' &&
           <input type="submit" value="Submit" />
         }
         {this.state.status === 'submitting' &&

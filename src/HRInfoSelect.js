@@ -7,30 +7,31 @@ class HRInfoSelect extends React.Component {
     this.state = {
       items: []
     };
-    this.setBaseUrl = this.setBaseUrl.bind(this);
+    this.getUrl = this.getUrl.bind(this);
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  setBaseUrl () {
-    this.baseUrl = 'https://www.humanitarianresponse.info/en/api/v1.0/' + this.props.type + '?sort=label';
-    if (this.props.type !== 'document_types') {
-      this.baseUrl += '&fields=id,label';
+  getUrl (type, operation) {
+    let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type + '?sort=label';
+    if (type !== 'document_types') {
+      url += '&fields=id,label,operation';
     }
-    if (this.props.operation) {
-      this.baseUrl += '&filter[operation]=' + this.props.operation.id;
+    if (operation) {
+      url += '&filter[operation]=' + operation;
     }
-    this.baseUrl += '&page=';
+    url += '&page=';
+    return url;
   }
 
-  fetchNextPage (page) {
-    return fetch(this.baseUrl + page)
+  fetchNextPage (url, page, type, operationLabel) {
+    return fetch(url + page)
         .then(results => {
             return results.json();
         }).then(data => {
           let pushed = [];
           let items = this.state.items;
-          if (this.props.type === 'document_types') {
+          if (type === 'document_types') {
             data.data.forEach(function (elt) {
               if (elt.parent.length === 1) {
                 elt.label = elt.parent[0].label + " > " + elt.label;
@@ -40,27 +41,34 @@ class HRInfoSelect extends React.Component {
                 pushed.push(elt);
               }
             });
-            this.setState({
-              items: items.concat(pushed).sort(function (a, b) {
-                if (a.label < b.label) {
-                  return -1;
-                }
-                if (a.label > b.label) {
-                  return 1;
-                }
-                return 0;
-              })
+          }
+          else if (type === 'bundles' || type === 'offices') {
+            data.data.forEach(function (elt) {
+              elt.label = elt.label + " (" + operationLabel + ")";
+              pushed.push(elt);
             });
           }
           else {
             pushed = data.data;
-            this.setState({
-              items: items.concat(pushed)
+            pushed = pushed.map(function (val) {
+              val.type = type;
+              return val;
             });
           }
+          this.setState({
+            items: items.concat(pushed).sort(function (a, b) {
+              if (a.label < b.label) {
+                return -1;
+              }
+              if (a.label > b.label) {
+                return 1;
+              }
+              return 0;
+            })
+          });
           if (data.next) {
             const nextPage = page + 1;
-            return this.fetchNextPage(nextPage);
+            return this.fetchNextPage(url, nextPage, type);
           }
         }).catch(function(err) {
             console.log("Fetch error: ", err);
@@ -74,8 +82,23 @@ class HRInfoSelect extends React.Component {
   }
 
   componentDidMount() {
-    this.setBaseUrl();
-    this.fetchNextPage(1);
+    if (this.props.spaces) {
+      const that = this;
+      this.props.spaces.forEach(function (space) {
+        if (space.type === 'operations') {
+          const url = that.getUrl(that.props.type, space.id);
+          that.fetchNextPage(url, 1, that.props.type, space.label);
+        }
+      });
+    }
+    else {
+      const url = this.getUrl(this.props.type);
+      this.fetchNextPage(url, 1, this.props.type);
+    }
+    if (this.props.type === 'spaces') {
+      const url2 = this.getUrl('operations');
+      this.fetchNextPage(url2, 1, 'operations');
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -86,12 +109,17 @@ class HRInfoSelect extends React.Component {
         }
       }
     }
-    if (prevProps.operation && prevProps.operation.id !== this.props.operation.id) {
+    if (JSON.stringify(prevProps.spaces) !== JSON.stringify(this.props.spaces)) {
       this.setState({
         items: []
       });
-      this.setBaseUrl();
-      this.fetchNextPage(1);
+      const that = this;
+      this.props.spaces.forEach(function (space) {
+        if (space.type === 'operations') {
+          const url = that.getUrl(that.props.type, space.id);
+          that.fetchNextPage(url, 1, that.props.type, space.label);
+        }
+      });
     }
   }
 
@@ -105,8 +133,7 @@ class HRInfoSelect extends React.Component {
           options={this.state.items}
           getOptionValue={(option) => { return option.id }}
           getOptionLabel={(option) => { return option.label}}
-          value={this.props.value}
-          required={this.props.required} />
+          value={this.props.value} />
     );
   }
 }

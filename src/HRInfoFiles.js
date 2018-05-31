@@ -329,7 +329,7 @@ class HRInfoFiles extends React.Component {
         rows.push(this.getRow(i));
       }
       return (
-        <div>
+        <div className={this.props.className}>
           {rows}
           <button type="button" onClick={this.onAddBtnClick}>Add file</button>
         </div>
