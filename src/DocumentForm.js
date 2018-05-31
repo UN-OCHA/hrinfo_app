@@ -1,4 +1,5 @@
 import React from 'react';
+import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
@@ -310,115 +311,122 @@ class DocumentForm extends React.Component {
 
   render() {
     const offices = this.state.doc.hasOperation ? (
-      <div className="form-group">
-        <label htmlFor="offices">Coordination hub(s)</label>
+      <FormGroup>
+        <Label for="offices">Coordination hub(s)</Label>
         <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
-      </div>
+      </FormGroup>
     ) : '';
 
     const disasters = this.state.doc.hasOperation ? (
-      <div className="form-group">
-        <label htmlFor="disasters">Disaster(s)</label>
+      <FormGroup>
+        <Label for="disasters">Disaster(s)</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
-      </div>
+      </FormGroup>
     ) : '';
 
     const bundles = this.state.doc.hasOperation ? (
-      <div className="form-group">
-        <label htmlFor="bundles">Cluster(s)/Sector(s)</label>
+      <FormGroup>
+        <Label for="bundles">Cluster(s)/Sector(s)</Label>
         <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
-      </div>
+      </FormGroup>
     ) : '';
 
     const { editorState } = this.state;
 
     return (
-      <div>
-      <form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated': ''}>
-        <div className="form-group required">
-          <label htmlFor="language">Language</label>
+      <Form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated': ''}>
+        <FormGroup className="required">
+          <Label for="language">Language</Label>
           <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
           <div className="invalid-feedback">
             Please select a language
           </div>
-        </div>
-        <div className="form-group required">
-          <label htmlFor="spaces">Space</label>
+        </FormGroup>
+
+        <FormGroup className="required">
+          <Label for="spaces">Spaces</Label>
           <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
           <div className="invalid-feedback">
             You must select an operation or a space
           </div>
-        </div>
-        <div className="form-group required">
-          <label htmlFor="label">Label</label>
+        </FormGroup>
+
+        <FormGroup className="required">
+          <Label for="label">Label</Label>
           <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
           <div className="invalid-feedback">
             Please enter a document title
           </div>
-        </div>
-        <div className="form-group required">
-          <label htmlFor="document_type">Document type</label>
+        </FormGroup>
+
+        <FormGroup className="required">
+          <Label for="document_type">Document type</Label>
           <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type) ? 'is-valid' : 'is-invalid'} />
           <div className="invalid-feedback">
             You must select a document type
           </div>
-        </div>
-        <div className="form-group required">
-          <label htmlFor="publication_date">Original Publication Date</label>
+        </FormGroup>
+
+        <FormGroup className="required">
+          <Label for="publication_date">Original Publication Date</Label>
           <input type="date" className="form-control" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
           <div className="invalid-feedback">
             You must enter a publication date
           </div>
-        </div>
-        <div className="form-group required">
-          <label htmlFor="files">Files</label>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="files">Files</Label>
           <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files) ? 'is-valid' : 'is-invalid'} />
           <div className="invalid-feedback">
             You must add at least one file
           </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="body">Body</label>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="body">Body</Label>
           <Editor
             editorState={editorState}
             wrapperClassName="demo-wrapper"
             editorClassName="demo-editor"
             onEditorStateChange={this.onEditorStateChange}
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="related_content">Related Content</label>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="related_content">Related Content</Label>
           <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
-        </div>
-        <div className="form-group required">
-          <label htmlFor="organizations">Organizations</label>
+        </FormGroup>
+
+        <FormGroup className="required">
+          <Label for="organizations">Organizations</Label>
           <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
           <div className="invalid-feedback">
             You must select at least one organization
           </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="locations">Locations</label>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="locations">Locations</Label>
           <HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} />
-        </div>
+        </FormGroup>
         {bundles}
         {offices}
         {disasters}
-        <div className="form-group">
-          <label htmlFor="themes">Themes</label>
+        <FormGroup>
+          <Label for="themes">Themes</Label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
-        </div>
+        </FormGroup>
         {this.state.status !== 'submitting' &&
-          <input type="submit" value="Submit" />
+          <Button color="primary">Submit</Button>
         }
         {this.state.status === 'submitting' &&
           <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
         }
-      </form>
-      {this.props.match.params.id &&
-        <button className="btn btn-default btn-alert" onClick={this.handleDelete}>Delete</button>
-      }
-      </div>
+        {this.props.match.params.id &&
+          <Button color="danger" onClick={this.handleDelete}>Delete</Button>
+        }
+      </Form>
     );
   }
 }
