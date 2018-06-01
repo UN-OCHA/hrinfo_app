@@ -2,6 +2,20 @@ import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import { withRouter } from "react-router-dom";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem } from 'reactstrap';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import Routes from "./Routes";
 import './App.css';
 import Search from './Search';
@@ -18,13 +32,21 @@ class App extends Component {
       isAuthenticated: false,
       isAuthenticating: true,
       user: {},
-      token: ''
+      token: '',
+      isOpen: false
     };
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
     this.userIsAuthenticated = this.userIsAuthenticated.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.goToDocument = this.goToDocument.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
   }
 
   userHasAuthenticated (authenticated, user, token) {
@@ -88,32 +110,47 @@ class App extends Component {
       user: this.state.user,
       token: this.state.token
     };
+
+    const navbar = this.state.isAuthenticated ? (
+      <Navbar color="light" light expand="md">
+        <NavbarBrand href="/home">HR.info Admin</NavbarBrand>
+        <NavbarToggler onClick={this.toggle} />
+        <Search className="col-sm-6" onChange={this.goToDocument} placeholder="Search for documents..." />
+        <Collapse isOpen={this.state.isOpen} navbar>
+          <Nav className="ml-auto" navbar>
+            <NavItem>
+              <NavLink href="/admin/">Admin</NavLink>
+            </NavItem>
+            <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
+                <FontAwesomeIcon icon={faUser} />
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem>
+                  Option 1
+                </DropdownItem>
+                <DropdownItem>
+                  Option 2
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem onClick={this.handleLogout}>
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </Nav>
+        </Collapse>
+      </Navbar>
+    ) : (
+      <Navbar color="light" light expand="md">
+        <NavbarBrand href="/home">HR.info Admin</NavbarBrand>
+        <NavbarToggler onClick={this.toggle} />
+      </Navbar>
+    );
     return (
       !this.state.isAuthenticating &&
       <div className="App container">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand" href="/">HRInfo Admin</a>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto col-sm-9">
-              <li className="nav-item active">
-                <a className="nav-link" href="/home">Home <span className="sr-only">(current)</span></a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/admin">Admin</a>
-              </li>
-              <li className="nav-item">
-                <button className="nav-link" onClick={this.handleLogout}>Logout</button>
-              </li>
-            </ul>
-            <div className="col-sm-3">
-              <Search onChange={this.goToDocument} />
-            </div>
-          </div>
-        </nav>
+        {navbar}
         <Routes childProps={childProps} />
       </div>
     );

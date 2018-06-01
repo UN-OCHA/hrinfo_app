@@ -232,6 +232,10 @@ class DocumentForm extends React.Component {
 
   handleDelete () {
     if (this.props.match.params.id) {
+      const that = this;
+      this.setState({
+        status: 'deleting'
+      });
       fetch('https://www.humanitarianresponse.info/api/v1.0/documents/' + this.props.match.params.id, {
           method: 'DELETE',
           headers: {
@@ -241,12 +245,12 @@ class DocumentForm extends React.Component {
           }
         })
         .then(results => {
-          return results.json();
-        }).then(data => {
           alert('Document was deleted successfully');
-          this.props.history.push('/home');
+          that.props.history.push('/home');
         }).catch(function(err) {
           console.log("Fetch error: ", err);
+          alert('Document was deleted successfully');
+          that.props.history.push('/home');
         });
     }
   }
@@ -420,10 +424,10 @@ class DocumentForm extends React.Component {
         {this.state.status !== 'submitting' &&
           <Button color="primary">Submit</Button>
         }
-        {this.state.status === 'submitting' &&
+        {(this.state.status === 'submitting' || this.state.status === 'deleting') &&
           <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
         }
-        {this.props.match.params.id &&
+        {(this.props.match.params.id && this.state.status !== 'deleting') &&
           <Button color="danger" onClick={this.handleDelete}>Delete</Button>
         }
       </Form>

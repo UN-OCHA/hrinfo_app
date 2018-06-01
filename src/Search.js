@@ -40,6 +40,8 @@ class Search extends React.Component {
         getOptionValue={(option) => { return option.id }}
         getOptionLabel={(option) => { return option.label}}
         onChange={this.handleChange}
+        className={this.props.className}
+        placeholder={this.props.placeholder}
         />
     );
   }
