@@ -53,7 +53,8 @@ class App extends Component {
     const { cookies } = this.props;
     let newState = {};
     if (authenticated === true) {
-      cookies.set('hid', {token: token, user: {name: user.name}}, {path: '/'});
+      cookies.set('hid-token', token, {path: '/'});
+      localStorage.setItem('hid-user', JSON.stringify(user));
       newState = {
         isAuthenticated: true,
         user: user,
@@ -61,7 +62,8 @@ class App extends Component {
       };
     }
     else {
-      cookies.remove('hid', { path: '/'});
+      cookies.remove('hid-token', { path: '/'});
+      localStorage.clear();
       newState = {
         isAuthenticated: false,
         user: {},
@@ -73,7 +75,9 @@ class App extends Component {
 
   userIsAuthenticated () {
     const { cookies } = this.props;
-    return cookies.get('hid');
+    const token = cookies.get('hid-token');
+    const user = localStorage.getItem('hid-user');
+    return {token: token, user: JSON.parse(user)};
   }
 
   handleLogout () {

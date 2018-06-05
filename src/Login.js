@@ -28,6 +28,7 @@ class Login extends React.Component {
       event.preventDefault();
       let body = this.state;
       body.exp = Math.floor(Date.now() / 1000) + 3600;
+      let tokenData = {};
       fetch('https://auth.humanitarian.id/api/v2/jsonwebtoken', {
         method: 'POST',
         body: JSON.stringify(body),
@@ -40,13 +41,27 @@ class Login extends React.Component {
             return results.json();
         })
         .then(data => {
-          if (data.user && data.token) {
-            this.props.userHasAuthenticated(true, data.user, data.token);
-            this.props.history.push('/home');
+          if (!data.user || !data.token) {
+            throw "Unknown exception";
           }
           else {
-            alert('Could not log you in');
+            tokenData = data;
+            return fetch('https://www.humanitarianresponse.info/api/v1.0/user/me?access_token=' + data.token);
           }
+        })
+        .then(results => {
+          return results.json();
+        })
+        .then(data => {
+          tokenData.user.hrinfo = {
+            roles: data.data[0].roles,
+            spaces: data.data[0].spaces
+          };
+          this.props.userHasAuthenticated(true, tokenData.user, tokenData.token);
+          this.props.history.push('/home');
+        })
+        .catch(err => {
+          alert('Could not log you in');
         });
     }
 
