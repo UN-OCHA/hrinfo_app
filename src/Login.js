@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap';
 
 class Login extends React.Component {
   constructor(props) {
@@ -67,19 +68,19 @@ class Login extends React.Component {
 
     render() {
       return (
-        <div className="Login">
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="email" className="form-control" name="email" id="email" value={this.state.email} onChange={this.handleChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input type="password" className="form-control" name="password" id="password" value={this.state.password} onChange={this.handleChange} />
-            </div>
-            <button className="btn btn-default" type="submit">Login</button>
-          </form>
-        </div>
+        <Form onSubmit={this.handleSubmit}>
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input type="email" name="email" id="email" value={this.state.email} onChange={this.handleChange} />
+            <FormText color="muted">Your Humanitarian ID email</FormText>
+          </FormGroup>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange} />
+            <FormText color="muted">Your Humanitarian ID password</FormText>
+          </FormGroup>
+          <Button color="primary">Login</Button>
+        </Form>
       );
     }
 }

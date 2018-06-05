@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
@@ -357,7 +357,7 @@ class DocumentForm extends React.Component {
 
         <FormGroup className="required">
           <Label for="label">Label</Label>
-          <input type="text" className="form-control" name="label" id="label" aria-describedby="labelHelp" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
+          <Input type="text" name="label" id="label" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
           <div className="invalid-feedback">
             Please enter a document title
           </div>
@@ -373,7 +373,7 @@ class DocumentForm extends React.Component {
 
         <FormGroup className="required">
           <Label for="publication_date">Original Publication Date</Label>
-          <input type="date" className="form-control" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
+          <Input type="date" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
           <div className="invalid-feedback">
             You must enter a publication date
           </div>
