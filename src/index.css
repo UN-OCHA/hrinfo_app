@@ -24,3 +24,13 @@ body {
   content:"*";
   color: #dc3545;
 }
+
+.crop-image {
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.badge {
+  margin-right: 1em;
+  margin-left: 1em;
+}

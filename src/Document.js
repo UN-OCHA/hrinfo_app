@@ -1,4 +1,6 @@
 import React from 'react';
+import { Row, Col, Label, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Badge, CardFooter, CardLink } from 'reactstrap';
+import renderHTML from 'react-render-html';
 
 class Document extends React.Component {
 
@@ -7,13 +9,17 @@ class Document extends React.Component {
 
       this.state = {
         doc: null,
-        canEdit: true
+        canEdit: true,
+        filesOpen: false
       };
 
       this.canEdit = this.canEdit.bind(this);
+      this.renderBadges = this.renderBadges.bind(this);
+      this.openFiles = this.openFiles.bind(this);
     }
 
     getDocument () {
+      const that = this;
       return fetch("https://www.humanitarianresponse.info/api/v1.0/documents/" + this.props.match.params.id)
           .then(results => {
               return results.json();
@@ -21,6 +27,7 @@ class Document extends React.Component {
             return data.data[0];
           }).catch(function(err) {
               console.log("Fetch error: ", err);
+              that.props.setAlert('danger', 'Could not fetch document');
           });
     }
 
@@ -48,6 +55,12 @@ class Document extends React.Component {
       return canEdit;
     }
 
+    openFiles () {
+      this.setState({
+        filesOpen: !this.state.filesOpen
+      });
+    }
+
     async componentDidMount() {
       const doc = await this.getDocument();
       this.setState({
@@ -56,20 +69,61 @@ class Document extends React.Component {
       });
     }
 
+    renderBadges () {
+      const attributes = [
+        'operation',
+        'space',
+        'organizations',
+        'bundles',
+        'locations',
+        'themes',
+        'offices',
+        'disasters'
+      ];
+      const that = this;
+      let badges = [];
+      attributes.forEach(function (a) {
+        if (that.state.doc[a]) {
+          for (let i = 0; i < that.state.doc[a].length; i++) {
+            if (that.state.doc[a][i]) {
+              badges.push(<Badge>{that.state.doc[a][i].label}</Badge>);
+            }
+          }
+        }
+      });
+      return badges;
+    }
+
     render() {
       const editLink = this.state.canEdit ? (
-        <a href={'/documents/' + this.props.match.params.id + '/edit'}>Edit this document</a>
+        <CardLink href={'/documents/' + this.props.match.params.id + '/edit'}>Edit</CardLink>
       ) : '';
       return (
-        <div className="document">
-          {this.state.doc &&
-            <div>
-              <p>{this.state.doc.label}</p>
-              <a href={ 'https://www.humanitarianresponse.info/node/' + this.props.match.params.id } target="blank">View this document in humanitarianresponse.info</a><br />
-              {editLink}
-            </div>
-          }
-        </div>
+        this.state.doc &&
+        <Card>
+          <CardBody>
+            <CardTitle>{this.state.doc.label}</CardTitle>
+            <CardSubtitle>{this.renderBadges()}</CardSubtitle>
+          </CardBody>
+          <div className="crop-image">
+            <CardImg top width="100%" src={this.state.doc.files[0].file.preview} alt="Card image cap" />
+          </div>
+          <ButtonDropdown isOpen={this.state.filesOpen} toggle={this.openFiles} className="mx-auto">
+            <DropdownToggle caret color="primary">
+              Download
+            </DropdownToggle>
+            <DropdownMenu>
+              {this.state.doc.files.map(function (f) {
+                return <DropdownItem><a href={f.file.url} target="_blank">{f.file.filename}</a></DropdownItem>;
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
+          <CardText>{this.state.doc['body-html'] ? renderHTML(this.state.doc['body-html']) : ''}</CardText>
+          <CardFooter>
+            <CardLink href={ 'https://www.humanitarianresponse.info/node/' + this.props.match.params.id }>View in HR.info</CardLink>
+            {editLink}
+          </CardFooter>
+        </Card>
       );
     }
 }

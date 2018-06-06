@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Row } from 'reactstrap';
 import HRInfoLocation from './HRInfoLocation';
 
 class HRInfoLocations extends React.Component {
@@ -31,12 +32,12 @@ class HRInfoLocations extends React.Component {
     ) : '';
 
     return (
-      <div className="row" key={number}>
+      <Row key={number}>
         <HRInfoLocation level="0" onChange={this.handleChange} row={number} value={this.state.locations[number][0]} />
         {locations1}
         {locations2}
         {locations3}
-      </div>
+      </Row>
     );
   }
 
@@ -125,7 +126,7 @@ class HRInfoLocations extends React.Component {
     return (
       <div>
         {rows}
-        <button type="button" onClick={this.onAddBtnClick}>Add location</button>
+        <Button onClick={this.onAddBtnClick}>Add location</Button>
       </div>
       );
   }

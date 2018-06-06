@@ -13,7 +13,8 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem,
+  Alert} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import Routes from "./Routes";
@@ -33,7 +34,8 @@ class App extends Component {
       isAuthenticating: true,
       user: {},
       token: '',
-      isOpen: false
+      isOpen: false,
+      alert: {}
     };
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -41,6 +43,8 @@ class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.goToDocument = this.goToDocument.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.setAlert = this.setAlert.bind(this);
+    this.hideAlert = this.hideAlert.bind(this);
   }
 
   toggle() {
@@ -106,11 +110,27 @@ class App extends Component {
     this.props.history.push('/documents/' + selected.id);
   }
 
+  setAlert(color, message) {
+    this.setState({
+      alert: {
+        color: color,
+        message: message
+      }
+    });
+  }
+
+  hideAlert() {
+    this.setState({
+      alert: {}
+    });
+  }
+
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       userIsAuthenticated: this.userIsAuthenticated,
+      setAlert: this.setAlert,
       user: this.state.user,
       token: this.state.token
     };
@@ -151,10 +171,15 @@ class App extends Component {
         <NavbarToggler onClick={this.toggle} />
       </Navbar>
     );
+
+    const myAlert = this.state.alert.message ? (
+      <Alert color={this.state.alert.color} toggle={this.hideAlert}>{this.state.alert.message}</Alert>
+    ) : '';
     return (
       !this.state.isAuthenticating &&
       <div className="App container">
         {navbar}
+        {myAlert}
         <Routes childProps={childProps} />
       </div>
     );

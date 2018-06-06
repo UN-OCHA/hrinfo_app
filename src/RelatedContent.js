@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 
 class RelatedContent extends React.Component {
     constructor(props) {
@@ -18,16 +19,20 @@ class RelatedContent extends React.Component {
 
     getRow (number) {
       return (
-        <div className="row" key={number}>
-          <div className="col-sm-6">
-            <label>Title</label><br />
-            <input type="text" className="form-control" name={'related_content_titles_' + number} placeholder="Title" value={this.state.value[number]['title']} onChange={(v) => this.handleChange(number, 'title', v)} />
-          </div>
-          <div className="col-sm-6">
-            <label>URL</label>
-            <input type="text" className="form-control" name={'related_content_urls_' + number} placeholder="URL" value={this.state.value[number]['url']} onChange={(v) => this.handleChange(number, 'url', v)} />
-          </div>
-        </div>
+        <Row key={number}>
+          <Col sm="6">
+            <FormGroup>
+              <Label>Title</Label>
+              <Input type="text" className="form-control" name={'related_content_titles_' + number} placeholder="Title" value={this.state.value[number]['title']} onChange={(v) => this.handleChange(number, 'title', v)} />
+            </FormGroup>
+          </Col>
+          <Col sm="6">
+            <FormGroup>
+              <Label>URL</Label>
+              <Input type="text" className="form-control" name={'related_content_urls_' + number} placeholder="URL" value={this.state.value[number]['url']} onChange={(v) => this.handleChange(number, 'url', v)} />
+            </FormGroup>
+          </Col>
+        </Row>
       );
     }
 
@@ -79,7 +84,7 @@ class RelatedContent extends React.Component {
       return (
         <div>
           {rows}
-          <button type="button" onClick={this.onAddBtnClick}>Add related content</button>
+          <Button onClick={this.onAddBtnClick}>Add related content</Button>
         </div>
         );
     }

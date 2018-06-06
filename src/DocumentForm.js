@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
@@ -227,6 +227,9 @@ class DocumentForm extends React.Component {
       })
       .then(res => {
         this.props.history.push('/documents/' + doc.id);
+      })
+      .catch(err => {
+        this.props.setAlert('danger', 'There was an error uploading your document');
       });
   }
 
@@ -245,11 +248,10 @@ class DocumentForm extends React.Component {
           }
         })
         .then(results => {
-          alert('Document was deleted successfully');
+          that.props.setAlert('success', 'Document deleted successfully');
           that.props.history.push('/home');
         }).catch(function(err) {
-          console.log("Fetch error: ", err);
-          alert('Document was deleted successfully');
+          that.props.setAlert('danger', 'There was an error deleting your document');
           that.props.history.push('/home');
         });
     }
@@ -266,13 +268,14 @@ class DocumentForm extends React.Component {
   }
 
   getDocument () {
+    const that = this;
     return fetch("https://www.humanitarianresponse.info/api/v1.0/documents/" + this.props.match.params.id)
         .then(results => {
             return results.json();
         }).then(data => {
           return data.data[0];
         }).catch(function(err) {
-            console.log("Fetch error: ", err);
+          that.props.setAlert('danger', 'Could not fetch document');
         });
   }
 
@@ -318,6 +321,9 @@ class DocumentForm extends React.Component {
       <FormGroup>
         <Label for="offices">Coordination hub(s)</Label>
         <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
+        <FormText color="muted">
+          Click on the field and select the coordination hub(s) the document refers to (if any).
+        </FormText>
       </FormGroup>
     ) : '';
 
@@ -325,6 +331,9 @@ class DocumentForm extends React.Component {
       <FormGroup>
         <Label for="disasters">Disaster(s)</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
+        <FormText color="muted">
+          Click on the field and select the disaster(s) or emergency the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
+        </FormText>
       </FormGroup>
     ) : '';
 
@@ -332,6 +341,9 @@ class DocumentForm extends React.Component {
       <FormGroup>
         <Label for="bundles">Cluster(s)/Sector(s)</Label>
         <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
+        <FormText color="muted">
+          Indicate the cluster(s)/sector(s) the document refers to.
+        </FormText>
       </FormGroup>
     ) : '';
 
@@ -350,6 +362,9 @@ class DocumentForm extends React.Component {
         <FormGroup className="required">
           <Label for="spaces">Spaces</Label>
           <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Click on the field and select where to publish the document (operation, regional site or thematic site).
+          </FormText>
           <div className="invalid-feedback">
             You must select an operation or a space
           </div>
@@ -358,6 +373,9 @@ class DocumentForm extends React.Component {
         <FormGroup className="required">
           <Label for="label">Label</Label>
           <Input type="text" name="label" id="label" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+          </FormText>
           <div className="invalid-feedback">
             Please enter a document title
           </div>
@@ -366,6 +384,9 @@ class DocumentForm extends React.Component {
         <FormGroup className="required">
           <Label for="document_type">Document type</Label>
           <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Select the document type and sub-type that best describe the document.
+          </FormText>
           <div className="invalid-feedback">
             You must select a document type
           </div>
@@ -374,45 +395,64 @@ class DocumentForm extends React.Component {
         <FormGroup className="required">
           <Label for="publication_date">Original Publication Date</Label>
           <Input type="date" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
+          <FormText color="muted">
+            Indicate when the document has originally been published.
+          </FormText>
           <div className="invalid-feedback">
             You must enter a publication date
           </div>
         </FormGroup>
 
-        <FormGroup>
+        <FormGroup className="required">
+          <Label for="organizations">Organizations</Label>
+          <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Type in and select the source(s) of the document.
+          </FormText>
+          <div className="invalid-feedback">
+            You must select at least one organization
+          </div>
+        </FormGroup>
+
+        <FormGroup className="required">
           <Label for="files">Files</Label>
           <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Upload the file to publish from your computer, and specify the language of the document. It is best to publish one file per record, however you can add
+            more if needed. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+          </FormText>
           <div className="invalid-feedback">
             You must add at least one file
           </div>
         </FormGroup>
 
         <FormGroup>
-          <Label for="body">Body</Label>
+          <Label for="body">Description or Summary of Content</Label>
           <Editor
             editorState={editorState}
             wrapperClassName="demo-wrapper"
             editorClassName="demo-editor"
             onEditorStateChange={this.onEditorStateChange}
           />
+          <FormText color="muted">
+            Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+          </FormText>
         </FormGroup>
 
         <FormGroup>
           <Label for="related_content">Related Content</Label>
           <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
-        </FormGroup>
-
-        <FormGroup className="required">
-          <Label for="organizations">Organizations</Label>
-          <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
-          <div className="invalid-feedback">
-            You must select at least one organization
-          </div>
+          <FormText color="muted">
+            Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+          </FormText>
         </FormGroup>
 
         <FormGroup>
           <Label for="locations">Locations</Label>
           <HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} />
+          <FormText color="muted">
+            Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).
+          </FormText>
         </FormGroup>
         {bundles}
         {offices}
@@ -420,6 +460,9 @@ class DocumentForm extends React.Component {
         <FormGroup>
           <Label for="themes">Themes</Label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
+          <FormText color="muted">
+            Click on the field and select all relevant themes. Choose only themes the document substantively refers to.
+          </FormText>
         </FormGroup>
         {this.state.status !== 'submitting' &&
           <Button color="primary">Submit</Button>

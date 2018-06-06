@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 
 class Login extends React.Component {
   constructor(props) {
@@ -7,16 +9,12 @@ class Login extends React.Component {
 
       this.state = {
         email: "",
-        password: ""
+        password: "",
+        status: 'initial'
       };
 
-      this.validateForm = this.validateForm.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    validateForm() {
-      return this.state.email.length > 0 && this.state.password.length > 0;
     }
 
     handleChange (event) {
@@ -27,7 +25,13 @@ class Login extends React.Component {
 
     handleSubmit (event) {
       event.preventDefault();
-      let body = this.state;
+      this.setState({
+        status: 'submitting'
+      });
+      let body = {
+        email: this.state.email,
+        password: this.state.password
+      };
       body.exp = Math.floor(Date.now() / 1000) + 3600;
       let tokenData = {};
       fetch('https://auth.humanitarian.id/api/v2/jsonwebtoken', {
@@ -62,7 +66,10 @@ class Login extends React.Component {
           this.props.history.push('/home');
         })
         .catch(err => {
-          alert('Could not log you in');
+          this.setState({
+            status: 'initial'
+          });
+          this.props.setAlert('danger', 'Could not log you in. Please check your email and password.');
         });
     }
 
@@ -71,15 +78,20 @@ class Login extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="email">Email</Label>
-            <Input type="email" name="email" id="email" value={this.state.email} onChange={this.handleChange} />
+            <Input type="email" name="email" id="email" value={this.state.email} onChange={this.handleChange} required />
             <FormText color="muted">Your Humanitarian ID email</FormText>
           </FormGroup>
           <FormGroup>
             <Label for="password">Password</Label>
-            <Input type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange} />
+            <Input type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange} required />
             <FormText color="muted">Your Humanitarian ID password</FormText>
           </FormGroup>
-          <Button color="primary">Login</Button>
+          {this.state.status === 'initial' &&
+            <Button color="primary">Login</Button>
+          }
+          {this.state.status === 'submitting' &&
+            <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
+          }
         </Form>
       );
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 
@@ -210,24 +211,28 @@ class HRInfoFiles extends React.Component {
 
     getRow (number) {
       return (
-        <div className="row" key={number}>
-          <div className="col-sm-6">
-            <label>File</label><br />
-            {this.state.files[number] === '' ?
-              <input type="file" id={'files_' + number } name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } /> : ''
-            }
-            {this.state.files[number] === 'uploading' ?
-              <FontAwesomeIcon icon={faSpinner} pulse fixedWidth /> : ''
-            }
-            {typeof this.state.files[number] === 'object' ?
-              <a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a> : ''
-            }
-          </div>
-          <div className="col-sm-6">
-            <label>Language</label>
-            <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
-          </div>
-        </div>
+        <Row key={number}>
+          <Col sm="6">
+            <FormGroup>
+              <Label>File</Label>
+              {this.state.files[number] === '' ?
+                <Input type="file" id={'files_' + number } name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } /> : ''
+              }
+              {this.state.files[number] === 'uploading' ?
+                <FontAwesomeIcon icon={faSpinner} pulse fixedWidth /> : ''
+              }
+              {typeof this.state.files[number] === 'object' ?
+                <a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a> : ''
+              }
+            </FormGroup>
+          </Col>
+          <Col sm="6">
+            <FormGroup>
+              <Label>Language</Label>
+              <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
+            </FormGroup>
+          </Col>
+        </Row>
       );
     }
 
@@ -331,7 +336,7 @@ class HRInfoFiles extends React.Component {
       return (
         <div className={this.props.className}>
           {rows}
-          <button type="button" onClick={this.onAddBtnClick}>Add file</button>
+          <Button onClick={this.onAddBtnClick}>Add file</Button>
         </div>
         );
     }
