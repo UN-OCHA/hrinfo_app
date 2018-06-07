@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Label, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Badge, CardFooter, CardLink } from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Badge, CardFooter, CardLink } from 'reactstrap';
 import renderHTML from 'react-render-html';
 
 class Document extends React.Component {
@@ -62,11 +62,23 @@ class Document extends React.Component {
     }
 
     async componentDidMount() {
-      const doc = await this.getDocument();
-      this.setState({
-        doc: doc,
-        canEdit: this.canEdit(doc)
-      });
+      if (this.props.match.params.id) {
+        const doc = await this.getDocument();
+        this.setState({
+          doc: doc,
+          canEdit: this.canEdit(doc)
+        });
+      }
+    }
+
+    async componentDidUpdate () {
+      if (this.state.doc.id && this.state.doc.id !== this.props.match.params.id) {
+        const doc = await this.getDocument();
+        this.setState({
+          doc: doc,
+          canEdit: this.canEdit(doc)
+        });
+      }
     }
 
     renderBadges () {
@@ -86,7 +98,7 @@ class Document extends React.Component {
         if (that.state.doc[a]) {
           for (let i = 0; i < that.state.doc[a].length; i++) {
             if (that.state.doc[a][i]) {
-              badges.push(<Badge>{that.state.doc[a][i].label}</Badge>);
+              badges.push(<Badge key={a + '_' + that.state.doc[a][i].id}>{that.state.doc[a][i].label}</Badge>);
             }
           }
         }
@@ -98,33 +110,37 @@ class Document extends React.Component {
       const editLink = this.state.canEdit ? (
         <CardLink href={'/documents/' + this.props.match.params.id + '/edit'}>Edit</CardLink>
       ) : '';
-      return (
-        this.state.doc &&
-        <Card>
-          <CardBody>
-            <CardTitle>{this.state.doc.label}</CardTitle>
-            <CardSubtitle>{this.renderBadges()}</CardSubtitle>
-          </CardBody>
-          <div className="crop-image">
-            <CardImg top width="100%" src={this.state.doc.files[0].file.preview} alt="Card image cap" />
-          </div>
-          <ButtonDropdown isOpen={this.state.filesOpen} toggle={this.openFiles} className="mx-auto">
-            <DropdownToggle caret color="primary">
-              Download
-            </DropdownToggle>
-            <DropdownMenu>
-              {this.state.doc.files.map(function (f) {
-                return <DropdownItem><a href={f.file.url} target="_blank">{f.file.filename}</a></DropdownItem>;
-              })}
-            </DropdownMenu>
-          </ButtonDropdown>
-          <CardText>{this.state.doc['body-html'] ? renderHTML(this.state.doc['body-html']) : ''}</CardText>
-          <CardFooter>
-            <CardLink href={ 'https://www.humanitarianresponse.info/node/' + this.props.match.params.id }>View in HR.info</CardLink>
-            {editLink}
-          </CardFooter>
-        </Card>
-      );
+      if (this.state.doc) {
+        return (
+          <Card>
+            <CardBody>
+              <CardTitle>{this.state.doc.label}</CardTitle>
+              <CardSubtitle>{this.renderBadges()}</CardSubtitle>
+            </CardBody>
+            <div className="crop-image">
+              <CardImg top width="100%" src={this.state.doc.files[0].file.preview} alt="Card image cap" />
+            </div>
+            <ButtonDropdown isOpen={this.state.filesOpen} toggle={this.openFiles} className="mx-auto">
+              <DropdownToggle caret color="primary">
+                Download
+              </DropdownToggle>
+              <DropdownMenu>
+                {this.state.doc.files.map(function (f) {
+                  return <DropdownItem key={f.file.fid}><a href={f.file.url} target="_blank">{f.file.filename}</a></DropdownItem>;
+                })}
+              </DropdownMenu>
+            </ButtonDropdown>
+            <CardText>{this.state.doc['body-html'] ? renderHTML(this.state.doc['body-html']) : ''}</CardText>
+            <CardFooter>
+              <CardLink href={ 'https://www.humanitarianresponse.info/node/' + this.props.match.params.id }>View in HR.info</CardLink>
+              {editLink}
+            </CardFooter>
+          </Card>
+        );
+      }
+      else {
+        return null;
+      }
     }
 }
 
