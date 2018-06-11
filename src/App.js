@@ -14,12 +14,13 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Alert} from 'reactstrap';
+  Alert,
+  Input} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import Routes from "./Routes";
 import './App.css';
-import Search from './Search';
+import SearchPage from './SearchPage';
 
 class App extends Component {
   static propTypes = {
@@ -35,13 +36,14 @@ class App extends Component {
       user: {},
       token: '',
       isOpen: false,
-      alert: {}
+      alert: {},
+      searchTerms: ''
     };
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
     this.userIsAuthenticated = this.userIsAuthenticated.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.goToDocument = this.goToDocument.bind(this);
+    this.setSearch = this.setSearch.bind(this);
     this.toggle = this.toggle.bind(this);
     this.setAlert = this.setAlert.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
@@ -106,8 +108,13 @@ class App extends Component {
     }
   }
 
-  goToDocument(selected) {
-    this.props.history.push('/documents/' + selected.id);
+  setSearch(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+
+    this.setState({
+      searchTerms: value
+    });
   }
 
   setAlert(color, message) {
@@ -136,10 +143,10 @@ class App extends Component {
     };
 
     const navbar = this.state.isAuthenticated ? (
-      <Navbar color="light" light expand="md">
+      <Navbar color="dark" dark expand="md">
         <NavbarBrand href="/home">HR.info Admin</NavbarBrand>
         <NavbarToggler onClick={this.toggle} />
-        <Search className="col-sm-6" onChange={this.goToDocument} placeholder="Search for documents..." />
+        <Input type="text" className="col-sm-6" value={this.state.searchTerms} onChange={this.setSearch} placeholder="Start typing to search..." />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
@@ -166,7 +173,7 @@ class App extends Component {
         </Collapse>
       </Navbar>
     ) : (
-      <Navbar color="light" light expand="md">
+      <Navbar color="dark" dark expand="md">
         <NavbarBrand href="/home">HR.info Admin</NavbarBrand>
         <NavbarToggler onClick={this.toggle} />
       </Navbar>
@@ -175,14 +182,30 @@ class App extends Component {
     const myAlert = this.state.alert.message ? (
       <Alert color={this.state.alert.color} toggle={this.hideAlert}>{this.state.alert.message}</Alert>
     ) : '';
-    return (
-      !this.state.isAuthenticating &&
-      <div className="App container">
-        {navbar}
-        {myAlert}
-        <Routes childProps={childProps} />
-      </div>
-    );
+    if (!this.state.searchTerms) {
+      return (
+        !this.state.isAuthenticating &&
+        <div className="App">
+          {navbar}
+          <div className="container-fluid">
+            {myAlert}
+            <Routes childProps={childProps} />
+          </div>
+        </div>
+      );
+    }
+    else {
+      return (
+        !this.state.isAuthenticating &&
+        <div className="App">
+          {navbar}
+          <div className="container-fluid">
+            {myAlert}
+            <SearchPage searchTerms={this.state.searchTerms} />
+          </div>
+        </div>
+      );
+    }
   }
 }
 
