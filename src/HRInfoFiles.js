@@ -222,7 +222,7 @@ class HRInfoFiles extends React.Component {
                 <FontAwesomeIcon icon={faSpinner} pulse fixedWidth /> : ''
               }
               {typeof this.state.files[number] === 'object' ?
-                <a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a> : ''
+                <div><a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a></div> : ''
               }
             </FormGroup>
           </Col>

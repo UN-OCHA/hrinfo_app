@@ -14,7 +14,7 @@ class HRInfoSelect extends React.Component {
 
   getUrl (type, operation) {
     let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type + '?sort=label';
-    if (type !== 'document_types') {
+    if (type !== 'document_types' && type !== 'infographic_types') {
       url += '&fields=id,label,operation';
     }
     if (operation) {
@@ -31,7 +31,7 @@ class HRInfoSelect extends React.Component {
         }).then(data => {
           let pushed = [];
           let items = this.state.items;
-          if (type === 'document_types') {
+          if (type === 'document_types' || type === 'infographic_types') {
             data.data.forEach(function (elt) {
               if (elt.parent.length === 1) {
                 elt.label = elt.parent[0].label + " > " + elt.label;
@@ -102,7 +102,7 @@ class HRInfoSelect extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.type === 'document_types' && this.props.value) {
+    if ((this.props.type === 'document_types' || this.props.type === 'infographic_types') && this.props.value) {
       for (let i = 0; i < this.state.items.length; i++) {
         if (this.state.items[i].id === parseInt(this.props.value.id, 10)) {
           this.props.value.label = this.state.items[i].label;

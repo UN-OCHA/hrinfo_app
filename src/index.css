@@ -1,7 +1,16 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: helvetica,arial,sans-serif;
+  font-size: 14px;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #565d68;
+  line-height: 1.5;
+}
+
+body, html {
+  height: 100%;
 }
 
 .rdw-editor-main {
@@ -30,7 +39,33 @@ body {
   overflow: hidden;
 }
 
-.badge {
-  margin-right: 1em;
-  margin-left: 1em;
+.page-wrapper {
+  min-height: 100%;
+  margin-bottom: -190px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+footer {
+  background: #007ac0;
+  padding: 40px 0;
+  margin-top: 16px;
+  color: #fff;
+  font-size: 12px;
+  font-family: 'Open Sans',helvetica,arial,sans-serif;
+  height: 190px;
+}
+
+.footer a {
+  color: #fff;
+}
+
+.footer__logo {
+  margin-bottom: 8px;
+}
+
+.footer__logo a {
+  display: block;
+  margin-top: 8px;
 }

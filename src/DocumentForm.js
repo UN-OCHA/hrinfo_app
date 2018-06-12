@@ -16,6 +16,12 @@ import RelatedContent from './RelatedContent';
 class DocumentForm extends React.Component {
   constructor(props) {
     super(props);
+    let type = 'documents';
+    let typeLabel = 'document';
+    if (props.match.url.indexOf('documents') === -1) {
+      type = 'infographics';
+      typeLabel = 'map/infographic';
+    }
     this.state = {
       doc: {
         label: '',
@@ -28,7 +34,9 @@ class DocumentForm extends React.Component {
         { value: 'es', label: 'Spanish' },
         { value: 'ru', label: 'Russian' }
       ],
-      status: ''
+      status: '',
+      type: type,
+      typeLabel: typeLabel
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -120,7 +128,7 @@ class DocumentForm extends React.Component {
     if (this.isValid(doc.language) &&
       this.isValid(doc.spaces) &&
       this.isValid(doc.label) &&
-      this.isValid(doc.document_type) &&
+      ((this.state.type === 'documents' && this.isValid(doc.document_type)) || (this.state.type === 'infographics' && this.isValid(doc.infographic_type)))  &&
       this.isValid(doc.publication_date) &&
       this.isValid(doc.files) &&
       this.isValid(doc.organizations)) {
@@ -147,7 +155,12 @@ class DocumentForm extends React.Component {
     let doc = {};
     let body = JSON.stringify(this.state.doc);
     body = JSON.parse(body);
-    body.document_type = body.document_type.id;
+    if (this.state.type === 'documents') {
+      body.document_type = body.document_type.id;
+    }
+    else {
+      body.infographic_type = body.infographic_type.id;
+    }
     body.operation = [];
     body.space = [];
     body.spaces.forEach(function (sp) {
@@ -200,10 +213,10 @@ class DocumentForm extends React.Component {
     body.language = body.language.value;
 
     let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/documents';
+    let url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type;
     if (body.id) {
       httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/api/v1.0/documents/' + body.id;
+      url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type + '/' + body.id;
       delete body.created;
       delete body.changed;
       delete body.url;
@@ -226,7 +239,7 @@ class DocumentForm extends React.Component {
         return this.postFieldCollections(doc.id, field_collections);
       })
       .then(res => {
-        this.props.history.push('/documents/' + doc.id);
+        this.props.history.push('/' + this.state.type + '/' + doc.id);
       })
       .catch(err => {
         this.props.setAlert('danger', 'There was an error uploading your document');
@@ -239,7 +252,7 @@ class DocumentForm extends React.Component {
       this.setState({
         status: 'deleting'
       });
-      fetch('https://www.humanitarianresponse.info/api/v1.0/documents/' + this.props.match.params.id, {
+      fetch('https://www.humanitarianresponse.info/api/v1.0/' + this.state.type + '/' + this.props.match.params.id, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + this.props.token,
@@ -248,10 +261,10 @@ class DocumentForm extends React.Component {
           }
         })
         .then(results => {
-          that.props.setAlert('success', 'Document deleted successfully');
+          that.props.setAlert('success', that.state.typeLabel + ' deleted successfully');
           that.props.history.push('/home');
         }).catch(function(err) {
-          that.props.setAlert('danger', 'There was an error deleting your document');
+          that.props.setAlert('danger', 'There was an error deleting your ' + that.state.typeLabel);
           that.props.history.push('/home');
         });
     }
@@ -269,13 +282,13 @@ class DocumentForm extends React.Component {
 
   getDocument () {
     const that = this;
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/documents/" + this.props.match.params.id)
+    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + this.state.type + "/" + this.props.match.params.id)
         .then(results => {
             return results.json();
         }).then(data => {
           return data.data[0];
         }).catch(function(err) {
-          that.props.setAlert('danger', 'Could not fetch document');
+          that.props.setAlert('danger', 'Could not fetch ' + that.state.typeLabel);
         });
   }
 
@@ -322,7 +335,7 @@ class DocumentForm extends React.Component {
         <Label for="offices">Coordination hub(s)</Label>
         <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
         <FormText color="muted">
-          Click on the field and select the coordination hub(s) the document refers to (if any).
+          Click on the field and select the coordination hub(s) the {this.state.typeLabel} refers to (if any).
         </FormText>
       </FormGroup>
     ) : '';
@@ -332,7 +345,7 @@ class DocumentForm extends React.Component {
         <Label for="disasters">Disaster(s)</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
         <FormText color="muted">
-          Click on the field and select the disaster(s) or emergency the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
+          Click on the field and select the disaster(s) or emergency the {this.state.typeLabel} refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
         </FormText>
       </FormGroup>
     ) : '';
@@ -342,7 +355,7 @@ class DocumentForm extends React.Component {
         <Label for="bundles">Cluster(s)/Sector(s)</Label>
         <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
         <FormText color="muted">
-          Indicate the cluster(s)/sector(s) the document refers to.
+          Indicate the cluster(s)/sector(s) the {this.state.typeLabel} refers to.
         </FormText>
       </FormGroup>
     ) : '';
@@ -350,7 +363,7 @@ class DocumentForm extends React.Component {
     const { editorState } = this.state;
 
     return (
-      <Form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated': ''}>
+      <Form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated bg-white my-3 p-3': 'bg-white my-3 p-3'}>
         <FormGroup className="required">
           <Label for="language">Language</Label>
           <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
@@ -363,7 +376,7 @@ class DocumentForm extends React.Component {
           <Label for="spaces">Spaces</Label>
           <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
-            Click on the field and select where to publish the document (operation, regional site or thematic site).
+            Click on the field and select where to publish the {this.state.typeLabel} (operation, regional site or thematic site).
           </FormText>
           <div className="invalid-feedback">
             You must select an operation or a space
@@ -374,7 +387,7 @@ class DocumentForm extends React.Component {
           <Label for="label">Label</Label>
           <Input type="text" name="label" id="label" placeholder="Enter the title of the document" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
           <FormText color="muted">
-            Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+            Type the original title of the {this.state.typeLabel}. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
           </FormText>
           <div className="invalid-feedback">
             Please enter a document title
@@ -382,13 +395,16 @@ class DocumentForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="document_type">Document type</Label>
-          <HRInfoSelect type="document_types" onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type) ? 'is-valid' : 'is-invalid'} />
+          <Label for={this.state.type === 'documents' ? 'document_type' : 'infographic_type'}>{this.state.type === 'documents' ? 'Document type' : 'Infographic type'}</Label>
+          {this.state.type === 'documents' ?
+            <HRInfoSelect type='document_types' onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type) ? 'is-valid' : 'is-invalid'} />
+             : <HRInfoSelect type='infographic_types' onChange={(s) => this.handleSelectChange('infographic_type', s)} value={this.state.doc.infographic_type} className={this.isValid(this.state.doc.infographic_type) ? 'is-valid' : 'is-invalid'} />
+          }
           <FormText color="muted">
-            Select the document type and sub-type that best describe the document.
+            Select the {this.state.typeLabel} type and sub-type that best describe the {this.state.typeLabel}.
           </FormText>
           <div className="invalid-feedback">
-            You must select a document type
+            You must select a {this.state.typeLabel} type
           </div>
         </FormGroup>
 
@@ -396,7 +412,7 @@ class DocumentForm extends React.Component {
           <Label for="publication_date">Original Publication Date</Label>
           <Input type="date" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
           <FormText color="muted">
-            Indicate when the document has originally been published.
+            Indicate when the {this.state.typeLabel} has originally been published.
           </FormText>
           <div className="invalid-feedback">
             You must enter a publication date
@@ -407,7 +423,7 @@ class DocumentForm extends React.Component {
           <Label for="organizations">Organizations</Label>
           <HRInfoOrganizations onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
-            Type in and select the source(s) of the document.
+            Type in and select the source(s) of the {this.state.typeLabel}.
           </FormText>
           <div className="invalid-feedback">
             You must select at least one organization
@@ -418,7 +434,7 @@ class DocumentForm extends React.Component {
           <Label for="files">Files</Label>
           <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
-            Upload the file to publish from your computer, and specify the language of the document. It is best to publish one file per record, however you can add
+            Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add
             more if needed. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
           </FormText>
           <div className="invalid-feedback">
@@ -435,7 +451,7 @@ class DocumentForm extends React.Component {
             onEditorStateChange={this.onEditorStateChange}
           />
           <FormText color="muted">
-            Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+            Try to always include here the text (in full or part of it) of the {this.state.typeLabel} (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
           </FormText>
         </FormGroup>
 
@@ -443,7 +459,7 @@ class DocumentForm extends React.Component {
           <Label for="related_content">Related Content</Label>
           <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
           <FormText color="muted">
-            Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+            Add links to content that is related to the {this.state.typeLabel} you are publishing (example: language versions of the same {this.state.typeLabel}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
           </FormText>
         </FormGroup>
 
@@ -451,7 +467,7 @@ class DocumentForm extends React.Component {
           <Label for="locations">Locations</Label>
           <HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} />
           <FormText color="muted">
-            Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).
+            Select from the menu the country(ies) the {this.state.typeLabel} is about and indicate more specific locations by selecting multiple layers (region, province, town).
           </FormText>
         </FormGroup>
         {bundles}
@@ -461,7 +477,7 @@ class DocumentForm extends React.Component {
           <Label for="themes">Themes</Label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
           <FormText color="muted">
-            Click on the field and select all relevant themes. Choose only themes the document substantively refers to.
+            Click on the field and select all relevant themes. Choose only themes the {this.state.typeLabel} substantively refers to.
           </FormText>
         </FormGroup>
         {this.state.status !== 'submitting' &&
