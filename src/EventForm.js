@@ -10,18 +10,14 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
-import HRInfoFiles from './HRInfoFiles';
 import RelatedContent from './RelatedContent';
+import HidContacts from './HidContacts';
+import Address from './Address';
 
-class DocumentForm extends React.Component {
+class EventForm extends React.Component {
   constructor(props) {
     super(props);
-    let type = 'documents';
-    let typeLabel = 'document';
-    if (props.match.url.indexOf('documents') === -1) {
-      type = 'infographics';
-      typeLabel = 'map/infographic';
-    }
+
     this.state = {
       doc: {
         label: '',
@@ -34,9 +30,13 @@ class DocumentForm extends React.Component {
         { value: 'es', label: 'Spanish' },
         { value: 'ru', label: 'Russian' }
       ],
-      status: '',
-      type: type,
-      typeLabel: typeLabel
+      event_categories: [
+        { value: 82, label: 'Meetings'},
+        { value: 83, label: 'Trainings'},
+        { value: 84, label: 'Workshops'},
+        { value: 85, label: 'Conferences'}
+      ],
+      status: ''
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -46,7 +46,6 @@ class DocumentForm extends React.Component {
     this.isValid = this.isValid.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.postFieldCollections = this.postFieldCollections.bind(this);
   }
 
   handleInputChange(event) {
@@ -78,32 +77,6 @@ class DocumentForm extends React.Component {
     });
   }
 
-  async postFieldCollections (docid, field_collections) {
-    const token = this.props.token;
-    for (const fc of field_collections) {
-      const body = {
-        file: fc.file,
-        language: fc.language,
-        host_entity: docid
-      };
-      let url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection';
-      let httpMethod = 'POST';
-      if (fc.item_id !== '') {
-        url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection/' + fc.item_id;
-        httpMethod = 'PATCH';
-      }
-      await fetch(url, {
-        method: httpMethod,
-        body: JSON.stringify(body),
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-    }
-  }
-
   isValid (value) {
     if (typeof value === 'undefined') {
       return false;
@@ -128,7 +101,7 @@ class DocumentForm extends React.Component {
     if (this.isValid(doc.language) &&
       this.isValid(doc.spaces) &&
       this.isValid(doc.label) &&
-      ((this.state.type === 'documents' && this.isValid(doc.document_type)) || (this.state.type === 'infographics' && this.isValid(doc.infographic_type)))  &&
+      this.isValid(doc.event_category)  &&
       this.isValid(doc.publication_date) &&
       this.isValid(doc.files) &&
       this.isValid(doc.organizations)) {
@@ -155,12 +128,7 @@ class DocumentForm extends React.Component {
     let doc = {};
     let body = JSON.stringify(this.state.doc);
     body = JSON.parse(body);
-    if (this.state.type === 'documents') {
-      body.document_type = body.document_type.id;
-    }
-    else {
-      body.infographic_type = body.infographic_type.id;
-    }
+    body.event_category = body.event_category.id;
     body.operation = [];
     body.space = [];
     body.spaces.forEach(function (sp) {
@@ -235,8 +203,7 @@ class DocumentForm extends React.Component {
         return results.json();
       })
       .then(data => {
-        doc = data.data[0];
-        return this.postFieldCollections(doc.id, field_collections);
+        doc =  data.data[0];
       })
       .then(res => {
         this.props.history.push('/' + this.state.type + '/' + doc.id);
@@ -252,7 +219,7 @@ class DocumentForm extends React.Component {
       this.setState({
         status: 'deleting'
       });
-      fetch('https://www.humanitarianresponse.info/api/v1.0/' + this.state.type + '/' + this.props.match.params.id, {
+      fetch('https://www.humanitarianresponse.info/api/v1.0/events/' + this.props.match.params.id, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + this.props.token,
@@ -261,10 +228,10 @@ class DocumentForm extends React.Component {
           }
         })
         .then(results => {
-          that.props.setAlert('success', that.state.typeLabel + ' deleted successfully');
+          that.props.setAlert('success', 'Event deleted successfully');
           that.props.history.push('/home');
         }).catch(function(err) {
-          that.props.setAlert('danger', 'There was an error deleting your ' + that.state.typeLabel);
+          that.props.setAlert('danger', 'There was an error deleting your event');
           that.props.history.push('/home');
         });
     }
@@ -282,13 +249,13 @@ class DocumentForm extends React.Component {
 
   getDocument () {
     const that = this;
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + this.state.type + "/" + this.props.match.params.id)
+    return fetch("https://www.humanitarianresponse.info/api/v1.0/events/" + this.props.match.params.id)
         .then(results => {
             return results.json();
         }).then(data => {
           return data.data[0];
         }).catch(function(err) {
-          that.props.setAlert('danger', 'Could not fetch ' + that.state.typeLabel);
+          that.props.setAlert('danger', 'Could not fetch event');
         });
   }
 
@@ -335,7 +302,7 @@ class DocumentForm extends React.Component {
         <Label for="offices">Coordination hub(s)</Label>
         <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
         <FormText color="muted">
-          Click on the field and select the coordination hub(s) the {this.state.typeLabel} refers to (if any).
+          Click on the field and select the coordination hub(s) the event refers to (if any).
         </FormText>
       </FormGroup>
     ) : '';
@@ -345,7 +312,7 @@ class DocumentForm extends React.Component {
         <Label for="disasters">Disaster(s)</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
         <FormText color="muted">
-          Click on the field and select the disaster(s) or emergency the {this.state.typeLabel} refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
+          Click on the field and select the disaster(s) or emergency the event refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
         </FormText>
       </FormGroup>
     ) : '';
@@ -355,7 +322,7 @@ class DocumentForm extends React.Component {
         <Label for="bundles">Cluster(s)/Sector(s)</Label>
         <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
         <FormText color="muted">
-          Indicate the cluster(s)/sector(s) the {this.state.typeLabel} refers to.
+          Indicate the cluster(s)/sector(s) the event refers to.
         </FormText>
       </FormGroup>
     ) : '';
@@ -376,7 +343,7 @@ class DocumentForm extends React.Component {
           <Label for="spaces">Spaces</Label>
           <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
-            Click on the field and select where to publish the {this.state.typeLabel} (operation, regional site or thematic site).
+            Click on the field and select where to publish the event (operation, regional site or thematic site).
           </FormText>
           <div className="invalid-feedback">
             You must select an operation or a space
@@ -385,65 +352,65 @@ class DocumentForm extends React.Component {
 
         <FormGroup className="required">
           <Label for="label">Label</Label>
-          <Input type="text" name="label" id="label" placeholder={'Enter the title of the ' + this.state.typeLabel} required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
+          <Input type="text" name="label" id="label" placeholder="Enter the title of the event" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
           <FormText color="muted">
-            Type the original title of the {this.state.typeLabel}. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+            Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
           </FormText>
           <div className="invalid-feedback">
-            Please enter a document title
+            Please enter the event title
           </div>
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for={this.state.type === 'documents' ? 'document_type' : 'infographic_type'}>{this.state.type === 'documents' ? 'Document type' : 'Infographic type'}</Label>
-          {this.state.type === 'documents' ?
-            <HRInfoSelect type='document_types' onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type) ? 'is-valid' : 'is-invalid'} />
-             : <HRInfoSelect type='infographic_types' onChange={(s) => this.handleSelectChange('infographic_type', s)} value={this.state.doc.infographic_type} className={this.isValid(this.state.doc.infographic_type) ? 'is-valid' : 'is-invalid'} />
-          }
+          <Label for="event_category">Event Category</Label>
+          <Select id="event_category" name="event_category" options={this.state.event_categories} value={this.state.doc.event_category} onChange={(s) => this.handleSelectChange('event_category', s)} className={this.isValid(this.state.doc.event_category) ? 'is-valid' : 'is-invalid'}/>
           <FormText color="muted">
-            Select the {this.state.typeLabel} type and sub-type that best describe the {this.state.typeLabel}.
+            From the list, select the kind of event you are creating.
           </FormText>
           <div className="invalid-feedback">
-            You must select a {this.state.typeLabel} type
+            You must select an event category
           </div>
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="publication_date">Original Publication Date</Label>
-          <Input type="date" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
+          <Label for="date">Date(s)</Label>
+          <Input type="date" id="date" name="date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
           <FormText color="muted">
-            Indicate when the {this.state.typeLabel} has originally been published.
+            Indicate the date(s) of the event.
           </FormText>
           <div className="invalid-feedback">
-            You must enter a publication date
-          </div>
-        </FormGroup>
-
-        <FormGroup className="required">
-          <Label for="organizations">Organizations</Label>
-          <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
-          <FormText color="muted">
-            Type in and select the source(s) of the {this.state.typeLabel}.
-          </FormText>
-          <div className="invalid-feedback">
-            You must select at least one organization
-          </div>
-        </FormGroup>
-
-        <FormGroup className="required">
-          <Label for="files">Files</Label>
-          <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files) ? 'is-valid' : 'is-invalid'} />
-          <FormText color="muted">
-            Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add
-            more if needed. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
-          </FormText>
-          <div className="invalid-feedback">
-            You must add at least one file
+            You must enter a date
           </div>
         </FormGroup>
 
         <FormGroup>
-          <Label for="body">Description or Summary of Content</Label>
+          <Label for="locations">Location</Label>
+          <HRInfoLocations onChange={(s) => this.handleSelectChange('location', s)} value={this.state.doc.location} />
+          <FormText color="muted">
+            Select from the menu the country(ies) the {this.state.typeLabel} is about and indicate more specific locations by selecting multiple layers (region, province, town).
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="venue">Venue</Label>
+          <Address />
+          <FormText color="muted">
+            Indicate here where the event takes place.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="organizations">Organizations</Label>
+          <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Type in and select the the event organizer(s).
+          </FormText>
+        </FormGroup>
+
+        {bundles}
+
+        <FormGroup>
+          <Label for="body">Event description</Label>
           <Editor
             editorState={editorState}
             wrapperClassName="demo-wrapper"
@@ -451,7 +418,41 @@ class DocumentForm extends React.Component {
             onEditorStateChange={this.onEditorStateChange}
           />
           <FormText color="muted">
-            Try to always include here the text (in full or part of it) of the {this.state.typeLabel} (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+            Provide here additional information regarding the event.
+          </FormText>
+        </FormGroup>
+
+        {offices}
+        {disasters}
+        <FormGroup>
+          <Label for="themes">Themes</Label>
+          <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
+          <FormText color="muted">
+            Click on the field and select all relevant themes. Choose only themes the event substantively refers to.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="contacts">Contact(s)</Label>
+          <HidContacts token={this.props.token} onChange={(s) => this.handleSelectChange('contacts', s)} value={this.state.doc.contacts} className={this.isValid(this.state.doc.contacts) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="agendas">Agenda(s)</Label>
+          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('agendas', s)} value={this.state.doc.agendas} className={this.isValid(this.state.doc.agendas) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Add the agenda of the event as a document first, and then reference this document from here.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="meeting_minutes">Meeting minute(s)</Label>
+          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('meeting_minutes', s)} value={this.state.doc.meeting_minutes} className={this.isValid(this.state.doc.meeting_minutes) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Add the meeting minutes of the event as a document first, and then reference this document from here.
           </FormText>
         </FormGroup>
 
@@ -459,27 +460,10 @@ class DocumentForm extends React.Component {
           <Label for="related_content">Related Content</Label>
           <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
           <FormText color="muted">
-            Add links to content that is related to the {this.state.typeLabel} you are publishing (example: language versions of the same {this.state.typeLabel}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+            Add links to content that is related to the event you are creating by indicating the title of the content and its url. When using the Search function make sure to search by content title.
           </FormText>
         </FormGroup>
 
-        <FormGroup>
-          <Label for="locations">Locations</Label>
-          <HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} isMulti />
-          <FormText color="muted">
-            Select from the menu the country(ies) the {this.state.typeLabel} is about and indicate more specific locations by selecting multiple layers (region, province, town).
-          </FormText>
-        </FormGroup>
-        {bundles}
-        {offices}
-        {disasters}
-        <FormGroup>
-          <Label for="themes">Themes</Label>
-          <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
-          <FormText color="muted">
-            Click on the field and select all relevant themes. Choose only themes the {this.state.typeLabel} substantively refers to.
-          </FormText>
-        </FormGroup>
         {this.state.status !== 'submitting' &&
           <Button color="primary">Submit</Button>
         }
@@ -494,4 +478,4 @@ class DocumentForm extends React.Component {
   }
 }
 
-export default DocumentForm;
+export default EventForm;

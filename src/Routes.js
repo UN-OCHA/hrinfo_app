@@ -2,7 +2,7 @@ import React from "react";
 import { Switch } from "react-router-dom";
 import Login from "./Login";
 import DocumentForm from "./DocumentForm";
-import InfographicForm from "./InfographicForm";
+import EventForm from "./EventForm";
 import Home from "./Home";
 import Admin from "./Admin";
 import ItemPage from "./ItemPage";
@@ -20,4 +20,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/infographics/new" exact component={DocumentForm} props={childProps} />
     <AuthenticatedRoute path="/infographics/:id" exact component={ItemPage} props={childProps} />
     <AuthenticatedRoute path="/infographics/:id/edit" exact component={DocumentForm} props={childProps} />
+    <AuthenticatedRoute path="/events/new" exact component={EventForm} props={childProps} />
+    <AuthenticatedRoute path="/events/:id" exact component={ItemPage} props={childProps} />
+    <AuthenticatedRoute path="/events/:id/edit" exact component={EventForm} props={childProps} />
   </Switch>;

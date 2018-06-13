@@ -55,7 +55,7 @@ class App extends Component {
     });
   }
 
-  userHasAuthenticated (authenticated, user, token) {
+  userHasAuthenticated (authenticated, user, token, setState = true) {
     const { cookies } = this.props;
     let newState = {};
     if (authenticated === true) {
@@ -76,7 +76,12 @@ class App extends Component {
         token: ''
       };
     }
-    this.setState(newState);
+    if (setState) {
+      this.setState(newState);
+    }
+    else {
+      return newState;
+    }
   }
 
   userIsAuthenticated () {
@@ -105,6 +110,26 @@ class App extends Component {
       this.setState({
         isAuthenticating: false
       });
+    }
+  }
+
+  componentDidUpdate () {
+    if (this.state.token) {
+      // Decode the token
+      var base64Url = this.state.token.split('.')[1];
+      var base64 = base64Url.replace('-', '+').replace('_', '/');
+      const decoded = JSON.parse(window.atob(base64));
+      const current = new Date();
+      if (current.getTime() > decoded.exp * 1000) {
+        // Token is expired. Redirect user to login page with error message.
+        let newState = this.userHasAuthenticated(false, null, null, false);
+        newState.alert = {
+          color: 'danger',
+          message: 'Your session has expired. Please login again'
+        };
+        this.setState(newState);
+        this.props.history.push('/');
+      }
     }
   }
 

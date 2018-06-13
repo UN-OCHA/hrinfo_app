@@ -1,7 +1,7 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 
-class HRInfoOrganizations extends React.Component {
+class HRInfoAsyncSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,22 +13,28 @@ class HRInfoOrganizations extends React.Component {
   }
 
   getUrl (input) {
-    return 'https://www.humanitarianresponse.info/en/api/v1.0/organizations?search=' + input + '&fields=id,label,acronym&sort=label&range=10';
+    return 'https://www.humanitarianresponse.info/en/api/v1.0/' + this.props.type + '?search=' + input + '&fields=id,label,acronym&sort=label&range=10';
   }
 
   getOptions (input) {
+    const type = this.props.type;
     return fetch(this.getUrl(input))
         .then(results => {
             return results.json();
         }).then(data => {
-          let fullLabels = [];
-          data.data.forEach(function (org) {
-            if (org.acronym) {
-              org.label = org.label + ' (' + org.acronym + ')';
-            }
-            fullLabels.push(org);
-          });
-          return fullLabels;
+          if (type === 'organizations') {
+            let fullLabels = [];
+            data.data.forEach(function (org) {
+              if (org.acronym) {
+                org.label = org.label + ' (' + org.acronym + ')';
+              }
+              fullLabels.push(org);
+            });
+            return fullLabels;
+          }
+          else {
+            return data.data;
+          }
         }).catch(function(err) {
             console.log("Fetch error: ", err);
         });
@@ -55,4 +61,4 @@ class HRInfoOrganizations extends React.Component {
   }
 }
 
-export default HRInfoOrganizations;
+export default HRInfoAsyncSelect;

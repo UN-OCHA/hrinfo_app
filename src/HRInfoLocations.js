@@ -126,7 +126,7 @@ class HRInfoLocations extends React.Component {
     return (
       <div>
         {rows}
-        <Button onClick={this.onAddBtnClick}>Add location</Button>
+        {this.props.isMulti ? <Button onClick={this.onAddBtnClick}>Add location</Button> : '' }
       </div>
       );
   }
