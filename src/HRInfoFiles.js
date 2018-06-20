@@ -228,7 +228,7 @@ class HRInfoFiles extends React.Component {
           </Col>
           <Col sm="6">
             <FormGroup>
-              <Label>Language</Label>
+              <Label>File Language</Label>
               <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
             </FormGroup>
           </Col>

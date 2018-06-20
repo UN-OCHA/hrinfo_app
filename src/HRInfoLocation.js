@@ -5,7 +5,9 @@ class HRInfoLocation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: []
+      items: [],
+      val: {},
+      status: 'initial'
     };
     this.setBaseUrl = this.setBaseUrl.bind(this);
     this.fetchNextPage = this.fetchNextPage.bind(this);
@@ -13,7 +15,7 @@ class HRInfoLocation extends React.Component {
   }
 
   setBaseUrl () {
-    this.baseUrl = 'https://www.humanitarianresponse.info/en/api/v1.0/locations?fields=id,label&sort=label&filter[admin_level]=' + this.props.level;
+    this.baseUrl = 'https://www.humanitarianresponse.info/en/api/v1.0/locations?fields=id,label,pcode&sort=label&filter[admin_level]=' + this.props.level;
     if (this.props.parent) {
       this.baseUrl += '&filter[parent]=' + this.props.parent;
     }
@@ -33,12 +35,20 @@ class HRInfoLocation extends React.Component {
             const nextPage = page + 1;
             return this.fetchNextPage(nextPage);
           }
+          else {
+            this.setState({
+              status: 'ready'
+            });
+          }
         }).catch(function(err) {
             console.log("Fetch error: ", err);
         });
   }
 
   handleChange (selectedOption) {
+    this.setState({
+      val: selectedOption
+    });
     if (this.props.onChange) {
       this.props.onChange(this.props.row, this.props.level, selectedOption);
     }
@@ -50,12 +60,31 @@ class HRInfoLocation extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    const that = this;
     if (prevProps.parent !== this.props.parent) {
       this.setState({
         items: []
       });
       this.setBaseUrl(this.props.level);
       this.fetchNextPage(1);
+    }
+    if (this.props.value && typeof this.props.value === 'string' && this.state.status === 'initial') {
+      if (this.state.items.length) {
+        this.state.items.forEach(function (item) {
+          if (item.pcode === that.props.value) {
+            that.setState({
+              val: item,
+              status: 'ready'
+            });
+          }
+        });
+      }
+    }
+    if (this.props.value && typeof this.props.value === 'object' && this.state.status === 'initial') {
+      this.setState({
+        val: this.props.value,
+        status: 'ready'
+      });
     }
   }
 
@@ -68,8 +97,8 @@ class HRInfoLocation extends React.Component {
           options={this.state.items}
           getOptionValue={(option) => { return option.id }}
           getOptionLabel={(option) => { return option.label}}
-          value={this.props.value}
-          className="col-sm-3" />
+          value={this.state.val}
+          className={this.props.className} />
     );
   }
 }

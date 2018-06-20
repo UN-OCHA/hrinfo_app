@@ -38,7 +38,8 @@ class SearchPage extends React.Component {
     const that = this;
     const types = [
       'documents',
-      'infographics'
+      'infographics',
+      'events'
     ];
     let promises = [];
     types.forEach(function (type) {
@@ -83,9 +84,12 @@ class SearchPage extends React.Component {
       let index = 0;
       const types = [
         'documents',
-        'infographics'
+        'infographics',
+        'events'
       ];
       types.forEach(function (type) {
+        items = [];
+        index = 0;
         if (that.state.items[type]) {
           that.state.items[type].forEach(function (item) {
             items.push(<Item item={item} viewMode="search" />);

@@ -86,7 +86,9 @@ class Item extends React.Component {
         <Card className="p-3 my-3">
           <div className="crop-image">
             <a href={'/' + item.type + '/' + item.id}>
-              <CardImg top width="100%" src={item.files[0].file.preview === 'https://www.humanitarianresponse.info/' ? 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png' : item.files[0].file.preview} alt="Card image cap" />
+              {(item.type === 'documents' || item.type === 'infographics') ?
+                <CardImg top width="100%" src={item.files[0].file.preview === 'https://www.humanitarianresponse.info/' ? 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png' : item.files[0].file.preview} alt="Card image cap" />
+                : '' }
             </a>
           </div>
           <CardBody>
@@ -94,18 +96,19 @@ class Item extends React.Component {
             <ListGroup>
               {this.renderBadges()}
             </ListGroup>
-            <div className="text-center">
-              <ButtonDropdown isOpen={this.state.filesOpen} toggle={this.openFiles} className="mx-auto">
-                <DropdownToggle caret color="primary">
-                  Download
-                </DropdownToggle>
-                <DropdownMenu>
-                  {item.files.map(function (f) {
-                    return <DropdownItem key={f.file.fid}><a href={f.file.url} target="_blank">{f.file.filename}</a></DropdownItem>;
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
-            </div>
+            {(item.type === 'documents' || item.type === 'infographics') ?
+              <div className="text-center">
+                <ButtonDropdown isOpen={this.state.filesOpen} toggle={this.openFiles} className="mx-auto">
+                  <DropdownToggle caret color="primary">
+                    Download
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {item.files.map(function (f) {
+                      return <DropdownItem key={f.file.fid}><a href={f.file.url} target="_blank">{f.file.filename}</a></DropdownItem>;
+                    })}
+                  </DropdownMenu>
+                </ButtonDropdown>
+              </div> : '' }
             {this.props.viewMode === 'full' ? <CardText>{item['body-html'] ? renderHTML(item['body-html']) : ''}</CardText> : ''}
           </CardBody>
           <CardFooter className="text-center">

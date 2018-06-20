@@ -13,6 +13,7 @@ import HRInfoAsyncSelect from './HRInfoAsyncSelect';
 import RelatedContent from './RelatedContent';
 import HidContacts from './HidContacts';
 import Address from './Address';
+import EventDate from './EventDate';
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -21,7 +22,8 @@ class EventForm extends React.Component {
     this.state = {
       doc: {
         label: '',
-        publication_date: ''
+        date: [{}],
+        address: {}
       },
       editorState: EditorState.createEmpty(),
       languages: [
@@ -62,7 +64,12 @@ class EventForm extends React.Component {
 
   handleSelectChange (name, selected) {
     let doc = this.state.doc;
-    doc[name] = selected;
+    if (name === 'date') {
+      doc[name][0] = selected;
+    }
+    else {
+      doc[name] = selected;
+    }
     let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
     if (name === 'spaces') {
       doc.spaces.forEach(function (val) {
@@ -101,9 +108,8 @@ class EventForm extends React.Component {
     if (this.isValid(doc.language) &&
       this.isValid(doc.spaces) &&
       this.isValid(doc.label) &&
-      this.isValid(doc.event_category)  &&
-      this.isValid(doc.publication_date) &&
-      this.isValid(doc.files) &&
+      this.isValid(doc.category)  &&
+      this.isValid(doc.date) &&
       this.isValid(doc.organizations)) {
       return true;
     }
@@ -115,12 +121,12 @@ class EventForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const isValid = this.validateForm();
-    if (!isValid) {
+    /*if (!isValid) {
       this.setState({
         status: 'was-validated'
       });
       return;
-    }
+    }*/
     this.setState({
       status: 'submitting'
     });
@@ -128,7 +134,7 @@ class EventForm extends React.Component {
     let doc = {};
     let body = JSON.stringify(this.state.doc);
     body = JSON.parse(body);
-    body.event_category = body.event_category.id;
+    body.category = body.category.value;
     body.operation = [];
     body.space = [];
     body.spaces.forEach(function (sp) {
@@ -141,7 +147,6 @@ class EventForm extends React.Component {
     });
     delete body.spaces;
     delete body.hasOperation;
-    body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
     const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
     selectFields.forEach(function (field) {
       if (body[field]) {
@@ -163,28 +168,20 @@ class EventForm extends React.Component {
       });
       body.locations = locations;
     }
-    let field_collections = [];
-    body.files.files.forEach(function (file, index) {
-      let fc = {};
-      if (body.files.languages[index]) {
-        fc.language = body.files.languages[index].value;
-      }
-      fc.file = file.id ? file.id : file.fid;
-      fc.file = parseInt(fc.file, 10);
-      fc.item_id = '';
-      if (body.files.collections[index]) {
-        fc.item_id = parseInt(body.files.collections[index], 10);
-      }
-      field_collections.push(fc);
-    });
-    delete body.files;
-    body.language = body.language.value;
+    delete body.language;
+    //body.language = body.language.value;
+    if (body.address && body.address.country) {
+      body.address.country = body.address.country.pcode;
+    }
+    if (body.date[0] && body.date[0].timezone_db) {
+      body.date[0].timezone_db = body.date[0].timezone_db.value;
+    }
 
     let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type;
+    let url = 'https://www.humanitarianresponse.info/api/v1.0/events';
     if (body.id) {
       httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type + '/' + body.id;
+      url = 'https://www.humanitarianresponse.info/api/v1.0/events/' + body.id;
       delete body.created;
       delete body.changed;
       delete body.url;
@@ -206,7 +203,7 @@ class EventForm extends React.Component {
         doc =  data.data[0];
       })
       .then(res => {
-        this.props.history.push('/' + this.state.type + '/' + doc.id);
+        this.props.history.push('/events/' + doc.id);
       })
       .catch(err => {
         this.props.setAlert('danger', 'There was an error uploading your document');
@@ -281,6 +278,11 @@ class EventForm extends React.Component {
           doc.language = lang;
         }
       });
+      this.state.event_categories.forEach(function (category) {
+        if (category.value === parseInt(doc.category, 10)) {
+          doc.category = category;
+        }
+      });
       let state = {
         doc: doc
       };
@@ -309,7 +311,7 @@ class EventForm extends React.Component {
 
     const disasters = this.state.doc.hasOperation ? (
       <FormGroup>
-        <Label for="disasters">Disaster(s)</Label>
+        <Label for="disasters">Disaster(s) / Emergency</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
         <FormText color="muted">
           Click on the field and select the disaster(s) or emergency the event refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
@@ -340,7 +342,7 @@ class EventForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="spaces">Spaces</Label>
+          <Label for="spaces">Operation(s) / Webspace(s)</Label>
           <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
             Click on the field and select where to publish the event (operation, regional site or thematic site).
@@ -351,7 +353,7 @@ class EventForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="label">Label</Label>
+          <Label for="label">Title</Label>
           <Input type="text" name="label" id="label" placeholder="Enter the title of the event" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
           <FormText color="muted">
             Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
@@ -362,8 +364,8 @@ class EventForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="event_category">Event Category</Label>
-          <Select id="event_category" name="event_category" options={this.state.event_categories} value={this.state.doc.event_category} onChange={(s) => this.handleSelectChange('event_category', s)} className={this.isValid(this.state.doc.event_category) ? 'is-valid' : 'is-invalid'}/>
+          <Label for="category">Event Category</Label>
+          <Select id="category" name="category" options={this.state.event_categories} value={this.state.doc.category} onChange={(s) => this.handleSelectChange('category', s)} className={this.isValid(this.state.doc.category) ? 'is-valid' : 'is-invalid'}/>
           <FormText color="muted">
             From the list, select the kind of event you are creating.
           </FormText>
@@ -374,7 +376,7 @@ class EventForm extends React.Component {
 
         <FormGroup className="required">
           <Label for="date">Date(s)</Label>
-          <Input type="date" id="date" name="date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required />
+          <EventDate value={this.state.doc.date[0]} required onChange={(val) => {console.log(val); this.handleSelectChange('date', val);}} />
           <FormText color="muted">
             Indicate the date(s) of the event.
           </FormText>
@@ -393,14 +395,14 @@ class EventForm extends React.Component {
 
         <FormGroup>
           <Label for="venue">Venue</Label>
-          <Address />
+          <Address value={this.state.doc.address} onChange={(val) => this.handleSelectChange('address', val)} />
           <FormText color="muted">
             Indicate here where the event takes place.
           </FormText>
         </FormGroup>
 
         <FormGroup>
-          <Label for="organizations">Organizations</Label>
+          <Label for="organizations">Organization(s)</Label>
           <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
             Type in and select the the event organizer(s).
@@ -434,7 +436,7 @@ class EventForm extends React.Component {
 
         <FormGroup>
           <Label for="contacts">Contact(s)</Label>
-          <HidContacts token={this.props.token} onChange={(s) => this.handleSelectChange('contacts', s)} value={this.state.doc.contacts} className={this.isValid(this.state.doc.contacts) ? 'is-valid' : 'is-invalid'} />
+          <HidContacts token={this.props.token} onChange={(s) => this.handleSelectChange('contacts', s)} value={this.state.doc.contacts} />
           <FormText color="muted">
             Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.
           </FormText>
@@ -442,7 +444,7 @@ class EventForm extends React.Component {
 
         <FormGroup>
           <Label for="agendas">Agenda(s)</Label>
-          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('agendas', s)} value={this.state.doc.agendas} className={this.isValid(this.state.doc.agendas) ? 'is-valid' : 'is-invalid'} />
+          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('agendas', s)} value={this.state.doc.agendas} />
           <FormText color="muted">
             Add the agenda of the event as a document first, and then reference this document from here.
           </FormText>
@@ -450,7 +452,7 @@ class EventForm extends React.Component {
 
         <FormGroup>
           <Label for="meeting_minutes">Meeting minute(s)</Label>
-          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('meeting_minutes', s)} value={this.state.doc.meeting_minutes} className={this.isValid(this.state.doc.meeting_minutes) ? 'is-valid' : 'is-invalid'} />
+          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('meeting_minutes', s)} value={this.state.doc.meeting_minutes} />
           <FormText color="muted">
             Add the meeting minutes of the event as a document first, and then reference this document from here.
           </FormText>
@@ -465,7 +467,7 @@ class EventForm extends React.Component {
         </FormGroup>
 
         {this.state.status !== 'submitting' &&
-          <Button color="primary">Submit</Button>
+          <Button color="primary">Publish</Button>
         }
         {(this.state.status === 'submitting' || this.state.status === 'deleting') &&
           <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />

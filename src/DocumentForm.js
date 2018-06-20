@@ -342,7 +342,7 @@ class DocumentForm extends React.Component {
 
     const disasters = this.state.doc.hasOperation ? (
       <FormGroup>
-        <Label for="disasters">Disaster(s)</Label>
+        <Label for="disasters">Disaster(s) / Emergency</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
         <FormText color="muted">
           Click on the field and select the disaster(s) or emergency the {this.state.typeLabel} refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
@@ -373,7 +373,7 @@ class DocumentForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="spaces">Spaces</Label>
+          <Label for="spaces">Operation(s) / Webspace(s)</Label>
           <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
             Click on the field and select where to publish the {this.state.typeLabel} (operation, regional site or thematic site).
@@ -384,7 +384,7 @@ class DocumentForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="label">Label</Label>
+          <Label for="label">Title</Label>
           <Input type="text" name="label" id="label" placeholder={'Enter the title of the ' + this.state.typeLabel} required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
           <FormText color="muted">
             Type the original title of the {this.state.typeLabel}. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
@@ -420,7 +420,7 @@ class DocumentForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="organizations">Organizations</Label>
+          <Label for="organizations">Organization(s)</Label>
           <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
             Type in and select the source(s) of the {this.state.typeLabel}.
@@ -431,7 +431,7 @@ class DocumentForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="files">Files</Label>
+          <Label for="files">File(s)</Label>
           <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
             Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add
@@ -474,14 +474,14 @@ class DocumentForm extends React.Component {
         {offices}
         {disasters}
         <FormGroup>
-          <Label for="themes">Themes</Label>
+          <Label for="themes">Theme(s)</Label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
           <FormText color="muted">
             Click on the field and select all relevant themes. Choose only themes the {this.state.typeLabel} substantively refers to.
           </FormText>
         </FormGroup>
         {this.state.status !== 'submitting' &&
-          <Button color="primary">Submit</Button>
+          <Button color="primary">Publish</Button>
         }
         {(this.state.status === 'submitting' || this.state.status === 'deleting') &&
           <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
