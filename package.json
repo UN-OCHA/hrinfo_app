@@ -13,6 +13,7 @@
     "react-cookie": "^2.1.4",
     "react-dom": "^16.3.1",
     "react-draft-wysiwyg": "^1.12.13",
+    "react-dropbox-chooser": "^0.0.5",
     "react-render-html": "^0.6.0",
     "react-router-dom": "^4.2.2",
     "react-rrule-generator": "^1.0.2",

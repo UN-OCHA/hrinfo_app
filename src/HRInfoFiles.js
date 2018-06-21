@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-
+import DropboxChooser from 'react-dropbox-chooser';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {
@@ -216,7 +216,16 @@ class HRInfoFiles extends React.Component {
             <FormGroup>
               <Label>File</Label>
               {this.state.files[number] === '' ?
-                <Input type="file" id={'files_' + number } name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } /> : ''
+                <span>
+                  <Input type="file" id={'files_' + number } name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
+                  <DropboxChooser
+                    appKey='qe1p4izejvrjlpv'
+                    success={files => this.handleChange(number, 'file', files)}
+                    multiselect={false}
+                    extensions={['.pdf']} >
+                    <Button color="secondary" size="sm">Select from dropbox</Button>
+                </DropboxChooser>
+              </span> : ''
               }
               {this.state.files[number] === 'uploading' ?
                 <FontAwesomeIcon icon={faSpinner} pulse fixedWidth /> : ''
@@ -246,27 +255,44 @@ class HRInfoFiles extends React.Component {
         let files = this.state.files;
         const that = this;
         const token = this.props.token;
-        const data = new FormData();
-        data.append('file', v[0]);
+        let data = {}, requestParams = {};
+        if (v instanceof FileList) {
+          data = new FormData();
+          data.append('file', v[0]);
+          requestParams = {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token
+            },
+            body: data
+          };
+        }
+        else {
+          requestParams = {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Accept' : 'application/json',
+              'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(v[0])
+          };
+        }
         files[number] = 'uploading';
         this.setState({
           files: files
         });
 
-        fetch('https://www.humanitarianresponse.info/api/files', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-          },
-          body: data,
-        }).then((response) => {
-          return response.json();
-        }).then(data => {
-          files[number] = data.data[0][0];
-          that.changeState({
-            files: files
+        fetch('https://www.humanitarianresponse.info/api/files', requestParams)
+          .then((response) => {
+            return response.json();
+          })
+          .then(data => {
+            files[number] = data.data[0][0];
+            that.changeState({
+              files: files
+            });
           });
-        });
       }
       else {
         let languages = this.state.languages;
