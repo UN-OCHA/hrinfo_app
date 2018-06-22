@@ -13,9 +13,15 @@ class ItemPage extends React.Component {
 
     getDocument () {
       const that = this;
+      const token = this.props.token;
       let type = this.props.match.url.replace(this.props.match.params.id, '');
       type = type.replace('/', '');
-      return fetch("https://www.humanitarianresponse.info/api/v1.0" + this.props.match.url)
+      return fetch("https://www.humanitarianresponse.info/api/v1.0" + this.props.match.url, {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }})
           .then(results => {
               return results.json();
           }).then(data => {

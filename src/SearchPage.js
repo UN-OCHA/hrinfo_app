@@ -19,7 +19,14 @@ class SearchPage extends React.Component {
   }
 
   getItems (type, input) {
-    return fetch(this.getUrl(type, input))
+    const token = this.props.token;
+    return fetch(this.getUrl(type, input), {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
         .then(results => {
             return results.json();
         }).then(data => {

@@ -25,7 +25,8 @@ class DocumentForm extends React.Component {
     this.state = {
       doc: {
         label: '',
-        publication_date: ''
+        publication_date: '',
+        published: 1
       },
       editorState: EditorState.createEmpty(),
       languages: [
@@ -139,7 +140,7 @@ class DocumentForm extends React.Component {
     }
   }
 
-  handleSubmit(event) {
+  handleSubmit(event, isDraft = 0) {
     event.preventDefault();
     const isValid = this.validateForm();
     if (!isValid) {
@@ -155,6 +156,7 @@ class DocumentForm extends React.Component {
     let doc = {};
     let body = JSON.stringify(this.state.doc);
     body = JSON.parse(body);
+    body.published = isDraft ? 0 : 1;
     if (this.state.type === 'documents') {
       body.document_type = body.document_type.id;
     }
@@ -282,7 +284,14 @@ class DocumentForm extends React.Component {
 
   getDocument () {
     const that = this;
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + this.state.type + "/" + this.props.match.params.id)
+    const token = this.props.token;
+    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + this.state.type + "/" + this.props.match.params.id, {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
         .then(results => {
             return results.json();
         }).then(data => {
@@ -481,7 +490,10 @@ class DocumentForm extends React.Component {
           </FormText>
         </FormGroup>
         {this.state.status !== 'submitting' &&
-          <Button color="primary">Publish</Button>
+          <span>
+            <Button color="primary">Publish</Button> &nbsp;
+            <Button color="secondary" onClick={(evt) => this.handleSubmit(evt, 1)}>Save as Draft</Button> &nbsp;
+          </span>
         }
         {(this.state.status === 'submitting' || this.state.status === 'deleting') &&
           <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />

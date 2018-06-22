@@ -118,7 +118,7 @@ class EventForm extends React.Component {
     }
   }
 
-  handleSubmit(event) {
+  handleSubmit(event, isDraft = 0) {
     event.preventDefault();
     const isValid = this.validateForm();
     /*if (!isValid) {
@@ -134,6 +134,7 @@ class EventForm extends React.Component {
     let doc = {};
     let body = JSON.stringify(this.state.doc);
     body = JSON.parse(body);
+    body.published = isDraft ? 0 : 1;
     body.category = body.category.value;
     body.operation = [];
     body.space = [];
@@ -467,7 +468,10 @@ class EventForm extends React.Component {
         </FormGroup>
 
         {this.state.status !== 'submitting' &&
-          <Button color="primary">Publish</Button>
+          <span>
+            <Button color="primary">Publish</Button> &nbsp;
+            <Button color="secondary" onClick={(evt) => this.handleSubmit(evt, 1)}>Save as Draft</Button> &nbsp;
+          </span>
         }
         {(this.state.status === 'submitting' || this.state.status === 'deleting') &&
           <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
