@@ -79,16 +79,16 @@ class Address extends React.Component {
         <Row>
           <Col>
             <FormGroup>
-              <Label for="premise">Address 1</Label>
-              <Input type="text" name="premise" value={this.state.val.premise} onChange={this.handleChange} />
+              <Label for="thoroughfare">Address 1</Label>
+              <Input type="text" name="thoroughfare" value={this.state.val.thoroughfare} onChange={this.handleChange} />
             </FormGroup>
           </Col>
         </Row>
         <Row>
           <Col>
             <FormGroup>
-              <Label for="thoroughfare">Address 2</Label>
-              <Input type="text" name="thoroughfare" value={this.state.val.thoroughfare} onChange={this.handleChange} />
+              <Label for="premise">Address 2</Label>
+              <Input type="text" name="premise" value={this.state.val.premise} onChange={this.handleChange} />
             </FormGroup>
           </Col>
         </Row>

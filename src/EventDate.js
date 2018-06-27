@@ -2,7 +2,8 @@ import React from 'react';
 import Select from 'react-select';
 import { Input, FormGroup, Row, Col, Label } from 'reactstrap';
 import RRuleGenerator from 'react-rrule-generator';
-import timezones from './timezones.json';
+import moment from 'moment';
+import 'moment-timezone';
 
 class EventDate extends React.Component {
   constructor(props) {
@@ -15,8 +16,8 @@ class EventDate extends React.Component {
         value: '',
         value2: '',
         timezone: 'UTC',
-        offset: '0',
-        offset2: '0',
+        offset: 0,
+        offset2: 0,
         rrule: '',
         timezone_db: ''
       },
@@ -25,7 +26,7 @@ class EventDate extends React.Component {
       to_date: '',
       to_time: '',
       rrule: '',
-      status: 'initial'
+      status: 'initial',
     };
     this.handleChange = this.handleChange.bind(this);
     this.setCheckbox = this.setCheckbox.bind(this);
@@ -63,6 +64,20 @@ class EventDate extends React.Component {
   setTimezone (timezone) {
     let val = this.state.val;
     val.timezone_db = timezone;
+    val.timezone = timezone;
+    let dateVal = new Date();
+    if (val.value) {
+      dateVal = new Date(val.value);
+    }
+    val.offset = moment.tz.zone(timezone.value).utcOffset(dateVal.valueOf());
+    val.offset = -val.offset * 60;
+    let date2Val = new Date();
+    if (val.value2) {
+      date2Val = new Date(val.value2);
+    }
+    val.offset2 = moment.tz.zone(timezone.value).utcOffset(date2Val.valueOf());
+    val.offset2 = -val.offset2 * 60;
+    console.log(val);
     this.setState({
       val: val
     });
@@ -140,12 +155,10 @@ class EventDate extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
       let val = this.props.value;
-      timezones.forEach (function (group) {
-        group.options.forEach(function (timezone) {
-          if (timezone.value === val.timezone_db) {
-            val.timezone_db = timezone;
-          }
-        });
+      moment.tz.names().forEach (function (timezone) {
+        if (timezone === val.timezone) {
+          val.timezone = {value: timezone, label: timezone};
+        }
       });
       const from_time = this.getTime(val.value);
       let newState = {
@@ -227,7 +240,7 @@ class EventDate extends React.Component {
           <Col>
             <FormGroup>
               <Label for="timezone">Timezone</Label>
-              <Select options={timezones} onChange={this.setTimezone} value={this.state.val.timezone_db} />
+              <Select options={moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })} onChange={this.setTimezone} value={this.state.val.timezone} />
             </FormGroup>
           </Col>
         </Row>

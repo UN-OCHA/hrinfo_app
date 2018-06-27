@@ -169,13 +169,15 @@ class EventForm extends React.Component {
       });
       body.locations = locations;
     }
-    delete body.language;
-    //body.language = body.language.value;
-    if (body.address && body.address.country) {
+    body.language = body.language.value;
+    if (body.address && body.address.country && typeof body.address.country === 'object') {
       body.address.country = body.address.country.pcode;
     }
     if (body.date[0] && body.date[0].timezone_db) {
       body.date[0].timezone_db = body.date[0].timezone_db.value;
+    }
+    if (body.date[0] && body.date[0].timezone) {
+      body.date[0].timezone = body.date[0].timezone.value;
     }
 
     let httpMethod = 'POST';
