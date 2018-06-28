@@ -6,6 +6,7 @@ import EventForm from "./EventForm";
 import Home from "./Home";
 import Admin from "./Admin";
 import ItemPage from "./ItemPage";
+import User from "./User";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 
@@ -23,4 +24,5 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/events/new" exact component={EventForm} props={childProps} />
     <AuthenticatedRoute path="/events/:id" exact component={ItemPage} props={childProps} />
     <AuthenticatedRoute path="/events/:id/edit" exact component={EventForm} props={childProps} />
+    <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;

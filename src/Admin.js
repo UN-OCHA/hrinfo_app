@@ -9,6 +9,7 @@ class Admin extends React.Component {
           <ul>
             <li><a href="/documents/new">Add a document</a></li>
             <li><a href="/infographics/new">Add a map/infographic</a></li>
+            <li><a href="/events/new">Add a new event</a></li>
           </ul>
         </div>
       );

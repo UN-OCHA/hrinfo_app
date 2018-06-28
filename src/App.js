@@ -179,14 +179,11 @@ class App extends Component {
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                <FontAwesomeIcon icon={faUser} />
+                <i className="icon-user" />
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem>
-                  Option 1
-                </DropdownItem>
-                <DropdownItem>
-                  Option 2
+                <DropdownItem tag="a" href={'/users/' + this.state.user.id}>
+                  Profile
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem onClick={this.handleLogout}>

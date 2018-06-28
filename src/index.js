@@ -5,6 +5,7 @@ import { CookiesProvider } from 'react-cookie';
 import App from "./App";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import './unocha-icons.css';
 import registerServiceWorker from './registerServiceWorker';
 
 //ReactDOM.render(<App />, document.getElementById('root'));

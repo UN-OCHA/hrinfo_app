@@ -51,7 +51,12 @@ class Login extends React.Component {
           }
           else {
             tokenData = data;
-            return fetch('https://www.humanitarianresponse.info/api/v1.0/user/me?access_token=' + data.token);
+            return fetch('https://www.humanitarianresponse.info/api/v1.0/user/me',
+              {
+                headers: {
+                  'Authorization': 'Bearer ' + data.token
+                }
+              });
           }
         })
         .then(results => {
