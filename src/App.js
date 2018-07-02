@@ -8,16 +8,12 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
   Alert,
   Input} from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import Routes from "./Routes";
 import './App.css';
 import SearchPage from './SearchPage';
@@ -174,16 +170,16 @@ class App extends Component {
         <Input type="text" className="col-sm-6" value={this.state.searchTerms} onChange={this.setSearch} placeholder="Start typing to search..." />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink href="/admin/">Admin</NavLink>
-            </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                <i className="icon-user" />
+                <i className="icon-user" /> {this.state.user.name}
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem tag="a" href={'/users/' + this.state.user.id}>
                   Profile
+                </DropdownItem>
+                <DropdownItem tag="a" href="/admin/">
+                  Admin
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem onClick={this.handleLogout}>

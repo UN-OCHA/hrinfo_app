@@ -206,7 +206,8 @@ class HRInfoFiles extends React.Component {
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.onAddBtnClick = this.onAddBtnClick.bind(this);
-      this.chnageState = this.changeState.bind(this);
+      this.changeState = this.changeState.bind(this);
+      this.removeFileRow = this.removeFileRow.bind(this);
     }
 
     getRow (number) {
@@ -235,10 +236,18 @@ class HRInfoFiles extends React.Component {
               }
             </FormGroup>
           </Col>
-          <Col sm="6">
+          <Col sm="5">
             <FormGroup>
               <Label>File Language</Label>
               <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
+            </FormGroup>
+          </Col>
+          <Col sm="1">
+            <FormGroup>
+              <Label>&nbsp;</Label>
+              <div>
+                <Button outline color="link" onClick={(e) => this.removeFileRow(number)}><i className="icon-cancel-big" /></Button>
+              </div>
             </FormGroup>
           </Col>
         </Row>
@@ -314,6 +323,44 @@ class HRInfoFiles extends React.Component {
       }
     }
 
+    removeFileRow (number) {
+      let collections = this.state.collections;
+      const itemId = this.state.files[number].item_id;
+      if (itemId) {
+        const that = this;
+        const token = this.props.token;
+        // The file is already part of a field_collection, send a DELETE request
+        fetch('https://www.humanitarianresponse.info/api/v1.0/files_collection/' + itemId, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(results => {
+          const colIndex = this.state.collections.indexOf(itemId);
+          if (colIndex !== -1) {
+            collections = collections.filter(function (id) {
+              return id !== itemId;
+            });
+          }
+          that.setState({
+            files: that.state.files.splice(number - 1, 1),
+            inputNumber: that.state.inputNumber - 1,
+            collections: collections
+          });
+        })
+      }
+      else {
+        this.setState({
+          files: this.state.files.splice(number - 1, 1),
+          inputNumber: this.state.inputNumber - 1,
+          collections: collections
+        });
+      }
+    }
+
     onAddBtnClick (event) {
       let files = this.state.files;
       for (let i = 0; i < this.state.inputNumber + 1; i++) {
@@ -323,7 +370,8 @@ class HRInfoFiles extends React.Component {
         }
       }
       this.setState({
-        inputNumber: this.state.inputNumber + 1
+        inputNumber: this.state.inputNumber + 1,
+        files: files
       });
     }
 

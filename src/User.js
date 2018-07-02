@@ -1,5 +1,4 @@
 import React from 'react';
-import Item from './Item';
 import {Container, Row, Col} from 'reactstrap';
 import moment from 'moment';
 
