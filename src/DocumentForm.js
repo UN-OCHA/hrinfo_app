@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
+import {Button, Form, FormGroup, Label, Input, FormText, Collapse} from 'reactstrap';
 import {EditorState, ContentState, convertFromHTML} from 'draft-js';
 import {Editor} from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
@@ -46,9 +46,11 @@ class DocumentForm extends React.Component {
             ],
             status: '',
             type: type,
-            typeLabel: typeLabel
+            typeLabel: typeLabel,
+			collapse: false
         };
 
+		this.toggle = this.toggle.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.onEditorStateChange = this.onEditorStateChange.bind(this);
@@ -59,8 +61,11 @@ class DocumentForm extends React.Component {
         this.postFieldCollections = this.postFieldCollections.bind(this);
     }
 
+	toggle() {
+	    this.setState({ collapse: !this.state.collapse });
+	}
+
     handleInputChange(event) {
-		console.log(event);
         const target = event.target;
         const value = target.type === 'checkbox'
             ? target.checked
@@ -389,29 +394,6 @@ class DocumentForm extends React.Component {
 	                    You must enter a publication date
 	                </div>
 	            </FormGroup>
-
-	            <FormGroup>
-	                <Label for="body">Description or Summary of Content</Label>
-	                <Editor editorState={editorState} wrapperClassName="demo-wrapper" editorClassName="demo-editor" onEditorStateChange={this.onEditorStateChange}/>
-	                <FormText color="muted">
-	                    Try to always include here the text (in full or part of it) of the {this.state.typeLabel + ' '}
-	                    (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
-	                </FormText>
-	            </FormGroup>
-
-	            <FormGroup className="required">
-	                <Label for="files">File(s)</Label>
-	                <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files)
-	                        ? 'is-valid'
-	                        : 'is-invalid'}/>
-	                <FormText color="muted">
-	                    Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
-	                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
-	                </FormText>
-	                <div className="invalid-feedback">
-	                    You must add at least one file
-	                </div>
-	            </FormGroup>
 			</div>
 
 			<div className="col-md-6">
@@ -425,25 +407,7 @@ class DocumentForm extends React.Component {
 	                </div>
 	            </FormGroup>
 
-	            <FormGroup className="required">
-	                <Label for="spaces">Operation(s) / Webspace(s)</Label>
-	                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces)
-	                        ? 'is-valid'
-	                        : 'is-invalid'}/>
-	                <FormText color="muted">
-	                    Click on the field and select where to publish the {this.state.typeLabel}
-	                    (operation, regional site or thematic site).
-	                </FormText>
-	                <div className="invalid-feedback">
-	                    You must select an operation or a space
-	                </div>
-	            </FormGroup>
-
-	            {bundles}
-	            {offices}
-	            {disasters}
-
-	            <FormGroup className="required">
+				<FormGroup className="required">
 	                <Label for={this.state.type === 'documents'
 	                        ? 'document_type'
 	                        : 'infographic_type'}>{
@@ -461,7 +425,7 @@ class DocumentForm extends React.Component {
 	                                    : 'is-invalid'}/>
 	                }
 	                <FormText color="muted">
-	                    Select the {this.state.typeLabel}
+	                    Select the {this.state.typeLabel + ' '}
 	                    type and sub-type that best describe the {this.state.typeLabel}.
 	                </FormText>
 	                <div className="invalid-feedback">
@@ -469,6 +433,53 @@ class DocumentForm extends React.Component {
 	                    type
 	                </div>
 	            </FormGroup>
+			</div>
+
+			<div className="col-md-12">
+	            <FormGroup>
+	                <Label for="body">Description or Summary of Content</Label>
+	                <Editor editorState={editorState} wrapperClassName="demo-wrapper" editorClassName="demo-editor" onEditorStateChange={this.onEditorStateChange}/>
+	                <FormText color="muted">
+	                    Try to always include here the text (in full or part of it) of the {this.state.typeLabel + ' '}
+	                    (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+	                </FormText>
+	            </FormGroup>
+			</div>
+
+			<div className="col-md-6">
+	            <FormGroup className="required">
+	                <Label for="files">File(s)</Label>
+	                <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files)
+	                        ? 'is-valid'
+	                        : 'is-invalid'}/>
+	                <FormText color="muted">
+	                    Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
+	                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+	                </FormText>
+	                <div className="invalid-feedback">
+	                    You must add at least one file
+	                </div>
+	            </FormGroup>
+			</div>
+
+			<div className="col-md-6">
+	            <FormGroup className="required">
+	                <Label for="spaces">Operation(s) / Webspace(s)</Label>
+	                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces)
+	                        ? 'is-valid'
+	                        : 'is-invalid'}/>
+	                <FormText color="muted">
+	                    Click on the field and select where to publish the {this.state.typeLabel + ' '}
+	                    (operation, regional site or thematic site).
+	                </FormText>
+	                <div className="invalid-feedback">
+	                    You must select an operation or a space
+	                </div>
+	            </FormGroup>
+
+	            {bundles}
+	            {offices}
+	            {disasters}
 
 	            <FormGroup className="required">
 	                <Label for="organizations">Organization(s)</Label>
@@ -483,35 +494,53 @@ class DocumentForm extends React.Component {
 	                </div>
 	            </FormGroup>
 
-	            <FormGroup>
-	                <Label for="related_content">Related Content</Label>
-	                <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content}/>
-	                <FormText color="muted">
-	                    Add links to content that is related to the {this.state.typeLabel}
-	                    you are publishing (example: language versions of the same {this.state.typeLabel}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
-	                </FormText>
-	            </FormGroup>
+	            {/* Hidden under 'Add More Information' button
 
-	            <FormGroup>
-	                <Label for="locations">Locations</Label>
-	                <HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} isMulti="isMulti"/>
-	                <FormText color="muted">
-	                    Select from the menu the country(ies) the {this.state.typeLabel}
-	                    is about and indicate more specific locations by selecting multiple layers (region, province, town).
-	                </FormText>
-	            </FormGroup>
-	            <FormGroup>
-	                <Label for="themes">Theme(s)</Label>
-	                <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes}/>
-	                <FormText color="muted">
-	                    Click on the field and select all relevant themes. Choose only themes the {this.state.typeLabel}
-	                    substantively refers to.
-	                </FormText>
-	            </FormGroup>
+				*/}
 			</div>
 
+			<div className="col-md-12 my-3">
+				<div className="row justify-content-center">
+					<Button outline color="primary" onClick={this.toggle}>More Information</Button>
+				</div>
+			</div>
+			<Collapse isOpen={this.state.collapse}>
+				<div className="row">
+					<div className="col-md-6">
+						<FormGroup>
+							<Label for="locations">Locations</Label>
+							<HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} isMulti="isMulti"/>
+							<FormText color="muted">
+								Select from the menu the country(ies) the {this.state.typeLabel + ' '}
+								is about and indicate more specific locations by selecting multiple layers (region, province, town).
+							</FormText>
+						</FormGroup>
+
+						<FormGroup>
+							<Label for="themes">Theme(s)</Label>
+							<HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes}/>
+							<FormText color="muted">
+								Click on the field and select all relevant themes. Choose only themes the {this.state.typeLabel}
+								substantively refers to.
+							</FormText>
+						</FormGroup>
+					</div>
+					<div className="col-md-6">
+						<FormGroup>
+							<Label for="related_content">Related Content</Label>
+							<RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content}/>
+							<FormText color="muted">
+								Add links to content that is related to the {this.state.typeLabel}
+								you are publishing (example: language versions of the same {this.state.typeLabel}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+							</FormText>
+						</FormGroup>
+					</div>
+				</div>
+        	</Collapse>
+
             {
-                this.state.status !== 'submitting' && <span>
+                this.state.status !== 'submitting' &&
+					<span className="mx-auto my-3">
                         <Button color="primary">Publish</Button>
                         &nbsp;
                         <Button color="secondary" onClick={(evt) => this.handleSubmit(evt, 1)}>Save as Draft</Button>
