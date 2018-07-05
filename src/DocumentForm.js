@@ -12,6 +12,7 @@ import HRInfoLocations from './HRInfoLocations';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
 import HRInfoFiles from './HRInfoFiles';
 import RelatedContent from './RelatedContent';
+import LanguageSelect from './LanguageSelect';
 
 class DocumentForm extends React.Component {
   constructor(props) {
@@ -29,12 +30,6 @@ class DocumentForm extends React.Component {
         published: 1
       },
       editorState: EditorState.createEmpty(),
-      languages: [
-        { value: 'en', label: 'English'},
-        { value: 'fr', label: 'French' },
-        { value: 'es', label: 'Spanish' },
-        { value: 'ru', label: 'Russian' }
-      ],
       status: '',
       type: type,
       typeLabel: typeLabel
@@ -212,7 +207,6 @@ class DocumentForm extends React.Component {
       field_collections.push(fc);
     });
     delete body.files;
-    body.language = body.language.value;
 
     let httpMethod = 'POST';
     let url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type;
@@ -318,11 +312,6 @@ class DocumentForm extends React.Component {
           doc.spaces.push(sp);
         }
       });
-      this.state.languages.forEach(function (lang) {
-        if (doc.language === lang.value) {
-          doc.language = lang;
-        }
-      });
       let state = {
         doc: doc
       };
@@ -375,7 +364,7 @@ class DocumentForm extends React.Component {
       <Form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated bg-white my-3 p-3': 'bg-white my-3 p-3'}>
         <FormGroup className="required">
           <Label for="language">Language</Label>
-          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
+          <LanguageSelect value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
           <div className="invalid-feedback">
             Please select a language
           </div>

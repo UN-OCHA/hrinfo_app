@@ -14,10 +14,8 @@ import RelatedContent from './RelatedContent';
 import HidContacts from './HidContacts';
 import Address from './Address';
 import EventDate from './EventDate';
-import LanguageSelect from './LanguageSelect';
-import StringSelect from './StringSelect';
 
-class EventForm extends React.Component {
+class AssessmentForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,11 +26,46 @@ class EventForm extends React.Component {
         address: {}
       },
       editorState: EditorState.createEmpty(),
-      event_categories: [
-        { value: '82', label: 'Meetings'},
-        { value: '83', label: 'Trainings'},
-        { value: '84', label: 'Workshops'},
-        { value: '85', label: 'Conferences'}
+      languages: [
+        { value: 'en', label: 'English'},
+        { value: 'fr', label: 'French' },
+        { value: 'es', label: 'Spanish' },
+        { value: 'ru', label: 'Russian' }
+      ],
+      assessment_statuses: [
+        { value: 'Planned', label: 'Planned'},
+        { value: 'Ongoing', label: 'Ongoing'},
+        { value: 'Draft / Preliminary Results', label: 'Draft / Preliminary Results'},
+        { value: 'Field work completed', label: 'Field work completed'},
+        { value: 'Report completed', label: 'Report completed'}
+      ],
+      collection_methods: [
+        { value: 'Structured Interview', label: 'Structured Interview'},
+        { value: 'Unstructured Interview', label: 'Unstructured Interview'},
+        { value: 'Key Informant Interview', label: 'Key Informant Interview'},
+        { value: 'Focus group discussion', label: 'Focus group discussion'},
+        { value: 'Observation', label: 'Observation'},
+        { value: 'Baseline data analysis', label: 'Baseline data analysis'},
+        { value: 'Field Interview', label: 'Field Interview'},
+        { value: 'Email / Mail Interview', label: 'Email / Mail Interview'},
+        { value: 'Mixed', label: 'Mixed'},
+        { value: 'Other', label: 'Other'}
+      ],
+      masurement_units: [
+        { value: 'Community', label: 'Community'},
+        { value: 'Settlements', label: 'Settlements'},
+        { value: 'Households', label: 'Households'},
+        { value: 'Individuals', label: 'Individuals'},
+      ],
+      geographic_levels: [
+        { value: 'District', label: 'District'},
+        { value: 'National', label: 'National'},
+        { value: 'Non-representative', label: 'Non-representative'},
+        { value: 'Other', label: 'Other'},
+        { value: 'Province', label: 'Province'},
+        { value: 'Regional', label: 'Regional'},
+        { value: 'Sub-district', label: 'Sub-district'},
+        { value: 'Village', label: 'Village'}
       ],
       status: ''
     };
@@ -59,7 +92,6 @@ class EventForm extends React.Component {
   }
 
   handleSelectChange (name, selected) {
-    console.log(selected);
     let doc = this.state.doc;
     if (name === 'date') {
       doc[name][0] = selected;
@@ -166,6 +198,7 @@ class EventForm extends React.Component {
       });
       body.locations = locations;
     }
+    body.language = body.language.value;
     if (body.address && body.address.country && typeof body.address.country === 'object') {
       body.address.country = body.address.country.pcode;
     }
@@ -272,6 +305,16 @@ class EventForm extends React.Component {
           doc.spaces.push(sp);
         }
       });
+      this.state.languages.forEach(function (lang) {
+        if (doc.language === lang.value) {
+          doc.language = lang;
+        }
+      });
+      this.state.event_categories.forEach(function (category) {
+        if (category.value === parseInt(doc.category, 10)) {
+          doc.category = category;
+        }
+      });
       let state = {
         doc: doc
       };
@@ -288,22 +331,13 @@ class EventForm extends React.Component {
   }
 
   render() {
-    const offices = this.state.doc.hasOperation ? (
-      <FormGroup>
-        <Label for="offices">Coordination hub(s)</Label>
-        <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices} />
-        <FormText color="muted">
-          Click on the field and select the coordination hub(s) the event refers to (if any).
-        </FormText>
-      </FormGroup>
-    ) : '';
 
     const disasters = this.state.doc.hasOperation ? (
       <FormGroup>
         <Label for="disasters">Disaster(s) / Emergency</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
         <FormText color="muted">
-          Click on the field and select the disaster(s) or emergency the event refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
+          Click on the field and select the disaster(s) or emergency the assessment refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
         </FormText>
       </FormGroup>
     ) : '';
@@ -313,7 +347,7 @@ class EventForm extends React.Component {
         <Label for="bundles">Cluster(s)/Sector(s)</Label>
         <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
         <FormText color="muted">
-          Indicate the cluster(s)/sector(s) the event refers to.
+          Indicate the cluster(s)/sector(s) the assessment refers to.
         </FormText>
       </FormGroup>
     ) : '';
@@ -324,7 +358,7 @@ class EventForm extends React.Component {
       <Form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated bg-white my-3 p-3': 'bg-white my-3 p-3'}>
         <FormGroup className="required">
           <Label for="language">Language</Label>
-          <LanguageSelect value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
+          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
           <div className="invalid-feedback">
             Please select a language
           </div>
@@ -342,84 +376,133 @@ class EventForm extends React.Component {
         </FormGroup>
 
         <FormGroup className="required">
-          <Label for="label">Title</Label>
-          <Input type="text" name="label" id="label" placeholder="Enter the title of the event" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
+          <Label for="status">Status</Label>
+          <Select id="status" name="status" options={this.state.assessment_statuses} value={this.state.doc.status} onChange={(s) => this.handleSelectChange('status', s)} className={this.isValid(this.state.doc.category) ? 'is-valid' : 'is-invalid'}/>
           <FormText color="muted">
-            Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+            Indicate the phase of the assessment. Please remember to update this field as phases move on.
           </FormText>
           <div className="invalid-feedback">
-            Please enter the event title
-          </div>
-        </FormGroup>
-
-        <FormGroup className="required">
-          <Label for="category">Event Category</Label>
-          <StringSelect id="category" name="category" options={this.state.event_categories} value={this.state.doc.category} onChange={(s) => this.handleSelectChange('category', s)} className={this.isValid(this.state.doc.category) ? 'is-valid' : 'is-invalid'}/>
-          <FormText color="muted">
-            From the list, select the kind of event you are creating.
-          </FormText>
-          <div className="invalid-feedback">
-            You must select an event category
-          </div>
-        </FormGroup>
-
-        <FormGroup className="required">
-          <Label for="date">Date(s)</Label>
-          <EventDate value={this.state.doc.date[0]} required onChange={(val) => {console.log(val); this.handleSelectChange('date', val);}} />
-          <FormText color="muted">
-            Indicate the date(s) of the event.
-          </FormText>
-          <div className="invalid-feedback">
-            You must enter a date
+            You must select an assessment status
           </div>
         </FormGroup>
 
         <FormGroup>
-          <Label for="locations">Location</Label>
-          <HRInfoLocations onChange={(s) => this.handleSelectChange('location', s)} value={this.state.doc.location} />
-          <FormText color="muted">
-            Select from the menu the country(ies) the {this.state.typeLabel} is about and indicate more specific locations by selecting multiple layers (region, province, town).
-          </FormText>
-        </FormGroup>
-
-        <FormGroup>
-          <Label for="venue">Venue</Label>
-          <Address value={this.state.doc.address} onChange={(val) => this.handleSelectChange('address', val)} />
-          <FormText color="muted">
-            Indicate here where the event takes place.
-          </FormText>
-        </FormGroup>
-
-        <FormGroup>
-          <Label for="organizations">Organization(s)</Label>
+          <Label for="organizations">Leading/Coordinating Organization(s)</Label>
           <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
           <FormText color="muted">
-            Type in and select the the event organizer(s).
+            Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="participating_organizations">Participating Organization(s)</Label>
+          <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('participating_organizations', s)} value={this.state.doc.participating_organizations} className={this.isValid(this.state.doc.participating_organizations) ? 'is-valid' : 'is-invalid'} />
+          <FormText color="muted">
+            Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="locations">Location(s)</Label>
+          <HRInfoLocations onChange={(s) => this.handleSelectChange('location', s)} value={this.state.doc.location} isMulti />
+          <FormText color="muted">
+            Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town).
+            You can indicate up to four locations right away. If you need to indicate more than four, save your assessment as draft then edit it to add more locations.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="other_location">Other location</Label>
+          <Input type="text" name="other_location" id="other_location" value={this.state.doc.other_location} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            You can specify here a location not available in the Location(s) field list.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="population_types">Population Type(s)</Label>
+          <HRInfoSelect type="population_types" isMulti={true} onChange={(s) => this.handleSelectChange('population_types', s)} value={this.state.doc.population_types} />
+          <FormText color="muted">
+            Click on the field and select the segment(s) of the population targeted by the assessment. You can select multiple population types.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup className="required">
+          <Label for="label">Title</Label>
+          <Input type="text" name="label" id="label" placeholder="Enter the title of the assessment" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+          </FormText>
+          <div className="invalid-feedback">
+            Please enter the assessment title
+          </div>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="subject">Subject/Objective</Label>
+          <Input type="textarea" name="subject" id="subject" value={this.state.doc.subject} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            Insert a brief description of the topic of the assessment and what its goals are.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="methodology">Methodology</Label>
+          <Input type="textarea" name="methodology" id="methodology" value={this.state.doc.methodology} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            Insert a brief description of the procedures and the techniques used to collect, store and analyse the data.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="key_findings">Key findings</Label>
+          <Input type="textarea" name="key_findings" id="key_findings" value={this.state.doc.key_findings} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            Insert a brief summary of the assessment’s results.
           </FormText>
         </FormGroup>
 
         {bundles}
 
         <FormGroup>
-          <Label for="body">Event description</Label>
-          <Editor
-            editorState={editorState}
-            wrapperClassName="demo-wrapper"
-            editorClassName="demo-editor"
-            onEditorStateChange={this.onEditorStateChange}
-          />
-          <FormText color="muted">
-            Provide here additional information regarding the event.
-          </FormText>
-        </FormGroup>
-
-        {offices}
-        {disasters}
-        <FormGroup>
           <Label for="themes">Themes</Label>
           <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
           <FormText color="muted">
             Click on the field and select all relevant themes. Choose only themes the event substantively refers to.
+          </FormText>
+        </FormGroup>
+
+        {disasters}
+
+        <FormGroup>
+          <Label for="collection_method">Collection method(s)</Label>
+          <Select id="collection_method" name="collection_method" options={this.state.collection_methods} value={this.state.doc.collection_method} onChange={(s) => this.handleSelectChange('collection_method', s)} />
+          <FormText color="muted">
+            Click on the field and select the collection method(s) used to gather information during the assessment.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="unit_measurement">Unit(s) of Measurement</Label>
+          <Select id="unit_measurement" name="unit_measurement" options={this.state.measurement_units} value={this.state.doc.unit_measurement} onChange={(s) => this.handleSelectChange('unit_measurement', s)} />
+          <FormText color="muted">
+            Click on the field and select the unit(s) of measurement used for the assessment.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="sample_size">Sample size</Label>
+          <Input type="text" name="sample_size" id="sample_size" value={this.state.doc.sample_size} onChange={this.handleInputChange} />
+          <FormText color="muted">
+            Indicate the number of communities/households/individuals surveyed during the assessment.
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="geographic_level">Level of Representation</Label>
+          <Select id="geographic_level" name="geographic_level" options={this.state.geographic_levels} value={this.state.doc.geographic_level} onChange={(s) => this.handleSelectChange('geographic_level', s)} />
+          <FormText color="muted">
+            Select at what geographical level the assessment is (has been) conducted.
           </FormText>
         </FormGroup>
 
@@ -472,4 +555,4 @@ class EventForm extends React.Component {
   }
 }
 
-export default EventForm;
+export default AssessmentForm;

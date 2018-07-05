@@ -3,6 +3,8 @@ import { Switch } from "react-router-dom";
 import Login from "./Login";
 import DocumentForm from "./DocumentForm";
 import EventForm from "./EventForm";
+import AssessmentForm from "./AssessmentForm";
+import OperationForm from "./OperationForm";
 import Home from "./Home";
 import Admin from "./Admin";
 import ItemPage from "./ItemPage";
@@ -24,5 +26,8 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/events/new" exact component={EventForm} props={childProps} />
     <AuthenticatedRoute path="/events/:id" exact component={ItemPage} props={childProps} />
     <AuthenticatedRoute path="/events/:id/edit" exact component={EventForm} props={childProps} />
+    <AuthenticatedRoute path="/assessments/new" exact component={AssessmentForm} props={childProps} />
+    <AuthenticatedRoute path="/operations/new" exact component={OperationForm} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/edit" exact component={OperationForm} props={childProps} />
     <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;
