@@ -382,7 +382,7 @@ class DocumentForm extends React.Component {
 	                <Label for="publication_date">Original Publication Date</Label>
 	                <Input type="date" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required="required"/>
 	                <FormText color="muted">
-	                    Indicate when the {this.state.typeLabel}
+	                    Indicate when the {this.state.typeLabel + ' '}
 	                    has originally been published.
 	                </FormText>
 	                <div className="invalid-feedback">
@@ -394,7 +394,7 @@ class DocumentForm extends React.Component {
 	                <Label for="body">Description or Summary of Content</Label>
 	                <Editor editorState={editorState} wrapperClassName="demo-wrapper" editorClassName="demo-editor" onEditorStateChange={this.onEditorStateChange}/>
 	                <FormText color="muted">
-	                    Try to always include here the text (in full or part of it) of the {this.state.typeLabel}
+	                    Try to always include here the text (in full or part of it) of the {this.state.typeLabel + ' '}
 	                    (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
 	                </FormText>
 	            </FormGroup>
@@ -406,7 +406,7 @@ class DocumentForm extends React.Component {
 	                        : 'is-invalid'}/>
 	                <FormText color="muted">
 	                    Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
-	                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
+	                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
 	                </FormText>
 	                <div className="invalid-feedback">
 	                    You must add at least one file
