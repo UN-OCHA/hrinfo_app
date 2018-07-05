@@ -213,7 +213,7 @@ class HRInfoFiles extends React.Component {
     getRow (number) {
       return (
         <Row key={number}>
-          <Col sm="6">
+          <Col lg="5">
             <FormGroup>
               <Label>File</Label>
               {this.state.files[number] === '' ?
@@ -224,7 +224,7 @@ class HRInfoFiles extends React.Component {
                     success={files => this.handleChange(number, 'file', files)}
                     multiselect={false}
                     extensions={['.pdf']} >
-                    <Button color="secondary" size="sm">Select from dropbox</Button>
+                    <Button color="secondary" size="sm" className="my-2">Select from Dropbox</Button>
                 </DropboxChooser>
               </span> : ''
               }
@@ -236,17 +236,16 @@ class HRInfoFiles extends React.Component {
               }
             </FormGroup>
           </Col>
-          <Col sm="5">
+          <Col lg="5">
             <FormGroup>
               <Label>File Language</Label>
               <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
             </FormGroup>
           </Col>
-          <Col sm="1">
+          <Col lg="2" className="align-self-center">
             <FormGroup>
-              <Label>&nbsp;</Label>
               <div>
-                <Button outline color="link" onClick={(e) => this.removeFileRow(number)}><i className="icon-cancel-big" /></Button>
+                <Button outline color="danger" size="sm" onClick={(e) => this.removeFileRow(number)}><i className="icon-cancel-big" /></Button>
               </div>
             </FormGroup>
           </Col>
