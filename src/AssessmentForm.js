@@ -7,6 +7,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+import HRInfoAPI from './HRInfoAPI';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
@@ -69,6 +70,8 @@ class AssessmentForm extends React.Component {
       ],
       status: ''
     };
+
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -209,33 +212,10 @@ class AssessmentForm extends React.Component {
       body.date[0].timezone = body.date[0].timezone.value;
     }
 
-    let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/events';
-    if (body.id) {
-      httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/api/v1.0/events/' + body.id;
-      delete body.created;
-      delete body.changed;
-      delete body.url;
-    }
-
-    fetch(url, {
-        method: httpMethod,
-        body: JSON.stringify(body),
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        doc =  data.data[0];
-      })
-      .then(res => {
-        this.props.history.push('/events/' + doc.id);
+    this.hrinfoAPI
+      .save('assessments', body)
+      .then(doc => {
+        this.props.history.push('/assessments/' + doc.id);
       })
       .catch(err => {
         this.props.setAlert('danger', 'There was an error uploading your document');
@@ -248,19 +228,13 @@ class AssessmentForm extends React.Component {
       this.setState({
         status: 'deleting'
       });
-      fetch('https://www.humanitarianresponse.info/api/v1.0/events/' + this.props.match.params.id, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': 'Bearer ' + this.props.token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
+      this.hrinfoAPI
+        .remove('assessments', this.props.match.params.id)
         .then(results => {
-          that.props.setAlert('success', 'Event deleted successfully');
+          that.props.setAlert('success', 'Assessment deleted successfully');
           that.props.history.push('/home');
         }).catch(function(err) {
-          that.props.setAlert('danger', 'There was an error deleting your event');
+          that.props.setAlert('danger', 'There was an error deleting your assessment');
           that.props.history.push('/home');
         });
     }
@@ -276,21 +250,9 @@ class AssessmentForm extends React.Component {
     });
   }
 
-  getDocument () {
-    const that = this;
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/events/" + this.props.match.params.id)
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          return data.data[0];
-        }).catch(function(err) {
-          that.props.setAlert('danger', 'Could not fetch event');
-        });
-  }
-
   async componentDidMount() {
     if (this.props.match.params.id) {
-      const doc = await this.getDocument();
+      const doc = await this.hrinfoAPI.getItem('assessments', this.props.match.params.id);
       doc.spaces = [];
       doc.operation.forEach(function (op) {
         if (op) {

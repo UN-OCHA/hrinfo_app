@@ -4,6 +4,7 @@ import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import DropboxChooser from 'react-dropbox-chooser';
+import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {
@@ -203,6 +204,9 @@ class HRInfoFiles extends React.Component {
         languages: [''],
         status: ''
       };
+
+      this.hrinfoAPI = new HRInfoAPI(this.props.token);
+
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.onAddBtnClick = this.onAddBtnClick.bind(this);
@@ -263,41 +267,15 @@ class HRInfoFiles extends React.Component {
       if (type === 'file') {
         let files = this.state.files;
         const that = this;
-        const token = this.props.token;
-        let data = {}, requestParams = {};
-        if (v instanceof FileList) {
-          data = new FormData();
-          data.append('file', v[0]);
-          requestParams = {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + token
-            },
-            body: data
-          };
-        }
-        else {
-          requestParams = {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Accept' : 'application/json',
-              'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify(v[0])
-          };
-        }
         files[number] = 'uploading';
         this.setState({
           files: files
         });
 
-        fetch('https://www.humanitarianresponse.info/api/files', requestParams)
-          .then((response) => {
-            return response.json();
-          })
-          .then(data => {
-            files[number] = data.data[0][0];
+        this.hrinfoAPI
+          .saveFile(files)
+          .then(doc => {
+            files[number] = doc[0];
             that.changeState({
               files: files
             });
@@ -330,27 +308,21 @@ class HRInfoFiles extends React.Component {
         const that = this;
         const token = this.props.token;
         // The file is already part of a field_collection, send a DELETE request
-        fetch('https://www.humanitarianresponse.info/api/v1.0/files_collection/' + itemId, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(results => {
-          const colIndex = this.state.collections.indexOf(itemId);
-          if (colIndex !== -1) {
-            collections = collections.filter(function (id) {
-              return id !== itemId;
+        this.hrinfoAPI
+          .remove('files_collection', itemId)
+          .then(results => {
+            const colIndex = this.state.collections.indexOf(itemId);
+            if (colIndex !== -1) {
+              collections = collections.filter(function (id) {
+                return id !== itemId;
+              });
+            }
+            that.setState({
+              files: that.state.files.splice(number - 1, 1),
+              inputNumber: that.state.inputNumber - 1,
+              collections: collections
             });
-          }
-          that.setState({
-            files: that.state.files.splice(number - 1, 1),
-            inputNumber: that.state.inputNumber - 1,
-            collections: collections
-          });
-        })
+          })
       }
       else {
         this.setState({

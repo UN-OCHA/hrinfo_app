@@ -9,6 +9,7 @@ import Home from "./Home";
 import Admin from "./Admin";
 import ItemPage from "./ItemPage";
 import User from "./User";
+import OperationPage from "./OperationPage";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 
@@ -29,5 +30,6 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/assessments/new" exact component={AssessmentForm} props={childProps} />
     <AuthenticatedRoute path="/operations/new" exact component={OperationForm} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/edit" exact component={OperationForm} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id" exact component={OperationPage} props={childProps} />
     <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;

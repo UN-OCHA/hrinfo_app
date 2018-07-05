@@ -7,6 +7,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+import HRInfoAPI from './HRInfoAPI';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
@@ -34,6 +35,8 @@ class DocumentForm extends React.Component {
       type: type,
       typeLabel: typeLabel
     };
+
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -82,21 +85,7 @@ class DocumentForm extends React.Component {
         language: fc.language,
         host_entity: docid
       };
-      let url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection';
-      let httpMethod = 'POST';
-      if (fc.item_id !== '') {
-        url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection/' + fc.item_id;
-        httpMethod = 'PATCH';
-      }
-      await fetch(url, {
-        method: httpMethod,
-        body: JSON.stringify(body),
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
+      await this.hrinfoAPI.saveFieldCollection(body);
     }
   }
 
@@ -208,30 +197,10 @@ class DocumentForm extends React.Component {
     });
     delete body.files;
 
-    let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type;
-    if (body.id) {
-      httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/api/v1.0/' + this.state.type + '/' + body.id;
-      delete body.created;
-      delete body.changed;
-      delete body.url;
-    }
-
-    fetch(url, {
-        method: httpMethod,
-        body: JSON.stringify(body),
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        doc = data.data[0];
+    this.hrinfoAPI
+      .save(this.state.type, body)
+      .then(result => {
+        doc = result;
         return this.postFieldCollections(doc.id, field_collections);
       })
       .then(res => {
@@ -248,14 +217,8 @@ class DocumentForm extends React.Component {
       this.setState({
         status: 'deleting'
       });
-      fetch('https://www.humanitarianresponse.info/api/v1.0/' + this.state.type + '/' + this.props.match.params.id, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': 'Bearer ' + this.props.token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
+      this.hrinfoAPI
+        .remove(this.state.type, this.props.match.params.id)
         .then(results => {
           that.props.setAlert('success', that.state.typeLabel + ' deleted successfully');
           that.props.history.push('/home');
@@ -276,28 +239,9 @@ class DocumentForm extends React.Component {
     });
   }
 
-  getDocument () {
-    const that = this;
-    const token = this.props.token;
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + this.state.type + "/" + this.props.match.params.id, {
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          return data.data[0];
-        }).catch(function(err) {
-          that.props.setAlert('danger', 'Could not fetch ' + that.state.typeLabel);
-        });
-  }
-
   async componentDidMount() {
     if (this.props.match.params.id) {
-      const doc = await this.getDocument();
+      const doc = await this.hrinfoAPI.getItem(this.state.type, this.props.match.params.id);
       doc.spaces = [];
       doc.operation.forEach(function (op) {
         if (op) {

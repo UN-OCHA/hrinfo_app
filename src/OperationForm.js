@@ -4,6 +4,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+import HRInfoAPI from './HRInfoAPI';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocation from './HRInfoLocation';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
@@ -37,6 +38,8 @@ class OperationForm extends React.Component {
       ],
       status: ''
     };
+
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -125,32 +128,9 @@ class OperationForm extends React.Component {
     body.published = isDraft ? 0 : 1;
     body.language = body.language.value;
 
-    let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/operations';
-    if (body.id) {
-      httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/api/v1.0/operations/' + body.id;
-      delete body.created;
-      delete body.changed;
-      delete body.url;
-    }
-
-    fetch(url, {
-        method: httpMethod,
-        body: JSON.stringify(body),
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        doc =  data.data[0];
-      })
-      .then(res => {
+    this.hrinfoAPI
+      .save('operations', body)
+      .then(doc => {
         this.props.history.push('/operations/' + doc.id);
       })
       .catch(err => {
@@ -164,14 +144,8 @@ class OperationForm extends React.Component {
       this.setState({
         status: 'deleting'
       });
-      fetch('https://www.humanitarianresponse.info/api/v1.0/operations/' + this.props.match.params.id, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': 'Bearer ' + this.props.token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
+      this.hrinfoAPI
+        .remove('operations', this.props.match.params.id)
         .then(results => {
           that.props.setAlert('success', 'Operation deleted successfully');
           that.props.history.push('/home');
@@ -182,21 +156,9 @@ class OperationForm extends React.Component {
     }
   }
 
-  getDocument () {
-    const that = this;
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/operations/" + this.props.match.params.id)
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          return data.data[0];
-        }).catch(function(err) {
-          that.props.setAlert('danger', 'Could not fetch event');
-        });
-  }
-
   async componentDidMount() {
     if (this.props.match.params.id) {
-      const doc = await this.getDocument();
+      const doc = await this.hrinfoAPI.getItem('operations', this.props.match.params.id);
       if (doc.launch_date) {
         const launchDate = new Date(parseInt(doc.launch_date, 10) * 1000);
         const day = ("0" + launchDate.getDate()).slice(-2);

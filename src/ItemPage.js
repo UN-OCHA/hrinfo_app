@@ -1,5 +1,6 @@
 import React from 'react';
 import Item from './Item';
+import HRInfoAPI from './HRInfoAPI';
 
 class ItemPage extends React.Component {
 
@@ -9,34 +10,19 @@ class ItemPage extends React.Component {
       this.state = {
         doc: null
       };
-    }
-
-    getDocument () {
-      const that = this;
-      const token = this.props.token;
-      let type = this.props.match.url.replace(this.props.match.params.id, '');
-      type = type.replace('/', '');
-      return fetch("https://www.humanitarianresponse.info/api/v1.0" + this.props.match.url, {
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }})
-          .then(results => {
-              return results.json();
-          }).then(data => {
-            let out = data.data[0];
-            out.type = type.replace('/', '');
-            return out;
-          }).catch(function(err) {
-              console.log("Fetch error: ", err);
-              that.props.setAlert('danger', 'Could not fetch document');
-          });
+      this.hrinfoAPI = new HRInfoAPI(this.props.token);
     }
 
     async componentDidMount() {
       if (this.props.match.params.id) {
-        const doc = await this.getDocument();
+        let type = this.props.match.url.replace(this.props.match.params.id, '');
+        type = type.replace('/', '');
+        type = type.replace('/', '');
+        const doc = await this.hrinfoAPI.getItem(type, this.props.match.params.id)
+          .then(doc => {
+            doc.type = type;
+            return doc;
+          });
         this.setState({
           doc: doc
         });
