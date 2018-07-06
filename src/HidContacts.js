@@ -1,5 +1,6 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
+import HidAPI from './HidAPI';
 
 class HidContacts extends React.Component {
   constructor(props) {
@@ -8,29 +9,19 @@ class HidContacts extends React.Component {
       contacts: [],
       status: 'initial'
     };
-    this.getUrl = this.getUrl.bind(this);
+    this.hidAPI = new HidAPI(this.props.token);
     this.handleChange = this.handleChange.bind(this);
     this.getOptions = this.getOptions.bind(this);
   }
 
-  getUrl (input) {
-    return 'https://api.humanitarian.id/api/v2/user?limit=10&offset=0&sort=name&q=' + input;
-  }
-
   getOptions (input) {
-    const token = this.props.token;
-    return fetch(this.getUrl(input), {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        })
-        .then(results => {
-          return results.json();
-        }).then(data => {
-          return data;
-        }).catch(function(err) {
-          console.log("Fetch error: ", err);
-        });
+    let params = {};
+    params.limit = 10;
+    params.offset = 0;
+    params.sort = 'name';
+    params.q = input;
+    return this.hidAPI
+      .get('user', params);
   }
 
   handleChange (selectedOption) {
@@ -47,24 +38,13 @@ class HidContacts extends React.Component {
   }
 
   async componentDidUpdate (prevProps, prevState, snapshot) {
+    const that = this;
     if (this.state.status === 'initial') {
       if (this.props.value) {
         const token = this.props.token;
         let promises = [];
         this.props.value.forEach(function (v) {
-          promises.push(
-            fetch('https://api.humanitarian.id/api/v2/user/' + v, {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            })
-            .then(results => {
-              return results.json();
-            })
-            .then(data => {
-              return data;
-            })
-          );
+          promises.push(that.hidAPI.getItem('user', v));
         });
         let out = await Promise.all(promises);
         this.setState({

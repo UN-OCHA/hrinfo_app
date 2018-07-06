@@ -3,6 +3,7 @@ import { Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoAPI from './HRInfoAPI';
+import HidAPI from './HidAPI';
 
 class Login extends React.Component {
   constructor(props) {
@@ -30,23 +31,10 @@ class Login extends React.Component {
       this.setState({
         status: 'submitting'
       });
-      let body = {
-        email: this.state.email,
-        password: this.state.password
-      };
-      body.exp = Math.floor(Date.now() / 1000) + 3600;
       let tokenData = {};
-      fetch('https://auth.humanitarian.id/api/v2/jsonwebtoken', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-        })
-        .then(results => {
-            return results.json();
-        })
+      this.hidAPI = new HidAPI();
+      this.hidAPI
+        .getJWT(this.state.email, this.state.password)
         .then(data => {
           if (!data.user || !data.token) {
             throw "Unknown exception";

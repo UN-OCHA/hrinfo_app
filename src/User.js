@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import moment from 'moment';
+import HidAPI from './HidAPI';
 
 class User extends React.Component {
 
@@ -10,30 +11,13 @@ class User extends React.Component {
       this.state = {
         user: null
       };
-    }
 
-    getUser () {
-      const that = this;
-      const token = this.props.token;
-      return fetch("https://api.humanitarian.id/api/v2/user/" + this.props.match.params.id, {
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }})
-          .then(results => {
-              return results.json();
-          }).then(data => {
-            return data;
-          }).catch(function(err) {
-              console.log("Fetch error: ", err);
-              that.props.setAlert('danger', 'Could not fetch document');
-          });
+      this.hidAPI = new HidAPI(this.props.token);
     }
 
     async componentDidMount() {
       if (this.props.match.params.id) {
-        const user = await this.getUser();
+        const user = await this.hidAPI.getItem('user', this.props.match.params.id);
         this.setState({
           user: user
         });
@@ -42,7 +26,7 @@ class User extends React.Component {
 
     async componentDidUpdate () {
       if (this.state.user.id && this.state.user.id !== this.props.match.params.id) {
-        const user = await this.getUser();
+        const user = await this.hidAPI.getItem('user', this.props.match.params.id);
         this.setState({
           user: user
         });
