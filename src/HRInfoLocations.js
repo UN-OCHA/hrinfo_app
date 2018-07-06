@@ -34,7 +34,7 @@ class HRInfoLocations extends React.Component {
     ) : '';
 
     return (
-      <Row key={number}>
+      <Row key={number} className="my-3">
         <HRInfoLocation level="0" onChange={this.handleChange} row={number} value={this.state.locations[number][0]} className="col-sm-3" />
         {locations1}
         {locations2}
@@ -141,7 +141,7 @@ class HRInfoLocations extends React.Component {
     return (
       <div>
         {rows}
-        {this.props.isMulti ? <Button onClick={this.onAddBtnClick}>Add location</Button> : '' }
+        {this.props.isMulti ? <Button onClick={this.onAddBtnClick} className="my-3">Add location</Button> : '' }
       </div>
       );
   }
