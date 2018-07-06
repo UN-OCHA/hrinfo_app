@@ -28,6 +28,40 @@ class HRInfoAPI {
         });
   }
 
+  get (type, params) {
+    let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type;
+    let keys = Object.keys(params);
+    if (keys.length) {
+      url += '?';
+      keys.forEach(function (key) {
+        url += key + '=' + params[key] + '&';
+      });
+    }
+    return fetch(url)
+      .then(results => {
+        return results.json();
+      }).then(data => {
+        return data;
+      });
+  }
+
+  getProfile () {
+    return fetch('https://www.humanitarianresponse.info/api/v1.0/user/me',
+      {
+        headers: {
+          'Authorization': 'Bearer ' + this.token,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(results => {
+        return results.json();
+      })
+      .then(data => {
+        return data.data[0];
+      });
+  }
+
   save(type, body) {
     const token = this.token;
     let httpMethod = 'POST';

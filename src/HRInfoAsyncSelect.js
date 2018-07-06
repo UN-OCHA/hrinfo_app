@@ -1,5 +1,6 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
+import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoAsyncSelect extends React.Component {
   constructor(props) {
@@ -7,37 +8,37 @@ class HRInfoAsyncSelect extends React.Component {
     this.state = {
       items: []
     };
-    this.getUrl = this.getUrl.bind(this);
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
     this.handleChange = this.handleChange.bind(this);
     this.getOptions = this.getOptions.bind(this);
   }
 
-  getUrl (input) {
-    return 'https://www.humanitarianresponse.info/en/api/v1.0/' + this.props.type + '?search=' + input + '&fields=id,label,acronym&sort=label&range=10';
-  }
-
   getOptions (input) {
     const type = this.props.type;
-    return fetch(this.getUrl(input))
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          if (type === 'organizations') {
-            let fullLabels = [];
-            data.data.forEach(function (org) {
-              if (org.acronym) {
-                org.label = org.label + ' (' + org.acronym + ')';
-              }
-              fullLabels.push(org);
-            });
-            return fullLabels;
-          }
-          else {
-            return data.data;
-          }
-        }).catch(function(err) {
-            console.log("Fetch error: ", err);
-        });
+    let params = {};
+    params.search = input;
+    params.fields = 'id,label,acronym';
+    params.sort = 'label';
+    params.range = 10;
+    return this.hrinfoAPI
+      .get(type, params)
+      .then(data => {
+        if (type === 'organizations') {
+          let fullLabels = [];
+          data.data.forEach(function (org) {
+            if (org.acronym) {
+              org.label = org.label + ' (' + org.acronym + ')';
+            }
+            fullLabels.push(org);
+          });
+          return fullLabels;
+        }
+        else {
+          return data.data;
+        }
+      }).catch(function(err) {
+          console.log("Fetch error: ", err);
+      });
   }
 
   handleChange (selectedOption) {

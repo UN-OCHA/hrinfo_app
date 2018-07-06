@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+import HRInfoAPI from './HRInfoAPI';
 
 class Login extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Login extends React.Component {
 
     handleSubmit (event) {
       event.preventDefault();
+      const that = this;
       this.setState({
         status: 'submitting'
       });
@@ -51,21 +53,15 @@ class Login extends React.Component {
           }
           else {
             tokenData = data;
-            return fetch('https://www.humanitarianresponse.info/api/v1.0/user/me',
-              {
-                headers: {
-                  'Authorization': 'Bearer ' + data.token
-                }
-              });
+            that.hrinfoAPI = new HRInfoAPI(data.token);
+            return that.hrinfoAPI
+              .getProfile();
           }
-        })
-        .then(results => {
-          return results.json();
         })
         .then(data => {
           tokenData.user.hrinfo = {
-            roles: data.data[0].roles,
-            spaces: data.data[0].spaces
+            roles: data.roles,
+            spaces: data.spaces
           };
           this.props.userHasAuthenticated(true, tokenData.user, tokenData.token);
           this.props.history.push('/home');

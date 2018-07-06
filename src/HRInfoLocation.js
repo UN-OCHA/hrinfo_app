@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoLocation extends React.Component {
   constructor(props) {
@@ -9,40 +10,40 @@ class HRInfoLocation extends React.Component {
       val: {},
       status: 'initial'
     };
-    this.setBaseUrl = this.setBaseUrl.bind(this);
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  setBaseUrl () {
-    this.baseUrl = 'https://www.humanitarianresponse.info/en/api/v1.0/locations?fields=id,label,pcode&sort=label&filter[admin_level]=' + this.props.level;
-    if (this.props.parent) {
-      this.baseUrl += '&filter[parent]=' + this.props.parent;
-    }
-    this.baseUrl += '&page=';
-  }
-
   fetchNextPage (page) {
-    return fetch(this.baseUrl + page)
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          let items = this.state.items;
-          this.setState({
-            items: items.concat(data.data)
-          });
-          if (data.next) {
-            const nextPage = page + 1;
-            return this.fetchNextPage(nextPage);
-          }
-          else {
-            this.setState({
-              status: 'ready'
-            });
-          }
-        }).catch(function(err) {
-            console.log("Fetch error: ", err);
+    let params = {};
+    params.fields = 'id,label,pcode';
+    params.sort = 'label';
+    params['filter[admin_level]'] = this.props.level;
+    if (this.props.parent) {
+      params['filter[parent]'] = this.props.parent;
+    }
+    params['page'] = page;
+
+    return this.hrinfoAPI
+      .get('locations', params)
+      .then(data => {
+        let items = this.state.items;
+        this.setState({
+          items: items.concat(data.data)
         });
+        if (data.next) {
+          const nextPage = page + 1;
+          return this.fetchNextPage(nextPage);
+        }
+        else {
+          this.setState({
+            status: 'ready'
+          });
+        }
+      }).catch(function(err) {
+          console.log("Fetch error: ", err);
+      });
   }
 
   handleChange (selectedOption) {
@@ -55,7 +56,6 @@ class HRInfoLocation extends React.Component {
   }
 
   componentDidMount() {
-    this.setBaseUrl(this.props.level);
     this.fetchNextPage(1);
   }
 
@@ -65,7 +65,6 @@ class HRInfoLocation extends React.Component {
       this.setState({
         items: []
       });
-      this.setBaseUrl(this.props.level);
       this.fetchNextPage(1);
     }
     if (this.props.value && typeof this.props.value === 'string' && this.state.status === 'initial') {

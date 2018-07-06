@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
   constructor(props) {
@@ -7,72 +8,68 @@ class HRInfoSelect extends React.Component {
     this.state = {
       items: []
     };
-    this.getUrl = this.getUrl.bind(this);
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  getUrl (type, operation) {
-    let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type + '?sort=label';
+  fetchNextPage (page, type, operationId, operationLabel) {
+    let params = {};
+    params.sort = 'label';
+    params.page = page;
     if (type !== 'document_types' && type !== 'infographic_types') {
-      url += '&fields=id,label,operation';
+      params.fields = 'id,label,operation';
     }
-    if (operation) {
-      url += '&filter[operation]=' + operation;
+    if (operationId) {
+      params['filter[operation]'] = operationId;
     }
-    url += '&page=';
-    return url;
-  }
-
-  fetchNextPage (url, page, type, operationLabel) {
-    return fetch(url + page)
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          let pushed = [];
-          let items = this.state.items;
-          if (type === 'document_types' || type === 'infographic_types') {
-            data.data.forEach(function (elt) {
-              if (elt.parent.length === 1) {
-                elt.label = elt.parent[0].label + " > " + elt.label;
-                pushed.push(elt);
-              }
-              else {
-                pushed.push(elt);
-              }
-            });
-          }
-          else if (type === 'bundles' || type === 'offices') {
-            data.data.forEach(function (elt) {
-              elt.label = elt.label + " (" + operationLabel + ")";
+    return this.hrinfoAPI
+      .get(type, params)
+      .then(data => {
+        let pushed = [];
+        let items = this.state.items;
+        if (type === 'document_types' || type === 'infographic_types') {
+          data.data.forEach(function (elt) {
+            if (elt.parent.length === 1) {
+              elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
-            });
-          }
-          else {
-            pushed = data.data;
-            pushed = pushed.map(function (val) {
-              val.type = type;
-              return val;
-            });
-          }
-          this.setState({
-            items: items.concat(pushed).sort(function (a, b) {
-              if (a.label < b.label) {
-                return -1;
-              }
-              if (a.label > b.label) {
-                return 1;
-              }
-              return 0;
-            })
+            }
+            else {
+              pushed.push(elt);
+            }
           });
-          if (data.next) {
-            const nextPage = page + 1;
-            return this.fetchNextPage(url, nextPage, type);
-          }
-        }).catch(function(err) {
-            console.log("Fetch error: ", err);
+        }
+        else if (type === 'bundles' || type === 'offices') {
+          data.data.forEach(function (elt) {
+            elt.label = elt.label + " (" + operationLabel + ")";
+            pushed.push(elt);
+          });
+        }
+        else {
+          pushed = data.data;
+          pushed = pushed.map(function (val) {
+            val.type = type;
+            return val;
+          });
+        }
+        this.setState({
+          items: items.concat(pushed).sort(function (a, b) {
+            if (a.label < b.label) {
+              return -1;
+            }
+            if (a.label > b.label) {
+              return 1;
+            }
+            return 0;
+          })
         });
+        if (data.next) {
+          const nextPage = page + 1;
+          return this.fetchNextPage(nextPage, type);
+        }
+      }).catch(function(err) {
+          console.log("Fetch error: ", err);
+      });
   }
 
   handleChange (selectedOption) {
@@ -86,18 +83,15 @@ class HRInfoSelect extends React.Component {
       const that = this;
       this.props.spaces.forEach(function (space) {
         if (space.type === 'operations') {
-          const url = that.getUrl(that.props.type, space.id);
-          that.fetchNextPage(url, 1, that.props.type, space.label);
+          that.fetchNextPage(1, that.props.type, space.id, space.label);
         }
       });
     }
     else {
-      const url = this.getUrl(this.props.type);
-      this.fetchNextPage(url, 1, this.props.type);
+      this.fetchNextPage(1, this.props.type);
     }
     if (this.props.type === 'spaces') {
-      const url2 = this.getUrl('operations');
-      this.fetchNextPage(url2, 1, 'operations');
+      this.fetchNextPage(1, 'operations');
     }
   }
 
@@ -116,8 +110,7 @@ class HRInfoSelect extends React.Component {
       const that = this;
       this.props.spaces.forEach(function (space) {
         if (space.type === 'operations') {
-          const url = that.getUrl(that.props.type, space.id);
-          that.fetchNextPage(url, 1, that.props.type, space.label);
+          that.fetchNextPage(1, that.props.type, space.id, space.label);
         }
       });
     }

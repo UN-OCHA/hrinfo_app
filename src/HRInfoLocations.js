@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Row } from 'reactstrap';
 import HRInfoLocation from './HRInfoLocation';
+import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoLocations extends React.Component {
 
@@ -11,10 +12,10 @@ class HRInfoLocations extends React.Component {
       inputNumber: 1,
       status: 'initial'
     };
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
     this.getRow = this.getRow.bind(this);
     this.onAddBtnClick = this.onAddBtnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getLocation = this.getLocation.bind(this);
     this.getInitialLocations = this.getInitialLocations.bind(this);
     this.getInitialLocation = this.getInitialLocation.bind(this);
   }
@@ -40,15 +41,6 @@ class HRInfoLocations extends React.Component {
         {locations3}
       </Row>
     );
-  }
-
-  getLocation (url) {
-    return fetch(url)
-    .then((response) => {
-      return response.json();
-    }).then(data => {
-      return data.data[0];
-    });
   }
 
   handleChange (row, level, selected) {
@@ -83,14 +75,15 @@ class HRInfoLocations extends React.Component {
 
   getInitialLocation (loc) {
     const that = this;
-    return this.getLocation('https://www.humanitarianresponse.info/api/v1.0/locations/' + loc.id)
-    .then(function (data) {
-      let promises = [];
-      data.parents.forEach(function (parent) {
-        promises.push(that.getLocation(parent));
+    return this.hrinfoAPI
+      .getItem('locations', loc.id)
+      .then(function (data) {
+        let promises = [];
+        data.parents.forEach(function (parent) {
+          promises.push(that.hrinfoAPI.getItem('locations', parent));
+        });
+        return Promise.all(promises);
       });
-      return Promise.all(promises);
-    });
   }
 
   getInitialLocations () {

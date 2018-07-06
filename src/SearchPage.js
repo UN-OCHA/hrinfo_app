@@ -1,6 +1,7 @@
 import React from 'react';
 import { CardDeck } from 'reactstrap';
 import Item from './Item';
+import HRInfoAPI from './HRInfoAPI';
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -9,36 +10,29 @@ class SearchPage extends React.Component {
       items: {},
       searchTerms: ''
     };
-    this.getUrl = this.getUrl.bind(this);
+    this.hrinfoAPI = new HRInfoAPI(this.props.token);
     this.getItems = this.getItems.bind(this);
     this.getAllItems = this.getAllItems.bind(this);
   }
 
-  getUrl (type, input) {
-    return 'https://www.humanitarianresponse.info/en/api/v1.0/' + type + '?filter[label][value]=' + input + '&filter[label][operator]=CONTAINS&sort=label&range=10';
-  }
-
   getItems (type, input) {
-    const token = this.props.token;
-    return fetch(this.getUrl(type, input), {
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(results => {
-            return results.json();
-        }).then(data => {
-          var out = {};
-          data.data.forEach(function (item) {
-            item.type = type;
-          });
-          out[type] = data.data;
-          return out;
-        }).catch(function(err) {
-            console.log("Fetch error: ", err);
+    let params = {};
+    params['filter[label][value]'] = input;
+    params['filter[label][operator]'] = 'CONTAINS';
+    params['sort'] = 'label';
+    params['range'] = 10;
+    return this.hrinfoAPI
+      .get(type, params)
+      .then(data => {
+        var out = {};
+        data.data.forEach(function (item) {
+          item.type = type;
         });
+        out[type] = data.data;
+        return out;
+      }).catch(function(err) {
+          console.log("Fetch error: ", err);
+      });
   }
 
   getAllItems (input) {

@@ -9,25 +9,8 @@ class Address extends React.Component {
       val: {},
       status: 'initial'
     };
-    this.getUrl = this.getUrl.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getOptions = this.getOptions.bind(this);
     this.setCountry = this.setCountry.bind(this);
-  }
-
-  getUrl (input) {
-    return 'https://api.humanitarian.id/api/v2/user?limit=10&offset=0&sort=name&q=' + input + '&access_token=' + this.props.token;
-  }
-
-  getOptions (input) {
-    return fetch(this.getUrl(input))
-        .then(results => {
-          return results.json();
-        }).then(data => {
-          return data;
-        }).catch(function(err) {
-          console.log("Fetch error: ", err);
-        });
   }
 
   setCountry (row, level, selectedOption) {
