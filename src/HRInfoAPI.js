@@ -27,6 +27,25 @@ class HRInfoAPI {
         });
   }
 
+  async getAll (type, params) {
+    const that = this;
+    let items = [];
+    if (!params.page) {
+      params.page = 1;
+    }
+    return this
+      .get(type, params)
+      .then(async function(data) {
+        items = items.concat(data.data);
+        if (data.next) {
+          params.page = params.page + 1;
+          let newItems = await that.getAll(type, params);
+          items = items.concat(newItems);
+        }
+        return items;
+      });
+  }
+
   get (type, params) {
     let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type;
     let keys = Object.keys(params);

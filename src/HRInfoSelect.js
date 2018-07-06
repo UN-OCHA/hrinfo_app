@@ -9,14 +9,13 @@ class HRInfoSelect extends React.Component {
       items: []
     };
     this.hrinfoAPI = new HRInfoAPI();
-    this.fetchNextPage = this.fetchNextPage.bind(this);
+    this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  fetchNextPage (page, type, operationId, operationLabel) {
+  getOptions (type, operationId, operationLabel) {
     let params = {};
     params.sort = 'label';
-    params.page = page;
     if (type !== 'document_types' && type !== 'infographic_types') {
       params.fields = 'id,label,operation';
     }
@@ -24,12 +23,12 @@ class HRInfoSelect extends React.Component {
       params['filter[operation]'] = operationId;
     }
     return this.hrinfoAPI
-      .get(type, params)
-      .then(data => {
+      .getAll(type, params)
+      .then(elts => {
         let pushed = [];
         let items = this.state.items;
         if (type === 'document_types' || type === 'infographic_types') {
-          data.data.forEach(function (elt) {
+          elts.forEach(function (elt) {
             if (elt.parent.length === 1) {
               elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
@@ -40,13 +39,13 @@ class HRInfoSelect extends React.Component {
           });
         }
         else if (type === 'bundles' || type === 'offices') {
-          data.data.forEach(function (elt) {
+          elts.forEach(function (elt) {
             elt.label = elt.label + " (" + operationLabel + ")";
             pushed.push(elt);
           });
         }
         else {
-          pushed = data.data;
+          pushed = elts;
           pushed = pushed.map(function (val) {
             val.type = type;
             return val;
@@ -63,10 +62,6 @@ class HRInfoSelect extends React.Component {
             return 0;
           })
         });
-        if (data.next) {
-          const nextPage = page + 1;
-          return this.fetchNextPage(nextPage, type);
-        }
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
@@ -83,15 +78,15 @@ class HRInfoSelect extends React.Component {
       const that = this;
       this.props.spaces.forEach(function (space) {
         if (space.type === 'operations') {
-          that.fetchNextPage(1, that.props.type, space.id, space.label);
+          that.getOptions(that.props.type, space.id, space.label);
         }
       });
     }
     else {
-      this.fetchNextPage(1, this.props.type);
+      this.getOptions(this.props.type);
     }
     if (this.props.type === 'spaces') {
-      this.fetchNextPage(1, 'operations');
+      this.getOptions('operations');
     }
   }
 
@@ -110,7 +105,7 @@ class HRInfoSelect extends React.Component {
       const that = this;
       this.props.spaces.forEach(function (space) {
         if (space.type === 'operations') {
-          that.fetchNextPage(1, that.props.type, space.id, space.label);
+          that.getOptions(that.props.type, space.id, space.label);
         }
       });
     }

@@ -8,26 +8,20 @@ class OperationPage extends React.Component {
       super(props);
 
       this.state = {
-        doc: null
+        doc: null,
+        groups: []
       };
       this.hrinfoAPI = new HRInfoAPI();
     }
 
     async componentDidMount() {
       if (this.props.match.params.id) {
-        const doc = await this.hrinfoAPI.getItem('operations', this.props.match.params.id);
+        let groupParams = {};
+        groupParams['filter[operation]'] = this.props.match.params.id;
+        groupParams.sort = 'label';
         this.setState({
-          doc: doc
-        });
-      }
-    }
-
-    async componentDidUpdate () {
-      if (this.state.doc.id && this.state.doc.id !== this.props.match.params.id) {
-        const doc = await this.hrinfoAPI.getItem('operations', this.props.match.params.id);
-        this.setState({
-          doc: doc,
-          canEdit: this.canEdit(doc)
+          doc: await this.hrinfoAPI.getItem('operations', this.props.match.params.id),
+          groups: await this.hrinfoAPI.getAll('bundles', groupParams)
         });
       }
     }
@@ -35,11 +29,17 @@ class OperationPage extends React.Component {
     render() {
       if (this.state.doc) {
         const op = this.state.doc;
+        let groupsList = '';
+        groupsList = this.state.groups.map(function (group) {
+          return <li key={group.id}><a href={'/groups/' + group.id}>{group.label}</a></li>;
+        });
         return (
           <Container>
             <Row>
               <Col sm="3">
                 <h1>{op.label}</h1>
+                <h2>Groups</h2>
+                <ul>{groupsList}</ul>
               </Col>
               <Col>
                 <Nav tabs>

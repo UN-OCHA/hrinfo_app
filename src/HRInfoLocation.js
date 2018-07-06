@@ -11,11 +11,11 @@ class HRInfoLocation extends React.Component {
       status: 'initial'
     };
     this.hrinfoAPI = new HRInfoAPI();
-    this.fetchNextPage = this.fetchNextPage.bind(this);
+    this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  fetchNextPage (page) {
+  getOptions () {
     let params = {};
     params.fields = 'id,label,pcode';
     params.sort = 'label';
@@ -23,24 +23,14 @@ class HRInfoLocation extends React.Component {
     if (this.props.parent) {
       params['filter[parent]'] = this.props.parent;
     }
-    params['page'] = page;
 
     return this.hrinfoAPI
-      .get('locations', params)
-      .then(data => {
-        let items = this.state.items;
+      .getAll('locations', params)
+      .then(elts => {
         this.setState({
-          items: items.concat(data.data)
+          items: elts,
+          status: 'ready'
         });
-        if (data.next) {
-          const nextPage = page + 1;
-          return this.fetchNextPage(nextPage);
-        }
-        else {
-          this.setState({
-            status: 'ready'
-          });
-        }
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
@@ -56,7 +46,7 @@ class HRInfoLocation extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchNextPage(1);
+    this.getOptions();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -65,7 +55,7 @@ class HRInfoLocation extends React.Component {
       this.setState({
         items: []
       });
-      this.fetchNextPage(1);
+      this.getOptions();
     }
     if (this.props.value && typeof this.props.value === 'string' && this.state.status === 'initial') {
       if (this.state.items.length) {
