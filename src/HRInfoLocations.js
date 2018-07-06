@@ -12,7 +12,7 @@ class HRInfoLocations extends React.Component {
       inputNumber: 1,
       status: 'initial'
     };
-    this.hrinfoAPI = new HRInfoAPI(this.props.token);
+    this.hrinfoAPI = new HRInfoAPI();
     this.getRow = this.getRow.bind(this);
     this.onAddBtnClick = this.onAddBtnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);

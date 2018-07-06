@@ -10,7 +10,7 @@ class SearchPage extends React.Component {
       items: {},
       searchTerms: ''
     };
-    this.hrinfoAPI = new HRInfoAPI(this.props.token);
+    this.hrinfoAPI = new HRInfoAPI();
     this.getItems = this.getItems.bind(this);
     this.getAllItems = this.getAllItems.bind(this);
   }

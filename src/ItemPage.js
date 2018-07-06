@@ -10,7 +10,7 @@ class ItemPage extends React.Component {
       this.state = {
         doc: null
       };
-      this.hrinfoAPI = new HRInfoAPI(this.props.token);
+      this.hrinfoAPI = new HRInfoAPI();
     }
 
     async componentDidMount() {

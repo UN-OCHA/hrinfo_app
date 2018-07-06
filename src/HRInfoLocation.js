@@ -10,7 +10,7 @@ class HRInfoLocation extends React.Component {
       val: {},
       status: 'initial'
     };
-    this.hrinfoAPI = new HRInfoAPI(this.props.token);
+    this.hrinfoAPI = new HRInfoAPI();
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }

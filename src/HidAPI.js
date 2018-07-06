@@ -4,19 +4,18 @@ let instance = null;
 class HidAPI {
   constructor(token) {
     if(!instance){
-          instance = this;
+      instance = this;
     }
-
-    instance.token = token;
-
+    if (token) {
+      instance.token = token;
+    }
     return instance;
   }
 
   getItem(type, id) {
-    const token = this.token;
     return fetch("https://api.humanitarian.id/api/v2/" + type + "/" + id, {
         headers: {
-          'Authorization': 'Bearer ' + token,
+          'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }})

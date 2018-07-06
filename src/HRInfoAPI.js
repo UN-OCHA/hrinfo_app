@@ -3,20 +3,19 @@ let instance = null;
 
 class HRInfoAPI {
   constructor(token) {
-    if(!instance){
-          instance = this;
+    if (!instance){
+      instance = this;
     }
-
-    instance.token = token;
-
+    if (token) {
+      instance.token = token;
+    }
     return instance;
   }
 
   getItem(type, id) {
-    const token = this.token;
     return fetch("https://www.humanitarianresponse.info/api/v1.0/" + type + "/" + id, {
         headers: {
-          'Authorization': 'Bearer ' + token,
+          'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }})
@@ -63,7 +62,6 @@ class HRInfoAPI {
   }
 
   save(type, body) {
-    const token = this.token;
     let httpMethod = 'POST';
     let url = 'https://www.humanitarianresponse.info/api/v1.0/' + type;
     if (body.id) {
@@ -78,7 +76,7 @@ class HRInfoAPI {
         method: httpMethod,
         body: JSON.stringify(body),
         headers: {
-          'Authorization': 'Bearer ' + token,
+          'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }
@@ -92,11 +90,10 @@ class HRInfoAPI {
   }
 
   remove (type, id) {
-    const token = this.token;
     return fetch('https://www.humanitarianresponse.info/api/v1.0/' + type + '/' + id, {
         method: 'DELETE',
         headers: {
-          'Authorization': 'Bearer ' + token,
+          'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }
@@ -104,7 +101,6 @@ class HRInfoAPI {
   }
 
   saveFieldCollection (body) {
-    const token = this.token;
     let url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection';
     let httpMethod = 'POST';
     if (body.item_id) {
@@ -115,7 +111,7 @@ class HRInfoAPI {
       method: httpMethod,
       body: JSON.stringify(body),
       headers: {
-        'Authorization': 'Bearer ' + token,
+        'Authorization': 'Bearer ' + this.token,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }

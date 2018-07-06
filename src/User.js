@@ -12,7 +12,7 @@ class User extends React.Component {
         user: null
       };
 
-      this.hidAPI = new HidAPI(this.props.token);
+      this.hidAPI = new HidAPI();
     }
 
     async componentDidMount() {

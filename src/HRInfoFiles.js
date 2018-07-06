@@ -205,7 +205,7 @@ class HRInfoFiles extends React.Component {
         status: ''
       };
 
-      this.hrinfoAPI = new HRInfoAPI(this.props.token);
+      this.hrinfoAPI = new HRInfoAPI();
 
       this.getRow = this.getRow.bind(this);
       this.handleChange = this.handleChange.bind(this);

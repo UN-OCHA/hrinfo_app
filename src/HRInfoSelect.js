@@ -8,7 +8,7 @@ class HRInfoSelect extends React.Component {
     this.state = {
       items: []
     };
-    this.hrinfoAPI = new HRInfoAPI(this.props.token);
+    this.hrinfoAPI = new HRInfoAPI();
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }

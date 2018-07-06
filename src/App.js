@@ -17,6 +17,8 @@ import {
 import Routes from "./Routes";
 import './App.css';
 import SearchPage from './SearchPage';
+import HRInfoAPI from './HRInfoAPI';
+import HidAPI from './HidAPI';
 
 class App extends Component {
   static propTypes = {
@@ -126,6 +128,11 @@ class App extends Component {
         this.setState(newState);
         this.props.history.push('/');
       }
+      else {
+        // Initialize HID API and HRInfo api
+        new HRInfoAPI(this.state.token);
+        new HidAPI(this.state.token);
+      }
     }
   }
 
@@ -159,8 +166,7 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated,
       userIsAuthenticated: this.userIsAuthenticated,
       setAlert: this.setAlert,
-      user: this.state.user,
-      token: this.state.token
+      user: this.state.user
     };
 
     const navbar = this.state.isAuthenticated ? (

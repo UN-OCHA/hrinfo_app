@@ -39,7 +39,7 @@ class OperationForm extends React.Component {
       status: ''
     };
 
-    this.hrinfoAPI = new HRInfoAPI(this.props.token);
+    this.hrinfoAPI = new HRInfoAPI();
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);

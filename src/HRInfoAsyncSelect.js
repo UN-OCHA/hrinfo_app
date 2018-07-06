@@ -8,7 +8,7 @@ class HRInfoAsyncSelect extends React.Component {
     this.state = {
       items: []
     };
-    this.hrinfoAPI = new HRInfoAPI(this.props.token);
+    this.hrinfoAPI = new HRInfoAPI();
     this.handleChange = this.handleChange.bind(this);
     this.getOptions = this.getOptions.bind(this);
   }

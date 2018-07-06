@@ -9,7 +9,7 @@ class HidContacts extends React.Component {
       contacts: [],
       status: 'initial'
     };
-    this.hidAPI = new HidAPI(this.props.token);
+    this.hidAPI = new HidAPI();
     this.handleChange = this.handleChange.bind(this);
     this.getOptions = this.getOptions.bind(this);
   }
