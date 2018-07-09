@@ -106,7 +106,7 @@ class Login extends React.Component {
 					<Button variant="contained"
 						color="primary"
 						onClick={this.handleSubmit}
-						disabled={this.state.email == '' && this.state.password == ''}
+						disabled={this.state.email == '' || this.state.password == ''}
 						>Login</Button>
 				}
 				{ this.state.status === 'submitting' &&
