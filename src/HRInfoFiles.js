@@ -306,7 +306,6 @@ class HRInfoFiles extends React.Component {
       const itemId = this.state.files[number].item_id;
       if (itemId) {
         const that = this;
-        const token = this.props.token;
         // The file is already part of a field_collection, send a DELETE request
         this.hrinfoAPI
           .remove('files_collection', itemId)

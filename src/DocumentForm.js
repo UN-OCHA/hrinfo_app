@@ -1,13 +1,10 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText, Collapse } from 'reactstrap';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import HRInfoAPI from './HRInfoAPI';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
@@ -18,311 +15,61 @@ import LanguageSelect from './LanguageSelect';
 class DocumentForm extends React.Component {
   constructor(props) {
     super(props);
-    let type = 'documents';
-    let typeLabel = 'document';
-    if (props.match.url.indexOf('documents') === -1) {
-      type = 'infographics';
-      typeLabel = 'map/infographic';
-    }
     this.state = {
-      doc: {
-        label: '',
-        publication_date: '',
-        published: 1
-      },
-      editorState: EditorState.createEmpty(),
-      status: '',
-      type: type,
-      typeLabel: typeLabel,
       collapse: false
     };
 
-    this.hrinfoAPI = new HRInfoAPI();
-
     this.toggle = this.toggle.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.onEditorStateChange = this.onEditorStateChange.bind(this);
-    this.validateForm = this.validateForm.bind(this);
-    this.isValid = this.isValid.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.postFieldCollections = this.postFieldCollections.bind(this);
   }
 
   toggle() {
 	  this.setState({ collapse: !this.state.collapse });
 	}
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    let doc = this.state.doc;
-    doc[name] = value;
-    this.setState({
-      doc: doc
-    });
-  }
-
-  handleSelectChange (name, selected) {
-    let doc = this.state.doc;
-    doc[name] = selected;
-    let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
-    if (name === 'spaces') {
-      doc.spaces.forEach(function (val) {
-        if (val.type === 'operations') {
-          hasOperation = true;
-        }
-      });
-    }
-    doc.hasOperation = hasOperation;
-    this.setState({
-      doc: doc
-    });
-  }
-
-  async postFieldCollections (docid, field_collections) {
-    const token = this.props.token;
-    for (const fc of field_collections) {
-      const body = {
-        file: fc.file,
-        language: fc.language,
-        host_entity: docid
-      };
-      await this.hrinfoAPI.saveFieldCollection(body);
-    }
-  }
-
-  isValid (value) {
-    if (typeof value === 'undefined') {
-      return false;
-    }
-    if (!value) {
-      return false;
-    }
-    if (Array.isArray(value) && value.length === 0) {
-      return false;
-    }
-    if (value.files && value.files.length === 0) {
-      return false;
-    }
-    if (typeof value === 'string' && value === 'und') {
-      return false;
-    }
-    return true;
-  }
-
-  validateForm () {
-    const doc = this.state.doc;
-    if (this.isValid(doc.language) &&
-      this.isValid(doc.spaces) &&
-      this.isValid(doc.label) &&
-      ((this.state.type === 'documents' && this.isValid(doc.document_type)) || (this.state.type === 'infographics' && this.isValid(doc.infographic_type)))  &&
-      this.isValid(doc.publication_date) &&
-      this.isValid(doc.files) &&
-      this.isValid(doc.organizations)) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  handleSubmit(event, isDraft = 0) {
-    event.preventDefault();
-    const isValid = this.validateForm();
-    if (!isValid) {
-      this.setState({
-        status: 'was-validated'
-      });
-      return;
-    }
-    this.setState({
-      status: 'submitting'
-    });
-    const token = this.props.token;
-    let doc = {};
-    let body = JSON.stringify(this.state.doc);
-    body = JSON.parse(body);
-    body.published = isDraft ? 0 : 1;
-    if (this.state.type === 'documents') {
-      body.document_type = body.document_type.id;
-    }
-    else {
-      body.infographic_type = body.infographic_type.id;
-    }
-    body.operation = [];
-    body.space = [];
-    body.spaces.forEach(function (sp) {
-      if (sp.type === 'operations') {
-        body.operation.push(sp.id);
-      }
-      else {
-        body.space.push(sp.id);
-      }
-    });
-    delete body.spaces;
-    delete body.hasOperation;
-    body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
-    const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
-    selectFields.forEach(function (field) {
-      if (body[field]) {
-        for (let i = 0; i < body[field].length; i++) {
-          body[field][i] = parseInt(body[field][i].id, 10);
-        }
-      }
-    });
-    if (body.locations) {
-      let locations = [];
-      body.locations.forEach(function (location, index) {
-        let last = 0;
-        for (let j = 0; j < location.length; j++) {
-          if (typeof location[j] === 'object') {
-            last = j;
-          }
-        }
-        locations.push(parseInt(location[last].id, 10));
-      });
-      body.locations = locations;
-    }
-    let field_collections = [];
-    body.files.files.forEach(function (file, index) {
-      let fc = {};
-      if (body.files.languages[index]) {
-        fc.language = body.files.languages[index].value;
-      }
-      fc.file = file.id ? file.id : file.fid;
-      fc.file = parseInt(fc.file, 10);
-      fc.item_id = '';
-      if (body.files.collections[index]) {
-        fc.item_id = parseInt(body.files.collections[index], 10);
-      }
-      field_collections.push(fc);
-    });
-    delete body.files;
-
-    this.hrinfoAPI
-      .save(this.state.type, body)
-      .then(result => {
-        doc = result;
-        return this.postFieldCollections(doc.id, field_collections);
-      })
-      .then(res => {
-        this.props.history.push('/' + this.state.type + '/' + doc.id);
-      })
-      .catch(err => {
-        this.props.setAlert('danger', 'There was an error uploading your document');
-      });
-  }
-
-  handleDelete () {
-    if (this.props.match.params.id) {
-      const that = this;
-      this.setState({
-        status: 'deleting'
-      });
-      this.hrinfoAPI
-        .remove(this.state.type, this.props.match.params.id)
-        .then(results => {
-          that.props.setAlert('success', that.state.typeLabel + ' deleted successfully');
-          that.props.history.push('/home');
-        }).catch(function(err) {
-          that.props.setAlert('danger', 'There was an error deleting your ' + that.state.typeLabel);
-          that.props.history.push('/home');
-        });
-    }
-  }
-
-  onEditorStateChange (editorState) {
-    let html = stateToHTML(editorState.getCurrentContent());
-    let doc = this.state.doc;
-    doc.body = html;
-    this.setState({
-      editorState,
-      doc: doc
-    });
-  }
-
-  async componentDidMount() {
-    if (this.props.match.params.id) {
-      const doc = await this.hrinfoAPI.getItem(this.state.type, this.props.match.params.id);
-      doc.spaces = [];
-      doc.operation.forEach(function (op) {
-        if (op) {
-          doc.hasOperation = true;
-          op.type = "operations";
-          doc.spaces.push(op);
-        }
-      });
-      doc.space.forEach(function (sp) {
-        if (sp) {
-          sp.type = "spaces";
-          doc.spaces.push(sp);
-        }
-      });
-      let state = {
-        doc: doc
-      };
-      if (doc['body-html']) {
-        const blocksFromHTML = convertFromHTML(doc['body-html']);
-        const contentState = ContentState.createFromBlockArray(
-          blocksFromHTML.contentBlocks,
-          blocksFromHTML.entityMap
-        );
-        state.editorState = EditorState.createWithContent(contentState);
-      }
-      this.setState(state);
-    }
-  }
-
   render() {
-        const offices = this.state.doc.hasOperation
+        const offices = this.props.doc.hasOperation
             ? (<FormGroup>
                 <Label for="offices">Coordination hub(s)</Label>
-                <HRInfoSelect type="offices" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('offices', s)} value={this.state.doc.offices}/>
+                <HRInfoSelect type="offices" spaces={this.props.doc.spaces} isMulti={true} onChange={(s) => this.props.handleSelectChange('offices', s)} value={this.props.doc.offices}/>
                 <FormText color="muted">
-                    Click on the field and select the coordination hub(s) the {this.state.typeLabel}
+                    Click on the field and select the coordination hub(s) the {this.props.typeLabel}
                     refers to (if any).
                 </FormText>
             </FormGroup>)
             : '';
 
-        const disasters = this.state.doc.hasOperation
+        const disasters = this.props.doc.hasOperation
             ? (<FormGroup>
                 <Label for="disasters">Disaster(s) / Emergency</Label>
-                <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters}/>
+                <HRInfoSelect type="disasters" spaces={this.props.doc.spaces} isMulti={true} onChange={(s) => this.props.handleSelectChange('disasters', s)} value={this.props.doc.disasters}/>
                 <FormText color="muted">
-                    Click on the field and select the disaster(s) or emergency the {this.state.typeLabel}
+                    Click on the field and select the disaster(s) or emergency the {this.props.typeLabel}
                     refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See
                     <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
                 </FormText>
             </FormGroup>)
             : '';
 
-        const bundles = this.state.doc.hasOperation
+        const bundles = this.props.doc.hasOperation
             ? (<FormGroup>
                 <Label for="bundles">Cluster(s)/Sector(s)</Label>
-                <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles}/>
+                <HRInfoSelect type="bundles" spaces={this.props.doc.spaces} isMulti={true} onChange={(s) => this.props.handleSelectChange('bundles', s)} value={this.props.doc.bundles}/>
                 <FormText color="muted">
-                    Indicate the cluster(s)/sector(s) the {this.state.typeLabel}
+                    Indicate the cluster(s)/sector(s) the {this.props.label}
                     refers to.
                 </FormText>
             </FormGroup>)
             : '';
 
-        const {editorState} = this.state;
-
-        return (<Form onSubmit={this.handleSubmit} noValidate="noValidate" className={this.state.status === 'was-validated'
+        return (<Form onSubmit={this.props.handleSubmit} noValidate="noValidate" className={this.props.status === 'was-validated'
                 ? 'was-validated bg-white my-3 p-3 row'
                 : 'bg-white my-3 p-3 row'}>
 			<div className="col-md-6">
 				<FormGroup className="required">
 	                <Label for="label">Title</Label>
-	                <Input type="text" name="label" id="label" placeholder={'Enter the title of the ' + this.state.typeLabel} required="required" value={this.state.doc.label} onChange={this.handleInputChange}/>
+	                <Input type="text" name="label" id="label" placeholder={'Enter the title of the ' + this.props.label} required="required" value={this.props.doc.label} onChange={this.props.handleInputChange}/>
 	                <FormText color="muted">
-	                    Type the original title of the {this.state.typeLabel}. Try not to use abbreviations. To see Standards and Naming Conventions click
+	                    Type the original title of the {this.props.label}. Try not to use abbreviations. To see Standards and Naming Conventions click
 	                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
 	                </FormText>
 	                <div className="invalid-feedback">
@@ -332,9 +79,9 @@ class DocumentForm extends React.Component {
 
 				<FormGroup className="required">
 	                <Label for="publication_date">Original Publication Date</Label>
-	                <Input type="date" id="publication_date" name="publication_date" value={this.state.doc.publication_date} onChange={this.handleInputChange} required="required"/>
+	                <Input type="date" id="publication_date" name="publication_date" value={this.props.doc.publication_date} onChange={this.props.handleInputChange} required="required"/>
 	                <FormText color="muted">
-	                    Indicate when the {this.state.typeLabel + ' '}
+	                    Indicate when the {this.props.label + ' '}
 	                    has originally been published.
 	                </FormText>
 	                <div className="invalid-feedback">
@@ -344,39 +91,37 @@ class DocumentForm extends React.Component {
 			</div>
 
 			<div className="col-md-6">
-				<FormGroup className="required">
-	                <Label for="language">Language</Label>
-	                <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language)
-	                        ? 'is-valid'
-	                        : 'is-invalid'}/>
-	                <div className="invalid-feedback">
-	                    Please select a language
-	                </div>
-	            </FormGroup>
+        <FormGroup className="required">
+          <Label for="language">Language</Label>
+          <LanguageSelect value={this.props.doc.language} onChange={(s) => this.props.handleSelectChange('language', s)} className={this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
+          <div className="invalid-feedback">
+            Please select a language
+          </div>
+        </FormGroup>
 
 				<FormGroup className="required">
-	                <Label for={this.state.type === 'documents'
+	                <Label for={this.props.hrinfoType === 'documents'
 	                        ? 'document_type'
 	                        : 'infographic_type'}>{
-	                        this.state.type === 'documents'
+	                        this.props.hrinfoType === 'documents'
 	                            ? 'Document type'
 	                            : 'Infographic type'
 	                    }</Label>
 	                {
-	                    this.state.type === 'documents'
-	                        ? <HRInfoSelect type='document_types' onChange={(s) => this.handleSelectChange('document_type', s)} value={this.state.doc.document_type} className={this.isValid(this.state.doc.document_type)
+	                    this.props.hrinfoType === 'documents'
+	                        ? <HRInfoSelect type='document_types' onChange={(s) => this.props.handleSelectChange('document_type', s)} value={this.props.doc.document_type} className={this.props.isValid(this.props.doc.document_type)
 	                                    ? 'is-valid'
 	                                    : 'is-invalid'}/>
-	                        : <HRInfoSelect type='infographic_types' onChange={(s) => this.handleSelectChange('infographic_type', s)} value={this.state.doc.infographic_type} className={this.isValid(this.state.doc.infographic_type)
+	                        : <HRInfoSelect type='infographic_types' onChange={(s) => this.props.handleSelectChange('infographic_type', s)} value={this.props.doc.infographic_type} className={this.props.isValid(this.props.doc.infographic_type)
 	                                    ? 'is-valid'
 	                                    : 'is-invalid'}/>
 	                }
 	                <FormText color="muted">
-	                    Select the {this.state.typeLabel + ' '}
-	                    type and sub-type that best describe the {this.state.typeLabel}.
+	                    Select the {this.props.label + ' '}
+	                    type and sub-type that best describe the {this.props.label}.
 	                </FormText>
 	                <div className="invalid-feedback">
-	                    You must select a {this.state.typeLabel}
+	                    You must select a {this.props.label}
 	                    type
 	                </div>
 	            </FormGroup>
@@ -385,9 +130,9 @@ class DocumentForm extends React.Component {
 			<div className="col-md-12">
 	            <FormGroup>
 	                <Label for="body">Description or Summary of Content</Label>
-	                <Editor editorState={editorState} wrapperClassName="demo-wrapper" editorClassName="demo-editor" onEditorStateChange={this.onEditorStateChange}/>
+	                <Editor editorState={this.props.editorState} wrapperClassName="demo-wrapper" editorClassName="demo-editor" onEditorStateChange={this.props.onEditorStateChange}/>
 	                <FormText color="muted">
-	                    Try to always include here the text (in full or part of it) of the {this.state.typeLabel + ' '}
+	                    Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
 	                    (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
 	                </FormText>
 	            </FormGroup>
@@ -396,7 +141,7 @@ class DocumentForm extends React.Component {
 			<div className="col-md-6">
 	            <FormGroup className="required">
 	                <Label for="files">File(s)</Label>
-	                <HRInfoFiles onChange={(s) => this.handleSelectChange('files', s)} value={this.state.doc.files} token={this.props.token} className={this.isValid(this.state.doc.files)
+	                <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} className={this.props.isValid(this.props.doc.files)
 	                        ? 'is-valid'
 	                        : 'is-invalid'}/>
 	                <FormText color="muted">
@@ -412,11 +157,11 @@ class DocumentForm extends React.Component {
 			<div className="col-md-6">
 	            <FormGroup className="required">
 	                <Label for="spaces">Operation(s) / Webspace(s)</Label>
-	                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces)
+	                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces} className={this.props.isValid(this.props.doc.spaces)
 	                        ? 'is-valid'
 	                        : 'is-invalid'}/>
 	                <FormText color="muted">
-	                    Click on the field and select where to publish the {this.state.typeLabel + ' '}
+	                    Click on the field and select where to publish the {this.props.label + ' '}
 	                    (operation, regional site or thematic site).
 	                </FormText>
 	                <div className="invalid-feedback">
@@ -430,11 +175,11 @@ class DocumentForm extends React.Component {
 
 	            <FormGroup className="required">
 	                <Label for="organizations">Organization(s)</Label>
-	                <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations)
+	                <HRInfoAsyncSelect type="organizations" onChange={(s) => this.props.handleSelectChange('organizations', s)} value={this.props.doc.organizations} className={this.props.isValid(this.props.doc.organizations)
 	                        ? 'is-valid'
 	                        : 'is-invalid'}/>
 	                <FormText color="muted">
-	                    Type in and select the source(s) of the {this.state.typeLabel}.
+	                    Type in and select the source(s) of the {this.props.label}.
 	                </FormText>
 	                <div className="invalid-feedback">
 	                    You must select at least one organization
@@ -456,18 +201,18 @@ class DocumentForm extends React.Component {
 					<div className="col-md-6">
 						<FormGroup>
 							<Label for="locations">Locations</Label>
-							<HRInfoLocations onChange={(s) => this.handleSelectChange('locations', s)} value={this.state.doc.locations} isMulti="isMulti"/>
+							<HRInfoLocations onChange={(s) => this.props.handleSelectChange('locations', s)} value={this.props.doc.locations} isMulti="isMulti"/>
 							<FormText color="muted">
-								Select from the menu the country(ies) the {this.state.typeLabel + ' '}
+								Select from the menu the country(ies) the {this.props.label + ' '}
 								is about and indicate more specific locations by selecting multiple layers (region, province, town).
 							</FormText>
 						</FormGroup>
 
 						<FormGroup>
 							<Label for="themes">Theme(s)</Label>
-							<HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes}/>
+							<HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.props.handleSelectChange('themes', s)} value={this.props.doc.themes}/>
 							<FormText color="muted">
-								Click on the field and select all relevant themes. Choose only themes the {this.state.typeLabel}
+								Click on the field and select all relevant themes. Choose only themes the {this.props.label}
 								substantively refers to.
 							</FormText>
 						</FormGroup>
@@ -475,10 +220,10 @@ class DocumentForm extends React.Component {
 					<div className="col-md-6">
 						<FormGroup>
 							<Label for="related_content">Related Content</Label>
-							<RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content}/>
+							<RelatedContent onChange={(s) => this.props.handleSelectChange('related_content', s)} value={this.props.doc.related_content}/>
 							<FormText color="muted">
-								Add links to content that is related to the {this.state.typeLabel}
-								you are publishing (example: language versions of the same {this.state.typeLabel}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+								Add links to content that is related to the {this.props.label}
+								you are publishing (example: language versions of the same {this.props.label}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
 							</FormText>
 						</FormGroup>
 					</div>
@@ -486,16 +231,16 @@ class DocumentForm extends React.Component {
         	</Collapse>
 
             {
-                this.state.status !== 'submitting' &&
+                this.props.status !== 'submitting' &&
 					<span className="mx-auto my-3">
                         <Button color="primary">Publish</Button>
                         &nbsp;
-                        <Button color="secondary" onClick={(evt) => this.handleSubmit(evt, 1)}>Save as Draft</Button>
+                        <Button color="secondary" onClick={(evt) => this.props.handleSubmit(evt, 1)}>Save as Draft</Button>
                         &nbsp;
                     </span>
             }
-            {(this.state.status === 'submitting' || this.state.status === 'deleting') && <FontAwesomeIcon icon={faSpinner} pulse="pulse" fixedWidth="fixedWidth"/>}
-            {(this.props.match.params.id && this.state.status !== 'deleting') && <Button color="danger" onClick={this.handleDelete}>Delete</Button>}
+            {(this.props.status === 'submitting' || this.props.status === 'deleting') && <FontAwesomeIcon icon={faSpinner} pulse="pulse" fixedWidth="fixedWidth"/>}
+            {(this.props.match.params.id && this.props.status !== 'deleting') && <Button color="danger" onClick={this.props.handleDelete}>Delete</Button>}
         </Form>);
     }
 }

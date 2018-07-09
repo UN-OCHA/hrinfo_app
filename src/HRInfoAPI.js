@@ -23,7 +23,12 @@ class HRInfoAPI {
             return results.json();
         })
         .then(data => {
-          return data.data[0];
+          if (data.data) {
+            return data.data[0];
+          }
+          else {
+            return {};
+          }
         });
   }
 

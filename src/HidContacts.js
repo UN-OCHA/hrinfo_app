@@ -41,7 +41,6 @@ class HidContacts extends React.Component {
     const that = this;
     if (this.state.status === 'initial') {
       if (this.props.value) {
-        const token = this.props.token;
         let promises = [];
         this.props.value.forEach(function (v) {
           promises.push(that.hidAPI.getItem('user', v));
