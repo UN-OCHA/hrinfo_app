@@ -23,3 +23,25 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.paper {
+	flex: 1;
+	margin: 0 2%;
+}
+
+.inputMargin {
+	margin: 2px 5px
+}
+
+.toolbar {
+	justify-content: space-between;
+}
+
+.link, .link:hover {
+	text-decoration: inherit;
+	color: inherit;
+}
+
+.container-fluid {
+	margin-top: 1%;
+}
