@@ -1,88 +1,119 @@
 import React from 'react';
-import { Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoAPI from './HRInfoAPI';
 import HidAPI from './HidAPI';
 
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import './Login.css';
+
 class Login extends React.Component {
-  constructor(props) {
-      super(props);
+    constructor(props) {
+        super(props);
 
-      this.state = {
-        email: "",
-        password: "",
-        status: 'initial'
-      };
+        this.state = {
+            email: '',
+            password: '',
+            status: 'initial',
+            showPassword: false
+        };
 
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+        this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     }
 
-    handleChange (event) {
-      this.setState({
-        [event.target.id]: event.target.value
-      });
+    handleChange(event) {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
     }
 
-    handleSubmit (event) {
-      event.preventDefault();
-      const that = this;
-      this.setState({
-        status: 'submitting'
-      });
-      let tokenData = {};
-      this.hidAPI = new HidAPI();
-      this.hidAPI
-        .getJWT(this.state.email, this.state.password)
-        .then(data => {
-          if (!data.user || !data.token) {
-            throw "Unknown exception";
-          }
-          else {
-            tokenData = data;
-            that.hrinfoAPI = new HRInfoAPI(data.token);
-            return that.hrinfoAPI
-              .getProfile();
-          }
-        })
-        .then(data => {
-          tokenData.user.hrinfo = {
-            roles: data.roles,
-            spaces: data.spaces
-          };
-          this.props.userHasAuthenticated(true, tokenData.user, tokenData.token);
-          this.props.history.push('/home');
-        })
-        .catch(err => {
-          this.setState({
-            status: 'initial'
-          });
-          this.props.setAlert('danger', 'Could not log you in. Please check your email and password.');
+    handleMouseDownPassword(event) {
+        event.preventDefault();
+    };
+
+    handleClickShowPassword() {
+        this.setState(state => ({
+            showPassword: !state.showPassword
+        }));
+    };
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const that = this;
+        this.setState({status: 'submitting'});
+        let tokenData = {};
+        this.hidAPI = new HidAPI();
+        this.hidAPI.getJWT(this.state.email, this.state.password).then(data => {
+            if (!data.user || !data.token) {
+                throw "Unknown exception";
+            } else {
+                tokenData = data;
+                that.hrinfoAPI = new HRInfoAPI(data.token);
+                return that.hrinfoAPI.getProfile();
+            }
+        }).then(data => {
+            tokenData.user.hrinfo = {
+                roles: data.roles,
+                spaces: data.spaces
+            };
+            this.props.userHasAuthenticated(true, tokenData.user, tokenData.token);
+            this.props.history.push('/home');
+        }).catch(err => {
+            this.setState({status: 'initial'});
+            this.props.setAlert('danger', 'Could not log you in. Please check your email and password.');
         });
     }
 
     render() {
-      return (
-        <Form onSubmit={this.handleSubmit}>
-          <FormGroup>
-            <Label for="email">Email</Label>
-            <Input type="email" name="email" id="email" value={this.state.email} onChange={this.handleChange} required />
-            <FormText color="muted">Your Humanitarian ID email</FormText>
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Password</Label>
-            <Input type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange} required />
-            <FormText color="muted">Your Humanitarian ID password</FormText>
-          </FormGroup>
-          {this.state.status === 'initial' &&
-            <Button color="primary">Login</Button>
-          }
-          {this.state.status === 'submitting' &&
-            <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
-          }
-        </Form>
-      );
+        return (
+			<div className="login-container">
+				<FormControl required fullWidth margin="normal">
+					<InputLabel htmlFor="email">Email</InputLabel>
+					<Input id="email" value={this.state.email} onChange={this.handleChange}/>
+					<FormHelperText id="email-text">Your Humanitarian ID email</FormHelperText>
+				</FormControl>
+				<FormControl required fullWidth margin="normal">
+					<InputLabel htmlFor="password">Password</InputLabel>
+					<Input id="password"
+						type={this.state.showPassword ? 'text' : 'password'}
+						value={this.state.password}
+						onChange={this.handleChange}
+						endAdornment={
+							<InputAdornment position = "end" >
+								<IconButton aria-label="Toggle password visibility"
+									onClick={this.handleClickShowPassword}
+									onMouseDown={this.handleMouseDownPassword}>
+									{ this.state.showPassword ? <VisibilityOff/> : <Visibility/> }
+								</IconButton>
+							</InputAdornment> }/>
+					<FormHelperText id="password-text">Your Humanitarian ID password</FormHelperText>
+				</FormControl>
+				{ this.state.status === 'initial' &&
+					<Button variant="contained"
+						color="primary"
+						onClick={this.handleSubmit}
+						disabled={this.state.email == '' && this.state.password == ''}
+						>Login</Button>
+				}
+				{ this.state.status === 'submitting' &&
+					<CircularProgress/>
+				}
+			</div>
+		);
     }
 }
 
