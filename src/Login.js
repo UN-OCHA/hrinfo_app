@@ -2,8 +2,6 @@ import React from 'react';
 import HRInfoAPI from './HRInfoAPI';
 import HidAPI from './HidAPI';
 
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -95,7 +93,7 @@ class Login extends React.Component {
 								<IconButton aria-label="Toggle password visibility"
 									onClick={this.handleClickShowPassword}
 									onMouseDown={this.handleMouseDownPassword}>
-									{ this.state.showPassword ? <VisibilityOff/> : <Visibility/> }
+									{ this.state.showPassword ? <i className="icon-eye-hidden" /> : <i className="icon-eye" /> }
 								</IconButton>
 							</InputAdornment> }/>
 					<FormHelperText id="password-text">Your Humanitarian ID password</FormHelperText>

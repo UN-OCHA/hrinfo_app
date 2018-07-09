@@ -15,10 +15,6 @@ import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
-// Material Icons
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Search from '@material-ui/icons/Search';
 
 import Routes from "./Routes";
 import './App.css';
@@ -166,7 +162,7 @@ class App extends Component {
         };
 
         const navbar = this.state.isAuthenticated ? (
-			<AppBar position="fixed">
+			<AppBar position="sticky">
                 <Toolbar className="toolbar">
                     <Typography variant="title" color="inherit">
                         <NavLink to={'/home'} className="link">HR.info Admin</NavLink>
@@ -179,18 +175,21 @@ class App extends Component {
 							fullWidth
 							startAdornment={
 								<InputAdornment position = "start" >
-									<Search/>
+									<i className="icon-search" />
                         		</InputAdornment>
 							}
 							className="inputMargin"/>
                     </Paper>
                     <div>
-                        <IconButton aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
+                        <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
 							aria-haspopup="true"
 							onClick={this.toggleMenu}
-							color="inherit">
-                            <AccountCircle/>
-                        </IconButton>
+							color="secondary"
+							variant="fab"
+							mini
+							classes={{flat: 'flat'}}>
+							<i className="icon-user" />
+                        </Button>
                         <Menu id="menu-appbar"
 							anchorEl={this.state.anchorEl}
 							anchorOrigin={{
@@ -216,7 +215,7 @@ class App extends Component {
                 </Toolbar>
             </AppBar>)
             : (
-			<AppBar position="fixed">
+			<AppBar position="sticky">
                 <Toolbar>
                     <Typography variant="title" color="inherit" href="/home">
                         HR.info Admin

@@ -9,13 +9,16 @@ import './unocha-icons.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/red';
+import indigo from '@material-ui/core/colors/indigo';
 
 const theme = createMuiTheme({
 	palette: {
-		primary: blue,
-		secondary: red,
+		primary: {
+			main: '#007faa'
+		},
+		secondary: {
+			main: '#53B1C8'
+		},
 
 	}
 });
