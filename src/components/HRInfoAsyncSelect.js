@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoAsyncSelect extends React.Component {
   constructor(props) {

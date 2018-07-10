@@ -7,14 +7,14 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import HRInfoAPI from './HRInfoAPI';
-import HRInfoSelect from './HRInfoSelect';
-import HRInfoLocations from './HRInfoLocations';
-import HRInfoAsyncSelect from './HRInfoAsyncSelect';
-import RelatedContent from './RelatedContent';
-import HidContacts from './HidContacts';
-import Address from './Address';
-import EventDate from './EventDate';
+import HRInfoAPI from '../api/HRInfoAPI';
+import HRInfoSelect from '../components/HRInfoSelect';
+import HRInfoLocations from '../components/HRInfoLocations';
+import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
+import RelatedContent from '../components/RelatedContent';
+import HidContacts from '../components/HidContacts';
+import Address from '../components/Address';
+import EventDate from '../components/EventDate';
 
 class AssessmentForm extends React.Component {
   constructor(props) {

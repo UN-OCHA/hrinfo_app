@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Row, Col, Nav, NavItem, NavLink} from 'reactstrap';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class OperationPage extends React.Component {
 

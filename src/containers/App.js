@@ -16,11 +16,11 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import Routes from "./Routes";
+import Routes from "../utils/Routes";
 import './App.css';
 import SearchPage from './SearchPage';
-import HRInfoAPI from './HRInfoAPI';
-import HidAPI from './HidAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
+import HidAPI from '../api/HidAPI';
 
 class App extends Component {
     static propTypes = {

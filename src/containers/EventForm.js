@@ -4,15 +4,15 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import HRInfoSelect from './HRInfoSelect';
-import HRInfoLocations from './HRInfoLocations';
-import HRInfoAsyncSelect from './HRInfoAsyncSelect';
-import RelatedContent from './RelatedContent';
-import HidContacts from './HidContacts';
-import Address from './Address';
-import EventDate from './EventDate';
-import LanguageSelect from './LanguageSelect';
-import StringSelect from './StringSelect';
+import HRInfoSelect from '../components/HRInfoSelect';
+import HRInfoLocations from '../components/HRInfoLocations';
+import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
+import RelatedContent from '../components/RelatedContent';
+import HidContacts from '../components/HidContacts';
+import Address from '../components/Address';
+import EventDate from '../components/EventDate';
+import LanguageSelect from '../components/LanguageSelect';
+import StringSelect from '../components/StringSelect';
 
 class EventForm extends React.Component {
   constructor(props) {

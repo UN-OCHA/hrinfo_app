@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
   constructor(props) {

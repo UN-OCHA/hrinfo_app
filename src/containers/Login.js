@@ -1,6 +1,6 @@
 import React from 'react';
-import HRInfoAPI from './HRInfoAPI';
-import HidAPI from './HidAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
+import HidAPI from '../api/HidAPI';
 
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';

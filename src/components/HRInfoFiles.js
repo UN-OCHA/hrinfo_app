@@ -4,7 +4,7 @@ import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import DropboxChooser from 'react-dropbox-chooser';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Row } from 'reactstrap';
 import HRInfoLocation from './HRInfoLocation';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoLocations extends React.Component {
 

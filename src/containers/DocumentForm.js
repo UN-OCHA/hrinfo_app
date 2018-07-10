@@ -5,12 +5,12 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import HRInfoSelect from './HRInfoSelect';
-import HRInfoLocations from './HRInfoLocations';
-import HRInfoAsyncSelect from './HRInfoAsyncSelect';
-import HRInfoFiles from './HRInfoFiles';
-import RelatedContent from './RelatedContent';
-import LanguageSelect from './LanguageSelect';
+import HRInfoSelect from '../components/HRInfoSelect';
+import HRInfoLocations from '../components/HRInfoLocations';
+import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
+import HRInfoFiles from '../components/HRInfoFiles';
+import RelatedContent from '../components/RelatedContent';
+import LanguageSelect from '../components/LanguageSelect';
 
 class DocumentForm extends React.Component {
   constructor(props) {

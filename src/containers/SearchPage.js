@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardDeck } from 'reactstrap';
-import Item from './Item';
-import HRInfoAPI from './HRInfoAPI';
+import Item from '../components/Item';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class SearchPage extends React.Component {
   constructor(props) {
