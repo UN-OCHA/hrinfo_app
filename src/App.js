@@ -15,6 +15,7 @@ import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import Avatar from '@material-ui/core/Avatar';
 
 import Routes from "./Routes";
 import './App.css';
@@ -188,7 +189,7 @@ class App extends Component {
 							variant="fab"
 							mini
 							classes={{flat: 'flat'}}>
-							<i className="icon-user" />
+							<Avatar alt={this.state.user.name} src={this.state.user.picture}/>
                         </Button>
                         <Menu id="menu-appbar"
 							anchorEl={this.state.anchorEl}
