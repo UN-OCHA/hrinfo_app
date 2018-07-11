@@ -22,6 +22,7 @@ import './App.css';
 import SearchPage from './SearchPage';
 import HRInfoAPI from './HRInfoAPI';
 import HidAPI from './HidAPI';
+import IconLogo from './IconLogo';
 
 class App extends Component {
     static propTypes = {
@@ -166,7 +167,7 @@ class App extends Component {
 			<AppBar position="sticky">
                 <Toolbar className="toolbar">
                     <Typography variant="title" color="inherit">
-                        <NavLink to={'/home'} className="link">HR.info Admin</NavLink>
+                        <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
                     </Typography>
                     <Paper elevation0="true" className="paper">
                         <Input value={this.state.searchTerms}
@@ -219,7 +220,7 @@ class App extends Component {
 			<AppBar position="sticky">
                 <Toolbar>
                     <Typography variant="title" color="inherit" href="/home">
-                        HR.info Admin
+                        <IconLogo />
                     </Typography>
                 </Toolbar>
             </AppBar>);
