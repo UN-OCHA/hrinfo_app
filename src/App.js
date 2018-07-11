@@ -16,6 +16,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Avatar from '@material-ui/core/Avatar';
+import ViewModule from '@material-ui/icons/ViewModule';
+import Popover from '@material-ui/core/Popover';
 
 import Routes from "./Routes";
 import './App.css';
@@ -23,6 +25,7 @@ import SearchPage from './SearchPage';
 import HRInfoAPI from './HRInfoAPI';
 import HidAPI from './HidAPI';
 import IconLogo from './IconLogo';
+import SpaceMenu from './SpaceMenu';
 
 class App extends Component {
     static propTypes = {
@@ -39,7 +42,10 @@ class App extends Component {
             token: '',
             anchorEl: null,
             alert: {},
-            searchTerms: ''
+            searchTerms: '',
+            group: null,
+            openPopover: false,
+            anchorPopover: null
         };
 
         this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -49,6 +55,8 @@ class App extends Component {
         this.toggleMenu = this.toggleMenu.bind(this);
         this.setAlert = this.setAlert.bind(this);
         this.hideAlert = this.hideAlert.bind(this);
+        this.setGroup = this.setGroup.bind(this);
+        this.handlePopover = this.handlePopover.bind(this);
     }
 
     toggleMenu(event) {
@@ -108,6 +116,13 @@ class App extends Component {
         }
     }
 
+    handlePopover (event) {
+      this.setState({
+        openPopover: !this.state.openPopover,
+        anchorPopover: event.currentTarget
+      });
+    }
+
     componentDidUpdate() {
         if (this.state.token) {
             // Decode the token
@@ -154,20 +169,48 @@ class App extends Component {
         this.setState({alert: {}});
     }
 
+    setGroup (group) {
+      this.setState({
+        group: group
+      });
+    }
+
     render() {
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
             userHasAuthenticated: this.userHasAuthenticated,
             userIsAuthenticated: this.userIsAuthenticated,
             setAlert: this.setAlert,
-            user: this.state.user
+            user: this.state.user,
+            setGroup: this.setGroup
         };
+
+        const popover = this.state.group ? (
+          <Popover open={this.state.openPopover}
+            onClose={this.handlePopover}
+            anchorEl={this.state.anchorPopover}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}><SpaceMenu groupHref={'/operations/' + this.state.group.id}/></Popover>
+        ) : '';
+
+        const modulesButton = this.state.group ? (
+          <IconButton aria-label="Modules" onClick={this.handlePopover} color="secondary">
+            <ViewModule />
+          </IconButton>
+        ) : '';
 
         const navbar = this.state.isAuthenticated ? (
 			<AppBar position="sticky">
                 <Toolbar className="toolbar">
                     <Typography variant="title" color="inherit">
                         <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
+                        {this.state.group ? this.state.group.label : ''}
                     </Typography>
                     <Paper elevation0="true" className="paper">
                         <Input value={this.state.searchTerms}
@@ -183,6 +226,7 @@ class App extends Component {
 							className="inputMargin"/>
                     </Paper>
                     <div>
+                        {modulesButton}
                         <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
 							aria-haspopup="true"
 							onClick={this.toggleMenu}
@@ -250,6 +294,7 @@ class App extends Component {
         if (!this.state.searchTerms) {
             return (!this.state.isAuthenticating && <div className="App">
                 {navbar}
+                {popover}
                 <div className="container-fluid">
                     {myAlert}
                     <Routes childProps={childProps}/>
@@ -258,6 +303,7 @@ class App extends Component {
         } else {
             return (!this.state.isAuthenticating && <div className="App">
                 {navbar}
+                {popover}
                 <div className="container-fluid">
                     {myAlert}
                     <SearchPage searchTerms={this.state.searchTerms}/>
