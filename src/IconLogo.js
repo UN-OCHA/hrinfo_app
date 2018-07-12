@@ -8,7 +8,7 @@ class IconLogo extends React.Component {
           <title>Humanitarian Response</title>
           <desc>Created with Sketch.</desc>
           <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
               <g id="iPad-Pro-Landscape" fill="#BE2F3D">
                   <g id="HRinfo_logo-01" transform="translate(5.000000, -10.000000)">
                       <g id="Group" transform="translate(18.387755, 0.146839)">

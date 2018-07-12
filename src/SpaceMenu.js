@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -7,6 +8,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
   root: {
@@ -84,12 +86,12 @@ function TitlebarGridList(props) {
     <div className={classes.root}>
       <GridList cellHeight={80} className={classes.gridList}>
         {tileData.map(tile => (
-          <a href={groupHref + '/' + tile.href}>
-            <GridListTile key={tile.label} className={classes.center}>
+          <Link to={groupHref + '/' + tile.href} key={tile.label}>
+            <GridListTile key={tile.label} className={classes.center} onClick={props.handlePopover}>
               <h2 className={tile.icon} />
               <h5>{tile.label}</h5>
             </GridListTile>
-          </a>
+          </Link>
         ))}
       </GridList>
     </div>
@@ -98,7 +100,7 @@ function TitlebarGridList(props) {
 
 TitlebarGridList.propTypes = {
   classes: PropTypes.object.isRequired,
-  groupHref: PropTypes.object.isRequired,
+  groupHref: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(TitlebarGridList);

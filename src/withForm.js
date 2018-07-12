@@ -1,6 +1,5 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
 import HRInfoAPI from './HRInfoAPI';
 
@@ -154,7 +153,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
       this.setState({
         status: 'submitting'
       });
-      let doc = {};
       let field_collections = [];
       let body = JSON.stringify(this.state.doc);
       body = JSON.parse(body);
@@ -252,6 +250,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
     async componentDidMount() {
       if (this.props.match.params.id) {
         const doc = await this.hrinfoAPI.getItem(hrinfoType, this.props.match.params.id);
+        let state = {};
         if (hrinfoType !== 'operations') {
           doc.spaces = [];
           doc.operation.forEach(function (op) {
@@ -284,9 +283,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
             doc.launch_date = launchDate.getFullYear() + '-' + month + '-' + day;
           }
         }
-        let state = {
-          doc: doc
-        };
+        state.doc = doc;
         this.setState(state);
       }
     }

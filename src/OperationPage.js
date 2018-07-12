@@ -20,11 +20,19 @@ class OperationPage extends React.Component {
           doc: op,
         });
         this.props.setGroup(op);
+        const breadcrumb = [
+          {
+            href: '/operations/' + op.id,
+            label: op.label
+          },
+        ];
+        this.props.setBreadcrumb(breadcrumb);
       }
     }
 
     componentWillUnmount() {
       this.props.setGroup(null);
+      this.props.setBreadcrumb([]);
     }
 
     render() {

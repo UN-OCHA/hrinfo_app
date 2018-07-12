@@ -26,6 +26,7 @@ import HRInfoAPI from './HRInfoAPI';
 import HidAPI from './HidAPI';
 import IconLogo from './IconLogo';
 import SpaceMenu from './SpaceMenu';
+import Breadcrumb from './Breadcrumb';
 
 class App extends Component {
     static propTypes = {
@@ -45,7 +46,8 @@ class App extends Component {
             searchTerms: '',
             group: null,
             openPopover: false,
-            anchorPopover: null
+            anchorPopover: null,
+            breadcrumb: []
         };
 
         this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -57,6 +59,7 @@ class App extends Component {
         this.hideAlert = this.hideAlert.bind(this);
         this.setGroup = this.setGroup.bind(this);
         this.handlePopover = this.handlePopover.bind(this);
+        this.setBreadcrumb = this.setBreadcrumb.bind(this);
     }
 
     toggleMenu(event) {
@@ -124,27 +127,27 @@ class App extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.token) {
-            // Decode the token
-            var base64Url = this.state.token.split('.')[1];
-            var base64 = base64Url.replace('-', '+').replace('_', '/');
-            const decoded = JSON.parse(window.atob(base64));
-            const current = new Date();
-            if (current.getTime() > decoded.exp * 1000) {
-                // Token is expired. Redirect user to login page with error message.
-                let newState = this.userHasAuthenticated(false, null, null, false);
-                newState.alert = {
-                    color: 'danger',
-                    message: 'Your session has expired. Please login again'
-                };
-                this.setState(newState);
-                this.props.history.push('/');
-            } else {
-                // Initialize HID API and HRInfo api
-                new HRInfoAPI(this.state.token);
-                new HidAPI(this.state.token);
-            }
+      if (this.state.token) {
+        // Decode the token
+        var base64Url = this.state.token.split('.')[1];
+        var base64 = base64Url.replace('-', '+').replace('_', '/');
+        const decoded = JSON.parse(window.atob(base64));
+        const current = new Date();
+        if (current.getTime() > decoded.exp * 1000) {
+          // Token is expired. Redirect user to login page with error message.
+          let newState = this.userHasAuthenticated(false, null, null, false);
+          newState.alert = {
+              color: 'danger',
+              message: 'Your session has expired. Please login again'
+          };
+          this.setState(newState);
+          this.props.history.push('/');
+        } else {
+          // Initialize HID API and HRInfo api
+          new HRInfoAPI(this.state.token);
+          new HidAPI(this.state.token);
         }
+      }
     }
 
     setSearch(event) {
@@ -175,6 +178,12 @@ class App extends Component {
       });
     }
 
+    setBreadcrumb (breadcrumb) {
+      this.setState({
+        breadcrumb: breadcrumb
+      });
+    }
+
     render() {
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
@@ -182,7 +191,8 @@ class App extends Component {
             userIsAuthenticated: this.userIsAuthenticated,
             setAlert: this.setAlert,
             user: this.state.user,
-            setGroup: this.setGroup
+            setGroup: this.setGroup,
+            setBreadcrumb: this.setBreadcrumb
         };
 
         const popover = this.state.group ? (
@@ -196,7 +206,7 @@ class App extends Component {
             transformOrigin={{
               vertical: 'top',
               horizontal: 'center',
-            }}><SpaceMenu groupHref={'/operations/' + this.state.group.id}/></Popover>
+            }}><SpaceMenu groupHref={'/operations/' + this.state.group.id} handlePopover={this.handlePopover} /></Popover>
         ) : '';
 
         const modulesButton = this.state.group ? (
@@ -210,7 +220,7 @@ class App extends Component {
                 <Toolbar className="toolbar">
                     <Typography variant="title" color="inherit">
                         <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
-                        {this.state.group ? this.state.group.label : ''}
+                        <Breadcrumb elts={this.state.breadcrumb} />
                     </Typography>
                     <Paper elevation0="true" className="paper">
                         <Input value={this.state.searchTerms}
@@ -248,14 +258,14 @@ class App extends Component {
                             }}
 							open={Boolean(this.state.anchorEl)}
 							onClose={this.toggleMenu}>
-                            <MenuItem onClick={this.toggleMenu}>
-                                <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
-                            </MenuItem>
-                            <MenuItem onClick={this.toggleMenu}>
-                                <NavLink to={'/admin'} className="link">Admin</NavLink>
-                            </MenuItem>
-                            <Divider/>
-                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                          <MenuItem onClick={this.toggleMenu}>
+                              <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
+                          </MenuItem>
+                          <MenuItem onClick={this.toggleMenu}>
+                              <NavLink to={'/admin'} className="link">Admin</NavLink>
+                          </MenuItem>
+                          <Divider/>
+                          <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                         </Menu>
                     </div>
                 </Toolbar>

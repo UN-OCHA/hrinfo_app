@@ -10,6 +10,8 @@ import Admin from "./Admin";
 import ItemPage from "./ItemPage";
 import User from "./User";
 import OperationPage from "./OperationPage";
+import GroupsPage from './GroupsPage';
+import ContactsPage from './ContactsPage';
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import withForm from './withForm';
@@ -32,5 +34,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/new" exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/edit" exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
     <AuthenticatedRoute path="/operations/:id" exact component={OperationPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/groups" exact component={GroupsPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;
