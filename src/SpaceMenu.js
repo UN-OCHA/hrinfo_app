@@ -55,7 +55,7 @@ const tileData = [
   {
     label: 'Maps/Infographics',
     icon: 'icon-map-pin',
-    href: 'maps'
+    href: 'infographics'
   },
   {
     label: 'Datasets',

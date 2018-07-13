@@ -11,8 +11,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import withSpace from './withSpace';
 import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
+import withSpace from './withSpace';
 
 const styles = theme => ({
   root: {
@@ -25,10 +25,10 @@ const styles = theme => ({
   },
 });
 
-class ContactsPage extends React.Component {
+class InfographicsPage extends React.Component {
 
     render() {
-      const { classes, content, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = this.props;
+      const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page} = this.props;
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
       return (
@@ -36,32 +36,26 @@ class ContactsPage extends React.Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell></TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Job Title</TableCell>
-                <TableCell>Organization</TableCell>
-                <TableCell>Cluster</TableCell>
-                <TableCell>Country</TableCell>
+                <TableCell>Title</TableCell>
+                <TableCell>Infographic type</TableCell>
+                <TableCell>Organizations</TableCell>
+                <TableCell>Publication date</TableCell>
+                <TableCell>Files</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {content.data.map(n => {
-                let bundles = '';
-                if (n.bundles) {
-                  n.bundles.forEach(function (b) {
-                    bundles += b.name + ',';
-                  });
-                }
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.verified ? <i className="icon-check-circle" /> : ''}
+                      {n.label}
                     </TableCell>
-                    <TableCell><NavLink to={'/users/' + n.id}>{n.name}</NavLink></TableCell>
-                    <TableCell>{n.job_title}</TableCell>
-                    <TableCell>{n.organization ? (n.organization.acronym ? n.organization.acronym : n.organization.name) : ''}</TableCell>
-                    <TableCell>{bundles}</TableCell>
-                    <TableCell>{n.location && n.location.country ? n.location.country.name : ''}</TableCell>
+                    <TableCell>{n.infographic_type ? n.infographic_type.label : ''}</TableCell>
+                    <TableCell>{n.organizations ? n.organizations.map(o => {
+                      return o.label + '; ';
+                    }) : ''}</TableCell>
+                    <TableCell>{n.publication_date ? n.publication_date : ''}</TableCell>
+                    <TableCell>TODO</TableCell>
                   </TableRow>
                 );
               })}
@@ -91,9 +85,9 @@ class ContactsPage extends React.Component {
     }
 }
 
-ContactsPage.propTypes = {
+InfographicsPage.propTypes = {
   classes: PropTypes.object.isRequired,
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(ContactsPage), { spaceType: 'operations', contentType: 'user', contentLabel: 'Contacts', sort: 'name'});
+export default withSpace(withStyles(styles)(InfographicsPage), {spaceType: 'operations', contentType: 'infographics', contentLabel: 'Infographics', sort: '-publication_date'});

@@ -22,9 +22,11 @@ const styles = theme => ({
 });
 
 
-class GroupsPage extends React.Component {
+class OfficesPage extends React.Component {
+
     render() {
       const { classes, content } = this.props;
+      console.log(content);
 
       return (
         <Paper className={classes.root}>
@@ -32,42 +34,32 @@ class GroupsPage extends React.Component {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Lead Agencies</TableCell>
-                <TableCell>Partners</TableCell>
-                <TableCell>Cluster coordinators</TableCell>
+                <TableCell>Phones</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Venue</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {content.data.map(n => {
+                let venue = '';
+                if (n.address) {
+                  if (n.address.thoroughfare) {
+                    venue += n.address.thoroughfare + ',';
+                  }
+                  if (n.address.locality) {
+                    venue += n.address.locality;
+                  }
+                }
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={'/groups/' + n.id}>{n.label}</Link>
+                      {n.label}
                     </TableCell>
-                    <TableCell>{n.type}</TableCell>
-                    <TableCell>
-                      {n.lead_agencies ? n.lead_agencies.map(l => {
-                        return (
-                          <span>{l.label}<br /></span>
-                        );
-                      }) : ''
-                    }</TableCell>
-                    <TableCell>
-                      {n.partners ? n.partners.map(l => {
-                        return (
-                          <span>{l.label}<br /></span>
-                        );
-                      }) : ''
-                    }</TableCell>
-                    <TableCell>
-                      {n.cluster_coordinators ? n.cluster_coordinators.map(l => {
-                        return (
-                          <span>{l.name}<br /></span>
-                        );
-                      }) : ''
-                    }
-                    </TableCell>
+                    <TableCell>TODO</TableCell>
+                    <TableCell>{n.email ? n.email : ''}</TableCell>
+                    <TableCell>{n.location ? n.location.label : ''}</TableCell>
+                    <TableCell>{venue}</TableCell>
                   </TableRow>
                 );
               })}
@@ -78,9 +70,9 @@ class GroupsPage extends React.Component {
     }
 }
 
-GroupsPage.propTypes = {
+OfficesPage.propTypes = {
   classes: PropTypes.object.isRequired,
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(GroupsPage), { spaceType: 'operations', contentType: 'bundles', contentLabel: 'Groups', sort: 'label'});
+export default withSpace(withStyles(styles)(OfficesPage), { spaceType: 'operations', contentType: 'offices', contentLabel: 'Offices', sort: 'label'});
