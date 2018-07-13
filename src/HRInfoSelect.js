@@ -29,7 +29,6 @@ class HRInfoSelect extends React.Component {
         let items = this.state.items;
         if (type === 'document_types' || type === 'infographic_types') {
           elts.forEach(function (elt) {
-			elt.value = elt.id;
             if (elt.parent.length === 1) {
               elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
@@ -41,7 +40,6 @@ class HRInfoSelect extends React.Component {
         }
         else if (type === 'bundles' || type === 'offices') {
           elts.forEach(function (elt) {
-			elt.value = elt.id;
             elt.label = elt.label + " (" + operationLabel + ")";
             pushed.push(elt);
           });
@@ -49,7 +47,6 @@ class HRInfoSelect extends React.Component {
         else {
           pushed = elts;
           pushed = pushed.map(function (val) {
-			val.value = val.id;
             val.type = type;
             return val;
           });

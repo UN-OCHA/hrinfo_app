@@ -63,7 +63,8 @@ function SelectWrapped(props) {
       styles={customStyles}
       isClearable={true}
 	  isMulti={props.isMulti}
-	  placeholder=""
+	  getOptionValue={(option) => { return option.id }}
+	  getOptionLabel={(option) => { return option.label}}
       {...other}
     />
   );

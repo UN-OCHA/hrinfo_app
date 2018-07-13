@@ -75,3 +75,27 @@
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
+
+.form {
+	display: flex;
+}
+
+.form-primary {
+	width: 60%;
+	padding-right: 50px;
+}
+.form-secondary {
+	width: 40%;
+}
+
+.more-info-button {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 15px;
+}
+
+.submission {
+	text-align: center;
+	margin-top: 20px;
+}

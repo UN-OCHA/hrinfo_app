@@ -25,7 +25,6 @@ class HRInfoAsyncSelect extends React.Component {
       .then(data => {
 		  let fullLabels = [];
 		  data.data.forEach(function (elt) {
-			  elt.value = elt.id;
 			  if (type === 'organizations' && elt.acronym) {
 				  elt.label = elt.label + ' (' + elt.acronym + ')';
 			  }
