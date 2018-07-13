@@ -206,7 +206,7 @@ class App extends Component {
             transformOrigin={{
               vertical: 'top',
               horizontal: 'center',
-            }}><SpaceMenu groupHref={'/operations/' + this.state.group.id} handlePopover={this.handlePopover} /></Popover>
+            }}><SpaceMenu space={this.state.group} handlePopover={this.handlePopover} /></Popover>
         ) : '';
 
         const modulesButton = this.state.group ? (

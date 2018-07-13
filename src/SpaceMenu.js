@@ -79,19 +79,28 @@ const tileData = [
   }
 ];
 
+const menus = {
+  operation: ['groups', 'contacts', 'events', 'documents', 'infographics', 'datasets', 'offices', 'assessments', 'disasters'],
+  group: ['contacts', 'events', 'documents', 'infographics', 'datasets', 'assessments'],
+  organization: ['contacts', 'events', 'documents', 'infographics', 'datasets', 'assessments'],
+  disaster: ['contacts', 'events', 'documents', 'infographics', 'assessments'],
+  office: ['contacts', 'events', 'documents', 'infographics', 'assessments']
+};
+
 function TitlebarGridList(props) {
-  const { classes, groupHref } = props;
+  const { classes, space } = props;
 
   return (
     <div className={classes.root}>
       <GridList cellHeight={80} className={classes.gridList}>
         {tileData.map(tile => (
-          <Link to={groupHref + '/' + tile.href} key={tile.label}>
-            <GridListTile key={tile.label} className={classes.center} onClick={props.handlePopover}>
-              <h2 className={tile.icon} />
-              <h5>{tile.label}</h5>
-            </GridListTile>
-          </Link>
+          menus[space.type].indexOf(tile.href) !== -1 ?
+            <Link to={'/' + space.type + 's/' + space.id + '/' + tile.href} key={tile.label}>
+              <GridListTile key={tile.label} className={classes.center} onClick={props.handlePopover}>
+                <h2 className={tile.icon} />
+                <h5>{tile.label}</h5>
+              </GridListTile>
+            </Link> : ''
         ))}
       </GridList>
     </div>
@@ -100,7 +109,7 @@ function TitlebarGridList(props) {
 
 TitlebarGridList.propTypes = {
   classes: PropTypes.object.isRequired,
-  groupHref: PropTypes.string.isRequired,
+  space: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(TitlebarGridList);

@@ -96,4 +96,4 @@ ContactsPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(ContactsPage), { spaceType: 'operations', contentType: 'user', contentLabel: 'Contacts', sort: 'name'});
+export default withSpace(withStyles(styles)(ContactsPage), { contentType: 'user', contentLabel: 'Contacts', sort: 'name'});

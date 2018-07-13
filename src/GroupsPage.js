@@ -83,4 +83,4 @@ GroupsPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(GroupsPage), { spaceType: 'operations', contentType: 'bundles', contentLabel: 'Groups', sort: 'label'});
+export default withSpace(withStyles(styles)(GroupsPage), {contentType: 'bundles', contentLabel: 'Groups', sort: 'label'});

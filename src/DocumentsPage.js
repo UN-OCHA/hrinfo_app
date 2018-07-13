@@ -90,4 +90,4 @@ DocumentsPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(DocumentsPage), {spaceType: 'operations', contentType: 'documents', contentLabel: 'Documents', sort: '-publication_date'});
+export default withSpace(withStyles(styles)(DocumentsPage), {contentType: 'documents', contentLabel: 'Documents', sort: '-publication_date'});

@@ -75,4 +75,4 @@ OfficesPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(OfficesPage), { spaceType: 'operations', contentType: 'offices', contentLabel: 'Offices', sort: 'label'});
+export default withSpace(withStyles(styles)(OfficesPage), { contentType: 'offices', contentLabel: 'Offices', sort: 'label'});

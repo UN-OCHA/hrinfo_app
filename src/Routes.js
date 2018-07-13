@@ -44,5 +44,8 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/:id/infographics" exact component={InfographicsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/offices" exact component={OfficesPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/contacts" exact component={ContactsPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/documents" exact component={DocumentsPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/infographics" exact component={InfographicsPage} props={childProps} />
     <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;
