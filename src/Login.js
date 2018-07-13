@@ -7,7 +7,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -76,7 +75,7 @@ class Login extends React.Component {
 
     render() {
         return (
-			<div className="login-container">
+			<form className="login-container" onSubmit={this.handleSubmit}>
 				<FormControl required fullWidth margin="normal">
 					<InputLabel htmlFor="email">Email</InputLabel>
 					<Input id="email" value={this.state.email} onChange={this.handleChange}/>
@@ -102,13 +101,15 @@ class Login extends React.Component {
 					<Button variant="contained"
 						color="primary"
 						onClick={this.handleSubmit}
-						disabled={this.state.email == '' || this.state.password == ''}
-						>Login</Button>
+						type="submit"
+						disabled={this.state.email == '' || this.state.password == ''}>
+						Login
+					</Button>
 				}
 				{ this.state.status === 'submitting' &&
 					<CircularProgress/>
 				}
-			</div>
+			</form>
 		);
     }
 }

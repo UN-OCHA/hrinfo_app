@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import MaterialSelect from './MaterialSelect';
 
 class LanguageSelect extends React.Component {
   constructor(props) {
@@ -28,13 +28,13 @@ class LanguageSelect extends React.Component {
 
   handleChange (selectedOption) {
     if (this.props.onChange) {
-      this.props.onChange(selectedOption.value);
+      this.props.onChange(selectedOption ? selectedOption.value : selectedOption);
     }
   }
 
   render() {
     return (
-        <Select
+        <MaterialSelect
           id="language"
           name="language"
           onChange={this.handleChange}

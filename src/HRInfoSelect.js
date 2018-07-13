@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import MaterialSelect from './MaterialSelect';
 import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
@@ -29,6 +29,7 @@ class HRInfoSelect extends React.Component {
         let items = this.state.items;
         if (type === 'document_types' || type === 'infographic_types') {
           elts.forEach(function (elt) {
+			elt.value = elt.id;
             if (elt.parent.length === 1) {
               elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
@@ -40,6 +41,7 @@ class HRInfoSelect extends React.Component {
         }
         else if (type === 'bundles' || type === 'offices') {
           elts.forEach(function (elt) {
+			elt.value = elt.id;
             elt.label = elt.label + " (" + operationLabel + ")";
             pushed.push(elt);
           });
@@ -47,6 +49,7 @@ class HRInfoSelect extends React.Component {
         else {
           pushed = elts;
           pushed = pushed.map(function (val) {
+			val.value = val.id;
             val.type = type;
             return val;
           });
@@ -62,6 +65,7 @@ class HRInfoSelect extends React.Component {
             return 0;
           })
         });
+
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
@@ -113,14 +117,12 @@ class HRInfoSelect extends React.Component {
 
   render() {
     return (
-        <Select
+        <MaterialSelect
           isMulti={this.props.isMulti}
           id={this.props.type}
           name={this.props.type}
           onChange={this.handleChange}
           options={this.state.items}
-          getOptionValue={(option) => { return option.id }}
-          getOptionLabel={(option) => { return option.label}}
           value={this.props.value} />
     );
   }

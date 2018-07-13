@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import MaterialSelect from './MaterialSelect';
 import HRInfoAPI from './HRInfoAPI';
 
 class HRInfoLocation extends React.Component {
@@ -79,13 +79,11 @@ class HRInfoLocation extends React.Component {
 
   render() {
     return (
-        <Select
+        <MaterialSelect
           id="locations"
           name="locations"
           onChange={this.handleChange}
           options={this.state.items}
-          getOptionValue={(option) => { return option.id }}
-          getOptionLabel={(option) => { return option.label}}
           value={this.state.val}
           className={this.props.className} />
     );
