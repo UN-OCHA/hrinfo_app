@@ -1,7 +1,12 @@
 .login-container {
 	display: flex;
 	flex-direction: column;
-	width: 30%;
+	width: 100%;
 	justify-content: space-between;
 	align-items: center;
 }
+ @media only screen and (min-width: 768px) {
+	 .login-container {
+		 width: 40%;
+	 }
+ }

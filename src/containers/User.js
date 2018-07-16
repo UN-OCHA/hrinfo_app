@@ -46,36 +46,36 @@ class User extends React.Component {
           }
         }
         let phonesList = '';
-        phonesList = user.phone_numbers.map(function (phone) {
-          return <li><a href={'tel:' + phone.number}>{phone.number}</a><div>{phone.type}</div></li>;
+        phonesList = user.phone_numbers.map(function (phone, index) {
+          return <li key={index}><a href={'tel:' + phone.number}>{phone.number}</a><div>{phone.type}</div></li>;
         });
         let emailsList = '';
-        emailsList = user.emails.map(function (email) {
-          return <li><a href={'mailto:' + email.email}>{email.email}</a></li>;
+        emailsList = user.emails.map(function (email, index) {
+          return <li key={index}><a href={'mailto:' + email.email}>{email.email}</a></li>;
         });
         let socialsList = '';
-        socialsList = user.voips.map(function (voip) {
-          return <li>{voip.type}: {voip.username}</li>;
+        socialsList = user.voips.map(function (voip, index) {
+          return <li key={index}>{voip.type}: {voip.username}</li>;
         });
         let orgsList = '';
-        orgsList = user.organizations.map(function (org) {
-          return <li>{org.name}</li>;
+        orgsList = user.organizations.map(function (org, index) {
+          return <li key={index}>{org.name}</li>;
         });
         let jobsList = '';
-        jobsList = user.job_titles.map(function (job) {
-          return <li>{job}</li>;
+        jobsList = user.job_titles.map(function (job, index) {
+          return <li key={index}>{job}</li>;
         });
         let locsList = '';
-        locsList = user.locations.map(function (loc) {
-          return <li>{loc.country.name}</li>;
+        locsList = user.locations.map(function (loc, index) {
+          return <li key={index}>{loc.country.name}</li>;
         });
         let rolesList = '';
-        rolesList = user.functional_roles.map(function (role) {
-          return <li>{role.name}</li>;
+        rolesList = user.functional_roles.map(function (role, index) {
+          return <li key={index}>{role.name}</li>;
         });
         let sitesList = '';
-        sitesList = user.websites.map(function (site) {
-          return <li><a href={site.url}>{site.url}</a></li>;
+        sitesList = user.websites.map(function (site, index) {
+          return <li key={index}><a href={site.url}>{site.url}</a></li>;
         });
         const userVerified = <span><i className="icon-check-circle" /> This user has been verified</span>;
         return (

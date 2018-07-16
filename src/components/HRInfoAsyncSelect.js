@@ -1,5 +1,5 @@
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
+import MaterialAsyncSelect from '../components/MaterialAsyncSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoAsyncSelect extends React.Component {
@@ -23,19 +23,14 @@ class HRInfoAsyncSelect extends React.Component {
     return this.hrinfoAPI
       .get(type, params)
       .then(data => {
-        if (type === 'organizations') {
-          let fullLabels = [];
-          data.data.forEach(function (org) {
-            if (org.acronym) {
-              org.label = org.label + ' (' + org.acronym + ')';
-            }
-            fullLabels.push(org);
-          });
-          return fullLabels;
-        }
-        else {
-          return data.data;
-        }
+		  let fullLabels = [];
+		  data.data.forEach(function (elt) {
+			  if (type === 'organizations' && elt.acronym) {
+				  elt.label = elt.label + ' (' + elt.acronym + ')';
+			  }
+			  fullLabels.push(elt);
+		  });
+		  return fullLabels;
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
@@ -49,7 +44,7 @@ class HRInfoAsyncSelect extends React.Component {
 
   render() {
     return (
-      <AsyncSelect
+      <MaterialAsyncSelect
         isMulti
         loadOptions={this.getOptions}
         getOptionValue={(option) => { return option.id }}

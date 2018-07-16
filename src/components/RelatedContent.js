@@ -1,5 +1,8 @@
 import React from 'react';
-import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 class RelatedContent extends React.Component {
     constructor(props) {
@@ -19,20 +22,25 @@ class RelatedContent extends React.Component {
 
     getRow (number) {
       return (
-        <Row key={number}>
-          <Col sm="6">
-            <FormGroup>
-              <Label>Title</Label>
-              <Input type="text" className="form-control" name={'related_content_titles_' + number} placeholder="Title" value={this.state.value[number]['title']} onChange={(v) => this.handleChange(number, 'title', v)} />
-            </FormGroup>
-          </Col>
-          <Col sm="6">
-            <FormGroup>
-              <Label>URL</Label>
-              <Input type="text" className="form-control" name={'related_content_urls_' + number} placeholder="URL" value={this.state.value[number]['url']} onChange={(v) => this.handleChange(number, 'url', v)} />
-            </FormGroup>
-          </Col>
-        </Row>
+		  <div key={number} className="related-content">
+			  <FormControl margin="normal">
+				  <TextField type="text"
+					  name={'related_content_titles_' + number}
+					  label="Title"
+					  value={this.state.value[number]['title']}
+					  onChange={(v) => this.handleChange(number, 'title', v)}
+					  helperText="Type in the title of the related content."/>
+			  </FormControl>
+			  <FormControl margin="normal">
+				  <TextField type="text"
+					  name={'related_content_urls_' + number}
+					  label="URL"
+					  value={this.state.value[number]['url']}
+					  onChange={(v) => this.handleChange(number, 'url', v)}
+					  helperText="Type in the URL of the related content."/>
+			  </FormControl>
+		  </div>
+
       );
     }
 
@@ -83,8 +91,8 @@ class RelatedContent extends React.Component {
       }
       return (
         <div>
-          {rows}
-          <Button onClick={this.onAddBtnClick}>Add related content</Button>
+          	{rows}
+		  	<Button variant="outlined" onClick={this.onAddBtnClick}>Add related content</Button>
         </div>
         );
     }

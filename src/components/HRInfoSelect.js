@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
@@ -62,6 +62,7 @@ class HRInfoSelect extends React.Component {
             return 0;
           })
         });
+
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
@@ -113,14 +114,12 @@ class HRInfoSelect extends React.Component {
 
   render() {
     return (
-        <Select
+        <MaterialSelect
           isMulti={this.props.isMulti}
           id={this.props.type}
           name={this.props.type}
           onChange={this.handleChange}
           options={this.state.items}
-          getOptionValue={(option) => { return option.id }}
-          getOptionLabel={(option) => { return option.label}}
           value={this.props.value} />
     );
   }

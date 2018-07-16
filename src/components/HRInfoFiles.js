@@ -1,10 +1,13 @@
 import React from 'react';
-import Select from 'react-select';
-import { Button, FormGroup, Label, Input, Row, Col } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+import MaterialSelect from './MaterialSelect';
 import DropboxChooser from 'react-dropbox-chooser';
 import HRInfoAPI from '../api/HRInfoAPI';
+
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {
@@ -216,45 +219,45 @@ class HRInfoFiles extends React.Component {
 
     getRow (number) {
       return (
-        <Row key={number}>
-          <Col lg="5">
-            <FormGroup>
-              <Label>File</Label>
-              {this.state.files[number] === '' ?
-                <span>
-                  <Input type="file" id={'files_' + number } name={'files_' + number } onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
-                  <DropboxChooser
-                    appKey='qe1p4izejvrjlpv'
-                    success={files => this.handleChange(number, 'file', files)}
-                    multiselect={false}
-                    extensions={['.pdf']} >
-                    <Button color="secondary" size="sm" className="my-2">Select from Dropbox</Button>
-                </DropboxChooser>
-              </span> : ''
-              }
-              {this.state.files[number] === 'uploading' ?
-                <FontAwesomeIcon icon={faSpinner} pulse fixedWidth /> : ''
-              }
-              {typeof this.state.files[number] === 'object' ?
-                <div><a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a></div> : ''
-              }
-            </FormGroup>
-          </Col>
-          <Col lg="5">
-            <FormGroup>
-              <Label>File Language</Label>
-              <Select options={this.languages} name={'languages_' + number} onChange={ (s) => this.handleChange(number, 'language', s)} value={this.state.languages[number]} />
-            </FormGroup>
-          </Col>
-          <Col lg="2" className="align-self-center">
-            <FormGroup>
-              <Label>&nbsp;</Label>
-              <div>
-                <Button outline color="danger" size="sm" onClick={(e) => this.removeFileRow(number)}><i className="icon-cancel-big" /></Button>
-              </div>
-            </FormGroup>
-          </Col>
-        </Row>
+        <div key={number} className="file-container">
+            <FormControl margin="normal" className="file-container-file">
+              	<Typography>File</Typography>
+              	{this.state.files[number] === '' ?
+                	<span>
+						<label className="MuiButtonBase-root-102 MuiButton-root-78 MuiButton-text-80 MuiButton-textPrimary-81 MuiButton-flat-83 MuiButton-flatPrimary-84">
+							<span>Select File</span>
+							<input type="file"
+								id={'files_' + number }
+								name={'files_' + number }
+								className="none"
+								onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
+						</label>
+	                  	<DropboxChooser
+		                    appKey='qe1p4izejvrjlpv'
+		                    success={files => this.handleChange(number, 'file', files)}
+		                    multiselect={false}
+		                    extensions={['.pdf']}
+							className="inline">
+		                    <Button color="primary">Select from Dropbox</Button>
+	                	</DropboxChooser>
+              		</span> : ''
+              	}
+				{this.state.files[number] === 'uploading' ?
+					<CircularProgress/> : ''
+				}
+              	{typeof this.state.files[number] === 'object' ?
+                	<div><a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a></div> : ''
+              	}
+            </FormControl>
+            <FormControl margin="normal" className="file-container-language">
+              	<Typography>File Language</Typography>
+              	<MaterialSelect options={this.languages}
+				  	name={'languages_' + number}
+				  	onChange={ (s) => this.handleChange(number, 'language', s)}
+				  	value={this.state.languages[number]} />
+        	</FormControl>
+            <IconButton color="primary" onClick={(e) => this.removeFileRow(number)}><i className="icon-trash" /></IconButton>
+        </div>
       );
     }
 
@@ -381,7 +384,7 @@ class HRInfoFiles extends React.Component {
       return (
         <div className={this.props.className}>
           {rows}
-          <Button onClick={this.onAddBtnClick}>Add file</Button>
+          <Button variant="outlined" onClick={this.onAddBtnClick}>Add file</Button>
         </div>
         );
     }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
 import HRInfoAPI from '../api/HRInfoAPI';
 
@@ -32,15 +31,22 @@ const withForm = function withForm(Component, hrinfoType, label) {
     }
 
     handleInputChange(event) {
-      const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
+		let value = null;
+		let name = null;
+	  	if (event.target) {
+		  	const target = event.target;
+		  	value = target.type === 'checkbox' ? target.checked : target.value;
+		  	name = target.name;
+	  	} else {
+		  	name = 'publication_date';
+		  	value = event.toDate();
+	  	}
 
-      let doc = this.state.doc;
-      doc[name] = value;
-      this.setState({
-        doc: doc
-      });
+		let doc = this.state.doc;
+		doc[name] = value;
+			this.setState({
+				doc: doc
+			});
     }
 
     handleSelectChange (name, selected) {
@@ -145,16 +151,15 @@ const withForm = function withForm(Component, hrinfoType, label) {
     handleSubmit(event, isDraft = 0) {
       event.preventDefault();
       const isValid = this.validateForm();
-      /*if (!isValid) {
+      if (!isValid) {
         this.setState({
           status: 'was-validated'
         });
         return;
-      }*/
+      }
       this.setState({
         status: 'submitting'
       });
-      let doc = {};
       let field_collections = [];
       let body = JSON.stringify(this.state.doc);
       body = JSON.parse(body);
@@ -252,6 +257,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
     async componentDidMount() {
       if (this.props.match.params.id) {
         const doc = await this.hrinfoAPI.getItem(hrinfoType, this.props.match.params.id);
+        let state = {};
         if (hrinfoType !== 'operations') {
           doc.spaces = [];
           doc.operation.forEach(function (op) {
@@ -273,7 +279,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
               blocksFromHTML.contentBlocks,
               blocksFromHTML.entityMap
             );
-            state.editorState = EditorState.createWithContent(contentState);
+            this.state.editorState = EditorState.createWithContent(contentState);
           }
         }
         else {
@@ -284,9 +290,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
             doc.launch_date = launchDate.getFullYear() + '-' + month + '-' + day;
           }
         }
-        let state = {
-          doc: doc
-        };
+        state.doc = doc;
         this.setState(state);
       }
     }
