@@ -185,6 +185,7 @@ class App extends Component {
     }
 
     render() {
+		console.log(this.state.user)
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
             userHasAuthenticated: this.userHasAuthenticated,
@@ -244,7 +245,11 @@ class App extends Component {
 							variant="fab"
 							mini
 							classes={{flat: 'flat'}}>
-							<Avatar alt={this.state.user.name} src={this.state.user.picture}/>
+							{ this.state.user.picture ? (
+								<Avatar src={this.state.user.picture}></Avatar>
+							) : (
+								<Avatar>{this.state.user.name.substring(0,1)}</Avatar>
+							)}
                         </Button>
                         <Menu id="menu-appbar"
 							anchorEl={this.state.anchorEl}
