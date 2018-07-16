@@ -9,7 +9,7 @@ import Home from "./Home";
 import Admin from "./Admin";
 import ItemPage from "./ItemPage";
 import User from "./User";
-import {OperationPage, GroupPage} from "./OperationPage";
+import SpacePage from "./SpacePage";
 import GroupsPage from './GroupsPage';
 import ContactsPage from './ContactsPage';
 import OfficesPage from './OfficesPage';
@@ -37,15 +37,23 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/assessments/new" exact component={AssessmentForm} props={childProps} />
     <AuthenticatedRoute path="/operations/new" exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/edit" exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
-    <AuthenticatedRoute path="/operations/:id" exact component={OperationPage} props={childProps} />
-    <AuthenticatedRoute path="/groups/:id" exact component={GroupPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id" exact component={SpacePage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/groups" exact component={GroupsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/documents" exact component={DocumentsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/infographics" exact component={InfographicsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/offices" exact component={OfficesPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id" exact component={SpacePage} props={childProps} />
     <AuthenticatedRoute path="/groups/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/groups/:id/documents" exact component={DocumentsPage} props={childProps} />
     <AuthenticatedRoute path="/groups/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/offices/:id" exact component={SpacePage} props={childProps} />
+    <AuthenticatedRoute path="/offices/:id/contacts" exact component={ContactsPage} props={childProps} />
+    <AuthenticatedRoute path="/offices/:id/documents" exact component={DocumentsPage} props={childProps} />
+    <AuthenticatedRoute path="/offices/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/organizations/:id" exact component={SpacePage} props={childProps} />
+    <AuthenticatedRoute path="/organizations/:id/contacts" exact component={ContactsPage} props={childProps} />
+    <AuthenticatedRoute path="/organizations/:id/documents" exact component={DocumentsPage} props={childProps} />
+    <AuthenticatedRoute path="/organizations/:id/infographics" exact component={InfographicsPage} props={childProps} />
     <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;

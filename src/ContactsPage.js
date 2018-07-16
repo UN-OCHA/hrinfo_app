@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -57,7 +57,7 @@ class ContactsPage extends React.Component {
                     <TableCell component="th" scope="row">
                       {n.verified ? <i className="icon-check-circle" /> : ''}
                     </TableCell>
-                    <TableCell><NavLink to={'/users/' + n.id}>{n.name}</NavLink></TableCell>
+                    <TableCell><Link to={'/users/' + n.id}>{n.name}</Link></TableCell>
                     <TableCell>{n.job_title}</TableCell>
                     <TableCell>{n.organization ? (n.organization.acronym ? n.organization.acronym : n.organization.name) : ''}</TableCell>
                     <TableCell>{bundles}</TableCell>
