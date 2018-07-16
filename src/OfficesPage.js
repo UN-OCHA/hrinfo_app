@@ -54,7 +54,7 @@ class OfficesPage extends React.Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.label}
+                      <Link to={'/offices/' + n.id}>{n.label}</Link>
                     </TableCell>
                     <TableCell>TODO</TableCell>
                     <TableCell>{n.email ? n.email : ''}</TableCell>

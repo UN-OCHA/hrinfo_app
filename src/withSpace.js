@@ -96,12 +96,17 @@ const withSpace = function withSpace(Component, options) {
         let newState = {};
         newState.doc = await this.hrinfoAPI.getItem(this.hrinfoType, this.props.match.params.id);
         newState.doc.type = this.spaceType;
-        let breadcrumb = [
-          {
-            href: '/' + this.spaceType + 's/' + newState.doc.id,
-            label: newState.doc.label
-          },
-        ];
+        let breadcrumb = [];
+        if ((this.spaceType === 'group' || this.spaceType === 'office') && newState.doc.operation) {
+          breadcrumb.push({
+            href: '/operations/' + newState.doc.operation[0].id,
+            label: newState.doc.operation[0].label
+          });
+        }
+        breadcrumb.push({
+          href: '/' + this.spaceType + 's/' + newState.doc.id,
+          label: newState.doc.label
+        });
         if (options.contentType) {
           let params = {
             sort: options.sort
@@ -128,8 +133,12 @@ const withSpace = function withSpace(Component, options) {
             params[this.hidFilter + '.list'] = newState.list._id;
             newState.content = await this.hidAPI.get(options.contentType, params);
           }
+          let contentType = options.contentType;
+          if (contentType === 'user') {
+            contentType = 'contacts';
+          }
           breadcrumb.push({
-            href: '/' + this.spaceType + 's/' + newState.doc.id + '/' + options.contentType,
+            href: '/' + this.spaceType + 's/' + newState.doc.id + '/' + contentType,
             label: options.contentLabel
           });
         }

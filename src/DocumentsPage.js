@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -52,7 +52,7 @@ class DocumentsPage extends React.Component {
                     </TableCell>
                     <TableCell>{n.document_type ? n.document_type.label : ''}</TableCell>
                     <TableCell>{n.organizations ? n.organizations.map(o => {
-                      return o.label + '; ';
+                      return (<Link to={'/organizations/' + o.id}>{o.label}</Link>);
                     }) : ''}</TableCell>
                     <TableCell>{n.publication_date ? n.publication_date : ''}</TableCell>
                     <TableCell>TODO</TableCell>
