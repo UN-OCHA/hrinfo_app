@@ -18,9 +18,6 @@ const theme = createMuiTheme({
 		},
 		secondary: {
 			main: '#53b1c8'
-		},
-		accent: {
-			main: '#ff8a80'
 		}
 	}
 });

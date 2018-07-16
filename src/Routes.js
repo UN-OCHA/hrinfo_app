@@ -9,10 +9,16 @@ import Home from "./Home";
 import Admin from "./Admin";
 import ItemPage from "./ItemPage";
 import User from "./User";
-import OperationPage from "./OperationPage";
+import {OperationPage, GroupPage} from "./OperationPage";
+import GroupsPage from './GroupsPage';
+import ContactsPage from './ContactsPage';
+import OfficesPage from './OfficesPage';
+import DocumentsPage from './DocumentsPage';
+import InfographicsPage from './InfographicsPage';
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import withForm from './withForm';
+import withSpace from './withSpace';
 
 export default ({ childProps }) =>
   <Switch>
@@ -32,5 +38,14 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/new" exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/edit" exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
     <AuthenticatedRoute path="/operations/:id" exact component={OperationPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id" exact component={GroupPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/groups" exact component={GroupsPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/documents" exact component={DocumentsPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/contacts" exact component={ContactsPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/offices" exact component={OfficesPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/contacts" exact component={ContactsPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/documents" exact component={DocumentsPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/infographics" exact component={InfographicsPage} props={childProps} />
     <AuthenticatedRoute path="/users/:id" exact component={User} props={childProps} />
   </Switch>;

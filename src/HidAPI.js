@@ -36,6 +36,7 @@ class HidAPI {
         url += key + '=' + params[key] + '&';
       });
     }
+    let count = 0;
     return fetch(url, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
@@ -44,10 +45,15 @@ class HidAPI {
         }
       })
       .then(results => {
+        count = parseInt(results.headers.get('x-total-count'), 10);
         return results.json();
-      }).then(data => {
-        return data;
-      });
+      })
+      .then(data => {
+        return {
+          count: count,
+          data: data
+        };
+      })
   }
 
   getJWT (email, password) {

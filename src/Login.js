@@ -101,10 +101,8 @@ class Login extends React.Component {
 					<Button variant="contained"
 						color="primary"
 						onClick={this.handleSubmit}
-						type="submit"
-						disabled={this.state.email == '' || this.state.password == ''}>
-						Login
-					</Button>
+						disabled={this.state.email === '' || this.state.password === ''}
+						>Login</Button>
 				}
 				{ this.state.status === 'submitting' &&
 					<CircularProgress/>
