@@ -9,7 +9,6 @@ import './unocha-icons.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import indigo from '@material-ui/core/colors/indigo';
 
 const theme = createMuiTheme({
 	palette: {

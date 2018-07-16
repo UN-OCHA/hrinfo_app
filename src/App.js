@@ -185,7 +185,6 @@ class App extends Component {
     }
 
     render() {
-		console.log(this.state.user)
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
             userHasAuthenticated: this.userHasAuthenticated,

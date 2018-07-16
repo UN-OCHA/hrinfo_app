@@ -1,9 +1,6 @@
 import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import Select from 'react-select';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoLocations from './HRInfoLocations';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
@@ -11,7 +8,6 @@ import HRInfoFiles from './HRInfoFiles';
 import RelatedContent from './RelatedContent';
 import LanguageSelect from './LanguageSelect';
 
-import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';

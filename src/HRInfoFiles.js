@@ -1,15 +1,10 @@
 import React from 'react';
 import MaterialSelect from './MaterialSelect';
-import { FormGroup, Label, Row, Col } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import DropboxChooser from 'react-dropbox-chooser';
 import HRInfoAPI from './HRInfoAPI';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
