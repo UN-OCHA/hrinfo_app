@@ -75,6 +75,7 @@ function SelectWrapped(props) {
 	  isMulti
 	  getOptionValue={(option) => { return option.id }}
       getOptionLabel={(option) => { return option.label}}
+	  value={props.value}
       {...other}
     />
   );
@@ -116,6 +117,10 @@ const customStyles = {
   menuList: () => ({
     maxHeight: ITEM_HEIGHT * 4.5,
     overflowY: "auto"
+  }),
+  multiValueLabel: (base) => ({
+	  ...base,
+	  whiteSpace: "normal"
   })
 };
 
@@ -150,7 +155,8 @@ class MaterialAsyncSelect extends React.Component {
 	              instanceId: this.props.id,
 	              id: this.props.id,
 	              simpleValue: true,
-	              loadOptions: this.props.loadOptions
+	              loadOptions: this.props.loadOptions,
+				  value: this.props.value
 	            },
 	          }}
 	        />

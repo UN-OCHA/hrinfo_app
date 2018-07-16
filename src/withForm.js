@@ -280,7 +280,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
               blocksFromHTML.contentBlocks,
               blocksFromHTML.entityMap
             );
-            state.editorState = EditorState.createWithContent(contentState);
+            this.state.editorState = EditorState.createWithContent(contentState);
           }
         }
         else {
