@@ -100,13 +100,21 @@ const withSpace = function withSpace(Component, options) {
           range.end = r[6];
         }
         else {
-          range.start = r[0];
-          range.end = new Date(moment(r[0]).add(1, 'days'));
+          if (r.length === 0) {
+            range.start = new Date(moment().subtract(20, 'days'));
+            range.end = new Date(moment().add(20, 'days'));
+          }
+          else {
+            range.start = r[0];
+            range.end = new Date(moment(r[0]).add(1, 'days'));
+          }
         }
       }
       else {
         range = r;
       }
+      range.start = range.start.toISOString();
+      range.end = range.end.toISOString();
       let content = null;
       let params = {};
       params['filter[date][value][0]'] = range.start;
