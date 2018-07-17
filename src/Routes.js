@@ -16,6 +16,7 @@ import OfficesPage from './OfficesPage';
 import DocumentsPage from './DocumentsPage';
 import InfographicsPage from './InfographicsPage';
 import DisastersPage from './DisastersPage';
+import EventsPage from './EventsPage';
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import withForm from './withForm';
@@ -43,6 +44,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/:id/groups" exact component={GroupsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/documents" exact component={DocumentsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/events" exact component={EventsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/offices" exact component={OfficesPage} props={childProps} />
     <AuthenticatedRoute path="/operations/:id/disasters" exact component={DisastersPage} props={childProps} />
@@ -51,16 +53,19 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/groups/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/groups/:id/documents" exact component={DocumentsPage} props={childProps} />
     <AuthenticatedRoute path="/groups/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/events" exact component={EventsPage} props={childProps} />
 
     <AuthenticatedRoute path="/offices/:id" exact component={SpacePage} props={childProps} />
     <AuthenticatedRoute path="/offices/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/offices/:id/documents" exact component={DocumentsPage} props={childProps} />
     <AuthenticatedRoute path="/offices/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/offices/:id/events" exact component={EventsPage} props={childProps} />
 
     <AuthenticatedRoute path="/organizations/:id" exact component={SpacePage} props={childProps} />
     <AuthenticatedRoute path="/organizations/:id/contacts" exact component={ContactsPage} props={childProps} />
     <AuthenticatedRoute path="/organizations/:id/documents" exact component={DocumentsPage} props={childProps} />
     <AuthenticatedRoute path="/organizations/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/organizations/:id/events" exact component={EventsPage} props={childProps} />
 
     <AuthenticatedRoute path="/disasters/:id" exact component={SpacePage} props={childProps} />
     <AuthenticatedRoute path="/disasters/:id/contacts" exact component={ContactsPage} props={childProps} />

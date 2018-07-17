@@ -10,6 +10,7 @@ import LanguageSelect from './LanguageSelect';
 
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -40,7 +41,7 @@ class DocumentForm extends React.Component {
         const offices = this.props.doc.hasOperation
             ? (
 			<FormControl fullWidth margin="normal">
-				<Typography>Coordination hub(s)</Typography>
+				<FormLabel>Coordination hub(s)</FormLabel>
 				<HRInfoSelect
 					type="offices"
 					spaces={this.props.doc.spaces}
@@ -58,7 +59,7 @@ class DocumentForm extends React.Component {
         const disasters = this.props.doc.hasOperation
             ? (
 				<FormControl fullWidth margin="normal">
-					<Typography htmlFor="disasters">Disaster(s) / Emergency</Typography>
+					<FormLabel>Disaster(s) / Emergency</FormLabel>
 					<HRInfoSelect
 						type="disasters"
 						spaces={this.props.doc.spaces}
@@ -77,7 +78,7 @@ class DocumentForm extends React.Component {
         const bundles = this.props.doc.hasOperation
             ? (
 				<FormControl fullWidth margin="normal">
-					<Typography htmlFor="bundles">Cluster(s)/Sector(s)</Typography>
+					<FormLabel>Cluster(s)/Sector(s)</FormLabel>
 					<HRInfoSelect
 						type="bundles"
 						spaces={this.props.doc.spaces}
@@ -96,8 +97,8 @@ class DocumentForm extends React.Component {
 		<form noValidate="noValidate">
 			<div className="form">
 				<div className="form-primary">
-					<FormControl required fullWidth margin="normal" error={!this.props.isValid(this.props.doc.label)}>
-		                <Typography htmlFor="label">Title</Typography>
+					<FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>
+		                <FormLabel>Title</FormLabel>
 		                <TextField type="text"
 							name="label"
 							id="label"
@@ -110,28 +111,8 @@ class DocumentForm extends React.Component {
 		                </FormHelperText>
 		            </FormControl>
 
-					<FormControl required fullWidth margin="normal" error={!this.props.isValid(this.props.doc.publication_date)}>
-		                <Typography htmlFor="publication_date">Original Publication Date</Typography>
-						<MuiPickersUtilsProvider utils={MomentUtils}>
-					        <DatePicker
-								id="publication_date"
-	  							name="publication_date"
-								format="DD/MM/YYYY"
-								placeholder="Select date"
-	  							value={this.props.doc.publication_date}
-	  							onChange={this.props.handleInputChange}
-								leftArrowIcon={<i className="icon-arrow-left" />}
-								rightArrowIcon={<i className="icon-arrow-right" />}
-					        />
-				      	</MuiPickersUtilsProvider>
-						<FormHelperText id="publication_date-text">
-		                    Indicate when the {this.props.label + ' '}
-		                    has originally been published.
-		                </FormHelperText>
-		            </FormControl>
-
-					<FormControl fullWidth margin="normal" error={!this.props.isValid(this.props.doc.body)}>
-		                <Typography htmlFor="body">Description or Summary of Content</Typography>
+					<FormControl fullWidth margin="normal">
+		                <FormLabel>Description or Summary of Content</FormLabel>
 		                <Editor editorState={this.props.editorState}
 							wrapperClassName="editor-wrapper"
 							editorClassName="editor-content"
@@ -143,8 +124,8 @@ class DocumentForm extends React.Component {
 		                </FormHelperText>
 		            </FormControl>
 
-					<FormControl required fullWidth margin="normal" error={!this.props.isValid(this.props.doc.files)}>
-		                <Typography htmlFor="files">File(s)</Typography>
+					<FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>
+		                <FormLabel>File(s)</FormLabel>
 		                <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
 							<FormHelperText id="files-text">
 		                    Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
@@ -154,8 +135,8 @@ class DocumentForm extends React.Component {
 				</div>
 
 				<div className="form-secondary">
-			        <FormControl required fullWidth margin="normal" error={!this.props.isValid(this.props.doc.language)}>
-			          	<Typography htmlFor="language">Language</Typography>
+			        <FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>
+			          	<FormLabel>Language</FormLabel>
 			          	<LanguageSelect value={this.props.doc.language}
 							onChange={(s) => this.props.handleSelectChange('language', s)}
 							className={this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
@@ -164,39 +145,8 @@ class DocumentForm extends React.Component {
 		                </FormHelperText>
 			        </FormControl>
 
-					<FormControl required fullWidth margin="normal"
-						error={(this.props.hrinfoType === 'documents' && !this.props.isValid(this.props.doc.document_type)) ||
-							(this.props.hrinfoType === 'infographics' && !this.props.isValid(this.props.doc.infographic_type))}>
-		                <Typography htmlFor={this.props.hrinfoType === 'documents'
-		                        ? 'document_type'
-		                        : 'infographic_type'}>
-							{ this.props.hrinfoType === 'documents'
-		                            ? 'Document type'
-		                            : 'Infographic type' }
-						</Typography>
-		                {
-		                    this.props.hrinfoType === 'documents'
-		                        ? <HRInfoSelect type='document_types'
-										onChange={(s) => this.props.handleSelectChange('document_type', s)}
-										value={this.props.doc.document_type}
-										className={this.props.isValid(this.props.doc.document_type)
-		                                    ? 'is-valid'
-		                                    : 'is-invalid'}/>
-		                        : <HRInfoSelect type='infographic_types'
-										onChange={(s) => this.props.handleSelectChange('infographic_type', s)}
-										value={this.props.doc.infographic_type}
-										className={this.props.isValid(this.props.doc.infographic_type)
-		                                    ? 'is-valid'
-		                                    : 'is-invalid'}/>
-		                }
-		                <FormHelperText>
-		                    Select the {this.props.label + ' '}
-		                    type and sub-type that best describe the {this.props.label}.
-		                </FormHelperText>
-		            </FormControl>
-
-					<FormControl required fullWidth margin="normal" error={!this.props.isValid(this.props.doc.spaces)}>
-		                <Typography htmlFor="spaces">Operation(s) / Webspace(s)</Typography>
+					<FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>
+		                <FormLabel>Operation(s) / Webspace(s)</FormLabel>
 		                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces}/>
 						<FormHelperText>
 		                    Click on the field and select where to publish the {this.props.label + ' '}
@@ -204,12 +154,57 @@ class DocumentForm extends React.Component {
 		                </FormHelperText>
 		            </FormControl>
 
-		            {bundles}
-		            {offices}
-		            {disasters}
+                <FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.publication_date)}>
+      		                <FormLabel>Original Publication Date</FormLabel>
+      						<MuiPickersUtilsProvider utils={MomentUtils}>
+      					        <DatePicker
+      								id="publication_date"
+      	  							name="publication_date"
+      								format="DD/MM/YYYY"
+      								placeholder="Select date"
+      	  							value={this.props.doc.publication_date}
+      	  							onChange={this.props.handleInputChange}
+      								leftArrowIcon={<i className="icon-arrow-left" />}
+      								rightArrowIcon={<i className="icon-arrow-right" />}
+      					        />
+      				      	</MuiPickersUtilsProvider>
+      						<FormHelperText id="publication_date-text">
+      		                    Indicate when the {this.props.label + ' '}
+      		                    has originally been published.
+      		                </FormHelperText>
+      		            </FormControl>
 
-		            <FormControl required fullWidth margin="normal" error={!this.props.isValid(this.props.doc.organizations)}>
-		                <Typography htmlFor="organizations">Organization(s)</Typography>
+            <FormControl required fullWidth margin="normal"
+  						error={this.props.status === 'was-validated' && ((this.props.hrinfoType === 'documents' && !this.props.isValid(this.props.doc.document_type)) ||
+  							(this.props.hrinfoType === 'infographics' && !this.props.isValid(this.props.doc.infographic_type)))}>
+  		                <FormLabel>
+  							{ this.props.hrinfoType === 'documents'
+  		                            ? 'Document type'
+  		                            : 'Infographic type' }
+  						</FormLabel>
+  		                {
+  		                    this.props.hrinfoType === 'documents'
+  		                        ? <HRInfoSelect type='document_types'
+  										onChange={(s) => this.props.handleSelectChange('document_type', s)}
+  										value={this.props.doc.document_type}
+  										className={this.props.isValid(this.props.doc.document_type)
+  		                                    ? 'is-valid'
+  		                                    : 'is-invalid'}/>
+  		                        : <HRInfoSelect type='infographic_types'
+  										onChange={(s) => this.props.handleSelectChange('infographic_type', s)}
+  										value={this.props.doc.infographic_type}
+  										className={this.props.isValid(this.props.doc.infographic_type)
+  		                                    ? 'is-valid'
+  		                                    : 'is-invalid'}/>
+  		                }
+  		                <FormHelperText>
+  		                    Select the {this.props.label + ' '}
+  		                    type and sub-type that best describe the {this.props.label}.
+  		                </FormHelperText>
+  		            </FormControl>
+
+                <FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>
+		                <FormLabel>Organization(s)</FormLabel>
 		                <HRInfoAsyncSelect type="organizations"
 							onChange={(s) => this.props.handleSelectChange('organizations', s)}
 							value={this.props.doc.organizations}/>
@@ -217,6 +212,10 @@ class DocumentForm extends React.Component {
 		                    Type in and select the source(s) of the {this.props.label}.
 		                </FormHelperText>
 		            </FormControl>
+
+		            {bundles}
+		            {offices}
+		            {disasters}
 
 					<div className="more-info-button">
 						{!this.state.collapse &&
@@ -232,7 +231,7 @@ class DocumentForm extends React.Component {
 
 						<Collapse in={this.state.collapse}>
 							<FormControl fullWidth margin="normal">
-								<Typography htmlFor="locations">Locations</Typography>
+								<FormLabel>Locations</FormLabel>
 								<HRInfoLocations onChange={(s) => this.props.handleSelectChange('locations', s)}
 									value={this.props.doc.locations}
 									isMulti="isMulti"
@@ -244,7 +243,7 @@ class DocumentForm extends React.Component {
 							</FormControl>
 
 							<FormControl fullWidth margin="normal">
-								<Typography htmlFor="themes">Theme(s)</Typography>
+								<FormLabel>Theme(s)</FormLabel>
 								<HRInfoSelect type="themes"
 									isMulti={true}
 									onChange={(s) => this.props.handleSelectChange('themes', s)}
@@ -257,7 +256,7 @@ class DocumentForm extends React.Component {
 							</FormControl>
 
 							<FormControl fullWidth margin="normal">
-								<Typography htmlFor="related_content">Related Content</Typography>
+								<FormLabel>Related Content</FormLabel>
 								<RelatedContent onChange={(s) => this.props.handleSelectChange('related_content', s)}
 									value={this.props.doc.related_content}
 									id="related_content"/>

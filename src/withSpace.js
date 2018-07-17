@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import HRInfoAPI from './HRInfoAPI';
 import HidAPI from './HidAPI';
 
@@ -42,6 +43,7 @@ const withSpace = function withSpace(Component, options) {
       // hrinfoType = ['operations', 'bundles', 'organizations', 'disasters', 'offices']
       this.handleChangePage = this.handleChangePage.bind(this);
       this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+      this.onRangeChange = this.onRangeChange.bind(this);
     }
 
     async handleChangePage (event, page) {
@@ -86,6 +88,34 @@ const withSpace = function withSpace(Component, options) {
       }
       this.setState({
         rowsPerPage: event.target.value,
+        content
+      });
+    }
+
+    async onRangeChange(r) {
+      let range = {};
+      if (Array.isArray(r)) {
+        if (r.length > 1) {
+          range.start = r[0];
+          range.end = r[6];
+        }
+        else {
+          range.start = r[0];
+          range.end = new Date(moment(r[0]).add(1, 'days'));
+        }
+      }
+      else {
+        range = r;
+      }
+      let content = null;
+      let params = {};
+      params['filter[date][value][0]'] = range.start;
+      params['filter[date][value][1]'] = range.end;
+      params['filter[date][operator][0]'] = 'BETWEEN';
+      params['filter[date][operator][1]'] = 'BETWEEN';
+      params['filter[' + this.hrinfoFilter + ']'] = this.state.doc.id;
+      content = await this.hrinfoAPI.get(options.contentType, params);
+      this.setState({
         content
       });
     }
@@ -161,7 +191,8 @@ const withSpace = function withSpace(Component, options) {
         handleChangePage: this.handleChangePage,
         handleChangeRowsPerPage: this.handleChangeRowsPerPage,
         rowsPerPage: this.state.rowsPerPage,
-        page: this.state.page
+        page: this.state.page,
+        onRangeChange: this.onRangeChange
       };
       return <Component {...this.props} {...newProps} />;
     }

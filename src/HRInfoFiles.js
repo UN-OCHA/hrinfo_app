@@ -6,8 +6,10 @@ import HRInfoAPI from './HRInfoAPI';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Input from '@material-ui/core/Input';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {
@@ -220,18 +222,20 @@ class HRInfoFiles extends React.Component {
     getRow (number) {
       return (
         <div key={number} className="file-container">
-            <FormControl margin="normal" className="file-container-file">
-              	<Typography>File</Typography>
+            <FormControl required margin="normal" className="file-container-file">
+              	<FormLabel>File</FormLabel>
               	{this.state.files[number] === '' ?
                 	<span>
-						<label className="MuiButtonBase-root-102 MuiButton-root-78 MuiButton-text-80 MuiButton-textPrimary-81 MuiButton-flat-83 MuiButton-flatPrimary-84">
-							<span>Select File</span>
 							<input type="file"
 								id={'files_' + number }
 								name={'files_' + number }
-								className="none"
+                className="none"
 								onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
-						</label>
+                <label htmlFor={'files_' + number}>
+                  <Button component="span" color="primary">
+                    Select File
+                  </Button>
+                </label>
 	                  	<DropboxChooser
 		                    appKey='qe1p4izejvrjlpv'
 		                    success={files => this.handleChange(number, 'file', files)}
