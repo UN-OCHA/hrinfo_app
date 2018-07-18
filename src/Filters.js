@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Chip from '@material-ui/core/Chip';
@@ -25,27 +23,29 @@ class FiltersDrawer extends React.Component {
       return (
         <Drawer open={drawerState} onClose={toggleDrawer}>
           <div className={classes.list}>
-            <FormControl fullWidth margin="normal">
-              <FormLabel>
-							  { contentType === 'documents'
-		              ? 'Filter by Document type'
-		              : 'Filter by Infographic type' }
-              </FormLabel>
-		            {
-                  contentType === 'documents'
-                  ? <HRInfoSelect type='document_types'
-                      onChange={(s) => this.props.setFilter('document_type', s)}
-                      value={this.props.filters.document_type} />
-                  : <HRInfoSelect type='infographic_types'
-                      onChange={(s) => this.props.setFilter('infographic_type', s)}
-                      value={this.props.filters.infographic_type} />
-                }
-		        </FormControl>
+            { (contentType === 'documents' || contentType === 'infographics')
+              ? <FormControl fullWidth margin="normal">
+                  <FormLabel>
+    							  { contentType === 'documents'
+    		              ? 'Filter by Document type'
+    		              : 'Filter by Infographic type' }
+                  </FormLabel>
+    		            {
+                      contentType === 'documents'
+                      ? <HRInfoSelect type='document_types'
+                          onChange={(s) => this.props.setFilter('document_type', s)}
+                          value={filters.document_type} />
+                      : <HRInfoSelect type='infographic_types'
+                          onChange={(s) => this.props.setFilter('infographic_type', s)}
+                          value={filters.infographic_type} />
+                    }
+    		        </FormControl> : ''
+            }
             <FormControl fullWidth margin="normal">
               <FormLabel>Filter by Organization(s)</FormLabel>
               <HRInfoAsyncSelect type="organizations"
                 onChange={(s) => this.props.setFilter('organizations', s)}
-                value={this.props.filters.organizations}/>
+                value={filters.organizations}/>
             </FormControl>
             { spaceType === 'operation'
               ? <FormControl fullWidth margin="normal">
@@ -55,7 +55,7 @@ class FiltersDrawer extends React.Component {
           						spaces={this.props.doc ? this.props.doc : null}
           						isMulti={true}
           						onChange={(s) => this.props.setFilter('bundles', s)}
-          						value={this.props.filters.bundles}/>
+          						value={filters.bundles}/>
       				  </FormControl> : ''
             }
             { spaceType === 'operation'
@@ -66,7 +66,7 @@ class FiltersDrawer extends React.Component {
         					spaces={this.props.doc ? this.props.doc : null}
         					isMulti={true}
         					onChange={(s) => this.props.setFilter('offices', s)}
-        					value={this.props.filters.offices}/>
+        					value={filters.offices}/>
         			</FormControl> : ''
             }
             <FormControl fullWidth margin="normal">
@@ -74,7 +74,7 @@ class FiltersDrawer extends React.Component {
               <HRInfoSelect type="themes"
                 isMulti={true}
                 onChange={(s) => this.props.setFilter('themes', s)}
-								value={this.props.filters.themes}
+								value={filters.themes}
                 id="themes"/>
             </FormControl>
             { spaceType === 'operation'
@@ -85,7 +85,7 @@ class FiltersDrawer extends React.Component {
       						spaces={this.props.doc ? this.props.doc : null}
       						isMulti={true}
       						onChange={(s) => this.props.setFilter('disasters', s)}
-      						value={this.props.filters.disasters}/>
+      						value={filters.disasters}/>
       				</FormControl> : ''
             }
           </div>

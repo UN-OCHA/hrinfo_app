@@ -20,7 +20,6 @@ import EventsPage from './EventsPage';
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import withForm from './withForm';
-import withSpace from './withSpace';
 
 export default ({ childProps }) =>
   <Switch>

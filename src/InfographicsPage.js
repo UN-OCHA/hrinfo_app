@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 import {Filters, FilterChips} from './Filters';
 import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
@@ -26,6 +27,12 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+    color: 'white'
+  }
 });
 
 class InfographicsPage extends React.Component {
@@ -99,6 +106,11 @@ class InfographicsPage extends React.Component {
               </TableFooter>
             </Table>
           </Paper>
+          <Link to="/infographics/new">
+            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+              <AddIcon />
+            </Button>
+          </Link>
         </div>
       );
     }

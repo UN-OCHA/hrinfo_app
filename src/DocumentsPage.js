@@ -10,11 +10,9 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import AddIcon from '@material-ui/icons/Add';
 
 import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
 import withSpace from './withSpace';
@@ -29,8 +27,11 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
-  list: {
-    width: 250
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+    color: 'white'
   }
 });
 
@@ -105,6 +106,11 @@ class DocumentsPage extends React.Component {
               </TableFooter>
             </Table>
           </Paper>
+          <Link to="/documents/new">
+            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+              <AddIcon />
+            </Button>
+          </Link>
         </div>
       );
     }

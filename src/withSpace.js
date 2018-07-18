@@ -18,7 +18,8 @@ const withSpace = function withSpace(Component, options) {
         page: 0,
         rowsPerPage: 50,
         drawerState: false,
-        filters: {}
+        filters: {},
+        dateFilters: {}
       };
 
       this.hrinfoAPI = new HRInfoAPI();
@@ -86,16 +87,13 @@ const withSpace = function withSpace(Component, options) {
       }
       range.start = range.start.toISOString();
       range.end = range.end.toISOString();
-      let content = null;
-      let params = {};
-      params['filter[date][value][0]'] = range.start;
-      params['filter[date][value][1]'] = range.end;
-      params['filter[date][operator][0]'] = 'BETWEEN';
-      params['filter[date][operator][1]'] = 'BETWEEN';
-      params['filter[' + this.hrinfoFilter + ']'] = this.state.doc.id;
-      content = await this.hrinfoAPI.get(options.contentType, params);
+      let dateFilters = {};
+      dateFilters['[value][0]'] = range.start;
+      dateFilters['[value][1]'] = range.end;
+      dateFilters['[operator][0]'] = 'BETWEEN';
+      dateFilters['[operator][1]'] = 'BETWEEN';
       this.setState({
-        content
+        dateFilters: dateFilters
       });
     }
 
@@ -160,7 +158,8 @@ const withSpace = function withSpace(Component, options) {
     async componentDidUpdate(prevProps, prevState, snapshot) {
       if (prevState.rowsPerPage !== this.state.rowsPerPage ||
         prevState.page !== this.state.page ||
-        JSON.stringify(prevState.filters) !== JSON.stringify(this.state.filters)) {
+        JSON.stringify(prevState.filters) !== JSON.stringify(this.state.filters) ||
+        JSON.stringify(prevState.dateFilters) !== JSON.stringify(this.state.dateFilters)) {
 
         let content = null;
         let params = {
@@ -185,6 +184,13 @@ const withSpace = function withSpace(Component, options) {
               params['filter[' + key + ']'] = filters[key].id;
             }
           });
+          let dateFilterKeys = Object.keys(this.state.dateFilters);
+          if (dateFilterKeys.length > 0) {
+            let dateFilters = this.state.dateFilters;
+            dateFilterKeys.forEach(function (key) {
+              params['filter[date]' + key] = dateFilters[key];
+            });
+          }
           content = await this.hrinfoAPI.get(options.contentType, params);
         }
         else {

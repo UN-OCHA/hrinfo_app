@@ -9,7 +9,6 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Input from '@material-ui/core/Input';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {

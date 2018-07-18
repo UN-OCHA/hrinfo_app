@@ -6,7 +6,11 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
+import {Filters, FilterChips} from './Filters';
 import withSpace from './withSpace';
 
 BigCalendar.momentLocalizer(moment);
@@ -28,6 +32,12 @@ const styles = theme => ({
   },
   calendar: {
     height: "100vh"
+  },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+    color: 'white'
   }
 });
 
@@ -35,7 +45,7 @@ const styles = theme => ({
 class EventsPage extends React.Component {
 
     render() {
-      const { classes, content, onRangeChange} = this.props;
+      const { classes, content, onRangeChange, toggleDrawer, drawerState, contentType, spaceType, filters, removeFilter} = this.props;
       const events = [];
 
       content.data.forEach(function (event) {
@@ -49,21 +59,39 @@ class EventsPage extends React.Component {
         events.push(event);
       });
 
-
-      console.log(events);
-
       return (
-        <Paper className={classes.root}>
-          <BigCalendar
-            events={events}
-            className={classes.calendar}
-            titleAccessor='label'
-            components={{
-              event: Event
-            }}
-            onRangeChange={this.props.onRangeChange}
-          />
-        </Paper>
+        <div>
+          <Filters
+            contentType={contentType}
+            spaceType={spaceType}
+            filters={filters}
+            setFilter={this.props.setFilter}
+            toggleDrawer={toggleDrawer}
+            drawerState={drawerState}
+            doc={this.props.doc} />
+          <Paper className={classes.root}>
+            <Typography align="right">
+              <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
+            </Typography>
+            <Typography variant="subheading">
+              <FilterChips filters={filters} removeFilter={removeFilter} />
+            </Typography>
+            <BigCalendar
+              events={events}
+              className={classes.calendar}
+              titleAccessor='label'
+              components={{
+                event: Event
+              }}
+              onRangeChange={onRangeChange}
+            />
+          </Paper>
+          <Link to="/events/new">
+            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+              <AddIcon />
+            </Button>
+          </Link>
+        </div>
       );
     }
 }
