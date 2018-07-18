@@ -16,7 +16,9 @@ const withSpace = function withSpace(Component, options) {
         },
         list: null,
         page: 0,
-        rowsPerPage: 50
+        rowsPerPage: 50,
+        drawerState: false,
+        filters: {}
       };
 
       this.hrinfoAPI = new HRInfoAPI();
@@ -44,51 +46,19 @@ const withSpace = function withSpace(Component, options) {
       this.handleChangePage = this.handleChangePage.bind(this);
       this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
       this.onRangeChange = this.onRangeChange.bind(this);
+      this.toggleDrawer = this.toggleDrawer.bind(this);
+      this.setFilter = this.setFilter.bind(this);
     }
 
-    async handleChangePage (event, page) {
-      let content = null;
-      let params = {
-        sort: options.sort,
-      };
-      if (options.contentType !== 'user') {
-        params.range = this.state.rowsPerPage;
-        params.page = page + 1;
-        params['filter[' + this.hrinfoFilter + ']'] = this.state.doc.id;
-        content = await this.hrinfoAPI.get(options.contentType, params);
-      }
-      else {
-        params.limit = this.state.rowsPerPage;
-        params.offset = page * this.state.rowsPerPage;
-        params[this.hidFilter + '.list'] = this.state.list._id;
-        content = await this.hidAPI.get(options.contentType, params);
-      }
+    handleChangePage (event, page) {
       this.setState({
-        page,
-        content
+        page
       });
     }
 
-    async handleChangeRowsPerPage(event) {
-      let content = null;
-      let params = {
-        sort: options.sort
-      };
-      if (options.contentType !== 'user') {
-        params.range = event.target.value;
-        params.page = this.state.page + 1;
-        params['filter[' + this.hrinfoFilter +']'] = this.state.doc.id;
-        content = await this.hrinfoAPI.get(options.contentType, params);
-      }
-      else {
-        params.limit = event.target.value;
-        params.offset = this.state.page * event.target.value;
-        params[this.hidFilter + '.list'] = this.state.list._id;
-        content = await this.hidAPI.get(options.contentType, params);
-      }
+    handleChangeRowsPerPage(event) {
       this.setState({
-        rowsPerPage: event.target.value,
-        content
+        rowsPerPage: event.target.value
       });
     }
 
@@ -186,6 +156,54 @@ const withSpace = function withSpace(Component, options) {
       }
     }
 
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+      console.log(prevState.filters);
+      console.log(this.state.filters);
+      if (prevState.rowsPerPage !== this.state.rowsPerPage ||
+        prevState.page !== this.state.page ||
+        JSON.stringify(prevState.filters) !== JSON.stringify(this.state.filters)) {
+
+        let content = null;
+        let params = {
+          sort: options.sort
+        };
+        let filters = this.state.filters;
+        if (options.contentType !== 'user') {
+          params.range = this.state.rowsPerPage;
+          params.page = this.state.page + 1;
+          params['filter[' + this.hrinfoFilter +']'] = this.state.doc.id;
+          Object.keys(filters).forEach(function (key) {
+            params['filter[' + key + ']'] = filters[key][0].id;
+          });
+          content = await this.hrinfoAPI.get(options.contentType, params);
+        }
+        else {
+          params.limit = this.state.rowsPerPage;
+          params.offset = this.state.page * this.state.rowsPerPage;
+          params[this.hidFilter + '.list'] = this.state.list._id;
+          content = await this.hidAPI.get(options.contentType, params);
+        }
+        this.setState({
+          content: content
+        });
+      }
+    }
+
+    toggleDrawer () {
+      this.setState({
+        drawerState: !this.state.drawerState
+      });
+    }
+
+    setFilter(name, val) {
+      let filters = Object.assign(this.state.filters);
+      filters[name] = val;
+      this.setState({
+        filters: filters
+      });
+
+    }
+
     componentWillUnmount() {
       this.props.setGroup(null);
       this.props.setBreadcrumb([]);
@@ -200,7 +218,11 @@ const withSpace = function withSpace(Component, options) {
         handleChangeRowsPerPage: this.handleChangeRowsPerPage,
         rowsPerPage: this.state.rowsPerPage,
         page: this.state.page,
-        onRangeChange: this.onRangeChange
+        onRangeChange: this.onRangeChange,
+        drawerState: this.state.drawerState,
+        toggleDrawer: this.toggleDrawer,
+        setFilter: this.setFilter,
+        filters: this.state.filters
       };
       return <Component {...this.props} {...newProps} />;
     }

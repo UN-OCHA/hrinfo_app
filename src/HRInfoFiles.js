@@ -237,7 +237,7 @@ class HRInfoFiles extends React.Component {
                   </Button>
                 </label>
 	                  	<DropboxChooser
-		                    appKey='qe1p4izejvrjlpv'
+		                    appKey='e000wzkrc14aj26'
 		                    success={files => this.handleChange(number, 'file', files)}
 		                    multiselect={false}
 		                    extensions={['.pdf']}
