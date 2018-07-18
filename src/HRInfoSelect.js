@@ -77,11 +77,16 @@ class HRInfoSelect extends React.Component {
   componentDidMount() {
     if (this.props.spaces) {
       const that = this;
-      this.props.spaces.forEach(function (space) {
-        if (space.type === 'operations') {
-          that.getOptions(that.props.type, space.id, space.label);
-        }
-      });
+      if (Array.isArray(this.props.spaces)) {
+        this.props.spaces.forEach(function (space) {
+          if (space.type === 'operations') {
+            that.getOptions(that.props.type, space.id, space.label);
+          }
+        });
+      }
+      else {
+        this.getOptions(this.props.type, this.props.spaces.id, this.props.spaces.label);
+      }
     }
     else {
       this.getOptions(this.props.type);

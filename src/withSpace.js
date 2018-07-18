@@ -48,6 +48,7 @@ const withSpace = function withSpace(Component, options) {
       this.onRangeChange = this.onRangeChange.bind(this);
       this.toggleDrawer = this.toggleDrawer.bind(this);
       this.setFilter = this.setFilter.bind(this);
+      this.removeFilter = this.removeFilter.bind(this);
     }
 
     handleChangePage (event, page) {
@@ -157,8 +158,6 @@ const withSpace = function withSpace(Component, options) {
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
-      console.log(prevState.filters);
-      console.log(this.state.filters);
       if (prevState.rowsPerPage !== this.state.rowsPerPage ||
         prevState.page !== this.state.page ||
         JSON.stringify(prevState.filters) !== JSON.stringify(this.state.filters)) {
@@ -171,9 +170,20 @@ const withSpace = function withSpace(Component, options) {
         if (options.contentType !== 'user') {
           params.range = this.state.rowsPerPage;
           params.page = this.state.page + 1;
-          params['filter[' + this.hrinfoFilter +']'] = this.state.doc.id;
-          Object.keys(filters).forEach(function (key) {
-            params['filter[' + key + ']'] = filters[key][0].id;
+          let filterKeys = Object.keys(filters);
+          // TODO: this fixes a flaw in the hrinfo API which makes the API display empty results when filtered by both bundles and operation
+          if (filterKeys.indexOf('bundles') === -1) {
+            params['filter[' + this.hrinfoFilter +']'] = this.state.doc.id;
+          }
+          filterKeys.forEach(function (key) {
+            if (Array.isArray(filters[key])) {
+              for (let i = 0; i < filters[key].length; i++) {
+                params['filter[' + key + '][value][' + i + ']'] = filters[key][i].id
+              }
+            }
+            else {
+              params['filter[' + key + ']'] = filters[key].id;
+            }
           });
           content = await this.hrinfoAPI.get(options.contentType, params);
         }
@@ -195,9 +205,40 @@ const withSpace = function withSpace(Component, options) {
       });
     }
 
+    removeFilter (key, filter) {
+      const that = this;
+      let newFilters = {};
+      Object.keys(this.state.filters).forEach(function (key) {
+        newFilters[key] = that.state.filters[key];
+      });
+      if (Array.isArray(newFilters[key])) {
+        newFilters[key] = newFilters[key].filter(function (sfilter) {
+          return sfilter.id !== filter.id;
+        });
+        if (newFilters[key].length === 0) {
+          delete newFilters[key];
+        }
+      }
+      else {
+        delete newFilters[key];
+      }
+      this.setState({
+        filters: newFilters
+      });
+    }
+
     setFilter(name, val) {
-      let filters = Object.assign(this.state.filters);
-      filters[name] = val;
+      const that = this;
+      let filters = {};
+      Object.keys(this.state.filters).forEach(function (key) {
+        filters[key] = that.state.filters[key];
+      });
+      if ((Array.isArray(val) && val.length !== 0) || val.id) {
+        filters[name] = val;
+      }
+      else {
+        delete filters[name];
+      }
       this.setState({
         filters: filters
       });
@@ -214,6 +255,7 @@ const withSpace = function withSpace(Component, options) {
         spaceType: this.spaceType,
         doc: this.state.doc,
         content: this.state.content,
+        contentType: options.contentType,
         handleChangePage: this.handleChangePage,
         handleChangeRowsPerPage: this.handleChangeRowsPerPage,
         rowsPerPage: this.state.rowsPerPage,
@@ -222,6 +264,7 @@ const withSpace = function withSpace(Component, options) {
         drawerState: this.state.drawerState,
         toggleDrawer: this.toggleDrawer,
         setFilter: this.setFilter,
+        removeFilter: this.removeFilter,
         filters: this.state.filters
       };
       return <Component {...this.props} {...newProps} />;

@@ -10,7 +10,10 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
+import {Filters, FilterChips} from './Filters';
 import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
 import withSpace from './withSpace';
 
@@ -28,59 +31,75 @@ const styles = theme => ({
 class InfographicsPage extends React.Component {
 
     render() {
-      const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page} = this.props;
+      const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page, toggleDrawer, drawerState, contentType, spaceType, filters, removeFilter} = this.props;
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
       return (
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Infographic type</TableCell>
-                <TableCell>Organizations</TableCell>
-                <TableCell>Publication date</TableCell>
-                <TableCell>Files</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {content.data.map(n => {
-                return (
-                  <TableRow key={n.id}>
-                    <TableCell component="th" scope="row">
-                      {n.label}
-                    </TableCell>
-                    <TableCell>{n.infographic_type ? n.infographic_type.label : ''}</TableCell>
-                    <TableCell>{n.organizations ? n.organizations.map(o => {
-                      return o.label + '; ';
-                    }) : ''}</TableCell>
-                    <TableCell>{n.publication_date ? n.publication_date : ''}</TableCell>
-                    <TableCell>TODO</TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
+        <div>
+          <Filters
+            contentType={contentType}
+            spaceType={spaceType}
+            filters={filters}
+            setFilter={this.props.setFilter}
+            toggleDrawer={toggleDrawer}
+            drawerState={drawerState}
+            doc={this.props.doc} />
+          <Paper className={classes.root}>
+            <Typography align="right">
+              <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
+            </Typography>
+            <Typography variant="subheading">
+              <FilterChips filters={filters} removeFilter={removeFilter} />&nbsp;<strong>{content.count}</strong> elements found
+            </Typography>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Infographic type</TableCell>
+                  <TableCell>Organizations</TableCell>
+                  <TableCell>Publication date</TableCell>
+                  <TableCell>Files</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={3}
-                  count={content.count}
-                  rowsPerPage={rowsPerPage}
-                  rowsPerPageOptions={[50,100,150,200]}
-                  page={page}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </Paper>
+              </TableHead>
+              <TableBody>
+                {content.data.map(n => {
+                  return (
+                    <TableRow key={n.id}>
+                      <TableCell component="th" scope="row">
+                        {n.label}
+                      </TableCell>
+                      <TableCell>{n.infographic_type ? n.infographic_type.label : ''}</TableCell>
+                      <TableCell>{n.organizations ? n.organizations.map(o => {
+                        return o.label + '; ';
+                      }) : ''}</TableCell>
+                      <TableCell>{n.publication_date ? n.publication_date : ''}</TableCell>
+                      <TableCell>TODO</TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 48 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    colSpan={3}
+                    count={content.count}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[50,100,150,200]}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActionsWrapped}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </Paper>
+        </div>
       );
     }
 }

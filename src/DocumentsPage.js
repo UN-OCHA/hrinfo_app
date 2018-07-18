@@ -16,10 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import HRInfoSelect from './HRInfoSelect';
-import HRInfoAsyncSelect from './HRInfoAsyncSelect';
 import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
 import withSpace from './withSpace';
+import {Filters, FilterChips} from './Filters';
 
 const styles = theme => ({
   root: {
@@ -38,32 +37,25 @@ const styles = theme => ({
 class DocumentsPage extends React.Component {
 
     render() {
-      const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page, toggleDrawer, drawerState} = this.props;
+      const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page, toggleDrawer, drawerState, contentType, spaceType, filters, removeFilter} = this.props;
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
       return (
         <div>
-          <Drawer open={drawerState} onClose={toggleDrawer}>
-            <div className={classes.list}>
-              <FormControl fullWidth margin="normal">
-                <FormLabel>Filter by Theme(s)</FormLabel>
-                <HRInfoSelect type="themes"
-                  isMulti={true}
-                  onChange={(s) => this.props.setFilter('themes', s)}
-									value={this.props.filters.themes}
-                  id="themes"/>
-              </FormControl>
-              <FormControl fullWidth margin="normal">
-                <FormLabel>Filter by Organization(s)</FormLabel>
-                <HRInfoAsyncSelect type="organizations"
-                  onChange={(s) => this.props.setFilter('organizations', s)}
-                  value={this.props.filters.organizations}/>
-              </FormControl>
-            </div>
-          </Drawer>
+          <Filters
+            contentType={contentType}
+            spaceType={spaceType}
+            filters={filters}
+            setFilter={this.props.setFilter}
+            toggleDrawer={toggleDrawer}
+            drawerState={drawerState}
+            doc={this.props.doc} />
           <Paper className={classes.root}>
             <Typography align="right">
               <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
+            </Typography>
+            <Typography variant="subheading">
+              <FilterChips filters={filters} removeFilter={removeFilter} />&nbsp;<strong>{content.count}</strong> elements found
             </Typography>
             <Table className={classes.table}>
               <TableHead>
