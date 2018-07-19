@@ -18,6 +18,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Avatar from '@material-ui/core/Avatar';
 import ViewModule from '@material-ui/icons/ViewModule';
 import Popover from '@material-ui/core/Popover';
+import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
+import Slide from '@material-ui/core/Slide';
 
 import Routes from "./Routes";
 import './App.css';
@@ -44,6 +47,7 @@ class App extends Component {
             anchorEl: null,
             alert: {},
             searchTerms: '',
+			searchEnabled: false,
             group: null,
             openPopover: false,
             anchorPopover: null,
@@ -150,7 +154,7 @@ class App extends Component {
       }
     }
 
-    setSearch(event) {
+	setSearch(event) {
         const target = event.target;
         const value = target.type === 'checkbox'
             ? target.checked
@@ -216,66 +220,90 @@ class App extends Component {
         ) : '';
 
         const navbar = this.state.isAuthenticated ? (
-			<AppBar position="sticky">
-                <Toolbar className="toolbar">
-                    <Typography variant="title" color="inherit">
-                        <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
-                        <Breadcrumb elts={this.state.breadcrumb} />
-                    </Typography>
-                    <Paper elevation0="true" className="paper">
-                        <Input value={this.state.searchTerms}
-							onChange={this.setSearch}
-							placeholder="Start typing to search..."
-							disableUnderline
-							fullWidth
-							startAdornment={
-								<InputAdornment position = "start" >
-									<i className="icon-search" />
-                        		</InputAdornment>
-							}
-							className="inputMargin"/>
-                    </Paper>
-                    <div>
-                        {modulesButton}
-                        <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
-							aria-haspopup="true"
-							onClick={this.toggleMenu}
-							color="secondary"
-							variant="fab"
-							mini
-							classes={{flat: 'flat'}}>
-							{ this.state.user.picture ? (
-								<Avatar src={this.state.user.picture}></Avatar>
-							) : (
-								<Avatar>{this.state.user.name.substring(0,1)}</Avatar>
-							)}
-                        </Button>
-                        <Menu id="menu-appbar"
-							anchorEl={this.state.anchorEl}
-							anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right'
-                            }}
-							transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right'
-                            }}
-							open={Boolean(this.state.anchorEl)}
-							onClose={this.toggleMenu}>
-                          <MenuItem onClick={this.toggleMenu}>
-                              <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
-                          </MenuItem>
-                          <MenuItem onClick={this.toggleMenu}>
-                              <NavLink to={'/admin'} className="link">Admin</NavLink>
-                          </MenuItem>
-                          <Divider/>
-                          <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-                        </Menu>
-                    </div>
-                </Toolbar>
-            </AppBar>)
+			<Grid item xs={12}>
+				<AppBar position="sticky" color="primary">
+	                <Toolbar className="toolbar">
+	                    <Typography variant="title" color="inherit">
+	                        <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
+	                        <Breadcrumb elts={this.state.breadcrumb} />
+	                    </Typography>
+						<Hidden xsDown>
+							<Paper elevation={0} className="paper">
+								<Input value={this.state.searchTerms}
+									onChange={this.setSearch}
+									placeholder="Start typing to search..."
+									disableUnderline
+									fullWidth
+									startAdornment={
+										<InputAdornment position = "start" >
+											<i className="icon-search" />
+										</InputAdornment>
+									}
+									className="inputMargin"/>
+							</Paper>
+						</Hidden>
+	                    <div>
+	                        {modulesButton}
+	                        <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
+								aria-haspopup="true"
+								onClick={this.toggleMenu}
+								color="secondary"
+								variant="fab"
+								mini
+								classes={{flat: 'flat'}}>
+								{ this.state.user.picture ? (
+									<Avatar src={this.state.user.picture}></Avatar>
+								) : (
+									<Avatar>{this.state.user.name.substring(0,1)}</Avatar>
+								)}
+	                        </Button>
+	                        <Menu id="menu-appbar"
+								anchorEl={this.state.anchorEl}
+								anchorOrigin={{
+	                                vertical: 'top',
+	                                horizontal: 'right'
+	                            }}
+								transformOrigin={{
+	                                vertical: 'top',
+	                                horizontal: 'right'
+	                            }}
+								open={Boolean(this.state.anchorEl)}
+								onClose={this.toggleMenu}>
+	                          <MenuItem onClick={this.toggleMenu}>
+	                              <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
+	                          </MenuItem>
+	                          <MenuItem onClick={this.toggleMenu}>
+	                              <NavLink to={'/admin'} className="link">Admin</NavLink>
+	                          </MenuItem>
+	                          <Divider/>
+	                          <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+	                        </Menu>
+	                    </div>
+	                </Toolbar>
+	            </AppBar>
+				<Hidden smUp>
+					<AppBar position="sticky" color="secondary" elevation={0}>
+						<Toolbar variant="dense">
+							<Paper elevation={0} className="paper">
+								<Input value={this.state.searchTerms}
+									onChange={this.setSearch}
+									placeholder="Start typing to search..."
+									disableUnderline
+									fullWidth
+									startAdornment={
+										<InputAdornment position = "start" >
+											<i className="icon-search" />
+										</InputAdornment>
+									}
+									className="inputMargin"/>
+							</Paper>
+						</Toolbar>
+					</AppBar>
+				</Hidden>
+			</Grid>
+			)
             : (
-			<AppBar position="sticky">
+			<AppBar position="sticky" color="primary">
                 <Toolbar>
                     <Typography variant="title" color="inherit" href="/home">
                         <IconLogo />
@@ -306,23 +334,25 @@ class App extends Component {
             : '';
 
         if (!this.state.searchTerms) {
-            return (!this.state.isAuthenticating && <div className="App">
-                {navbar}
+            return (!this.state.isAuthenticating &&
+			<Grid container className="App" justify="center" alignItems="center">
+				{navbar}
                 {popover}
-                <div className="container-fluid">
+                <Grid item className="container-fluid" sm={11}>
                     {myAlert}
                     <Routes childProps={childProps}/>
-                </div>
-            </div>);
+                </Grid>
+            </Grid>);
         } else {
-            return (!this.state.isAuthenticating && <div className="App">
+            return (!this.state.isAuthenticating &&
+			<Grid container spacing={24} className="App" justify="center" alignItems="center">
                 {navbar}
                 {popover}
-                <div className="container-fluid">
+                <Grid item className="container-fluid" sm={11}>
                     {myAlert}
                     <SearchPage searchTerms={this.state.searchTerms}/>
-                </div>
-            </div>);
+                </Grid>
+            </Grid>);
         }
     }
 }

@@ -3,6 +3,8 @@ import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 class RelatedContent extends React.Component {
     constructor(props) {
@@ -22,24 +24,26 @@ class RelatedContent extends React.Component {
 
     getRow (number) {
       return (
-		  <div key={number} className="related-content">
-			  <FormControl margin="normal">
-				  <TextField type="text"
-					  name={'related_content_titles_' + number}
-					  label="Title"
-					  value={this.state.value[number]['title']}
-					  onChange={(v) => this.handleChange(number, 'title', v)}
-					  helperText="Type in the title of the related content."/>
-			  </FormControl>
-			  <FormControl margin="normal">
-				  <TextField type="text"
-					  name={'related_content_urls_' + number}
-					  label="URL"
-					  value={this.state.value[number]['url']}
-					  onChange={(v) => this.handleChange(number, 'url', v)}
-					  helperText="Type in the URL of the related content."/>
-			  </FormControl>
-		  </div>
+		  <Card key={number} className="card-container">
+			  <CardContent>
+				  <FormControl>
+					  <TextField type="text"
+						  name={'related_content_titles_' + number}
+						  label="Title"
+						  value={this.state.value[number]['title']}
+						  onChange={(v) => this.handleChange(number, 'title', v)}
+						  helperText="Type in the title of the related content."/>
+				  </FormControl>
+				  <FormControl>
+					  <TextField type="text"
+						  name={'related_content_urls_' + number}
+						  label="URL"
+						  value={this.state.value[number]['url']}
+						  onChange={(v) => this.handleChange(number, 'url', v)}
+						  helperText="Type in the URL of the related content."/>
+				  </FormControl>
+			  </CardContent>
+		  </Card>
 
       );
     }
@@ -92,7 +96,9 @@ class RelatedContent extends React.Component {
       return (
         <div>
           	{rows}
-		  	<Button variant="outlined" onClick={this.onAddBtnClick}>Add related content</Button>
+		  	<Button variant="outlined" onClick={this.onAddBtnClick}>
+				<i className="icon-news" /> &nbsp; Add another
+			</Button>
         </div>
         );
     }

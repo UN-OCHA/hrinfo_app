@@ -10,6 +10,11 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '@material-ui/core/Input';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Avatar from '@material-ui/core/Avatar';
 
 class HRInfoFiles extends React.Component {
     constructor(props) {
@@ -221,47 +226,57 @@ class HRInfoFiles extends React.Component {
 
     getRow (number) {
       return (
-        <div key={number} className="file-container">
-            <FormControl required margin="normal" className="file-container-file">
-              	<FormLabel>File</FormLabel>
-              	{this.state.files[number] === '' ?
-                	<span>
-							<input type="file"
-								id={'files_' + number }
-								name={'files_' + number }
-                className="none"
-								onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
-                <label htmlFor={'files_' + number}>
-                  <Button component="span" color="primary">
-                    Select File
-                  </Button>
-                </label>
+		<Card key={number} className="card-container">
+			<CardHeader
+				avatar={
+					<Avatar>
+						<i className="icon-document" />
+				    </Avatar>
+				}
+				action={
+					<IconButton color="primary" onClick={(e) => this.removeFileRow(number)}>
+						<i className="icon-trash" />
+					</IconButton>
+				}
+				title={
+					typeof this.state.files[number] === 'object' ?
+		           		<a href={this.state.files[number].uri} target="__blank" className="file-name">{this.state.files[number].label}</a> : 'New File'
+		        }
+			/>
+			<CardContent className="file-container-language">
+				<Typography>File Language</Typography>
+				<MaterialSelect options={this.languages}
+					name={'languages_' + number}
+					onChange={ (s) => this.handleChange(number, 'language', s)}
+					value={this.state.languages[number]} />
+			</CardContent>
+			<CardActions>
+				{this.state.files[number] === '' ?
+                	<span className="file-container-actions">
+						<input type="file"
+							id={'files_' + number }
+							name={'files_' + number }
+            				className="none"
+							onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
+	                	<label htmlFor={'files_' + number}>
+	                  		<Button component="span" color="primary" variant="outlined" size="small">
+	                    		From Storage
+	                  		</Button>
+	                	</label>
 	                  	<DropboxChooser
 		                    appKey='qe1p4izejvrjlpv'
 		                    success={files => this.handleChange(number, 'file', files)}
 		                    multiselect={false}
-		                    extensions={['.pdf']}
-							className="inline">
-		                    <Button color="primary">Select from Dropbox</Button>
+		                    extensions={['.pdf']}>
+		                    <Button color="primary" variant="outlined" size="small">From Dropbox</Button>
 	                	</DropboxChooser>
               		</span> : ''
               	}
 				{this.state.files[number] === 'uploading' ?
 					<CircularProgress/> : ''
 				}
-              	{typeof this.state.files[number] === 'object' ?
-                	<div><a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a></div> : ''
-              	}
-            </FormControl>
-            <FormControl margin="normal" className="file-container-language">
-              	<Typography>File Language</Typography>
-              	<MaterialSelect options={this.languages}
-				  	name={'languages_' + number}
-				  	onChange={ (s) => this.handleChange(number, 'language', s)}
-				  	value={this.state.languages[number]} />
-        	</FormControl>
-            <IconButton color="primary" onClick={(e) => this.removeFileRow(number)}><i className="icon-trash" /></IconButton>
-        </div>
+			</CardActions>
+		</Card>
       );
     }
 
@@ -280,7 +295,7 @@ class HRInfoFiles extends React.Component {
         });
 
         this.hrinfoAPI
-          .saveFile(files)
+          .saveFile(v)
           .then(doc => {
             files[number] = doc[0];
             that.changeState({
@@ -323,19 +338,25 @@ class HRInfoFiles extends React.Component {
                 return id !== itemId;
               });
             }
-            that.setState({
-              files: that.state.files.splice(number - 1, 1),
-              inputNumber: that.state.inputNumber - 1,
-              collections: collections
-            });
+			that.setState((prevState, props) => {
+				prevState.files.splice(number, 1);
+				return {
+	          		files: prevState.files,
+	          		inputNumber: prevState.inputNumber - 1,
+	          		collections: collections
+		  		}
+	  		});
           })
       }
       else {
-        this.setState({
-          files: this.state.files.splice(number - 1, 1),
-          inputNumber: this.state.inputNumber - 1,
-          collections: collections
-        });
+        this.setState((prevState, props) => {
+			prevState.files.splice(number, 1);
+			return {
+          		files: prevState.files,
+          		inputNumber: prevState.inputNumber - 1,
+          		collections: collections
+	  		}
+  		});
       }
     }
 
@@ -343,7 +364,7 @@ class HRInfoFiles extends React.Component {
       let files = this.state.files;
       for (let i = 0; i < this.state.inputNumber + 1; i++) {
         if (!files[i]) {
-          files[i] = '';
+          files[i] = "";
 
         }
       }
@@ -388,7 +409,9 @@ class HRInfoFiles extends React.Component {
       return (
         <div className={this.props.className}>
           {rows}
-          <Button variant="outlined" onClick={this.onAddBtnClick}>Add file</Button>
+          <Button variant="outlined" onClick={this.onAddBtnClick}>
+			  <i className="icon-document" /> &nbsp; Add another
+		  </Button>
         </div>
         );
     }

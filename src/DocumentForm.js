@@ -16,6 +16,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Collapse from '@material-ui/core/Collapse';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
@@ -27,15 +31,26 @@ class DocumentForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapse: false
+      collapse: false,
+	  wasSubmitted: false
     };
 
-    this.toggle = this.toggle.bind(this);
+	this.toggle = this.toggle.bind(this);
+	this.hideAlert = this.hideAlert.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   toggle() {
 	  this.setState({ collapse: !this.state.collapse });
 	}
+
+  hideAlert() {
+	  this.setState({ wasSubmitted: false });
+  }
+
+  submit() {
+	  this.setState({ wasSubmitted: true });
+  }
 
   render() {
         const offices = this.props.doc.hasOperation
@@ -92,142 +107,145 @@ class DocumentForm extends React.Component {
 				</FormControl>
 			)
             : '';
-
+		
         return (
-		<form noValidate="noValidate">
-			<div className="form">
-				<div className="form-primary">
-					<FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>
-		                <FormLabel>Title</FormLabel>
-		                <TextField type="text"
-							name="label"
-							id="label"
-							placeholder={'Enter the title of the ' + this.props.label}
-							value={this.props.doc.label}
-							onChange={this.props.handleInputChange}/>
-						<FormHelperText id="label-text">
-		                    Type the original title of the {this.props.label + ' '}. Try not to use abbreviations. To see Standards and Naming Conventions click
-		                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
-		                </FormHelperText>
-		            </FormControl>
+		<Grid container direction="column" alignItems="center">
+			<Grid item>
+				<Grid container justify="space-around">
+					<Grid item md={6} xs={11}>
+						<FormControl required fullWidth margin="normal">
+			                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
+			                <TextField type="text"
+								name="label"
+								id="label"
+								value={this.props.doc.label}
+								onChange={this.props.handleInputChange}/>
+							<FormHelperText id="label-text">
+			                    Type the original title of the {this.props.label + ' '}. Try not to use abbreviations. To see Standards and Naming Conventions click
+			                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+			                </FormHelperText>
+			            </FormControl>
 
-					<FormControl fullWidth margin="normal">
-		                <FormLabel>Description or Summary of Content</FormLabel>
-		                <Editor editorState={this.props.editorState}
-							wrapperClassName="editor-wrapper"
-							editorClassName="editor-content"
-							onEditorStateChange={this.props.onEditorStateChange}
-						/>
-		                <FormHelperText id="body-text">
-		                    Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
-		                    (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
-		                </FormHelperText>
-		            </FormControl>
+						<FormControl fullWidth margin="normal">
+							<FormLabel>Description or Summary of Content</FormLabel>
+							<Card className="card-container">
+								<Editor editorState={this.props.editorState}
+									editorClassName="editor-content"
+									toolbarClassName="editor-toolbar"
+									onEditorStateChange={this.props.onEditorStateChange}
+									/>
+							</Card>
+							<FormHelperText id="body-text">
+								Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
+								(example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+							</FormHelperText>
+						</FormControl>
 
-					<FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>
-		                <FormLabel>File(s)</FormLabel>
-		                <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
-							<FormHelperText id="files-text">
-		                    Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
-		                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
-		                </FormHelperText>
-		            </FormControl>
-				</div>
 
-				<div className="form-secondary">
-			        <FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>
-			          	<FormLabel>Language</FormLabel>
-			          	<LanguageSelect value={this.props.doc.language}
-							onChange={(s) => this.props.handleSelectChange('language', s)}
-							className={this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
-						<FormHelperText id="language-text">
-		                    Select the language of the {this.props.label}.
-		                </FormHelperText>
-			        </FormControl>
+						<FormControl required fullWidth margin="normal">
+			                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>File(s)</FormLabel>
+			                <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
+								<FormHelperText id="files-text">
+			                    Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
+			                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+			                </FormHelperText>
+			            </FormControl>
+					</Grid>
 
-					<FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>
-		                <FormLabel>Operation(s) / Webspace(s)</FormLabel>
-		                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces}/>
-						<FormHelperText>
-		                    Click on the field and select where to publish the {this.props.label + ' '}
-		                    (operation, regional site or thematic site).
-		                </FormHelperText>
-		            </FormControl>
+					<Grid item md={3} xs={11}>
+				        <FormControl required fullWidth margin="normal">
+				          	<FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>Language</FormLabel>
+				          	<LanguageSelect value={this.props.doc.language}
+								onChange={(s) => this.props.handleSelectChange('language', s)}
+								className={this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
+							<FormHelperText id="language-text">
+			                    Select the language of the {this.props.label}.
+			                </FormHelperText>
+				        </FormControl>
 
-                <FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.publication_date)}>
-      		                <FormLabel>Original Publication Date</FormLabel>
-      						<MuiPickersUtilsProvider utils={MomentUtils}>
-      					        <DatePicker
-      								id="publication_date"
-      	  							name="publication_date"
-      								format="DD/MM/YYYY"
-      								placeholder="Select date"
-      	  							value={this.props.doc.publication_date}
-      	  							onChange={this.props.handleInputChange}
-      								leftArrowIcon={<i className="icon-arrow-left" />}
-      								rightArrowIcon={<i className="icon-arrow-right" />}
-      					        />
-      				      	</MuiPickersUtilsProvider>
-      						<FormHelperText id="publication_date-text">
-      		                    Indicate when the {this.props.label + ' '}
-      		                    has originally been published.
-      		                </FormHelperText>
-      		            </FormControl>
+						<FormControl required fullWidth margin="normal">
+			                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>Operation(s) / Webspace(s)</FormLabel>
+			                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces}/>
+							<FormHelperText>
+			                    Click on the field and select where to publish the {this.props.label + ' '}
+			                    (operation, regional site or thematic site).
+			                </FormHelperText>
+			            </FormControl>
 
-            <FormControl required fullWidth margin="normal"
-  						error={this.props.status === 'was-validated' && ((this.props.hrinfoType === 'documents' && !this.props.isValid(this.props.doc.document_type)) ||
-  							(this.props.hrinfoType === 'infographics' && !this.props.isValid(this.props.doc.infographic_type)))}>
-  		                <FormLabel>
-  							{ this.props.hrinfoType === 'documents'
-  		                            ? 'Document type'
-  		                            : 'Infographic type' }
-  						</FormLabel>
-  		                {
-  		                    this.props.hrinfoType === 'documents'
-  		                        ? <HRInfoSelect type='document_types'
-  										onChange={(s) => this.props.handleSelectChange('document_type', s)}
-  										value={this.props.doc.document_type}
-  										className={this.props.isValid(this.props.doc.document_type)
-  		                                    ? 'is-valid'
-  		                                    : 'is-invalid'}/>
-  		                        : <HRInfoSelect type='infographic_types'
-  										onChange={(s) => this.props.handleSelectChange('infographic_type', s)}
-  										value={this.props.doc.infographic_type}
-  										className={this.props.isValid(this.props.doc.infographic_type)
-  		                                    ? 'is-valid'
-  		                                    : 'is-invalid'}/>
-  		                }
-  		                <FormHelperText>
-  		                    Select the {this.props.label + ' '}
-  		                    type and sub-type that best describe the {this.props.label}.
-  		                </FormHelperText>
-  		            </FormControl>
+	                	<FormControl required fullWidth margin="normal">
+	      		        	<FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.publication_date)}>Original Publication Date</FormLabel>
+	  						<MuiPickersUtilsProvider utils={MomentUtils}>
+	  					        <DatePicker
+	  								id="publication_date"
+	  	  							name="publication_date"
+	  								format="DD/MM/YYYY"
+	  								placeholder="Select date"
+	  	  							value={this.props.doc.publication_date}
+	  	  							onChange={this.props.handleInputChange}
+	  								leftArrowIcon={<i className="icon-arrow-left" />}
+	  								rightArrowIcon={<i className="icon-arrow-right" />}
+	  					        />
+	  				      	</MuiPickersUtilsProvider>
+	  						<FormHelperText id="publication_date-text">
+	  		                    Indicate when the {this.props.label + ' '}
+	  		                    has originally been published.
+	  		                </FormHelperText>
+	  		            </FormControl>
 
-                <FormControl required fullWidth margin="normal" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>
-		                <FormLabel>Organization(s)</FormLabel>
-		                <HRInfoAsyncSelect type="organizations"
-							onChange={(s) => this.props.handleSelectChange('organizations', s)}
-							value={this.props.doc.organizations}/>
-						<FormHelperText id="organizations-text">
-		                    Type in and select the source(s) of the {this.props.label}.
-		                </FormHelperText>
-		            </FormControl>
+	            		<FormControl required fullWidth margin="normal">
+	  		                <FormLabel focused error={this.props.status === 'was-validated' && ((this.props.hrinfoType === 'documents' && !this.props.isValid(this.props.doc.document_type)) ||
+	  							(this.props.hrinfoType === 'infographics' && !this.props.isValid(this.props.doc.infographic_type)))}>
+	  							{ this.props.hrinfoType === 'documents'
+	  		                            ? 'Document type'
+	  		                            : 'Infographic type' }
+	  						</FormLabel>
+	  		                {
+	  		                    this.props.hrinfoType === 'documents'
+	  		                        ? <HRInfoSelect type='document_types'
+	  										onChange={(s) => this.props.handleSelectChange('document_type', s)}
+	  										value={this.props.doc.document_type}
+	  										className={this.props.isValid(this.props.doc.document_type)
+	  		                                    ? 'is-valid'
+	  		                                    : 'is-invalid'}/>
+	  		                        : <HRInfoSelect type='infographic_types'
+	  										onChange={(s) => this.props.handleSelectChange('infographic_type', s)}
+	  										value={this.props.doc.infographic_type}
+	  										className={this.props.isValid(this.props.doc.infographic_type)
+	  		                                    ? 'is-valid'
+	  		                                    : 'is-invalid'}/>
+	  		                }
+	  		                <FormHelperText>
+	  		                    Select the {this.props.label + ' '}
+	  		                    type and sub-type that best describe the {this.props.label}.
+	  		                </FormHelperText>
+	  		            </FormControl>
 
-		            {bundles}
-		            {offices}
-		            {disasters}
+	                	<FormControl required fullWidth margin="normal">
+			                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>Organization(s)</FormLabel>
+			                <HRInfoAsyncSelect type="organizations"
+								onChange={(s) => this.props.handleSelectChange('organizations', s)}
+								value={this.props.doc.organizations}/>
+							<FormHelperText id="organizations-text">
+			                    Type in and select the source(s) of the {this.props.label}.
+			                </FormHelperText>
+			            </FormControl>
 
-					<div className="more-info-button">
-						{!this.state.collapse &&
-							<Button color="primary" variant="outlined" onClick={this.toggle}>
-								<i className="icon-plus" /> &nbsp; More Information
+			            {bundles}
+			            {offices}
+			            {disasters}
+
+						<div className="more-info-button">
+							{ !this.state.collapse &&
+								<Button color="secondary" variant="contained" onClick={this.toggle}>
+									<i className="icon-plus" /> &nbsp; Add More Information
+									</Button>
+		      				}
+							{ this.state.collapse &&
+								<Button color="secondary" variant="contained" onClick={this.toggle}>
+									<i className="icon-cancel" /> &nbsp; Hide Optional Information
 								</Button>
-	      				}
-						{this.state.collapse &&
-							<Button color="primary" variant="outlined" onClick={this.toggle}>
-								<i className="icon-cancel" /> &nbsp; Less Information
-							</Button>
-	  					}
+		  					}
+						</div>
 
 						<Collapse in={this.state.collapse}>
 							<FormControl fullWidth margin="normal">
@@ -250,7 +268,7 @@ class DocumentForm extends React.Component {
 									value={this.props.doc.themes}
 									id="themes"/>
 								<FormHelperText id="themes-text">
-									Click on the field and select all relevant themes. Choose only themes the {this.props.label}
+									Click on the field and select all relevant themes. Choose only themes the {this.props.label + ' '}
 									substantively refers to.
 								</FormHelperText>
 							</FormControl>
@@ -266,17 +284,17 @@ class DocumentForm extends React.Component {
 								</FormHelperText>
 							</FormControl>
 			        	</Collapse>
-					</div>
-				</div>
-			</div>
+					</Grid>
+				</Grid>
+			</Grid>
 
-			<div className="submission">
+			<Grid item className="submission">
 				{
 					this.props.status !== 'submitting' &&
 					<span>
-						<Button color="primary" variant="contained" onClick={(evt) => this.props.handleSubmit(evt)}>Publish</Button>
+						<Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
 						&nbsp;
-						<Button color="secondary" variant="contained" onClick={(evt) => this.props.handleSubmit(evt, 1)}>Save as Draft</Button>
+						<Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>Save as Draft</Button>
 						&nbsp;
 					</span>
 				}
@@ -288,8 +306,26 @@ class DocumentForm extends React.Component {
 						<Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
 					</span>
 				}
-			</div>
-        </form>);
+			</Grid>
+
+			<Snackbar anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left'
+                }}
+				open={this.props.status === 'was-validated' && this.state.wasSubmitted}
+				autoHideDuration={6000}
+				onClose={this.hideAlert}
+				ContentProps={{
+                    'aria-describedby' : 'message-id'
+                }}
+				message={<span id = "message-id" > The form is incomplete and could not be submitted.</span>}
+				action={[
+                    <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
+                        CLOSE
+                    </Button>
+                ]}
+			/>
+        </Grid>);
     }
 }
 
