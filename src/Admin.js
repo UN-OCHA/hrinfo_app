@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 class Admin extends React.Component {
 
@@ -7,9 +8,9 @@ class Admin extends React.Component {
         <div>
           <p>What would you like to do ?</p>
           <ul>
-            <li><a href="/documents/new">Add a document</a></li>
-            <li><a href="/infographics/new">Add a map/infographic</a></li>
-            <li><a href="/events/new">Add a new event</a></li>
+            <li><Link to="/documents/new">Add a document</Link></li>
+            <li><Link to="/infographics/new">Add a map/infographic</Link></li>
+            <li><Link to="/events/new">Add a new event</Link></li>
           </ul>
         </div>
       );
