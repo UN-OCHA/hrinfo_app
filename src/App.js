@@ -20,7 +20,6 @@ import ViewModule from '@material-ui/icons/ViewModule';
 import Popover from '@material-ui/core/Popover';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
-import Slide from '@material-ui/core/Slide';
 
 import Routes from "./Routes";
 import './App.css';
