@@ -10,9 +10,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
       this.state = {
         doc: {
-          label: '',
-          date: [{}],
-          address: {}
+          label: ''
         },
         editorState: EditorState.createEmpty(),
         status: ''
