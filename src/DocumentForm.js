@@ -177,8 +177,8 @@ class DocumentForm extends React.Component {
 	  								id="publication_date"
 	  	  							name="publication_date"
 	  								format="DD/MM/YYYY"
-	  								placeholder="Select date"
-	  	  							value={this.props.doc.publication_date}
+	  	  							value={this.props.doc.publication_date ? this.props.doc.publication_date : ''}
+									invalidLabel=""
 	  	  							onChange={this.props.handleInputChange}
 	  								leftArrowIcon={<i className="icon-arrow-left" />}
 	  								rightArrowIcon={<i className="icon-arrow-right" />}
