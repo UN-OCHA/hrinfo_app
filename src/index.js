@@ -9,6 +9,7 @@ import './images/unocha-icons.css';
 import registerServiceWorker from './utils/registerServiceWorker';
 
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const theme = createMuiTheme({
 	palette: {
@@ -16,7 +17,7 @@ const theme = createMuiTheme({
 			main: '#007faa'
 		},
 		secondary: {
-			main: '#53b1c8'
+			main: '#E5F3F6'
 		}
 	}
 });
@@ -26,6 +27,7 @@ ReactDOM.render(
 	<MuiThemeProvider theme={theme}>
 		<Router>
 			<CookiesProvider>
+				<CssBaseline/>
 				<App/>
 			</CookiesProvider>
 		</Router>

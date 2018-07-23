@@ -7,6 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select, { components } from 'react-select';
 
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import Clear from '@material-ui/icons/Clear';
+
 class Option extends React.Component {
   	handleClick = event => {
     	this.props.selectOption(this.props.data, event);
@@ -34,7 +37,7 @@ class Option extends React.Component {
 const DropdownIndicator = (props) => {
   	return components.DropdownIndicator && (
     	<components.DropdownIndicator {...props}>
-      		<i className="icon-arrow-down" style={{margin: '5px', cursor: 'pointer'}}/>
+			<KeyboardArrowDown color="primary" style={{cursor: 'pointer'}}/>
     	</components.DropdownIndicator>
   	);
 }
@@ -42,7 +45,7 @@ const DropdownIndicator = (props) => {
 const ClearIndicator = (props) => {
   	return components.DropdownIndicator && (
     	<components.DropdownIndicator {...props}>
-      		<i className="icon-cancel" style={{margin: '5px', cursor: 'pointer'}}/>
+			<Clear color="primary" fontSize="inherit" style={{cursor: 'pointer'}}/>
     	</components.DropdownIndicator>
   	);
 }
@@ -55,8 +58,10 @@ function SelectWrapped(props) {
         Option: Option,
         DropdownIndicator: DropdownIndicator,
 		ClearIndicator: ClearIndicator,
-		IndicatorSeparator: null
+		IndicatorSeparator: null,
+		Placeholder: () => {return (null);}
       }}
+	  pageSize={2}
 	  noOptionsMessage={() => <Typography>{'No results found'}</Typography>}
       styles={customStyles}
       isClearable={true}

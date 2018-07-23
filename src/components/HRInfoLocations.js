@@ -3,6 +3,8 @@ import HRInfoLocation from './HRInfoLocation';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 class HRInfoLocations extends React.Component {
 
@@ -35,12 +37,14 @@ class HRInfoLocations extends React.Component {
     ) : '';
 
     return (
-      <div key={number} className="locations-container">
-        <HRInfoLocation level="0" onChange={this.handleChange} row={number} value={this.state.locations[number][0]}/>
-        {locations1}
-        {locations2}
-        {locations3}
-	</div>
+      	<Card key={number} className="card-container">
+			<CardContent>
+				<HRInfoLocation level="0" onChange={this.handleChange} row={number} value={this.state.locations[number][0]}/>
+				{locations1}
+				{locations2}
+				{locations3}
+			</CardContent>
+		</Card>
     );
   }
 
@@ -142,7 +146,10 @@ class HRInfoLocations extends React.Component {
     return (
       <div>
         {rows}
-        {this.props.isMulti ? <Button variant="outlined" onClick={this.onAddBtnClick}>Add Location</Button> : '' }
+        {this.props.isMulti ?
+		<Button variant="outlined" onClick={this.onAddBtnClick}>
+			<i className="icon-map-pin" /> &nbsp; Add another
+		</Button> : '' }
       </div>
       );
   }

@@ -1,6 +1,8 @@
 import React from 'react';
+
 import HRInfoAPI from '../api/HRInfoAPI';
 import HidAPI from '../api/HidAPI';
+import moment from 'moment';
 
 const withSpace = function withSpace(Component, options) {
   return class extends React.Component {
@@ -15,7 +17,10 @@ const withSpace = function withSpace(Component, options) {
         },
         list: null,
         page: 0,
-        rowsPerPage: 50
+        rowsPerPage: 50,
+        drawerState: false,
+        filters: {},
+        dateFilters: {}
       };
 
       this.hrinfoAPI = new HRInfoAPI();
@@ -42,51 +47,54 @@ const withSpace = function withSpace(Component, options) {
       // hrinfoType = ['operations', 'bundles', 'organizations', 'disasters', 'offices']
       this.handleChangePage = this.handleChangePage.bind(this);
       this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+      this.onRangeChange = this.onRangeChange.bind(this);
+      this.toggleDrawer = this.toggleDrawer.bind(this);
+      this.setFilter = this.setFilter.bind(this);
+      this.removeFilter = this.removeFilter.bind(this);
     }
 
-    async handleChangePage (event, page) {
-      let content = null;
-      let params = {
-        sort: options.sort,
-      };
-      if (options.contentType !== 'user') {
-        params.range = this.state.rowsPerPage;
-        params.page = page + 1;
-        params['filter[' + this.hrinfoFilter + ']'] = this.state.doc.id;
-        content = await this.hrinfoAPI.get(options.contentType, params);
-      }
-      else {
-        params.limit = this.state.rowsPerPage;
-        params.offset = page * this.state.rowsPerPage;
-        params[this.hidFilter + '.list'] = this.state.list._id;
-        content = await this.hidAPI.get(options.contentType, params);
-      }
+    handleChangePage (event, page) {
       this.setState({
-        page,
-        content
+        page
       });
     }
 
-    async handleChangeRowsPerPage(event) {
-      let content = null;
-      let params = {
-        sort: options.sort
-      };
-      if (options.contentType !== 'user') {
-        params.range = event.target.value;
-        params.page = this.state.page + 1;
-        params['filter[' + this.hrinfoFilter +']'] = this.state.doc.id;
-        content = await this.hrinfoAPI.get(options.contentType, params);
+    handleChangeRowsPerPage(event) {
+      this.setState({
+        rowsPerPage: event.target.value
+      });
+    }
+
+    async onRangeChange(r) {
+      let range = {};
+      if (Array.isArray(r)) {
+        if (r.length > 1) {
+          range.start = r[0];
+          range.end = r[6];
+        }
+        else {
+          if (r.length === 0) {
+            range.start = new Date(moment().subtract(20, 'days'));
+            range.end = new Date(moment().add(20, 'days'));
+          }
+          else {
+            range.start = r[0];
+            range.end = new Date(moment(r[0]).add(1, 'days'));
+          }
+        }
       }
       else {
-        params.limit = event.target.value;
-        params.offset = this.state.page * event.target.value;
-        params[this.hidFilter + '.list'] = this.state.list._id;
-        content = await this.hidAPI.get(options.contentType, params);
+        range = r;
       }
+      range.start = range.start.toISOString();
+      range.end = range.end.toISOString();
+      let dateFilters = {};
+      dateFilters['[value][0]'] = range.start;
+      dateFilters['[value][1]'] = range.end;
+      dateFilters['[operator][0]'] = 'BETWEEN';
+      dateFilters['[operator][1]'] = 'BETWEEN';
       this.setState({
-        rowsPerPage: event.target.value,
-        content
+        dateFilters: dateFilters
       });
     }
 
@@ -148,6 +156,102 @@ const withSpace = function withSpace(Component, options) {
       }
     }
 
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+      if (prevState.rowsPerPage !== this.state.rowsPerPage ||
+        prevState.page !== this.state.page ||
+        JSON.stringify(prevState.filters) !== JSON.stringify(this.state.filters) ||
+        JSON.stringify(prevState.dateFilters) !== JSON.stringify(this.state.dateFilters)) {
+
+        let content = null;
+        let params = {
+          sort: options.sort
+        };
+        let filters = this.state.filters;
+        if (options.contentType !== 'user') {
+          params.range = this.state.rowsPerPage;
+          params.page = this.state.page + 1;
+          let filterKeys = Object.keys(filters);
+          // TODO: this fixes a flaw in the hrinfo API which makes the API display empty results when filtered by both bundles and operation
+          if (filterKeys.indexOf('bundles') === -1) {
+            params['filter[' + this.hrinfoFilter +']'] = this.state.doc.id;
+          }
+          filterKeys.forEach(function (key) {
+            if (Array.isArray(filters[key])) {
+              for (let i = 0; i < filters[key].length; i++) {
+                params['filter[' + key + '][value][' + i + ']'] = filters[key][i].id
+              }
+            }
+            else {
+              params['filter[' + key + ']'] = filters[key].id;
+            }
+          });
+          let dateFilterKeys = Object.keys(this.state.dateFilters);
+          if (dateFilterKeys.length > 0) {
+            let dateFilters = this.state.dateFilters;
+            dateFilterKeys.forEach(function (key) {
+              params['filter[date]' + key] = dateFilters[key];
+            });
+          }
+          content = await this.hrinfoAPI.get(options.contentType, params);
+        }
+        else {
+          params.limit = this.state.rowsPerPage;
+          params.offset = this.state.page * this.state.rowsPerPage;
+          params[this.hidFilter + '.list'] = this.state.list._id;
+          content = await this.hidAPI.get(options.contentType, params);
+        }
+        this.setState({
+          content: content
+        });
+      }
+    }
+
+    toggleDrawer () {
+      this.setState({
+        drawerState: !this.state.drawerState
+      });
+    }
+
+    removeFilter (key, filter) {
+      const that = this;
+      let newFilters = {};
+      Object.keys(this.state.filters).forEach(function (key) {
+        newFilters[key] = that.state.filters[key];
+      });
+      if (Array.isArray(newFilters[key])) {
+        newFilters[key] = newFilters[key].filter(function (sfilter) {
+          return sfilter.id !== filter.id;
+        });
+        if (newFilters[key].length === 0) {
+          delete newFilters[key];
+        }
+      }
+      else {
+        delete newFilters[key];
+      }
+      this.setState({
+        filters: newFilters
+      });
+    }
+
+    setFilter(name, val) {
+      const that = this;
+      let filters = {};
+      Object.keys(this.state.filters).forEach(function (key) {
+        filters[key] = that.state.filters[key];
+      });
+      if ((Array.isArray(val) && val.length !== 0) || val.id) {
+        filters[name] = val;
+      }
+      else {
+        delete filters[name];
+      }
+      this.setState({
+        filters: filters
+      });
+
+    }
+
     componentWillUnmount() {
       this.props.setGroup(null);
       this.props.setBreadcrumb([]);
@@ -158,10 +262,17 @@ const withSpace = function withSpace(Component, options) {
         spaceType: this.spaceType,
         doc: this.state.doc,
         content: this.state.content,
+        contentType: options.contentType,
         handleChangePage: this.handleChangePage,
         handleChangeRowsPerPage: this.handleChangeRowsPerPage,
         rowsPerPage: this.state.rowsPerPage,
-        page: this.state.page
+        page: this.state.page,
+        onRangeChange: this.onRangeChange,
+        drawerState: this.state.drawerState,
+        toggleDrawer: this.toggleDrawer,
+        setFilter: this.setFilter,
+        removeFilter: this.removeFilter,
+        filters: this.state.filters
       };
       return <Component {...this.props} {...newProps} />;
     }

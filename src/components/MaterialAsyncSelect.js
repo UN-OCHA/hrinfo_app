@@ -9,6 +9,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { components } from 'react-select';
 import AsyncSelect from 'react-select/lib/Async';
 
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import Clear from '@material-ui/icons/Clear';
+
 class Option extends React.Component {
   	handleClick = event => {
     	this.props.selectOption(this.props.data, event);
@@ -36,7 +39,7 @@ class Option extends React.Component {
 const DropdownIndicator = (props) => {
   	return components.DropdownIndicator && (
     	<components.DropdownIndicator {...props}>
-      		<i className="icon-arrow-down" style={{margin: '5px', cursor: 'pointer'}}/>
+			<KeyboardArrowDown color="primary" style={{cursor: 'pointer'}}/>
     	</components.DropdownIndicator>
   	);
 }
@@ -44,7 +47,7 @@ const DropdownIndicator = (props) => {
 const ClearIndicator = (props) => {
   	return components.DropdownIndicator && (
     	<components.DropdownIndicator {...props}>
-      		<i className="icon-cancel" style={{margin: '5px', cursor: 'pointer'}}/>
+			<Clear color="primary" fontSize="inherit" style={{cursor: 'pointer'}}/>
     	</components.DropdownIndicator>
   	);
 }
@@ -64,7 +67,8 @@ function SelectWrapped(props) {
         DropdownIndicator: DropdownIndicator,
 		ClearIndicator: ClearIndicator,
 		IndicatorSeparator: null,
-		LoadingIndicator: LoadingIndicator
+		LoadingIndicator: LoadingIndicator,
+		Placeholder: () => {return (null);}
       }}
 	  noOptionsMessage={() => <Typography>{'No results found (type at least one character)'}</Typography>}
 	  loadingMessage={() => <Typography>{'Loading...'}</Typography>}
