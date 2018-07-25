@@ -1,6 +1,6 @@
 import React from 'react';
-import MaterialAsyncSelect from './MaterialAsyncSelect';
-import HRInfoAPI from './HRInfoAPI';
+import MaterialAsyncSelect from '../components/MaterialAsyncSelect';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoAsyncSelect extends React.Component {
   constructor(props) {

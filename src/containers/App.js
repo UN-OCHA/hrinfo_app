@@ -21,14 +21,16 @@ import Popover from '@material-ui/core/Popover';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
-import Routes from "./Routes";
 import './App.css';
+
+import HRInfoAPI from '../api/HRInfoAPI';
+import HidAPI from '../api/HidAPI';
+
+import Routes from '../utils/Routes';
 import SearchPage from './SearchPage';
-import HRInfoAPI from './HRInfoAPI';
-import HidAPI from './HidAPI';
-import IconLogo from './IconLogo';
-import SpaceMenu from './SpaceMenu';
-import Breadcrumb from './Breadcrumb';
+import IconLogo from '../components/IconLogo';
+import SpaceMenu from '../components/SpaceMenu';
+import Breadcrumb from '../components/Breadcrumb';
 
 class App extends Component {
     static propTypes = {

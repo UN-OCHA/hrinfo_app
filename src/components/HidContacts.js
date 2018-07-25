@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
-import HidAPI from './HidAPI';
+import HidAPI from '../api/HidAPI';
 
 class HidContacts extends React.Component {
   constructor(props) {

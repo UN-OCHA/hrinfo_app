@@ -1,6 +1,6 @@
 import React from 'react';
-import Item from './Item';
-import HRInfoAPI from './HRInfoAPI';
+import Item from '../components/Item';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class ItemPage extends React.Component {
 

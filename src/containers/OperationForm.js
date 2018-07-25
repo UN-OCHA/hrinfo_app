@@ -3,12 +3,12 @@ import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import HRInfoSelect from './HRInfoSelect';
-import HRInfoLocation from './HRInfoLocation';
-import HRInfoAsyncSelect from './HRInfoAsyncSelect';
-import HidContacts from './HidContacts';
-import StringSelect from './StringSelect';
-import LanguageSelect from './LanguageSelect';
+import HRInfoSelect from '../components/HRInfoSelect';
+import HRInfoLocation from '../components/HRInfoLocation';
+import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
+import HidContacts from '../components/HidContacts';
+import StringSelect from '../components/StringSelect';
+import LanguageSelect from '../components/LanguageSelect';
 
 class OperationForm extends React.Component {
   constructor(props) {

@@ -1,7 +1,8 @@
 import React from 'react';
+
+import HRInfoAPI from '../api/HRInfoAPI';
+import HidAPI from '../api/HidAPI';
 import moment from 'moment';
-import HRInfoAPI from './HRInfoAPI';
-import HidAPI from './HidAPI';
 
 const withSpace = function withSpace(Component, options) {
   return class extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
 import MaterialSelect from './MaterialSelect';
 import DropboxChooser from 'react-dropbox-chooser';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';

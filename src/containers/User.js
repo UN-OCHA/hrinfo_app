@@ -1,7 +1,7 @@
 import React from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import moment from 'moment';
-import HidAPI from './HidAPI';
+import HidAPI from '../api/HidAPI';
 
 class User extends React.Component {
 

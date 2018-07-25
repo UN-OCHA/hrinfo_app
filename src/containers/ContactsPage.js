@@ -11,8 +11,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
-import withSpace from './withSpace';
+import withSpace from '../utils/withSpace';
+import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
 
 const styles = theme => ({
   root: {
@@ -25,10 +25,10 @@ const styles = theme => ({
   },
 });
 
-class DisastersPage extends React.Component {
+class ContactsPage extends React.Component {
 
     render() {
-      const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page} = this.props;
+      const { classes, content, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = this.props;
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
       return (
@@ -36,24 +36,32 @@ class DisastersPage extends React.Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>GLIDE Number</TableCell>
+                <TableCell></TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Job Title</TableCell>
+                <TableCell>Organization</TableCell>
+                <TableCell>Cluster</TableCell>
+                <TableCell>Country</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {content.data.map(n => {
+                let bundles = '';
+                if (n.bundles) {
+                  n.bundles.forEach(function (b) {
+                    bundles += b.name + ',';
+                  });
+                }
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={'/disasters/' + n.id}>{n.label}</Link>
+                      {n.verified ? <i className="icon-check-circle" /> : ''}
                     </TableCell>
-                    <TableCell>{n.primary_type}</TableCell>
-                    <TableCell>{n.status}</TableCell>
-                    <TableCell>{n.created}</TableCell>
-                    <TableCell>{n.glide}</TableCell>
+                    <TableCell><Link to={'/users/' + n.id}>{n.name}</Link></TableCell>
+                    <TableCell>{n.job_title}</TableCell>
+                    <TableCell>{n.organization ? (n.organization.acronym ? n.organization.acronym : n.organization.name) : ''}</TableCell>
+                    <TableCell>{bundles}</TableCell>
+                    <TableCell>{n.location && n.location.country ? n.location.country.name : ''}</TableCell>
                   </TableRow>
                 );
               })}
@@ -83,9 +91,9 @@ class DisastersPage extends React.Component {
     }
 }
 
-DisastersPage.propTypes = {
+ContactsPage.propTypes = {
   classes: PropTypes.object.isRequired,
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(DisastersPage), {contentType: 'disasters', contentLabel: 'Disasters', sort: '-created'});
+export default withSpace(withStyles(styles)(ContactsPage), { contentType: 'user', contentLabel: 'Contacts', sort: 'name'});

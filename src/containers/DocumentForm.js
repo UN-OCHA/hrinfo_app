@@ -1,12 +1,13 @@
 import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import HRInfoSelect from './HRInfoSelect';
-import HRInfoLocations from './HRInfoLocations';
-import HRInfoAsyncSelect from './HRInfoAsyncSelect';
-import HRInfoFiles from './HRInfoFiles';
-import RelatedContent from './RelatedContent';
-import LanguageSelect from './LanguageSelect';
+
+import HRInfoSelect from '../components/HRInfoSelect';
+import HRInfoLocations from '../components/HRInfoLocations';
+import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
+import HRInfoFiles from '../components/HRInfoFiles';
+import RelatedContent from '../components/RelatedContent';
+import LanguageSelect from '../components/LanguageSelect';
 
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';

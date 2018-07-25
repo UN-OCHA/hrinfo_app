@@ -14,9 +14,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 
-import TablePaginationActionsWrapped from './TablePaginationActionsWrapped';
-import withSpace from './withSpace';
-import {Filters, FilterChips} from './Filters';
+import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
+import withSpace from '../utils/withSpace';
+import {Filters, FilterChips} from '../components/Filters';
 
 const styles = theme => ({
   root: {

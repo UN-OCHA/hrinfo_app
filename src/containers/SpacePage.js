@@ -1,5 +1,5 @@
 import React from 'react';
-import withSpace from './withSpace';
+import withSpace from '../utils/withSpace';
 
 class SpacePage extends React.Component {
 

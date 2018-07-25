@@ -1,6 +1,6 @@
 import React from 'react';
-import MaterialSelect from './MaterialSelect';
-import HRInfoAPI from './HRInfoAPI';
+import MaterialSelect from '../components/MaterialSelect';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
   constructor(props) {

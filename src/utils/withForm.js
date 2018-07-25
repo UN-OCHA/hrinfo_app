@@ -1,7 +1,7 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-import HRInfoAPI from './HRInfoAPI';
+import HRInfoAPI from '../api/HRInfoAPI';
 
 const withForm = function withForm(Component, hrinfoType, label) {
   return class extends React.Component {
