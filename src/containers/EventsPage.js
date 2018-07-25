@@ -10,8 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
-import {Filters, FilterChips} from './Filters';
-import withSpace from './withSpace';
+import {Filters, FilterChips} from '../components/Filters';
+import withSpace from '../utils/withSpace';
 
 BigCalendar.momentLocalizer(moment);
 
