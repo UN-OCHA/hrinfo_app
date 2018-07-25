@@ -11,6 +11,7 @@ class HRInfoSelect extends React.Component {
     this.hrinfoAPI = new HRInfoAPI();
     this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.user = JSON.parse(localStorage.getItem('hid-user'));;
   }
 
   getOptions (type, operationId, operationLabel) {
@@ -45,7 +46,20 @@ class HRInfoSelect extends React.Component {
           });
         }
         else {
-          pushed = elts;
+          if ((type === 'spaces' || type === 'operations' || type === 'bundles') && this.user.hrinfo.roles.indexOf('administrator') === -1) {
+            let user = this.user;
+            console.log(user);
+            let spaceIds = Object.keys(user.hrinfo.spaces);
+            elts.forEach(function (elt) {
+              if (user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
+                pushed.push(elt);
+              }
+            });
+            console.log(pushed);
+          }
+          else {
+            pushed = elts;
+          }
           pushed = pushed.map(function (val) {
             val.type = type;
             return val;
