@@ -182,7 +182,23 @@ const withSpace = function withSpace(Component, options) {
               }
             }
             else {
-              params['filter[' + key + ']'] = filters[key].id;
+              if (key === 'publication_date_after' || key === 'publication_date_before') {
+                let index = 0;
+                if (key === 'publication_date_after') {
+                  params['filter[publication_date][value][0]'] = filters[key].toISOString();
+                  params['filter[publication_date][operator][0]'] = '>';
+                }
+                else {
+                  if (filterKeys.indexOf('publication_date_after') !== -1) {
+                    index = 1;
+                  }
+                  params['filter[publication_date][value][' + index + ']'] = filters[key].toISOString();
+                  params['filter[publication_date][operator][' + index + ']'] = '<';
+                }
+              }
+              else {
+                params['filter[' + key + ']'] = filters[key].id;
+              }
             }
           });
           let dateFilterKeys = Object.keys(this.state.dateFilters);
@@ -240,8 +256,13 @@ const withSpace = function withSpace(Component, options) {
       Object.keys(this.state.filters).forEach(function (key) {
         filters[key] = that.state.filters[key];
       });
-      if ((Array.isArray(val) && val.length !== 0) || val.id) {
-        filters[name] = val;
+      if ((Array.isArray(val) && val.length !== 0) || val.id || val.toDate()) {
+        if (val.toDate()) {
+          filters[name] = val.toDate();
+        }
+        else {
+          filters[name] = val;
+        }
       }
       else {
         delete filters[name];

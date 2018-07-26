@@ -5,6 +5,9 @@ import Drawer from '@material-ui/core/Drawer';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Chip from '@material-ui/core/Chip';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import DatePicker from 'material-ui-pickers/DatePicker';
 
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
@@ -88,6 +91,40 @@ class FiltersDrawer extends React.Component {
       						value={filters.disasters}/>
       				</FormControl> : ''
             }
+            { (contentType === 'documents' || contentType === 'infographics')
+              ? <FormControl fullWidth margin="normal">
+                  <FormLabel>Published After</FormLabel>
+                  <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <DatePicker
+                      id="publication_date_after"
+                      name="publication_date_aftre"
+                      format="DD/MM/YYYY"
+                      value={filters.publication_date_after ? filters.publication_date_after : ''}
+                      invalidLabel=""
+                      onChange={(s) => this.props.setFilter('publication_date_after', s)}
+                      leftArrowIcon={<i className="icon-arrow-left" />}
+                      rightArrowIcon={<i className="icon-arrow-right" />}
+                    />
+                  </MuiPickersUtilsProvider>
+    		        </FormControl> : ''
+            }
+            { (contentType === 'documents' || contentType === 'infographics')
+              ? <FormControl fullWidth margin="normal">
+                  <FormLabel>Published Before</FormLabel>
+                  <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <DatePicker
+                      id="publication_date_before"
+                      name="publication_date_before"
+                      format="DD/MM/YYYY"
+                      value={filters.publication_date_before ? filters.publication_date_before : ''}
+                      invalidLabel=""
+                      onChange={(s) => this.props.setFilter('publication_date_before', s)}
+                      leftArrowIcon={<i className="icon-arrow-left" />}
+                      rightArrowIcon={<i className="icon-arrow-right" />}
+                    />
+                  </MuiPickersUtilsProvider>
+    		        </FormControl> : ''
+            }
           </div>
         </Drawer>
       );
@@ -109,7 +146,16 @@ class FilterChips extends React.Component {
         });
       }
       else {
-        return (<Chip key={key + '_' + filters[key].id} label={filters[key].label} onDelete={() => {removeFilter(key, filters[key])}} />);
+        if (key === 'publication_date_before' || key === 'publication_date_after') {
+          let label = 'Published before: ';
+          if (key === 'publication_date_after') {
+            label = 'Published after: ';
+          }
+          return (<Chip key={key + '_' + filters[key].id} label={label + filters[key].toDateString()} onDelete={() => {removeFilter(key, filters[key])}} />);
+        }
+        else {
+          return (<Chip key={key + '_' + filters[key].id} label={filters[key].label} onDelete={() => {removeFilter(key, filters[key])}} />);
+        }
       }
     });
 
