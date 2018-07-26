@@ -256,8 +256,8 @@ const withSpace = function withSpace(Component, options) {
       Object.keys(this.state.filters).forEach(function (key) {
         filters[key] = that.state.filters[key];
       });
-      if ((Array.isArray(val) && val.length !== 0) || val.id || val.toDate()) {
-        if (val.toDate()) {
+      if ((Array.isArray(val) && val.length !== 0) || val.id || typeof val.toDate !== 'undefined') {
+        if (typeof val.toDate !== 'undefined') {
           filters[name] = val.toDate();
         }
         else {

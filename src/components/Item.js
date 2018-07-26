@@ -1,6 +1,37 @@
 import React from 'react';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardImg, CardBody, CardTitle, CardText, CardFooter, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import renderHTML from 'react-render-html';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import {Link} from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
+const styles = {
+  card: {
+    display: 'flex',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  content: {
+    flex: '1 0 auto',
+  },
+  cover: {
+    width: 200,
+    height: 283,
+  },
+  playIcon: {
+    height: 38,
+    width: 38,
+  },
+};
 
 class Item extends React.Component {
 
@@ -64,13 +95,13 @@ class Item extends React.Component {
         if (item[a] && Array.isArray(item[a])) {
           for (let i = 0; i < item[a].length; i++) {
             if (item[a][i]) {
-              badges.push(<ListGroupItem key={a + '_' + item[a][i].id}>{item[a][i].label}</ListGroupItem>);
+              badges.push(<ListItem key={a + '_' + item[a][i].id}>{item[a][i].label}</ListItem>);
             }
           }
         }
         else {
           if (item[a]) {
-            badges.push(<ListGroupItem key={a}>{item[a]}</ListGroupItem>);
+            badges.push(<ListItem key={a}>{item[a]}</ListItem>);
           }
         }
       });
@@ -78,47 +109,38 @@ class Item extends React.Component {
     }
 
     render() {
-      const item = this.props.item;
+      const { classes, item } = this.props;
       const editLink = this.props.viewMode === 'full' && this.canEdit() ? (
-        <Button href={'/' + item.type + '/' + item.id + '/edit'}>Edit</Button>
+        <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id + '/edit'}>Edit</Button>
       ) : '';
       return (
-        <Card className="p-3 my-3">
-          <div className="crop-image">
-            <a href={'/' + item.type + '/' + item.id}>
-              {(item.type === 'documents' || item.type === 'infographics') ?
-                <CardImg top width="100%" src={item.files[0].file.preview === 'https://www.humanitarianresponse.info/' ? 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png' : item.files[0].file.preview} alt="Card image cap" />
-                : '' }
-            </a>
+        <Card className={classes.card}>
+          <CardMedia
+            className={classes.cover}
+            image={item.files[0].file.preview === 'https://www.humanitarianresponse.info/' ? 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png' : item.files[0].file.preview}
+            title="Card Image"
+          />
+          <div className={classes.details}>
+            <CardContent>
+              <Typography gutterBottom variant="headline" component="h2">{item.label}</Typography>
+              {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
+            </CardContent>
+            <CardActions>
+              {this.props.viewMode === 'search' ? <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id}>View more</Button> : '' }
+              &nbsp;<Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>&nbsp;
+              {editLink}
+            </CardActions>
           </div>
-          <CardBody>
-            <CardTitle>{item.label}</CardTitle>
-            <ListGroup>
-              {this.renderBadges()}
-            </ListGroup>
-            {(item.type === 'documents' || item.type === 'infographics') ?
-              <div className="text-center">
-                <ButtonDropdown isOpen={this.state.filesOpen} toggle={this.openFiles} className="mx-auto">
-                  <DropdownToggle caret color="primary">
-                    Download
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    {item.files.map(function (f) {
-                      return <DropdownItem key={f.file.fid}><a href={f.file.url} target="_blank">{f.file.filename}</a></DropdownItem>;
-                    })}
-                  </DropdownMenu>
-                </ButtonDropdown>
-              </div> : '' }
-            {this.props.viewMode === 'full' ? <CardText>{item['body-html'] ? renderHTML(item['body-html']) : ''}</CardText> : ''}
-          </CardBody>
-          <CardFooter className="text-center">
-            {this.props.viewMode === 'search' ? <Button href={'/' + item.type + '/' + item.id}>View more</Button> : '' }
-            &nbsp;<Button href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>&nbsp;
-            {editLink}
-          </CardFooter>
+          <List>
+            {this.renderBadges()}
+          </List>
         </Card>
       );
     }
 }
 
-export default Item;
+Item.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Item);
