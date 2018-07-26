@@ -19,6 +19,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
 
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
@@ -109,6 +110,7 @@ class DocumentForm extends React.Component {
 
         return (
 		<Grid container direction="column" alignItems="center">
+			<Typography color="textSecondary" gutterBottom variant="headline">Create {this.props.label}</Typography>
 			<Grid item>
 				<Grid container justify="space-around">
 					<Grid item md={6} xs={11}>
@@ -180,6 +182,7 @@ class DocumentForm extends React.Component {
 	  								format="DD/MM/YYYY"
 	  	  							value={this.props.doc.publication_date ? this.props.doc.publication_date : ''}
 									invalidLabel=""
+									autoOk
 	  	  							onChange={this.props.handleInputChange}
 	  								leftArrowIcon={<i className="icon-arrow-left" />}
 	  								rightArrowIcon={<i className="icon-arrow-right" />}
@@ -196,7 +199,7 @@ class DocumentForm extends React.Component {
 	  							(this.props.hrinfoType === 'infographics' && !this.props.isValid(this.props.doc.infographic_type)))}>
 	  							{ this.props.hrinfoType === 'documents'
 	  		                            ? 'Document type'
-	  		                            : 'Infographic type' }
+	  		                            : 'Map/Infographic type' }
 	  						</FormLabel>
 	  		                {
 	  		                    this.props.hrinfoType === 'documents'
@@ -248,7 +251,7 @@ class DocumentForm extends React.Component {
 
 						<Collapse in={this.state.collapse}>
 							<FormControl fullWidth margin="normal">
-								<FormLabel>Locations</FormLabel>
+								<FormLabel>Location(s)</FormLabel>
 								<HRInfoLocations onChange={(s) => this.props.handleSelectChange('locations', s)}
 									value={this.props.doc.locations}
 									isMulti="isMulti"
@@ -317,7 +320,7 @@ class DocumentForm extends React.Component {
 				ContentProps={{
                     'aria-describedby' : 'message-id'
                 }}
-				message={<span id = "message-id" > The form is incomplete and could not be submitted.</span>}
+				message={<Typography id ="message-id" color="error">The form is incomplete and could not be submitted.</Typography>}
 				action={[
                     <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
                         CLOSE

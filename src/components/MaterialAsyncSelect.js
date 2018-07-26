@@ -70,7 +70,7 @@ function SelectWrapped(props) {
 		LoadingIndicator: LoadingIndicator,
 		Placeholder: () => {return (null);}
       }}
-	  noOptionsMessage={() => <Typography>{'No results found (type at least one character)'}</Typography>}
+	  noOptionsMessage={() => <Typography>{'Type at least one character to see results'}</Typography>}
 	  loadingMessage={() => <Typography>{'Loading...'}</Typography>}
       styles={customStyles}
       isClearable={true}
