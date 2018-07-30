@@ -1,18 +1,38 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import { Editor } from 'react-draft-wysiwyg';
+import { Editor }       from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import HRInfoSelect from '../components/HRInfoSelect';
-import HRInfoLocations from '../components/HRInfoLocations';
+
+import FontAwesomeIcon   from '@fortawesome/react-fontawesome';
+import faSpinner         from '@fortawesome/fontawesome-free-solid/faSpinner';
+
+import HRInfoSelect      from '../components/HRInfoSelect';
+import HRInfoLocations   from '../components/HRInfoLocations';
 import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
-import RelatedContent from '../components/RelatedContent';
-import HidContacts from '../components/HidContacts';
-import Address from '../components/Address';
-import EventDate from '../components/EventDate';
-import LanguageSelect from '../components/LanguageSelect';
-import StringSelect from '../components/StringSelect';
+import RelatedContent    from '../components/RelatedContent';
+import HidContacts       from '../components/HidContacts';
+import Address           from '../components/Address';
+import EventDate         from '../components/EventDate';
+import LanguageSelect    from '../components/LanguageSelect';
+import StringSelect      from '../components/StringSelect';
+
+//Material plugin
+import FormHelperText   from '@material-ui/core/FormHelperText';
+import FormControl      from '@material-ui/core/FormControl';
+import FormLabel        from '@material-ui/core/FormLabel';
+import TextField        from '@material-ui/core/TextField';
+// import Button           from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Collapse         from '@material-ui/core/Collapse';
+import Card             from '@material-ui/core/Card';
+import Grid             from '@material-ui/core/Grid';
+import Snackbar         from '@material-ui/core/Snackbar';
+import Typography       from '@material-ui/core/Typography';
+
+//Material
+import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import DatePicker              from 'material-ui-pickers/DatePicker';
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -104,7 +124,7 @@ class EventForm extends React.Component {
 
         <FormGroup className="required">
           <Label for="date">Date(s)</Label>
-          <EventDate value={this.props.doc.date[0]} required onChange={(val) => {console.log(val); this.props.handleSelectChange('date', val);}} />
+
           <FormText color="muted">
             Indicate the date(s) of the event.
           </FormText>
