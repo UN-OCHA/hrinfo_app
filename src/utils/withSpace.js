@@ -2,6 +2,7 @@ import React from 'react';
 
 import HRInfoAPI from '../api/HRInfoAPI';
 import HidAPI from '../api/HidAPI';
+import HdxAPI from '../api/HdxAPI';
 import moment from 'moment';
 
 const withSpace = function withSpace(Component, options) {
@@ -25,6 +26,7 @@ const withSpace = function withSpace(Component, options) {
 
       this.hrinfoAPI = new HRInfoAPI();
       this.hidAPI = new HidAPI();
+      this.hdxAPI = new HdxAPI();
       const parts = this.props.match.url.split('/');
       this.spaceType = parts[1].slice(0, -1);
       this.hrinfoFilter = this.spaceType + 's';
@@ -40,6 +42,9 @@ const withSpace = function withSpace(Component, options) {
       }
       if (this.spaceType === 'organization') {
         this.hidFilter = 'organization';
+      }
+      if (options.contentType === 'events' && this.hrinfoFilter === 'locations') {
+        this.hrinfoFilter = 'location';
       }
       // spaceType = ['operation', 'group', 'organization', 'disaster', 'office']
       // hrinfoFilter = ['operation', 'bundles', 'organizations', 'disasters', 'offices']
@@ -116,16 +121,11 @@ const withSpace = function withSpace(Component, options) {
           label: newState.doc.label
         });
         if (options.contentType) {
-          let params = {
-            sort: options.sort
-          };
-          if (options.contentType !== 'user') {
-            params.range = this.state.rowsPerPage;
-            params.page = this.state.page + 1;
-            params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
-            newState.content = await this.hrinfoAPI.get(options.contentType, params);
+          let params = {};
+          if (options.sort) {
+            params.sort = options.sort;
           }
-          else {
+          if (options.contentType === 'user') {
             params.limit = this.state.rowsPerPage;
             let listType = this.spaceType;
             if (listType === 'group') {
@@ -141,6 +141,22 @@ const withSpace = function withSpace(Component, options) {
             params[this.hidFilter + '.list'] = newState.list._id;
             newState.content = await this.hidAPI.get(options.contentType, params);
           }
+          else if (options.contentType === 'dataset') {
+            params.q = 'groups:nga';
+            params.rows = 10;
+            params.start = 10;
+            newState.content = await this.hdxAPI.get(params);
+          }
+          else {
+            params.range = this.state.rowsPerPage;
+            params.page = this.state.page + 1;
+            params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
+            newState.content = await this.hrinfoAPI.get(options.contentType, params);
+          }
+          newState.content.data = newState.content.data.map(function (item) {
+            item.type = options.contentType;
+            return item;
+          });
           let contentType = options.contentType;
           if (contentType === 'user') {
             contentType = 'contacts';
@@ -216,6 +232,10 @@ const withSpace = function withSpace(Component, options) {
           params[this.hidFilter + '.list'] = this.state.list._id;
           content = await this.hidAPI.get(options.contentType, params);
         }
+        content.data = content.data.map(function (item) {
+          item.type = options.contentType;
+          return item;
+        });
         this.setState({
           content: content
         });
