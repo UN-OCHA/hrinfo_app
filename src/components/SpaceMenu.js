@@ -79,7 +79,8 @@ const menus = {
   group: ['contacts', 'events', 'documents', 'infographics', 'datasets', 'assessments'],
   organization: ['contacts', 'events', 'documents', 'infographics', 'datasets', 'assessments'],
   disaster: ['contacts', 'events', 'documents', 'infographics', 'assessments'],
-  office: ['contacts', 'events', 'documents', 'infographics', 'assessments']
+  office: ['contacts', 'events', 'documents', 'infographics', 'assessments'],
+  location: ['events', 'documents', 'infographics', 'assessments']
 };
 
 function TitlebarGridList(props) {

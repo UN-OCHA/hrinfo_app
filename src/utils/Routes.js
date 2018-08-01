@@ -88,6 +88,13 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/disasters/:id/contacts"     exact component={ContactsPage}     props={childProps} />
     <AuthenticatedRoute path="/disasters/:id/documents"    exact component={DocumentsPage}    props={childProps} />
     <AuthenticatedRoute path="/disasters/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/disasters/:id/assessments" exact component={AssessmentsPage} props={childProps} />
+
+    <AuthenticatedRoute path="/locations/:id" exact component={SpacePage} props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/documents" exact component={DocumentsPage} props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/infographics" exact component={InfographicsPage} props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/events" exact component={EventsPage} props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/assessments" exact component={AssessmentsPage} props={childProps} />
 
 {/* Users */}
   </Switch>;

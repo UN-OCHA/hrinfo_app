@@ -43,7 +43,7 @@ const styles = theme => ({
   }
 });
 
-class DocumentsPage extends React.Component {
+class AssessmentsPage extends React.Component {
 
   state = {
     anchorEl: null,
@@ -67,15 +67,15 @@ class DocumentsPage extends React.Component {
     return (
       <div>
         <Filters
-          contentType   = {contentType}
-          spaceType     = {spaceType}
-          filters       = {filters}
-          setFilter     = {this.props.setFilter}
-          toggleDrawer  = {toggleDrawer}
-          drawerState   = {drawerState}
-          doc           = {this.props.doc} />
-        <Paper className  = {classes.root}>
-          <Typography align = "right">
+          contentType={contentType}
+          spaceType={spaceType}
+          filters={filters}
+          setFilter={this.props.setFilter}
+          toggleDrawer={toggleDrawer}
+          drawerState={drawerState}
+          doc={this.props.doc} />
+        <Paper className={classes.root}>
+          <Typography align="right">
             <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
             <IconButton onClick={(v) => {this.setState({view: 'grid'})}}>
               <ViewModule />
@@ -92,60 +92,75 @@ class DocumentsPage extends React.Component {
               <TableHead>
                 <TableRow>
                   <TableCell>Title</TableCell>
-                  <TableCell>Document type</TableCell>
-                  <TableCell>Organizations</TableCell>
-                  <TableCell>Publication date</TableCell>
-                  <TableCell>Files</TableCell>
+                  <TableCell>Location(s)</TableCell>
+                  <TableCell>Organization(s)</TableCell>
+                  <TableCell>Participating Organization(s)</TableCell>
+                  <TableCell>Cluster(s)/Sector(s)</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Assessment Date(s)</TableCell>
+                  <TableCell>Data</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {content.data.map(n => {
-                  let files = '';
-                  if (n.files) {
-                    if (n.files.length === 1) {
-                      files = <Button href={n.files[0].file.url} variant="outlined" color="primary">Download</Button>;
+                  let date = '';
+                  if (n.date.from !== n.date.to) {
+                    date = Moment(n.date.from).format('MMM DD YYYY') + ' to ' + Moment(n.date.to).format('MMM DD YYYY');
+                  }
+                  else {
+                    date = Moment(n.date.from).format('MMM DD YYYY');
+                  }
+                  let reportData = [];
+                  if (n.report && n.report.accessibility) {
+                    if (n.report.file) {
+                      reportData.push((<div>Report: <a href={n.report.file.url} target="_blank">{n.report.accessibility}</a></div>));
                     }
                     else {
-                      const that = this;
-                      const menuId = 'download-menu-' + n.id;
-                      files = <span><Button
-                        aria-owns={anchorEl ? menuId : null}
-                        aria-haspopup="true"
-                        onClick={(e) => {this.handleClick(e, menuId)}}
-                        variant="outlined"
-                        color="primary"
-                      >
-                        Download
-                      </Button>
-                      <Menu
-                        id={menuId}
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl) && openMenuId === menuId }
-                        onClose={this.handleClose}
-                      >
-                        {n.files.map(function (file) {
-                          return (<MenuItem key={file.file.fid} onClick={that.handleClose}><a href={file.file.url} className="link">{file.file.filename}</a></MenuItem>);
-                        })}
-                      </Menu></span>;
+                      reportData.push((<div>Report: {n.report.accessibility}</div>));
+                    }
+                  }
+                  if (n.questionnaire && n.questionnaire.accessibility) {
+                    if (n.questionnaire.file) {
+                      reportData.push((<div>Report: <a href={n.questionnaire.file.url} target="_blank">{n.questionnaire.accessibility}</a></div>));
+                    }
+                    else {
+                      reportData.push((<div>Questionnaire: {n.questionnaire.accessibility}</div>));
+                    }
+                  }
+                  if (n.data && n.data.accessibility) {
+                    if (n.data.file) {
+                      reportData.push((<div>Data: <a href={n.data.file.url} target="_blank">{n.data.accessibility}</a></div>));
+                    }
+                    else {
+                      reportData.push((<div>Data: {n.data.accessibility}</div>));
                     }
                   }
                   return (
                     <TableRow key={n.id}>
                       <TableCell component="th" scope="row">
-                        <Link to={'/documents/' + n.id}>{n.label}</Link>
+                        <Link to={'/assessments/' + n.id}>{n.label}</Link>
                       </TableCell>
-                      <TableCell>{n.document_type ? n.document_type.label : ''}</TableCell>
+                      <TableCell>{n.locations && n.locations.length ? n.locations.map(o => {
+                        return (<Link key={o.id} to={'/locations/' + o.id}>{o.label}</Link>);
+                      }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
                       <TableCell>{n.organizations && n.organizations.length ? n.organizations.map(o => {
                         return (<Link key={o.id} to={'/organizations/' + o.id}>{o.label}</Link>);
                       }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
-                      <TableCell>{n.publication_date ? Moment(n.publication_date).format('MMM DD YYYY') : ''}</TableCell>
-                      <TableCell>{files}</TableCell>
+                      <TableCell>{n.participating_organizations && n.participating_organizations.length ? n.participating_organizations.map(o => {
+                        return (<Link key={o.id} to={'/organizations/' + o.id}>{o.label}</Link>);
+                      }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
+                      <TableCell>{n.bundles && n.bundles.length ? n.bundles.map(o => {
+                        return (<Link key={o.id} to={'/groups/' + o.id}>{o.label}</Link>);
+                      }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
+                      <TableCell>{n.status}</TableCell>
+                      <TableCell>{date}</TableCell>
+                      <TableCell>{reportData}</TableCell>
                     </TableRow>
                   );
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 48 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={8} />
                   </TableRow>
                 )}
               </TableBody>
@@ -181,7 +196,7 @@ class DocumentsPage extends React.Component {
             </div> : ''
           }
         </Paper>
-        <Link to="/documents/new">
+        <Link to="/assessments/new">
           <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
             <AddIcon />
           </Button>
@@ -191,9 +206,9 @@ class DocumentsPage extends React.Component {
   }
 }
 
-DocumentsPage.propTypes = {
+AssessmentsPage.propTypes = {
   classes: PropTypes.object.isRequired,
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(DocumentsPage), {contentType: 'documents', contentLabel: 'Documents', sort: '-publication_date'});
+export default withSpace(withStyles(styles)(AssessmentsPage), {contentType: 'assessments', contentLabel: 'Assessments', sort: '-date'});

@@ -117,7 +117,7 @@ class Item extends React.Component {
         <Card className={classes.card}>
           <CardMedia
             className={classes.cover}
-            image={item.files[0].file.preview === 'https://www.humanitarianresponse.info/' ? 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png' : item.files[0].file.preview}
+            image={item.files && item.files[0].file.preview !== 'https://www.humanitarianresponse.info/' ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png'}
             title="Card Image"
           />
           <div className={classes.details}>
