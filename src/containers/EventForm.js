@@ -124,7 +124,7 @@ class EventForm extends React.Component {
 
         <FormGroup className="required">
           <Label for="date">Date(s)</Label>
-
+      /* */
           <FormText color="muted">
             Indicate the date(s) of the event.
           </FormText>

@@ -6,8 +6,8 @@ class Address extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      val: {},
-      status: 'initial'
+      val     : {},
+      status  : 'initial'
     };
     this.handleChange = this.handleChange.bind(this);
     this.setCountry = this.setCountry.bind(this);
@@ -26,13 +26,13 @@ class Address extends React.Component {
 
   handleChange (event) {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+    const value  = target.type === 'checkbox' ? target.checked : target.value;
+    const name   = target.name;
 
-    let val = this.state.val;
-    val[name] = value;
+    let val      = this.state.val;
+    val[name]    = value;
     this.setState({
-      val: val
+      val : val
     });
     if (this.props.onChange) {
       this.props.onChange(val);
@@ -42,7 +42,7 @@ class Address extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
       this.setState({
-        val: this.props.value,
+        val   : this.props.value,
         status: 'ready'
       });
     }
