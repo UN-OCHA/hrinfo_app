@@ -3,9 +3,10 @@ import { Switch } from "react-router-dom";
 
 import Login                from "../containers/Login";
 import DocumentForm         from "../containers/DocumentForm";
-import EventForm            from "../containers/EventForm";
-import newEventForm         from '../containers/newEventForm';
+import oldEventForm         from "../containers/oldEventForm";
+import EventForm            from '../containers/EventForm';
 import AssessmentForm       from "../containers/AssessmentForm";
+import AssessmentsPage      from "../containers/AssessmentsPage";
 import OperationForm        from "../containers/OperationForm";
 import Home                 from "../containers/Home";
 import Admin                from "../containers/Admin";
@@ -46,9 +47,9 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/infographics/:id"      exact component={ItemPage}                                              props={childProps} />
 
 {/* Events */}
-    <AuthenticatedRoute path="/events/new"      exact component={withForm(newEventForm, 'events', 'Event')}  props={childProps} />
-    <AuthenticatedRoute path="/events/:id/edit" exact component={withForm(EventForm,    'events', 'Event')}  props={childProps} />
-    <AuthenticatedRoute path="/events/:id"      exact component={ItemPage}                                   props={childProps} />
+    <AuthenticatedRoute path="/events/new"      exact component={withForm(EventForm, 'events', 'Event')}  props={childProps} />
+    <AuthenticatedRoute path="/events/:id/edit" exact component={withForm(EventForm, 'events', 'Event')}  props={childProps} />
+    <AuthenticatedRoute path="/events/:id"      exact component={ItemPage}                                props={childProps} />
 
 {/* Operations */}
     <AuthenticatedRoute path="/operations/new"              exact component={withForm(OperationForm, 'operations', 'Operation')} props={childProps} />
@@ -88,13 +89,14 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/disasters/:id/contacts"     exact component={ContactsPage}     props={childProps} />
     <AuthenticatedRoute path="/disasters/:id/documents"    exact component={DocumentsPage}    props={childProps} />
     <AuthenticatedRoute path="/disasters/:id/infographics" exact component={InfographicsPage} props={childProps} />
-    <AuthenticatedRoute path="/disasters/:id/assessments" exact component={AssessmentsPage} props={childProps} />
+    <AuthenticatedRoute path="/disasters/:id/assessments"  exact component={AssessmentsPage}  props={childProps} />
 
-    <AuthenticatedRoute path="/locations/:id" exact component={SpacePage} props={childProps} />
-    <AuthenticatedRoute path="/locations/:id/documents" exact component={DocumentsPage} props={childProps} />
+{/* Locations */}
+    <AuthenticatedRoute path="/locations/:id"              exact component={SpacePage}        props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/documents"    exact component={DocumentsPage}    props={childProps} />
     <AuthenticatedRoute path="/locations/:id/infographics" exact component={InfographicsPage} props={childProps} />
-    <AuthenticatedRoute path="/locations/:id/events" exact component={EventsPage} props={childProps} />
-    <AuthenticatedRoute path="/locations/:id/assessments" exact component={AssessmentsPage} props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/events"       exact component={EventsPage}       props={childProps} />
+    <AuthenticatedRoute path="/locations/:id/assessments"  exact component={AssessmentsPage}  props={childProps} />
 
 {/* Users */}
   </Switch>;

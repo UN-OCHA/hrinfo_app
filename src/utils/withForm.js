@@ -200,7 +200,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
         }
         body.operation = [];
-        body.space = [];
+        body.space     = [];
         body.spaces.forEach(function (sp) {
           if (sp.type === 'operations') {
             body.operation.push(sp.id);

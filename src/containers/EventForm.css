@@ -20,8 +20,6 @@
 }
 
 
-
-
 .address-container-select {
 	display			: flex;
 	align-items	: center;
@@ -33,11 +31,9 @@
 }
 
 
-
-
 .address-container-text {
 	display			: flex;
-	align-self: center;
+	align-self  : center;
 	width 			: 90%;
 	padding-top	: 0 !important;
 }
@@ -47,6 +43,13 @@
 }
 
 
+.date-container{
+	display					: flex;
+	justify-content	: space-around;
+	width 					: 100%;
+}
+
+.date-container-timezone{}
 
 
 .related-content > div {

@@ -2,23 +2,9 @@ import React  from 'react';
 import Select from 'react-select';
 import { Input, FormGroup, Row, Col, Label } from 'reactstrap';
 import RRuleGenerator                        from 'react-rrule-generator';
+import Checkbox                              from '@material-ui/core/Checkbox';
 import moment                                from 'moment';
 import 'moment-timezone';
-
-// Material
-import FormControl      from '@material-ui/core/FormControl';
-import FormLabel        from '@material-ui/core/FormLabel';
-import Checkbox         from '@material-ui/core/Checkbox';
-
-//Dates
-import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import DatePicker              from 'material-ui-pickers/DatePicker';
-import TimePicker              from 'material-ui-pickers/TimePicker';
-
-//Card
-import Card          from '@material-ui/core/Card';
-import CardContent   from '@material-ui/core/CardContent';
 
 class EventDate extends React.Component {
   constructor(props) {
@@ -223,120 +209,72 @@ class EventDate extends React.Component {
 
   render() {
     return (
-      <Card className="card-container">
-
-      {/* 'All day checkbox' */}
-        <CardContent className="date-container">
-          <FormGroup check>
-            <Checkbox name     = "allDay"
-                      onChange = {this.setCheckbox}/> All day
-          </FormGroup>
-        </CardContent>
-
-      {/* Date 'from' */}
-        <CardContent className="date-container">
-          <FormGroup margin = "normal">
-            <FormLabel for="from_date">From</FormLabel>
-                <form>
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <DatePicker
-                      id             = "from_date"
-                      name           = "from_date"
-                      format         = "DD/MM/YYYY"
-                      placeholder    = 'DD/MM/YYYY'
-                      value          = {this.state.from_date}
-                      onChange       = {this.handleChange}
-                      invalidLabel   = ""
-                      autoOk
-                      leftArrowIcon  = {<i className="icon-arrow-left"  />}
-                      rightArrowIcon = {<i className="icon-arrow-right" />}
-                    />
-                  </MuiPickersUtilsProvider>
-
-                  &nbsp;&nbsp;&nbsp;
-                  
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <TimePicker
-                      id            = "from_time"
-                      name          = "from_time"
-                      placeholder   = '00:00'
-                      value         = {this.state.from_time}
-                      onChange      = {this.handleChange}
-                      disabled      = {this.state.allDay}
-                      invalidLabel  = ""
-                      autoOk
-                    />
-                  </MuiPickersUtilsProvider>
-                </form>
-          </FormGroup>
-        </CardContent>
-
-      {/* Date 'To' */}
-        <CardContent className="date-container">
-            <FormGroup fullWidth margin = "normal">
-              <FormLabel for="from_date">To</FormLabel>
-                <form>
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <DatePicker
-                      id             = "to_date"
-                      name           = "to_date"
-                      format         = "DD/MM/YYYY"
-                      placeholder    = 'DD/MM/YYYY'
-                      value          = {this.state.to_date}
-                      onChange       = {this.handleChange}
-                      invalidLabel   = ""
-                      autoOk
-                      leftArrowIcon  = {<i className="icon-arrow-left"  />}
-                      rightArrowIcon = {<i className="icon-arrow-right" />}
-                    />
-                  </MuiPickersUtilsProvider>
-                  &nbsp;
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <TimePicker
-                      id            = "to_time"
-                      name          = "to_time"
-                      placeholder   = '00:00'
-                      value         = {this.state.to_time}
-                      onChange      = {this.handleChange}
-                      disabled      = {this.state.allDay}
-                      invalidLabel  = ""
-                      autoOk
-                    />
-                  </MuiPickersUtilsProvider>
-                </form>
-            </FormGroup>
-          </CardContent>
-
-        {/* 'Repeat' checkbox */}
-          <CardContent className="date-container">
+      <div>
+        <Row>
             <FormGroup check>
-              <Checkbox name     = "repeats"
-                        onChange = {this.setCheckbox}
-              /> Repeat
+              <Label check>
+                <Checkbox
+                    name="allDay"
+                    onChange={this.setCheckbox}/>
+                All day
+              </Label>
+
             </FormGroup>
-          </CardContent>
-
-        {/* 'Repeat' div hidden */}
-          <CardContent className="date-container">
-            {this.state.repeats === true &&
-              <Row>
-                <Col>
-                  <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} />
-                </Col>
-              </Row>
-            }
-          </CardContent>
-
-        {/* Timezone div */}
-          <CardContent className="date-container-timezone">
+        </Row>
+        <Row>
+          <Col>
+            <FormGroup>
+              <Label for="from_date">From</Label>
+              <Input type="date" name="from_date" value={this.state.from_date} onChange={this.handleChange} />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Label for="from_time">&nbsp;</Label>
+              <Input type="time" name="from_time" disabled={this.state.allDay} value={this.state.from_time} onChange={this.handleChange} />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <FormGroup>
+              <Label for="to_date">To</Label>
+              <Input type="date" name="to_date" value={this.state.to_date} onChange={this.handleChange} />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Label for="to_time">&nbsp;</Label>
+              <Input type="time" name="to_time" disabled={this.state.allDay} value={this.state.to_time} onChange={this.handleChange} />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <FormGroup check>
+              <Label check>
+                <Input type="checkbox" name="repeats" onChange={this.setCheckbox} />{' '}
+                Repeat
+              </Label>
+            </FormGroup>
+          </Col>
+        </Row>
+        {this.state.repeats === true &&
+          <Row>
+            <Col>
+              <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} />
+            </Col>
+          </Row>
+        }
+        <Row>
+          <Col>
             <FormGroup>
               <Label for="timezone">Timezone</Label>
-              <Select options  = {moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })}
-                      onChange = {this.setTimezone}
-                      value    = {this.state.val.timezone} />
+              <Select options={moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })} onChange={this.setTimezone} value={this.state.val.timezone} />
             </FormGroup>
-          </CardContent>
-      </Card>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }

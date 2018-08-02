@@ -23,7 +23,7 @@ import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
 
-//Material
+//Material ui pickers
 import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import DatePicker              from 'material-ui-pickers/DatePicker';
@@ -100,9 +100,9 @@ class DocumentForm extends React.Component {
         <HRInfoSelect
           type     =  "bundles"
           spaces   =  {this.props.doc.spaces}
-          isMulti  =  {true}
-          onChange =  {(s) => this.props.handleSelectChange('bundles', s)}
-          value    =  {this.props.doc.bundles}/>
+          isMulti =  {true}
+          onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
+          value =  {this.props.doc.bundles}/>
         <FormHelperText id="bundles-text">
           Indicate the cluster(s)/sector(s) the {this.props.label + ' '}
           refers to.
@@ -146,7 +146,6 @@ class DocumentForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
-
             <FormControl required fullWidth margin = "normal">
               <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>File(s)</FormLabel>
               <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
@@ -168,7 +167,6 @@ class DocumentForm extends React.Component {
                 Select the language of the {this.props.label}.
               </FormHelperText>
             </FormControl>
-
 
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>Operation(s) / Webspace(s)</FormLabel>
