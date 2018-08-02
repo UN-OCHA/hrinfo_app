@@ -1,6 +1,6 @@
 import React  from 'react';
 import Select from 'react-select';
-import { Input, FormGroup, Row, Col, Label } from 'reactstrap';
+import { FormGroup, Row, Col } from 'reactstrap';
 import RRuleGenerator                        from 'react-rrule-generator';
 import moment                                from 'moment';
 import 'moment-timezone';
@@ -227,15 +227,15 @@ class EventDate extends React.Component {
 
       {/* 'All day checkbox' */}
         <CardContent className="date-container">
-          <FormGroup check>
+          <FormControl check>
             <Checkbox name     = "allDay"
                       onChange = {this.setCheckbox}/> All day
-          </FormGroup>
+          </FormControl>
         </CardContent>
 
       {/* Date 'from' */}
         <CardContent className="date-container">
-          <FormGroup margin = "normal">
+          <FormControl margin = "normal">
             <FormLabel for="from_date">From</FormLabel>
                 <form>
                   <MuiPickersUtilsProvider utils = {MomentUtils}>
@@ -254,7 +254,7 @@ class EventDate extends React.Component {
                   </MuiPickersUtilsProvider>
 
                   &nbsp;&nbsp;&nbsp;
-                  
+
                   <MuiPickersUtilsProvider utils = {MomentUtils}>
                     <TimePicker
                       id            = "from_time"
@@ -268,12 +268,12 @@ class EventDate extends React.Component {
                     />
                   </MuiPickersUtilsProvider>
                 </form>
-          </FormGroup>
+          </FormControl>
         </CardContent>
 
       {/* Date 'To' */}
         <CardContent className="date-container">
-            <FormGroup fullWidth margin = "normal">
+            <FormControl  margin="normal">
               <FormLabel for="from_date">To</FormLabel>
                 <form>
                   <MuiPickersUtilsProvider utils = {MomentUtils}>
@@ -304,16 +304,16 @@ class EventDate extends React.Component {
                     />
                   </MuiPickersUtilsProvider>
                 </form>
-            </FormGroup>
+            </FormControl>
           </CardContent>
 
         {/* 'Repeat' checkbox */}
           <CardContent className="date-container">
-            <FormGroup check>
+            <FormControl check>
               <Checkbox name     = "repeats"
                         onChange = {this.setCheckbox}
               /> Repeat
-            </FormGroup>
+            </FormControl>
           </CardContent>
 
         {/* 'Repeat' div hidden */}
@@ -328,13 +328,14 @@ class EventDate extends React.Component {
           </CardContent>
 
         {/* Timezone div */}
-          <CardContent className="date-container-timezone">
-            <FormGroup>
-              <Label for="timezone">Timezone</Label>
-              <Select options  = {moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })}
-                      onChange = {this.setTimezone}
-                      value    = {this.state.val.timezone} />
-            </FormGroup>
+          <CardContent >
+            <FormGroup margin="normal">
+              <FormLabel for="timezone">Timezone</FormLabel>
+                <Select options  = {moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })}
+                        onChange = {this.setTimezone}
+                        value    = {this.state.val.timezone} />
+              </FormGroup>
+
           </CardContent>
       </Card>
     );

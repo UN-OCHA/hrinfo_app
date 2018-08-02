@@ -45,11 +45,15 @@
 
 .date-container{
 	display					: flex;
-	justify-content	: space-around;
+	justify-content	: space-evenly;
 	width 					: 100%;
 }
 
-.date-container-timezone{}
+.date-container-timezone{
+  display					: flex;
+	justify-content	: space-evenly;
+	width 					: 100%;
+}
 
 
 .related-content > div {

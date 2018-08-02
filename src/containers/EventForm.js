@@ -8,7 +8,6 @@ import HRInfoLocations       from '../components/HRInfoLocations';
 import Address               from '../components/Address';
 
 import HRInfoAsyncSelect     from '../components/HRInfoAsyncSelect';
-import HRInfoFiles           from '../components/HRInfoFiles';
 import RelatedContent        from '../components/RelatedContent';
 import LanguageSelect        from '../components/LanguageSelect';
 import EventCategorySelect   from '../components/EventCategorySelect';
@@ -28,10 +27,6 @@ import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
 
 //Material
-import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import DatePicker              from 'material-ui-pickers/DatePicker';
-
 import './EventForm.css';
 
 class EventForm extends React.Component {

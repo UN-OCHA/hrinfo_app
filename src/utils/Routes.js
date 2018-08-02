@@ -3,7 +3,6 @@ import { Switch } from "react-router-dom";
 
 import Login                from "../containers/Login";
 import DocumentForm         from "../containers/DocumentForm";
-import oldEventForm         from "../containers/oldEventForm";
 import EventForm            from '../containers/EventForm';
 import AssessmentForm       from "../containers/AssessmentForm";
 import AssessmentsPage      from "../containers/AssessmentsPage";
@@ -12,7 +11,6 @@ import Home                 from "../containers/Home";
 import Admin                from "../containers/Admin";
 import ItemPage             from "../containers/ItemPage";
 import User                 from "../containers/User";
-import OperationPage        from "../containers/OperationPage";
 import SpacePage            from "../containers/SpacePage";
 import GroupsPage           from '../containers/GroupsPage';
 import ContactsPage         from '../containers/ContactsPage';

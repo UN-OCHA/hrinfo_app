@@ -17,21 +17,13 @@ import FormLabel        from '@material-ui/core/FormLabel';
 import TextField        from '@material-ui/core/TextField';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-<<<<<<< HEAD
 import Collapse         from '@material-ui/core/Collapse';
 import Card             from '@material-ui/core/Card';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
-=======
-import Collapse from '@material-ui/core/Collapse';
-import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
-import Snackbar from '@material-ui/core/Snackbar';
-import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
->>>>>>> a1de16b2874e736b6e0a79e0b86155ea6385f1e0
 
 //Material ui pickers
 import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
