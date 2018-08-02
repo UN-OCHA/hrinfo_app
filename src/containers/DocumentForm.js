@@ -17,11 +17,21 @@ import FormLabel        from '@material-ui/core/FormLabel';
 import TextField        from '@material-ui/core/TextField';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+<<<<<<< HEAD
 import Collapse         from '@material-ui/core/Collapse';
 import Card             from '@material-ui/core/Card';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
+=======
+import Collapse from '@material-ui/core/Collapse';
+import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+>>>>>>> a1de16b2874e736b6e0a79e0b86155ea6385f1e0
 
 //Material ui pickers
 import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
@@ -279,20 +289,28 @@ class DocumentForm extends React.Component {
                   </FormHelperText>
                 </FormControl>
 
-                <FormControl fullWidth margin="normal">
-                  <FormLabel>Related Content</FormLabel>
-                  <RelatedContent onChange={(s) => this.props.handleSelectChange('related_content', s)}
-                    value={this.props.doc.related_content}
-                    id="related_content"/>
-                  <FormHelperText id="related_content-text">
-                    Add links to content that is related to the {this.props.label + ' '}
-                    you are publishing (example: language versions of the same {this.props.label}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
-                  </FormHelperText>
-                </FormControl>
-              </Collapse>
-            </Grid>
-          </Grid>
-        </Grid>
+							<FormControl fullWidth margin="normal">
+								<FormLabel>Related Content</FormLabel>
+								<RelatedContent onChange={(s) => this.props.handleSelectChange('related_content', s)}
+									value={this.props.doc.related_content}
+									id="related_content"/>
+								<FormHelperText id="related_content-text">
+									Add links to content that is related to the {this.props.label + ' '}
+									you are publishing (example: language versions of the same {this.props.label}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+								</FormHelperText>
+							</FormControl>
+
+              <FormControl fullWidth margin="normal">
+								<FormControlLabel
+                  control={<Checkbox checked={this.props.doc.exclude_from_reliefweb} onChange={(s) => this.props.handleSelectChange('exclude_from_reliefweb', s)} color="primary" />}
+                  label="Do not share with Reliefweb"
+                />
+							</FormControl>
+
+			        	</Collapse>
+					</Grid>
+				</Grid>
+			</Grid>
 
         <Grid item className="submission">
         {
