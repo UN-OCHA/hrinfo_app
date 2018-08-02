@@ -18,7 +18,7 @@ class HRInfoLocation extends React.Component {
   getOptions () {
     let params = {};
     params.fields = 'id,label,pcode';
-    params.sort = 'label';
+    params.sort   = 'label';
     params['filter[admin_level]'] = this.props.level;
     if (this.props.parent) {
       params['filter[parent]'] = this.props.parent;
@@ -28,8 +28,8 @@ class HRInfoLocation extends React.Component {
       .getAll('locations', params)
       .then(elts => {
         this.setState({
-          items: elts,
-          status: 'ready'
+          items  : elts,
+          status : 'ready'
         });
       }).catch(function(err) {
           console.log("Fetch error: ", err);

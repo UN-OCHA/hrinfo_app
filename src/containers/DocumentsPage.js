@@ -67,15 +67,15 @@ class DocumentsPage extends React.Component {
     return (
       <div>
         <Filters
-          contentType={contentType}
-          spaceType={spaceType}
-          filters={filters}
-          setFilter={this.props.setFilter}
-          toggleDrawer={toggleDrawer}
-          drawerState={drawerState}
-          doc={this.props.doc} />
-        <Paper className={classes.root}>
-          <Typography align="right">
+          contentType   = {contentType}
+          spaceType     = {spaceType}
+          filters       = {filters}
+          setFilter     = {this.props.setFilter}
+          toggleDrawer  = {toggleDrawer}
+          drawerState   = {drawerState}
+          doc           = {this.props.doc} />
+        <Paper className  = {classes.root}>
+          <Typography align = "right">
             <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
             <IconButton onClick={(v) => {this.setState({view: 'grid'})}}>
               <ViewModule />

@@ -1,0 +1,74 @@
+.editor-content {
+	padding: 10px;
+}
+
+.editor-toolbar > div {
+	flex-wrap: wrap;
+}
+
+.none {
+	display: none;
+}
+
+.inline {
+	display: inline;
+}
+
+.card-container {
+	margin: 10px 0;
+	overflow: visible !important;
+}
+
+
+.address-container-select {
+	display			: flex;
+	align-items	: center;
+	padding-top	: 0 !important;
+}
+
+.address-container-select > p {
+	width: 20%;
+}
+
+
+.address-container-text {
+	display			: flex;
+	align-self  : center;
+	width 			: 90%;
+	padding-top	: 0 !important;
+}
+
+.address-container-text > p {
+	width: 20%;
+}
+
+
+.date-container{
+	display					: flex;
+	justify-content	: space-evenly;
+	width 					: 100%;
+}
+
+.date-container-timezone{
+  display					: flex;
+	justify-content	: space-evenly;
+	width 					: 100%;
+}
+
+
+.related-content > div {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.more-info-button {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 15px;
+}
+
+.submission {
+	margin-top: 20px !important;
+}
