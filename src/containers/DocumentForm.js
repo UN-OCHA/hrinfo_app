@@ -295,7 +295,7 @@ class DocumentForm extends React.Component {
               <FormControl fullWidth margin="normal">
 								<FormControlLabel
                   control={<Checkbox checked={this.props.doc.exclude_from_reliefweb} onChange={(s) => this.props.handleSelectChange('exclude_from_reliefweb', s)} color="primary" />}
-                  label="Do not share with Reliefweb"
+                  label="Do not share with ReliefWeb"
                 />
 							</FormControl>
 

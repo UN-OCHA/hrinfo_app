@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
 
 const styles = {
   card: {
@@ -31,6 +33,13 @@ const styles = {
     height: 38,
     width: 38,
   },
+  gridList: {
+    padding: 5
+  },
+  gridImage: {
+    width: 400,
+    height: 280,
+  }
 };
 
 class Item extends React.Component {
@@ -110,32 +119,46 @@ class Item extends React.Component {
 
     render() {
       const { classes, item } = this.props;
-      const editLink = this.props.viewMode === 'full' && this.canEdit() ? (
-        <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id + '/edit'}>Edit</Button>
-      ) : '';
-      return (
-        <Card className={classes.card}>
-          <CardMedia
-            className={classes.cover}
-            image={item.files && item.files[0].file.preview !== 'https://www.humanitarianresponse.info/' ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png'}
-            title="Card Image"
-          />
-          <div className={classes.details}>
-            <CardContent>
-              <Typography gutterBottom variant="headline" component="h2">{item.label}</Typography>
-              {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
-            </CardContent>
-            <CardActions>
-              {this.props.viewMode === 'search' ? <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id}>View more</Button> : '' }
-              &nbsp;<Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>&nbsp;
-              {editLink}
-            </CardActions>
-          </div>
-          <List>
-            {this.renderBadges()}
-          </List>
-        </Card>
-      );
+      if (this.props.viewMode === 'full' || this.props.viewMode === 'search') {
+        const editLink = this.props.viewMode === 'full' && this.canEdit() ? (
+          <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id + '/edit'}>Edit</Button>
+        ) : '';
+        return (
+          <Card className={classes.card}>
+            <CardMedia
+              className={classes.cover}
+              image={item.files && item.files[0].file.preview !== 'https://www.humanitarianresponse.info/' ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png'}
+              title="Card Image"
+            />
+            <div className={classes.details}>
+              <CardContent>
+                <Typography gutterBottom variant="headline" component="h2">{item.label}</Typography>
+                {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
+              </CardContent>
+              <CardActions>
+                {this.props.viewMode === 'search' ? <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id}>View more</Button> : '' }
+                &nbsp;<Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>&nbsp;
+                {editLink}
+              </CardActions>
+            </div>
+            <List>
+              {this.renderBadges()}
+            </List>
+          </Card>
+        );
+      }
+      else {
+        return (
+          <GridListTile key={item.id} className={classes.gridList}>
+            <Link to={'/' + item.type + '/' + item.id}>
+              <img src={item.files[0].file.preview} alt={item.label} className={classes.gridImage} />
+              <GridListTileBar
+                title={item.label}
+              />
+            </Link>
+          </GridListTile>
+        );
+      }
     }
 }
 
