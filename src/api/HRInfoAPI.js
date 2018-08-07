@@ -64,6 +64,9 @@ class HRInfoAPI {
       .then(results => {
         return results.json();
       }).then(data => {
+        data.data.forEach(function (item) {
+          item.type = type;
+        });
         return data;
       });
   }

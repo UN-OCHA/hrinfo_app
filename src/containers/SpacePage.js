@@ -54,7 +54,10 @@ class SpacePage extends React.Component {
       }],
     },
     isModalOpen: false,
-    isSettingsOpen: {},
+    isSettingsOpen: {
+      DynamicContent: false,
+      OchaProducts: false
+    },
     addWidgetOptions: null
   };
 
@@ -111,7 +114,10 @@ class SpacePage extends React.Component {
     };
     this.setState({
       widgets: widgets,
-      isSettingsOpen: false,
+      isSettingsOpen: {
+        OchaProducts: false,
+        DynamicContent: false
+      },
       isModalOpen: false
     }, () => {
       that.setState({

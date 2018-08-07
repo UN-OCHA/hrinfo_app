@@ -46,7 +46,7 @@ class FiltersDrawer extends React.Component {
             }
             <FormControl fullWidth margin="normal">
               <FormLabel>Filter by Organization(s)</FormLabel>
-              <HRInfoAsyncSelect type="organizations"
+              <HRInfoAsyncSelect type="organizations" isMulti={true}
                 onChange={(s) => this.props.setFilter('organizations', s)}
                 value={filters.organizations}/>
             </FormControl>

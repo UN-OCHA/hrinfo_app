@@ -74,7 +74,7 @@ function SelectWrapped(props) {
 	  loadingMessage={() => <Typography>{'Loading...'}</Typography>}
       styles={customStyles}
       isClearable={true}
-	  isMulti
+	  isMulti={props.isMulti}
 	  getOptionValue={(option) => { return option.id }}
       getOptionLabel={(option) => { return option.label}}
 	  value={props.value}

@@ -151,7 +151,7 @@ class Item extends React.Component {
         return (
           <GridListTile key={item.id} className={classes.gridList}>
             <Link to={'/' + item.type + '/' + item.id}>
-              <img src={item.files[0].file.preview} alt={item.label} className={classes.gridImage} />
+              <img src={item.files ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png'} alt={item.label} className={classes.gridImage} />
               <GridListTileBar
                 title={item.label}
               />

@@ -231,7 +231,7 @@ class DocumentForm extends React.Component {
 
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>Organization(s)</FormLabel>
-              <HRInfoAsyncSelect type="organizations"
+              <HRInfoAsyncSelect type="organizations" isMulti={true}
                 onChange={(s) => this.props.handleSelectChange('organizations', s)}
                 value={this.props.doc.organizations}/>
               <FormHelperText id="organizations-text">

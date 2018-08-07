@@ -16,8 +16,14 @@ class HRInfoAsyncSelect extends React.Component {
   getOptions (input) {
     const type = this.props.type;
     let params = {};
-    params.search = input;
-    params.fields = 'id,label,acronym';
+    if (type === 'organizations') {
+      params.search = input;
+    }
+    else {
+      params['filter[label][value]'] = input;
+      params['filter[label][operator]'] = 'CONTAINS';
+    }
+    params.fields = this.props.fields ? this.props.fields : 'id,label,acronym';
     params.sort = 'label';
     params.range = 10;
     return this.hrinfoAPI
@@ -45,7 +51,7 @@ class HRInfoAsyncSelect extends React.Component {
   render() {
     return (
       <MaterialAsyncSelect
-        isMulti
+        isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
         getOptionValue={(option) => { return option.id }}
         getOptionLabel={(option) => { return option.label}}

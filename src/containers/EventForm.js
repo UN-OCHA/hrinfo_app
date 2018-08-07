@@ -204,7 +204,8 @@ class EventForm extends React.Component {
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>Organization(s)</FormLabel>
               <HRInfoAsyncSelect type     = "organizations"
                                  onChange = {(s) => this.props.handleSelectChange('organizations', s)}
-                                 value    = {this.props.doc.organizations}/>
+                                 value    = {this.props.doc.organizations}
+                                  isMulti={true} />
               <FormHelperText id="organizations-text">
                 Type in and select the source(s) of the {this.props.label}.
               </FormHelperText>
@@ -226,7 +227,8 @@ class EventForm extends React.Component {
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.agendas)}>Agenda(s)</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('agendas', s)}
-                                 value    = {this.props.doc.agendas} />
+                                 value    = {this.props.doc.agendas}
+                                  isMulti={true} />
               <FormHelperText>
                 Add the agenda of the {this.props.label} as a document first, and then reference this document from here.
               </FormHelperText>
@@ -237,7 +239,8 @@ class EventForm extends React.Component {
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.meeting_minutes)}>Meeting minute(s)</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}
-                                 value    = {this.props.doc.meeting_minutes} />
+                                 value    = {this.props.doc.meeting_minutes}
+                                  isMulti = {true} />
               <FormHelperText>
                 Add the meeting minutes of the {this.props.label} as a document first, and then reference this document from here.
               </FormHelperText>
