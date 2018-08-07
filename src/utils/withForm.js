@@ -31,14 +31,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
     handleInputChange(event) {
 		let value = null;
 		let name = null;
-	  	if (event.target) {
-		  	const target = event.target;
-		  	value = target.type === 'checkbox' ? target.checked : target.value;
-		  	name = target.name;
-	  	} else {
-		  	name = 'publication_date';
-		  	value = event.toDate();
-	  	}
+  	if (event.target) {
+	  	const target = event.target;
+	  	value = target.type === 'checkbox' ? target.checked : target.value;
+	  	name = target.name;
+  	} else {
+	  	name = 'publication_date';
+	  	value = event.toDate();
+  	}
 
 		let doc = this.state.doc;
 		doc[name] = value;
@@ -136,11 +136,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
     async postFieldCollections (docid, field_collections) {
       for (const fc of field_collections) {
-        const body = {
+        let body = {
           file: fc.file,
           language: fc.language,
           host_entity: docid
         };
+        if (fc.item_id) {
+          body.item_id = fc.item_id;
+        }
         await this.hrinfoAPI.saveFieldCollection(body);
       }
       return docid;
@@ -162,7 +165,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
       let body = JSON.stringify(this.state.doc);
       body = JSON.parse(body);
       body.published = isDraft ? 0 : 1;
-      body.language = body.language.value;
       if (hrinfoType !== 'operations') {
         if (hrinfoType === 'infographics' || hrinfoType === 'documents') {
           body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
