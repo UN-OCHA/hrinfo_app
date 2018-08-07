@@ -9,7 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import Modal from '@material-ui/core/Modal';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
@@ -107,29 +110,18 @@ OchaProductsSimple.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const settingsStyles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-  },
-});
-
-class SettingsModal extends React.Component {
+class OchaProductsSettings extends React.Component {
 
   render () {
-    const { classes } = this.props;
 
     return (
-      <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.props.open}
-          onClose={this.props.handleClose}
+      <Dialog
+        fullScreen
+        open={this.props.open}
+        onClose={this.props.handleClose}
         >
-          <div style={this.props.style} className={classes.paper}>
+          <DialogTitle id="scroll-dialog-title">Settings</DialogTitle>
+          <DialogContent>
             <FormControl required fullWidth margin="normal">
               <FormLabel>Operation(s) / Webspace(s)</FormLabel>
               <HRInfoSelect type="operations" onChange={(s) => this.props.addWidgetSetting('operation', s)} />
@@ -154,18 +146,20 @@ class SettingsModal extends React.Component {
               <FormLabel>Other Response Plan</FormLabel>
               <HRInfoAsyncSelect type="documents" onChange={(s) => this.props.addWidgetSetting('orp', s)} fields='id,label,files' />
             </FormControl>
-            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit()}}>Add Widget</Button>
-          </div>
-      </Modal>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.props.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={(evt) => {this.props.handleSubmit()}} color="primary">
+              Add Widget
+            </Button>
+          </DialogActions>
+      </Dialog>
     );
   }
 }
 
-SettingsModal.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-const OchaProductsSettings = withStyles(settingsStyles)(SettingsModal);
 const OchaProducts = withStyles(styles)(OchaProductsSimple);
 
 

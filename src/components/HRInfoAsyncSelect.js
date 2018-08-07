@@ -34,6 +34,9 @@ class HRInfoAsyncSelect extends React.Component {
 			  if (type === 'organizations' && elt.acronym) {
 				  elt.label = elt.label + ' (' + elt.acronym + ')';
 			  }
+        if (type === 'bundles' && elt.operation) {
+          elt.label = elt.label + ' (' + elt.operation[0].label + ')';
+        }
 			  fullLabels.push(elt);
 		  });
 		  return fullLabels;

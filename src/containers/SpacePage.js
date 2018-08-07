@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Dashboard, { addWidget } from 'react-dazzle';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,27 +14,6 @@ import {DynamicContent, DynamicContentSettings } from '../widgets/DynamicConten
 import withSpace from '../utils/withSpace';
 
 import 'react-dazzle/lib/style/style.css';
-
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
-const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-  },
-});
 
 class SpacePage extends React.Component {
 
@@ -58,7 +37,9 @@ class SpacePage extends React.Component {
       DynamicContent: false,
       OchaProducts: false
     },
-    addWidgetOptions: null
+    addWidgetOptions: {
+      widgetSettings: {}
+    }
   };
 
   /**
@@ -172,48 +153,43 @@ class SpacePage extends React.Component {
           onAdd={this.onAdd}
           onRemove={this.onRemove}
           onMove={this.onMove} />
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
+        <Dialog
+          fullScreen
           open={this.state.isModalOpen}
           onClose={this.handleClose}
         >
-          <div style={getModalStyle()} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              Add a widget
-            </Typography>
-            <Typography variant="subheading" id="simple-modal-description">
-              <List>
-                <ListItem>
-                  <Button onClick={(s) => {this.openSettings('OchaProducts')}}>Ocha Products</Button>
-                </ListItem>
-                <ListItem>
-                  <Button onClick={(s) => {this.openSettings('DynamicContent')}}>Dynamic Content</Button>
-                </ListItem>
-              </List>
-            </Typography>
-          </div>
-        </Modal>
+          <DialogTitle id="scroll-dialog-title">Choose a Widget</DialogTitle>
+          <DialogContent>
+            <List>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('OchaProducts')}}>Ocha Products</Button>
+              </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('DynamicContent')}}>Dynamic Content from HRInfo</Button>
+              </ListItem>
+            </List>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
         <DynamicContentSettings
           open={this.state.isSettingsOpen['DynamicContent']}
           handleClose={() => {this.closeSettings('DynamicContent')}}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          style={getModalStyle()}
+          {...this.state.addWidgetOptions.widgetSettings}
         />
         <OchaProductsSettings
           open={this.state.isSettingsOpen['OchaProducts']}
           handleClose={() => { this.closeSettings('OchaProducts') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          style={getModalStyle()}
         />
     </div>);
   }
 }
 
-SpacePage.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withSpace(withStyles(styles)(SpacePage), {});
+export default withSpace(SpacePage, {});
