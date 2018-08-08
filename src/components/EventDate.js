@@ -1,24 +1,20 @@
 import React  from 'react';
 import Select from 'react-select';
-import { FormGroup, Row, Col } from 'reactstrap';
-import RRuleGenerator                        from 'react-rrule-generator';
-import moment                                from 'moment';
+
+import RRuleGenerator          from 'react-rrule-generator';
+
+import moment                  from 'moment';
+import MaterialSelect          from './MaterialSelect';
 import 'moment-timezone';
 
 // Material
-import FormControl      from '@material-ui/core/FormControl';
-import FormLabel        from '@material-ui/core/FormLabel';
-import Checkbox         from '@material-ui/core/Checkbox';
-
-//Dates
-import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import DatePicker              from 'material-ui-pickers/DatePicker';
-import TimePicker              from 'material-ui-pickers/TimePicker';
-
-//Card
-import Card          from '@material-ui/core/Card';
-import CardContent   from '@material-ui/core/CardContent';
+import FormControl  from '@material-ui/core/FormControl';
+import FormLabel    from '@material-ui/core/FormLabel';
+import Checkbox     from '@material-ui/core/Checkbox';
+import Typography   from '@material-ui/core/Typography';
+import TextField    from '@material-ui/core/TextField';
+import Card         from '@material-ui/core/Card';
+import CardContent  from '@material-ui/core/CardContent';
 
 class EventDate extends React.Component {
   constructor(props) {
@@ -49,8 +45,12 @@ class EventDate extends React.Component {
     this.setTimezone  = this.setTimezone.bind(this);
   }
 
+
+
 // Checkbox 'All day'
   setCheckbox (event) {
+    console.log('EVENT target CHANGED', event.target)
+
     const target  = event.target;
     const value   = target.type === 'checkbox' ? target.checked : target.value;
     const name    = target.name;
@@ -68,6 +68,71 @@ class EventDate extends React.Component {
     }
     this.setState(newState);
   }
+
+
+  //Changements
+    handleChange (event) {
+      console.log('EVENT target CHANGED', event.target)
+
+      const target = event.target;
+      const value  = target.type === 'checkbox' ? target.checked : target.value;
+      const name   = target.name;
+      let val      = this.state.val;
+
+      // FROM DATE
+      if (name === 'from_date') {
+        val.value = value;
+        if (this.state.from_time) {
+          val.value += ' ' + this.state.from_time + ':00';
+        }
+        else {
+          val.value += ' 00:00:00';
+        }
+        this.setState({
+          val      : val,
+          from_date: value
+        });
+      }
+
+      // FROM TIME
+      if (name === 'from_time') {
+        val.value = this.state.from_date + ' ' + value + ':00';
+        this.setState({
+          val       : val,
+          from_time : value
+        });
+      }
+
+      // TO DATE
+      if (name === 'to_date') {
+        val.value2 = value;
+        if (this.state.to_time) {
+          val.value2 += ' ' + this.state.to_time + ':00';
+        }
+        else {
+          val.value2 += ' 00:00:00';
+        }
+        this.setState({
+          val     : val,
+          to_date : value
+        });
+      }
+
+      // TO TIME
+      if (name === 'to_time') {
+        val.value2 = this.state.to_date + ' ' + value + ':00';
+        this.setState({
+          val    : val,
+          to_time: value
+        });
+      }
+
+
+      if (this.props.onChange) {
+        this.props.onChange(val);
+      }
+    }
+
 
 
 // rrule
@@ -117,64 +182,6 @@ class EventDate extends React.Component {
   }
 
 
-//Changements
-  handleChange (event) {
-    const target = event.target;
-    const value  = target.type === 'checkbox' ? target.checked : target.value;
-    const name   = target.name;
-    let val      = this.state.val;
-
-    if (name === 'from_date') {
-      val.value = value;
-
-      if (this.state.from_time) {
-        val.value += ' ' + this.state.from_time + ':00';
-      }
-      else {
-        val.value += ' 00:00:00';
-      }
-
-      this.setState({
-        val      : val,
-        from_date: value
-      });
-    }
-    if (name === 'from_time') {
-      val.value = this.state.from_date + ' ' + value + ':00';
-
-      this.setState({
-        val      : val,
-        from_time: value
-      });
-    }
-    if (name === 'to_date') {
-      val.value2 = value;
-
-      if (this.state.to_time) {
-        val.value2 += ' ' + this.state.to_time + ':00';
-      }
-      else {
-        val.value2 += ' 00:00:00';
-      }
-
-      this.setState({
-        val    : val,
-        to_date: value
-      });
-    }
-    if (name === 'to_time') {
-      val.value2 = this.state.to_date + ' ' + value + ':00';
-      this.setState({
-        val    : val,
-        to_time: value
-      });
-    }
-
-    if (this.props.onChange) {
-      this.props.onChange(val);
-    }
-  }
-
 
 // Get the date
   getDate (input) {
@@ -193,7 +200,6 @@ class EventDate extends React.Component {
     }
   }
 
-
 // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
@@ -206,8 +212,8 @@ class EventDate extends React.Component {
       const from_time = this.getTime(val.value);
       let newState = {
         val       : val,
-        from_date : this.getDate(val.value),
         from_time : from_time,
+        from_date : this.getDate(val.value),
         to_date   : this.getDate(val.value2),
         to_time   : this.getTime(val.value2),
         allDay    : this.state.allDay,
@@ -224,91 +230,81 @@ class EventDate extends React.Component {
   render() {
     return (
       <Card className="card-container">
-
-      {/* 'All day checkbox' */}
-        <CardContent className="date-container">
-          <FormControl check>
-            <Checkbox name     = "allDay"
-                      onChange = {this.setCheckbox}/> All day
-          </FormControl>
-        </CardContent>
-
       {/* Date 'from' */}
+
         <CardContent className="date-container">
           <FormControl margin = "normal">
             <FormLabel for="from_date">From</FormLabel>
                 <form>
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <DatePicker
-                      id             = "from_date"
-                      name           = "from_date"
-                      format         = "DD/MM/YYYY"
-                      placeholder    = 'DD/MM/YYYY'
-                      value          = {this.state.from_date}
-                      onChange       = {this.handleChange}
-                      invalidLabel   = ""
-                      autoOk
-                      leftArrowIcon  = {<i className="icon-arrow-left"  />}
-                      rightArrowIcon = {<i className="icon-arrow-right" />}
-                    />
-                  </MuiPickersUtilsProvider>
+                  <TextField
+                    id    = "from_date"
+                    name  = "from_date"
+                    type  = "date"
+                    placeholder     = "DD/MM/YYYY"
+                    value           = {this.state.from_date}
+                    onChange        = {this.handleChange}
+                    InputLabelProps ={{
+                      shrink: true,
+                    }}
+                  />
 
-                  &nbsp;&nbsp;&nbsp;
+                  &nbsp;
 
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <TimePicker
-                      id            = "from_time"
-                      name          = "from_time"
-                      placeholder   = '00:00'
-                      value         = {this.state.from_time}
-                      onChange      = {this.handleChange}
-                      disabled      = {this.state.allDay}
-                      invalidLabel  = ""
-                      autoOk
-                    />
-                  </MuiPickersUtilsProvider>
+                  <TextField
+                    id    = "from_time"
+                    name  = "from_time"
+                    type  = "time"
+                    placeholder     = "00:00"
+                    value           = {this.state.from_time}
+                    onChange        = {this.handleChange}
+                    InputLabelProps ={{
+                      shrink: true,
+                    }}
+                  />
                 </form>
           </FormControl>
-        </CardContent>
 
-      {/* Date 'To' */}
-        <CardContent className="date-container">
+      {/* Date 'To'
+        <CardContent className="date-container"> */}
             <FormControl  margin="normal">
               <FormLabel for="from_date">To</FormLabel>
                 <form>
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <DatePicker
-                      id             = "to_date"
-                      name           = "to_date"
-                      format         = "DD/MM/YYYY"
-                      placeholder    = 'DD/MM/YYYY'
-                      value          = {this.state.to_date}
-                      onChange       = {this.handleChange}
-                      invalidLabel   = ""
-                      autoOk
-                      leftArrowIcon  = {<i className="icon-arrow-left"  />}
-                      rightArrowIcon = {<i className="icon-arrow-right" />}
-                    />
-                  </MuiPickersUtilsProvider>
+                  <TextField
+                    id    = "to_date"
+                    name  = "to_date"
+                    type  = "date"
+                    placeholder     = "DD/MM/YYYY"
+                    value           = {this.state.to_date}
+                    onChange        = {this.handleChange}
+                    InputLabelProps ={{
+                      shrink: true,
+                    }}
+                  />
+
                   &nbsp;
-                  <MuiPickersUtilsProvider utils = {MomentUtils}>
-                    <TimePicker
-                      id            = "to_time"
-                      name          = "to_time"
-                      placeholder   = '00:00'
-                      value         = {this.state.to_time}
-                      onChange      = {this.handleChange}
-                      disabled      = {this.state.allDay}
-                      invalidLabel  = ""
-                      autoOk
-                    />
-                  </MuiPickersUtilsProvider>
+
+                  <TextField
+                    id    = "to_date"
+                    name  = "to_date"
+                    type  = "time"
+                    placeholder     = "00:00"
+                    value          = {this.state.to_time}
+                    onChange       = {this.handleChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
                 </form>
             </FormControl>
           </CardContent>
 
-        {/* 'Repeat' checkbox */}
-          <CardContent className="date-container">
+
+       {/* 'All day' checkbox & 'Repeat' checkbox */}
+          <CardContent className = "date-container">
+            <FormControl check>
+              <Checkbox name     = "allDay"
+                        onChange = {this.setCheckbox}/> All day
+            </FormControl>
             <FormControl check>
               <Checkbox name     = "repeats"
                         onChange = {this.setCheckbox}
@@ -317,25 +313,18 @@ class EventDate extends React.Component {
           </CardContent>
 
         {/* 'Repeat' div hidden */}
-          <CardContent className="date-container">
+          <CardContent className = "date-container">
             {this.state.repeats === true &&
-              <Row>
-                <Col>
-                  <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} />
-                </Col>
-              </Row>
+              <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} />
             }
           </CardContent>
 
-        {/* Timezone div */}
+        {/* Timezone */}
           <CardContent >
-            <FormGroup margin="normal">
-              <FormLabel for="timezone">Timezone</FormLabel>
-                <Select options  = {moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })}
-                        onChange = {this.setTimezone}
-                        value    = {this.state.val.timezone} />
-              </FormGroup>
-
+            <Typography> Timezone </Typography>
+            <MaterialSelect options  = {moment.tz.names().map(function (timezone) { return {label: timezone, value: timezone}; })}
+                            onChange = {this.setTimezone}
+                            value    = {this.state.val.timezone} />
           </CardContent>
       </Card>
     );

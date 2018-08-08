@@ -49,12 +49,17 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
     handleSelectChange (name, selected) {
       let doc = this.state.doc;
-      if (name === 'date') {
-        doc[name][0] = selected;
-      }
-      else {
-        doc[name] = selected;
-      }
+      console.log ('DOC', doc)
+
+      // if (name === 'date') {
+      //   doc[name] = selected;
+      // }
+      // else {
+      //   doc[name] = selected;
+      // }
+
+      doc[name] = selected; //Added
+
       if (hrinfoType !== 'operations') {
         let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
         if (name === 'spaces') {

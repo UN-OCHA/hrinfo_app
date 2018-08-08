@@ -23,7 +23,7 @@ import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox         from '@material-ui/core/Checkbox';
 
 //Material ui pickers
 import MomentUtils             from 'material-ui-pickers/utils/moment-utils';

@@ -88,13 +88,18 @@ class Address extends React.Component {
       return (
         <Card  className="card-container">
 
+        {/* Country */}
           <CardContent className="address-container-select">
             <Typography>Country</Typography>
             <FormControl className="address-container-text">
-               <HRInfoLocation level="0" value={this.state.val.country} onChange={this.setCountry} />
+               <HRInfoLocation id = "country"
+                               level    = "0"
+                               value    = {this.state.val.country}
+                               onChange = {this.setCountry} />
             </FormControl>
           </CardContent>
 
+        {/* Address 1 */}
           <CardContent className="address-container-select">
             <Typography> Address 1 </Typography>
             <FormControl className="address-container-text">
@@ -105,6 +110,7 @@ class Address extends React.Component {
             </FormControl>
           </CardContent>
 
+        {/* Address 2 */}
           <CardContent className="address-container-select">
             <Typography> Address 2 </Typography>
             <FormControl className="address-container-text">
@@ -115,6 +121,7 @@ class Address extends React.Component {
             </FormControl>
           </CardContent>
 
+        {/* Postal Code */}
           <CardContent className="address-container-select">
             <Typography> Postal Code </Typography>
             <FormControl className="address-container-text">
@@ -125,6 +132,7 @@ class Address extends React.Component {
             </FormControl>
           </CardContent>
 
+        {/* City */}
           <CardContent className="address-container-select">
             <Typography>City</Typography>
             <FormControl className="address-container-text">
