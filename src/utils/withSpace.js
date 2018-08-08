@@ -142,9 +142,10 @@ const withSpace = function withSpace(Component, options) {
             newState.content = await this.hidAPI.get(options.contentType, params);
           }
           else if (options.contentType === 'dataset') {
-            params.q = 'groups:nga';
-            params.rows = 10;
-            params.start = 10;
+            const iso3 = newState.doc && newState.doc.country ? newState.doc.country.iso3.toLowerCase() : '';
+            params.q = 'groups:' + iso3;
+            params.rows = this.state.rowsPerPage;
+            params.start = this.state.page * this.state.rowsPerPage;
             newState.content = await this.hdxAPI.get(params);
           }
           else {
@@ -183,7 +184,20 @@ const withSpace = function withSpace(Component, options) {
           sort: options.sort
         };
         let filters = this.state.filters;
-        if (options.contentType !== 'user') {
+        if (options.contentType === 'user') {
+          params.limit = this.state.rowsPerPage;
+          params.offset = this.state.page * this.state.rowsPerPage;
+          params[this.hidFilter + '.list'] = this.state.list._id;
+          content = await this.hidAPI.get(options.contentType, params);
+        }
+        else if (options.contentType === 'dataset') {
+          const iso3 = this.state.doc && this.state.doc.country ? this.state.doc.country.iso3.toLowerCase() : '';
+          params.q = 'groups:' + iso3;
+          params.rows = this.state.rowsPerPage;
+          params.start = this.state.page * this.state.rowsPerPage;
+          content = await this.hdxAPI.get(params);
+        }
+        else {
           params.range = this.state.rowsPerPage;
           params.page = this.state.page + 1;
           let filterKeys = Object.keys(filters);
@@ -225,12 +239,6 @@ const withSpace = function withSpace(Component, options) {
             });
           }
           content = await this.hrinfoAPI.get(options.contentType, params);
-        }
-        else {
-          params.limit = this.state.rowsPerPage;
-          params.offset = this.state.page * this.state.rowsPerPage;
-          params[this.hidFilter + '.list'] = this.state.list._id;
-          content = await this.hidAPI.get(options.contentType, params);
         }
         content.data = content.data.map(function (item) {
           item.type = options.contentType;

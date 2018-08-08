@@ -18,6 +18,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ViewModule from '@material-ui/icons/ViewModule';
 import ViewList from '@material-ui/icons/ViewList';
+import moment from 'moment';
 
 
 import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
@@ -60,9 +61,9 @@ class DatasetsPage extends React.Component {
               return (
                 <TableRow key={n.id}>
                   <TableCell component="th" scope="row">
-                    <Link to={'/documents/' + n.id}>{n.title}</Link>
+                    <a href={'https://data.humdata.org/dataset/' + n.id} target="__blank">{n.title}</a>
                   </TableCell>
-                  <TableCell>{n.metadata_modified}</TableCell>
+                  <TableCell>{moment(n.metadata_modified).format('DD MMMM YYYY')}</TableCell>
                   <TableCell>{n.dataset_source}</TableCell>
                 </TableRow>
               );
@@ -98,4 +99,4 @@ DatasetsPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(DatasetsPage), {contentType: 'dataset', contentLabel: 'Datasets'});
+export default withSpace(withStyles(styles)(DatasetsPage), {contentType: 'dataset', contentLabel: 'Datasets', sort: 'metadata_modified'});
