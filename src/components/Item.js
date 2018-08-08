@@ -11,8 +11,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import moment from 'moment';
 
 const styles = {
   card: {
@@ -147,7 +149,7 @@ class Item extends React.Component {
           </Card>
         );
       }
-      else {
+      else if (this.props.viewMode === 'grid') {
         return (
           <GridListTile key={item.id} className={classes.gridList}>
             <Link to={'/' + item.type + '/' + item.id}>
@@ -157,6 +159,14 @@ class Item extends React.Component {
               />
             </Link>
           </GridListTile>
+        );
+      }
+      else if (this.props.viewMode === 'link') {
+        return (
+          <ListItem key={item.id}>
+            <Link to={'/' + item.type + '/' + item.id}><ListItemText primary={item.label} /></Link>
+            {item.type === 'events' ? moment(item.date[0].value).format('DD/MM/YYYY') : ''}
+          </ListItem>
         );
       }
     }

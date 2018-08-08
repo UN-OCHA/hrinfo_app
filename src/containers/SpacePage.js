@@ -7,9 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
-import {OchaProducts} from '../widgets/OchaProducts';
-import {DynamicContent } from '../widgets/DynamicContent';
-import {StaticContent} from '../widgets/StaticContent';
 import withSpace from '../utils/withSpace';
 import SelectWidget from '../components/SelectWidget';
 
@@ -26,11 +23,6 @@ const styles = theme => ({
 class SpacePage extends React.Component {
 
   state = {
-    widgetTypes: {
-      'DynamicContent': DynamicContent,
-      'OchaProducts': OchaProducts,
-      'StaticContent': StaticContent
-    },
     widgets: {
     },
     layout: {
@@ -123,13 +115,14 @@ class SpacePage extends React.Component {
             onAdd={this.onAdd}
             onRemove={this.onRemove}
             onMove={this.onMove} />
-          <SelectWidget
-            layout={this.state.tempLayout}
-            rowIndex={this.state.rowIndex}
-            columnIndex={this.state.columnIndex}
-            isModalOpen={this.state.isModalOpen}
-            onRequestClose={this.handleClose}
-            onWidgetSelect={this.handleWidgetSelection} />
+          {this.state.isEditable ?
+            <SelectWidget
+              layout={this.state.tempLayout}
+              rowIndex={this.state.rowIndex}
+              columnIndex={this.state.columnIndex}
+              isModalOpen={this.state.isModalOpen}
+              onRequestClose={this.handleClose}
+              onWidgetSelect={this.handleWidgetSelection} /> : ''}
       </Paper>);
     }
     else {

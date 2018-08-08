@@ -1,8 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,6 +15,7 @@ import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
 import HRInfoSelect from '../components/HRInfoSelect';
 import EventCategorySelect from '../components/EventCategorySelect';
 import HRInfoAPI from '../api/HRInfoAPI';
+import Item from '../components/Item';
 
 class DynamicContent extends React.Component {
 
@@ -73,10 +71,8 @@ class DynamicContent extends React.Component {
         <List>
             {documents.data.map(function (doc) {
               return (
-                <ListItem key={doc.id}>
-                  <Link to={'/' + doc.type + '/' + doc.id}><ListItemText primary={doc.label} /></Link>
-                  {doc.type === 'events' ? moment(doc.date[0].value).format('DD/MM/YYYY') : ''}
-                </ListItem>);
+                <Item item={doc} viewMode='link' />
+              );
             })}
         </List> : '' }
       </div>

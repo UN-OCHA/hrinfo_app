@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import {OchaProducts, OchaProductsSettings} from '../widgets/OchaProducts';
 import {DynamicContent, DynamicContentSettings } from '../widgets/DynamicContent';
 import {StaticContent, StaticContentSettings} from '../widgets/StaticContent';
+import {FreeText, FreeTextSettings} from '../widgets/FreeText';
 
 class SelectWidget extends React.Component {
 
@@ -17,12 +18,14 @@ class SelectWidget extends React.Component {
     widgetTypes: {
       'DynamicContent': DynamicContent,
       'OchaProducts': OchaProducts,
-      'StaticContent': StaticContent
+      'StaticContent': StaticContent,
+      'FreeText': FreeText
     },
     isSettingsOpen: {
       DynamicContent: false,
       OchaProducts: false,
-      StaticContent: false
+      StaticContent: false,
+      FreeText: false
     },
     addWidgetOptions: {
       widgetSettings: {}
@@ -102,6 +105,9 @@ class SelectWidget extends React.Component {
               <ListItem>
                 <Button onClick={(s) => {this.openSettings('StaticContent')}}>Static Content from HRInfo</Button>
               </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('FreeText')}}>Free Text</Button>
+              </ListItem>
             </List>
           </DialogContent>
           <DialogActions>
@@ -122,12 +128,21 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('OchaProducts') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          {...this.state.addWidgetOptions.widgetSettings}
         />
         <StaticContentSettings
           open={this.state.isSettingsOpen['StaticContent']}
           handleClose={() => { this.closeSettings('StaticContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          {...this.state.addWidgetOptions.widgetSettings}
+        />
+        <FreeTextSettings
+          open={this.state.isSettingsOpen['FreeText']}
+          handleClose={() => { this.closeSettings('FreeText') }}
+          handleSubmit={this.handleWidgetSelection}
+          addWidgetSetting={this.addWidgetSetting}
+          {...this.state.addWidgetOptions.widgetSettings}
         />
       </div>
     );
