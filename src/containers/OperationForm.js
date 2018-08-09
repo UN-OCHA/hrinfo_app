@@ -102,7 +102,7 @@ class OperationForm extends React.Component {
 
         <FormGroup>
           <Label for="focal_points">Focal points</Label>
-          <HidContacts onChange={(s) => this.props.handleSelectChange('focal_points', s)} value={this.props.doc.focal_points} />
+          <HidContacts isMulti={true} onChange={(s) => this.props.handleSelectChange('focal_points', s)} value={this.props.doc.focal_points} />
         </FormGroup>
 
         <FormGroup>

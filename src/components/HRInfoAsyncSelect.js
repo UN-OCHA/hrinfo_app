@@ -56,8 +56,6 @@ class HRInfoAsyncSelect extends React.Component {
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        getOptionValue={(option) => { return option.id }}
-        getOptionLabel={(option) => { return option.label}}
         onChange={this.handleChange}
         value={this.props.value}
         className={this.props.className}

@@ -11,6 +11,7 @@ import {OchaProducts, OchaProductsSettings} from '../widgets/OchaProducts';
 import {DynamicContent, DynamicContentSettings } from '../widgets/DynamicContent';
 import {StaticContent, StaticContentSettings} from '../widgets/StaticContent';
 import {FreeText, FreeTextSettings} from '../widgets/FreeText';
+import {HidContactsWidget, HidContactsWidgetSettings} from '../widgets/HidContactsWidget';
 
 class SelectWidget extends React.Component {
 
@@ -19,13 +20,15 @@ class SelectWidget extends React.Component {
       'DynamicContent': DynamicContent,
       'OchaProducts': OchaProducts,
       'StaticContent': StaticContent,
-      'FreeText': FreeText
+      'FreeText': FreeText,
+      'HidContactsWidget': HidContactsWidget
     },
     isSettingsOpen: {
       DynamicContent: false,
       OchaProducts: false,
       StaticContent: false,
-      FreeText: false
+      FreeText: false,
+      HidContactsWidget: false
     },
     addWidgetOptions: {
       widgetSettings: {}
@@ -108,6 +111,9 @@ class SelectWidget extends React.Component {
               <ListItem>
                 <Button onClick={(s) => {this.openSettings('FreeText')}}>Free Text</Button>
               </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('HidContactsWidget')}}>Contacts from HID</Button>
+              </ListItem>
             </List>
           </DialogContent>
           <DialogActions>
@@ -140,6 +146,13 @@ class SelectWidget extends React.Component {
         <FreeTextSettings
           open={this.state.isSettingsOpen['FreeText']}
           handleClose={() => { this.closeSettings('FreeText') }}
+          handleSubmit={this.handleWidgetSelection}
+          addWidgetSetting={this.addWidgetSetting}
+          {...this.state.addWidgetOptions.widgetSettings}
+        />
+        <HidContactsWidgetSettings
+          open={this.state.isSettingsOpen['HidContactsWidget']}
+          handleClose={() => { this.closeSettings('HidContactsWidget') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
           {...this.state.addWidgetOptions.widgetSettings}

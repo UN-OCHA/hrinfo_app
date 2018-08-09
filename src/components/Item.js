@@ -162,12 +162,27 @@ class Item extends React.Component {
         );
       }
       else if (this.props.viewMode === 'link') {
-        return (
-          <ListItem key={item.id}>
-            <Link to={'/' + item.type + '/' + item.id}><ListItemText primary={item.label} /></Link>
-            {item.type === 'events' ? moment(item.date[0].value).format('DD/MM/YYYY') : ''}
-          </ListItem>
-        );
+        if (item.type === 'users') {
+          return (
+            <ListItem key={item.id}>
+              <ListItemText>
+                <Link to={'/' + item.type + '/' + item.id}><Typography variant="headline" component="h2">{item.name}</Typography></Link>
+                {item.organization ? <Typography component="p">{item.organization.name}</Typography> : ''}
+                {item.job_title ? <Typography component="p">{item.job_title}</Typography> : ''}
+                {item.email ? <Typography component="p">{item.email}</Typography> : ''}
+                {item.phone_number ? <Typography component="p">{item.phone_number}</Typography> : ''}
+              </ListItemText>
+            </ListItem>
+          );
+        }
+        else {
+          return (
+            <ListItem key={item.id}>
+              <Link to={'/' + item.type + '/' + item.id}><ListItemText primary={item.label} /></Link>
+              {item.type === 'events' ? moment(item.date[0].value).format('DD/MM/YYYY') : ''}
+            </ListItem>
+          );
+        }
       }
     }
 }

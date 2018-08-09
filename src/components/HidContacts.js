@@ -1,5 +1,7 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
+
+import MaterialAsyncSelect from '../components/MaterialAsyncSelect';
 import HidAPI from '../api/HidAPI';
 
 class HidContacts extends React.Component {
@@ -21,19 +23,18 @@ class HidContacts extends React.Component {
     params.sort = 'name';
     params.q = input;
     return this.hidAPI
-      .get('user', params);
+      .get('user', params)
+      .then(data => {
+        return data.data;
+      });
   }
 
   handleChange (selectedOption) {
-    let out = [];
-    selectedOption.forEach(function (option) {
-      out.push(option.id);
-    });
     this.setState({
       contacts: selectedOption
     });
     if (this.props.onChange) {
-      this.props.onChange(out);
+      this.props.onChange(selectedOption);
     }
   }
 
@@ -41,15 +42,23 @@ class HidContacts extends React.Component {
     const that = this;
     if (this.state.status === 'initial') {
       if (this.props.value) {
-        let promises = [];
-        this.props.value.forEach(function (v) {
-          promises.push(that.hidAPI.getItem('user', v));
-        });
-        let out = await Promise.all(promises);
-        this.setState({
-          contacts: out,
-          status: 'loaded'
-        });
+        if (this.props.isMulti) {
+          let promises = [];
+          this.props.value.forEach(function (v) {
+            promises.push(that.hidAPI.getItem('user', v));
+          });
+          let out = await Promise.all(promises);
+          this.setState({
+            contacts: out,
+            status: 'loaded'
+          });
+        }
+        else {
+          this.setState({
+            contacts: that.props.value,
+            status: 'loaded'
+          });
+        }
       }
       else {
         this.setState({
@@ -61,11 +70,10 @@ class HidContacts extends React.Component {
 
   render() {
     return (
-      <AsyncSelect
-        isMulti
+      <MaterialAsyncSelect
+        isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        getOptionValue={(option) => { return option.id }}
-        getOptionLabel={(option) => { return option.name}}
+        labelAttribute="name"
         onChange={this.handleChange}
         value={this.state.contacts}
         className={this.props.className}

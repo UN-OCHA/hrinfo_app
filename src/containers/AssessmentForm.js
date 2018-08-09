@@ -470,7 +470,7 @@ class AssessmentForm extends React.Component {
 
         <FormGroup>
           <Label for="contacts">Contact(s)</Label>
-          <HidContacts token={this.props.token} onChange={(s) => this.handleSelectChange('contacts', s)} value={this.state.doc.contacts} />
+          <HidContacts isMulti={true} token={this.props.token} onChange={(s) => this.handleSelectChange('contacts', s)} value={this.state.doc.contacts} />
           <FormText color="muted">
             Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.
           </FormText>
