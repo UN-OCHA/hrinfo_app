@@ -159,7 +159,7 @@ class EventForm extends React.Component {
               <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>Venue</FormLabel>
               <Address onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
               <FormHelperText id = "files-text">
-                Indicate here where the event takes place.
+                Indicate here where the {this.props.label} takes place.
               </FormHelperText>
             </FormControl>
 
@@ -170,10 +170,10 @@ class EventForm extends React.Component {
                             required
                             onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} /> */}
               <EventDate value    = {this.props.doc.date}
-                         onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}}
+                         onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                          required />
               <FormHelperText>
-                Indicate the date of the {this.props.label + ' '}.
+                Indicate the date of the {this.props.label}.
               </FormHelperText>
             </FormControl>
           </Grid>
