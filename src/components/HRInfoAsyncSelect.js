@@ -9,7 +9,6 @@ class HRInfoAsyncSelect extends React.Component {
       items: []
     };
     this.hrinfoAPI = new HRInfoAPI();
-    this.handleChange = this.handleChange.bind(this);
     this.getOptions = this.getOptions.bind(this);
   }
 
@@ -45,18 +44,12 @@ class HRInfoAsyncSelect extends React.Component {
       });
   }
 
-  handleChange (selectedOption) {
-    if (this.props.onChange) {
-      this.props.onChange(selectedOption);
-    }
-  }
-
   render() {
     return (
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        onChange={this.handleChange}
+        onChange={this.props.onChange}
         value={this.props.value}
         className={this.props.className}
         />

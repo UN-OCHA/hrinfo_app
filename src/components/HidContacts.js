@@ -1,5 +1,4 @@
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
 
 import MaterialAsyncSelect from '../components/MaterialAsyncSelect';
 import HidAPI from '../api/HidAPI';

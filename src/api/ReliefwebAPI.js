@@ -29,7 +29,6 @@ class ReliefwebAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    let count = 0;
     return fetch(url, {
         headers: {
           'Accept': 'application/json',
@@ -58,7 +57,6 @@ class ReliefwebAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    let count = 0;
     return fetch(url, {
         headers: {
           'Accept': 'application/json',

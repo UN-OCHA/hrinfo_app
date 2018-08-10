@@ -13,6 +13,7 @@ import {StaticContent, StaticContentSettings} from '../widgets/StaticContent';
 import {FreeText, FreeTextSettings} from '../widgets/FreeText';
 import {HidContactsWidget, HidContactsWidgetSettings} from '../widgets/HidContactsWidget';
 import {ReliefwebDynamicContent, ReliefwebDynamicContentSettings} from '../widgets/ReliefwebDynamicContent';
+import {ReliefwebStaticContent, ReliefwebStaticContentSettings} from '../widgets/ReliefwebStaticContent';
 
 class SelectWidget extends React.Component {
 
@@ -23,7 +24,8 @@ class SelectWidget extends React.Component {
       'StaticContent': StaticContent,
       'FreeText': FreeText,
       'HidContactsWidget': HidContactsWidget,
-      'ReliefwebDynamicContent': ReliefwebDynamicContent
+      'ReliefwebDynamicContent': ReliefwebDynamicContent,
+      'ReliefwebStaticContent' : ReliefwebStaticContent
     },
     isSettingsOpen: {
       DynamicContent: false,
@@ -31,7 +33,8 @@ class SelectWidget extends React.Component {
       StaticContent: false,
       FreeText: false,
       HidContactsWidget: false,
-      ReliefwebDynamicContent: false
+      ReliefwebDynamicContent: false,
+      ReliefwebStaticContent: false
     },
     addWidgetOptions: {
       widgetSettings: {}
@@ -120,6 +123,9 @@ class SelectWidget extends React.Component {
               <ListItem>
                 <Button onClick={(s) => {this.openSettings('ReliefwebDynamicContent')}}>Dynamic Content from Reliefweb</Button>
               </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('ReliefwebStaticContent')}}>Static Content from Reliefweb</Button>
+              </ListItem>
             </List>
           </DialogContent>
           <DialogActions>
@@ -133,6 +139,7 @@ class SelectWidget extends React.Component {
           handleClose={() => {this.closeSettings('DynamicContent')}}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <OchaProductsSettings
@@ -140,6 +147,7 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('OchaProducts') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <StaticContentSettings
@@ -147,6 +155,7 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('StaticContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <FreeTextSettings
@@ -154,6 +163,7 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('FreeText') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <HidContactsWidgetSettings
@@ -161,6 +171,7 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('HidContactsWidget') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <ReliefwebDynamicContentSettings
@@ -168,6 +179,15 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('ReliefwebDynamicContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
+          title=''
+          {...this.state.addWidgetOptions.widgetSettings}
+        />
+        <ReliefwebStaticContentSettings
+          open={this.state.isSettingsOpen['ReliefwebStaticContent']}
+          handleClose={() => { this.closeSettings('ReliefwebStaticContent') }}
+          handleSubmit={this.handleWidgetSelection}
+          addWidgetSetting={this.addWidgetSetting}
+          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
       </div>

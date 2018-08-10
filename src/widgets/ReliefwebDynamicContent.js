@@ -8,12 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import moment from 'moment';
 
-import MaterialSelect from '../components/MaterialSelect';
-import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
-import HRInfoSelect from '../components/HRInfoSelect';
-import EventCategorySelect from '../components/EventCategorySelect';
 import ReliefwebAPI from '../api/ReliefwebAPI';
 import ReliefwebSelect from '../components/ReliefwebSelect';
 import Item from '../components/Item';
@@ -31,7 +26,6 @@ class ReliefwebDynamicContent extends React.Component {
   };
 
   async componentDidMount() {
-    const contentType = this.props.content ? this.props.content.value : 'documents';
     const props = this.props;
     const params = {
       appname: 'hrinfo',

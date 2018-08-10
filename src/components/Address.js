@@ -7,23 +7,6 @@ import TextField        from '@material-ui/core/TextField';
 import Card             from '@material-ui/core/Card';
 import CardContent      from '@material-ui/core/CardContent';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  margin: {
-    margin: theme.spacing.unit,
-  },
-  withoutLabel: {
-    marginTop: theme.spacing.unit * 3,
-  },
-  textField: {
-    flexBasis: 200,
-  },
-});
-
-
 
 class Address extends React.Component {
     constructor(props) {
@@ -34,18 +17,6 @@ class Address extends React.Component {
       };
       this.handleChange = this.handleChange.bind(this);
       this.setCountry = this.setCountry.bind(this);
-    }
-
-
-    setCountry (row, level, selectedOption) {
-      let val = this.state.val;
-          val['country'] = selectedOption;
-      this.setState({
-        val: val
-      });
-      if (this.props.onChange) {
-        this.props.onChange(val);
-      }
     }
 
     setCountry (row, level, selectedOption) {
@@ -84,7 +55,6 @@ class Address extends React.Component {
     }
 
     render () {
-      const { classes } = this.props;
       return (
         <Card  className="card-container">
 
