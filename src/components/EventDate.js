@@ -5,6 +5,7 @@ import RRuleGenerator          from 'react-rrule-generator';
 
 import moment                  from 'moment';
 import MaterialSelect          from './MaterialSelect';
+import RRule                   from './RRule';
 import 'moment-timezone';
 
 // Material
@@ -19,7 +20,7 @@ import CardContent  from '@material-ui/core/CardContent';
 //Material date picker
 import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import { DateTimePicker, DatePicker } from 'material-ui-pickers';
+import DateTimePicker                 from 'material-ui-pickers/DateTimePicker';
 
 class EventDate extends React.Component {
   constructor(props) {
@@ -45,8 +46,6 @@ class EventDate extends React.Component {
     this.setRrule     = this.setRrule.bind(this);
     this.setTimezone  = this.setTimezone.bind(this);
   }
-
-
 
   // Checkbox 'All day'
   setCheckbox (event) {
@@ -154,12 +153,9 @@ class EventDate extends React.Component {
       let newState = {
         val       : val,
         allDay    : this.state.allDay,
-        repeats   : false,
+        repeats   : this.state.repeats,
         status    : 'ready'
       };
-      if (this.props.value.rrule) {
-        newState.repeats = true;
-      }
       this.setState(newState);
     }
   }
@@ -213,11 +209,14 @@ class EventDate extends React.Component {
         <CardContent className = "date-container">
           <FormControl>
             <Checkbox name     = "allDay"
+                      color    = "primary"
                       onChange = {this.setCheckbox}
+                      disabled = {!(this.state.val.value && this.state.val.value2)}
             /> All day
           </FormControl>
           <FormControl>
             <Checkbox name     = "repeats"
+                      color    = "primary"
                       onChange = {this.setCheckbox}
             /> Repeat
           </FormControl>
@@ -226,7 +225,8 @@ class EventDate extends React.Component {
         {/* 'Repeat' div hidden */}
         <CardContent className = "date-container">
           {this.state.repeats === true &&
-            <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} />
+              /* <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} /> */
+              <RRule onChange={(rrule) => this.setRrule(rrule)} value={this.state.val.rrule}/>
           }
         </CardContent>
 
