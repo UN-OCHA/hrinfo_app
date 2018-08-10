@@ -66,8 +66,8 @@ function SelectWrapped(props) {
       styles={customStyles}
       isClearable={true}
 	  isMulti={props.isMulti}
-	  getOptionValue={(option) => { return option.id }}
-	  getOptionLabel={(option) => { return option.label}}
+	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
+	  getOptionLabel={(option) => { if (props.getOptionLabel) { return props.getOptionLabel(option) } else { return option.label } }}
 	  value={props.value}
       {...other}
     />
@@ -149,7 +149,9 @@ class MaterialSelect extends React.Component {
 	              id: this.props.id,
 	              simpleValue: true,
 	              options: this.props.options,
-				  value: this.props.value
+				        value: this.props.value,
+                getOptionValue: this.props.getOptionValue,
+                getOptionLabel: this.props.getOptionLabel
 	            },
 	          }}
 	        />

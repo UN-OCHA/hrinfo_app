@@ -48,14 +48,12 @@ class HRInfoSelect extends React.Component {
         else {
           if ((type === 'spaces' || type === 'operations' || type === 'bundles') && this.user.hrinfo.roles.indexOf('administrator') === -1) {
             let user = this.user;
-            console.log(user);
             let spaceIds = Object.keys(user.hrinfo.spaces);
             elts.forEach(function (elt) {
               if (user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
                 pushed.push(elt);
               }
             });
-            console.log(pushed);
           }
           else {
             pushed = elts;

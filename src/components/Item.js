@@ -175,6 +175,13 @@ class Item extends React.Component {
             </ListItem>
           );
         }
+        else if (item.type === 'reports') {
+          return (
+            <ListItem key={item.id}>
+              <a href={'https://reliefweb.int/node/' + item.id} target="_blank"><ListItemText primary={item.fields.title} /></a>
+            </ListItem>
+          );
+        }
         else {
           return (
             <ListItem key={item.id}>

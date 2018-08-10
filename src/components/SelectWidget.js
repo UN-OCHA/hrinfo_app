@@ -12,6 +12,7 @@ import {DynamicContent, DynamicContentSettings } from '../widgets/DynamicConten
 import {StaticContent, StaticContentSettings} from '../widgets/StaticContent';
 import {FreeText, FreeTextSettings} from '../widgets/FreeText';
 import {HidContactsWidget, HidContactsWidgetSettings} from '../widgets/HidContactsWidget';
+import {ReliefwebDynamicContent, ReliefwebDynamicContentSettings} from '../widgets/ReliefwebDynamicContent';
 
 class SelectWidget extends React.Component {
 
@@ -21,14 +22,16 @@ class SelectWidget extends React.Component {
       'OchaProducts': OchaProducts,
       'StaticContent': StaticContent,
       'FreeText': FreeText,
-      'HidContactsWidget': HidContactsWidget
+      'HidContactsWidget': HidContactsWidget,
+      'ReliefwebDynamicContent': ReliefwebDynamicContent
     },
     isSettingsOpen: {
       DynamicContent: false,
       OchaProducts: false,
       StaticContent: false,
       FreeText: false,
-      HidContactsWidget: false
+      HidContactsWidget: false,
+      ReliefwebDynamicContent: false
     },
     addWidgetOptions: {
       widgetSettings: {}
@@ -114,6 +117,9 @@ class SelectWidget extends React.Component {
               <ListItem>
                 <Button onClick={(s) => {this.openSettings('HidContactsWidget')}}>Contacts from HID</Button>
               </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('ReliefwebDynamicContent')}}>Dynamic Content from Reliefweb</Button>
+              </ListItem>
             </List>
           </DialogContent>
           <DialogActions>
@@ -153,6 +159,13 @@ class SelectWidget extends React.Component {
         <HidContactsWidgetSettings
           open={this.state.isSettingsOpen['HidContactsWidget']}
           handleClose={() => { this.closeSettings('HidContactsWidget') }}
+          handleSubmit={this.handleWidgetSelection}
+          addWidgetSetting={this.addWidgetSetting}
+          {...this.state.addWidgetOptions.widgetSettings}
+        />
+        <ReliefwebDynamicContentSettings
+          open={this.state.isSettingsOpen['ReliefwebDynamicContent']}
+          handleClose={() => { this.closeSettings('ReliefwebDynamicContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
           {...this.state.addWidgetOptions.widgetSettings}

@@ -73,7 +73,7 @@ class HidContacts extends React.Component {
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        labelAttribute="name"
+        getOptionLabel={(option) => {return option.name}}
         onChange={this.handleChange}
         value={this.state.contacts}
         className={this.props.className}
