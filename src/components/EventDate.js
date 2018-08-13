@@ -229,6 +229,7 @@ class EventDate extends React.Component {
                       color    = "primary"
                       onChange = {this.setCheckbox}
                       disabled = {!this.state.val.value}
+                      checked  = {this.state.allDay}
             /> All day
           </FormControl>
           <FormControl>
