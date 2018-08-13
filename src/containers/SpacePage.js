@@ -28,10 +28,22 @@ class SpacePage extends React.Component {
     layout: {
       rows: [{
         columns: [{
-          className: 'col-md-12',
+          className: 'layout-sidebar',
           widgets: [],
+        }, {
+          className: 'layout-header',
+          widgets: []
+        }, {
+          className: 'layout-first-column',
+          widgets: []
+        }, {
+          className: 'layout-second-column',
+          widgets: []
+        }, {
+          className: 'layout-footer',
+          widgets: []
         }],
-      }],
+      }]
     },
     isEditable: false,
     isModalOpen: false,
@@ -108,13 +120,16 @@ class SpacePage extends React.Component {
             <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/edit'}><i className="icon-edit" /></Button>
             <Button onClick={this.setEditable}><i className="icon-wheel" /></Button>
           </Typography>
-          <Dashboard
-            widgets={this.state.widgets}
-            layout={this.state.layout}
-            editable={this.state.isEditable}
-            onAdd={this.onAdd}
-            onRemove={this.onRemove}
-            onMove={this.onMove} />
+          <div className="container">
+            <Dashboard
+              widgets={this.state.widgets}
+              layout={this.state.layout}
+              editable={this.state.isEditable}
+              onAdd={this.onAdd}
+              onRemove={this.onRemove}
+              onMove={this.onMove}
+              className='container' />
+          </div>
           {this.state.isEditable ?
             <SelectWidget
               layout={this.state.tempLayout}
