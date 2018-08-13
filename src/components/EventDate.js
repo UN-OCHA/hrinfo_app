@@ -27,9 +27,10 @@ class EventDate extends React.Component {
     super(props);
     this.state = {
       items   : [],
+      endDate : true,
       allDay  : false,
       repeats : false,
-      val: {
+      val : {
         value       : '',
         value2      : '',
         timezone    : 'UTC',
@@ -47,7 +48,7 @@ class EventDate extends React.Component {
     this.setTimezone  = this.setTimezone.bind(this);
   }
 
-  // Checkbox 'All day'
+  // Checkbox
   setCheckbox (event) {
     const target  = event.target;
     const value   = target.checked;
@@ -58,7 +59,6 @@ class EventDate extends React.Component {
 
     if (target.name === 'allDay' && value) {
       newState.val        = this.state.val;
-
       newState.val.value  = new Date(newState.val.value);
       newState.val.value.setHours(0);
       newState.val.value.setMinutes(0);
@@ -66,6 +66,10 @@ class EventDate extends React.Component {
       newState.val.value2 = new Date(newState.val.value);
       newState.val.value2.setHours(0);
       newState.val.value2.setMinutes(0);
+    }
+    if (target.name === 'endDate' && value) {
+      newState.val = this.state.val;
+      newState.val.value2 = newState.val.value;
     }
     this.setState(newState);
   }
@@ -144,7 +148,7 @@ class EventDate extends React.Component {
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
-      let val = this.props.value[0];
+      let val = this.props.value[0] ? this.props.value[0] : this.props.value;
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
@@ -154,8 +158,9 @@ class EventDate extends React.Component {
       });
       let newState = {
         val       : val,
+        endDate   : (val.value.isSame(val.value2) ? false : true),
         allDay    : this.state.allDay,
-        repeats   : this.state.repeats,
+        repeats   : (val.rrule ? true : false),
         status    : 'ready'
       };
       this.setState(newState);
@@ -187,6 +192,7 @@ class EventDate extends React.Component {
           </FormControl>
 
       {/* Date 'To'*/}
+        {this.state.endDate === true &&
           <FormControl  margin="normal">
             <FormLabel htmlFor="to">To</FormLabel>
             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -202,24 +208,33 @@ class EventDate extends React.Component {
                 rightArrowIcon = {<i className="icon-arrow-right" />}
                 dateRangeIcon  = {<i className="icon-calendar" />}
                 timeIcon       = {<i className="icon-clock" />}
-              />
+                />
             </MuiPickersUtilsProvider>
           </FormControl>
+        }
         </CardContent>
 
        {/* 'All day' checkbox & 'Repeat' checkbox */}
         <CardContent className = "date-container">
           <FormControl>
+            <Checkbox name     = "endDate"
+                      color    = "primary"
+                      onChange = {this.setCheckbox}
+                      checked  = {this.state.endDate}
+            /> End date
+          </FormControl>
+          <FormControl>
             <Checkbox name     = "allDay"
                       color    = "primary"
                       onChange = {this.setCheckbox}
-                      disabled = {!(this.state.val.value && this.state.val.value2)}
+                      disabled = {!this.state.val.value}
             /> All day
           </FormControl>
           <FormControl>
             <Checkbox name     = "repeats"
                       color    = "primary"
                       onChange = {this.setCheckbox}
+                      checked  = {this.state.repeats}
             /> Repeat
           </FormControl>
         </CardContent>
