@@ -159,7 +159,7 @@ class EventDate extends React.Component {
       let newState = {
         val       : val,
         endDate   : (val.value.isSame(val.value2) ? false : true),
-        allDay    : this.state.allDay,
+        allDay    : (val.value2.hours() + val.value2.minutes() === 0 ? true : false),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'
       };
@@ -200,6 +200,7 @@ class EventDate extends React.Component {
                 id             = "to"
                 name           = "to"
                 format         = "DD/MM/YYYY hh:mm A"
+                minDate        = {this.state.val.value}
                 value          = {this.state.val.value2 ? this.state.val.value2 : ''}
                 invalidLabel   = ""
                 autoOk
