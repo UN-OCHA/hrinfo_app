@@ -196,11 +196,12 @@ class AssessmentsPage extends React.Component {
             </div> : ''
           }
         </Paper>
-        <Link to="/assessments/new">
-          <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
-            <AddIcon />
-          </Button>
-        </Link>
+        {this.props.doc && this.props.hasPermission('add', 'assessment', this.props.doc) ?
+          <Link to="/assessments/new">
+            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+              <AddIcon />
+            </Button>
+          </Link> : '' }
       </div>
     );
   }

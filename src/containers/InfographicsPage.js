@@ -106,11 +106,12 @@ class InfographicsPage extends React.Component {
               </TableFooter>
             </Table>
           </Paper>
-          <Link to="/infographics/new">
-            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
-              <AddIcon />
-            </Button>
-          </Link>
+          {this.props.doc && this.props.hasPermission('add', 'infographic', this.props.doc) ?
+            <Link to="/infographics/new">
+              <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+                <AddIcon />
+              </Button>
+            </Link> : '' }
         </div>
       );
     }

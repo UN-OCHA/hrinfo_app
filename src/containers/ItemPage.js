@@ -1,4 +1,9 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
 import Item from '../components/Item';
 import HRInfoAPI from '../api/HRInfoAPI';
 
@@ -41,7 +46,15 @@ class ItemPage extends React.Component {
 
     render() {
       if (this.state.doc) {
-        return (<Item item={this.state.doc} viewMode="full" user={this.props.user} />);
+        return (
+          <Paper>
+            <Typography align = "right">
+              {this.props.hasPermission('edit', this.state.doc) ?
+                <Button component={Link} to={'/' + this.state.doc.type + 's/' + this.state.doc.id + '/edit'}><i className="icon-edit" /></Button> : ''}
+            </Typography>
+            <Item item={this.state.doc} viewMode="full" user={this.props.user} />
+          </Paper>
+        );
       }
       else {
         return null;
