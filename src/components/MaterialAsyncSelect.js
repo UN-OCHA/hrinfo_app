@@ -74,9 +74,9 @@ function SelectWrapped(props) {
 	  loadingMessage={() => <Typography>{'Loading...'}</Typography>}
       styles={customStyles}
       isClearable={true}
-	  isMulti
-	  getOptionValue={(option) => { return option.id }}
-      getOptionLabel={(option) => { return option.label}}
+	  isMulti={props.isMulti}
+	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
+      getOptionLabel={(option) => { if (props.getOptionLabel) {return props.getOptionLabel(option)} else {return option.label}}}
 	  value={props.value}
       {...other}
     />
@@ -158,7 +158,9 @@ class MaterialAsyncSelect extends React.Component {
 	              id: this.props.id,
 	              simpleValue: true,
 	              loadOptions: this.props.loadOptions,
-				  value: this.props.value
+				        value: this.props.value,
+                getOptionLabel: this.props.getOptionLabel,
+                getOptionValue: this.props.getOptionValue
 	            },
 	          }}
 	        />

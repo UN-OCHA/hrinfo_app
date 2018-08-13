@@ -231,7 +231,7 @@ class DocumentForm extends React.Component {
 
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>Organization(s)</FormLabel>
-              <HRInfoAsyncSelect type="organizations"
+              <HRInfoAsyncSelect type="organizations" isMulti={true}
                 onChange={(s) => this.props.handleSelectChange('organizations', s)}
                 value={this.props.doc.organizations}/>
               <FormHelperText id="organizations-text">
@@ -294,8 +294,8 @@ class DocumentForm extends React.Component {
 
               <FormControl fullWidth margin="normal">
 								<FormControlLabel
-                  control={<Checkbox checked={this.props.doc.exclude_from_reliefweb} onChange={(s) => this.props.handleSelectChange('exclude_from_reliefweb', s)} color="primary" />}
-                  label="Do not share with Reliefweb"
+                  control={<Checkbox checked={this.props.doc.exclude_from_reliefweb === true ? true : false} name="exclude_from_reliefweb" onChange={this.props.handleInputChange} color="primary" />}
+                  label="Do not share with ReliefWeb"
                 />
 							</FormControl>
 

@@ -20,9 +20,10 @@ class HidAPI {
           'Content-Type': 'application/json'
         }})
         .then(results => {
-            return results.json();
+          return results.json();
         })
         .then(data => {
+          data.type = 'users';
           return data;
         });
   }
@@ -49,6 +50,9 @@ class HidAPI {
         return results.json();
       })
       .then(data => {
+        data.forEach(function (item) {
+          item.type = 'users';
+        });
         return {
           count: count,
           data: data

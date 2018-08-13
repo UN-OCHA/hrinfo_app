@@ -19,6 +19,7 @@ import DocumentsPage        from '../containers/DocumentsPage';
 import InfographicsPage     from '../containers/InfographicsPage';
 import DisastersPage        from '../containers/DisastersPage';
 import EventsPage           from '../containers/EventsPage';
+import DatasetsPage         from '../containers/DatasetsPage';
 
 import AuthenticatedRoute   from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
@@ -60,6 +61,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/:id/contacts"     exact component={ContactsPage}                                       props={childProps} />
     <AuthenticatedRoute path="/operations/:id/offices"      exact component={OfficesPage}                                        props={childProps} />
     <AuthenticatedRoute path="/operations/:id/disasters"    exact component={DisastersPage}                                      props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/datasets"     exact component={DatasetsPage}                                       props={childProps} />
 
 {/* Groups */}
     <AuthenticatedRoute path="/groups/:id"              exact component={SpacePage}         props={childProps} />

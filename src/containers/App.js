@@ -65,6 +65,7 @@ class App extends Component {
         this.setGroup = this.setGroup.bind(this);
         this.handlePopover = this.handlePopover.bind(this);
         this.setBreadcrumb = this.setBreadcrumb.bind(this);
+        this.hasPermission = this.hasPermission.bind(this);
     }
 
     toggleMenu(event) {
@@ -189,6 +190,26 @@ class App extends Component {
       });
     }
 
+    hasPermission (action, content, space) {
+      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1) {
+        return true;
+      }
+      let isAllowed = false;
+      Object.keys(hrinfo.spaces).forEach(function (id) {
+        if (id === space.id) {
+          const perms = hrinfo.spaces[id];
+          if (action === 'add' &&
+            content !== 'bundle' &&
+            content !== 'group' &&
+            (perms.indexOf('editor') !== -1 || perms.indexOf('manager') !== -1 || perms.indexOf('contributor') !== -1)) {
+            isAllowed = true;
+          }
+        }
+      });
+      return isAllowed;
+    }
+
     render() {
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
@@ -197,7 +218,8 @@ class App extends Component {
             setAlert: this.setAlert,
             user: this.state.user,
             setGroup: this.setGroup,
-            setBreadcrumb: this.setBreadcrumb
+            setBreadcrumb: this.setBreadcrumb,
+            hasPermission: this.hasPermission
         };
 
         const popover = this.state.group ? (

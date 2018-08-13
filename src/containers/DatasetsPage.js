@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,20 +9,12 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ViewModule from '@material-ui/icons/ViewModule';
-import ViewList from '@material-ui/icons/ViewList';
+import moment from 'moment';
 
 
 import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
 import withSpace from '../utils/withSpace';
-import {Filters, FilterChips} from '../components/Filters';
-import Item from '../components/Item';
 
 const styles = theme => ({
   root: {
@@ -39,7 +30,7 @@ const styles = theme => ({
 class DatasetsPage extends React.Component {
 
   render() {
-    const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page, toggleDrawer, drawerState, contentType, spaceType, filters, removeFilter} = this.props;
+    const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page} = this.props;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
     return (
@@ -60,9 +51,9 @@ class DatasetsPage extends React.Component {
               return (
                 <TableRow key={n.id}>
                   <TableCell component="th" scope="row">
-                    <Link to={'/documents/' + n.id}>{n.title}</Link>
+                    <a href={'https://data.humdata.org/dataset/' + n.id} target="__blank">{n.title}</a>
                   </TableCell>
-                  <TableCell>{n.metadata_modified}</TableCell>
+                  <TableCell>{moment(n.metadata_modified).format('DD MMMM YYYY')}</TableCell>
                   <TableCell>{n.dataset_source}</TableCell>
                 </TableRow>
               );
@@ -98,4 +89,4 @@ DatasetsPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(DatasetsPage), {contentType: 'dataset', contentLabel: 'Datasets'});
+export default withSpace(withStyles(styles)(DatasetsPage), {contentType: 'dataset', contentLabel: 'Datasets', sort: 'metadata_modified'});

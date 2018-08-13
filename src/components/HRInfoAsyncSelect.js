@@ -9,15 +9,20 @@ class HRInfoAsyncSelect extends React.Component {
       items: []
     };
     this.hrinfoAPI = new HRInfoAPI();
-    this.handleChange = this.handleChange.bind(this);
     this.getOptions = this.getOptions.bind(this);
   }
 
   getOptions (input) {
     const type = this.props.type;
     let params = {};
-    params.search = input;
-    params.fields = 'id,label,acronym';
+    if (type === 'organizations') {
+      params.search = input;
+    }
+    else {
+      params['filter[label][value]'] = input;
+      params['filter[label][operator]'] = 'CONTAINS';
+    }
+    params.fields = this.props.fields ? this.props.fields : 'id,label,acronym';
     params.sort = 'label';
     params.range = 10;
     return this.hrinfoAPI
@@ -28,6 +33,9 @@ class HRInfoAsyncSelect extends React.Component {
 			  if (type === 'organizations' && elt.acronym) {
 				  elt.label = elt.label + ' (' + elt.acronym + ')';
 			  }
+        if (type === 'bundles' && elt.operation) {
+          elt.label = elt.label + ' (' + elt.operation[0].label + ')';
+        }
 			  fullLabels.push(elt);
 		  });
 		  return fullLabels;
@@ -36,20 +44,12 @@ class HRInfoAsyncSelect extends React.Component {
       });
   }
 
-  handleChange (selectedOption) {
-    if (this.props.onChange) {
-      this.props.onChange(selectedOption);
-    }
-  }
-
   render() {
     return (
       <MaterialAsyncSelect
-        isMulti
+        isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        getOptionValue={(option) => { return option.id }}
-        getOptionLabel={(option) => { return option.label}}
-        onChange={this.handleChange}
+        onChange={this.props.onChange}
         value={this.props.value}
         className={this.props.className}
         />

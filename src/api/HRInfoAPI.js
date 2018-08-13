@@ -64,6 +64,9 @@ class HRInfoAPI {
       .then(results => {
         return results.json();
       }).then(data => {
+        data.data.forEach(function (item) {
+          item.type = type;
+        });
         return data;
       });
   }
@@ -130,6 +133,7 @@ class HRInfoAPI {
     if (body.item_id) {
       url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection/' + body.item_id;
       httpMethod = 'PATCH';
+      delete body.item_id;
     }
     return fetch(url, {
       method: httpMethod,
