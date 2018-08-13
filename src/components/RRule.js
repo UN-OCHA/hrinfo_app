@@ -130,8 +130,20 @@ class RRule extends React.Component {
                    value      = {this.state.interval}
                    onChange   = {(e) => this.handleChange(e, 'INTERVAL')}
                    InputProps = {{
-                    startAdornment: <InputAdornment position="start">every </InputAdornment>,
-                    endAdornment:   <InputAdornment position="end"> month(s)</InputAdornment>
+                    startAdornment: <InputAdornment position="start">every</InputAdornment>,
+                    endAdornment:   this.state.freq === 'MONTHLY' ?
+                                      <InputAdornment position="end">month(s)</InputAdornment>
+                                    : (this.state.freq === 'WEEKLY' ?
+                                        <InputAdornment position="end">week(s)</InputAdornment>
+                                      : (this.state.freq === 'DAILY' ?
+                                          <InputAdornment position="end">day(s)</InputAdornment>
+                                        : (this.state.freq === 'HOURLY' &&
+                                            <InputAdornment position="end">hour(s)</InputAdornment>
+                                          : ''
+                                        )
+                                      )
+                                    )
+
                   }}
         />
       </FormControl>
@@ -146,7 +158,7 @@ class RRule extends React.Component {
                    value      = {this.state.count}
                    onChange   = {(e) => this.handleChange(e, 'COUNT')}
                    InputProps = {{
-                    endAdornment:   <InputAdornment position="end"> execution(s)</InputAdornment>
+                    endAdornment:   <InputAdornment position="end">execution(s)</InputAdornment>
                   }}
         />
       </FormControl>

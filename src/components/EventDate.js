@@ -144,11 +144,13 @@ class EventDate extends React.Component {
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
-      let val = this.props.value;
+      let val = this.props.value[0];
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
         }
+        val.value = moment(val.value, "YYYY-MM-DD HH:mm:ss");
+        val.value2 = moment(val.value2, "YYYY-MM-DD HH:mm:ss");
       });
       let newState = {
         val       : val,
