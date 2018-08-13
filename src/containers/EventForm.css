@@ -49,6 +49,10 @@
 	width 					: 100%;
 }
 
+.rrule-container{
+  width           : 90%;
+}
+
 .date-container-timezone{
   display					: flex;
 	justify-content	: space-evenly;

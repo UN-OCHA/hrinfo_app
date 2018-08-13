@@ -159,7 +159,21 @@ class EventForm extends React.Component {
               <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>Venue</FormLabel>
               <Address onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
               <FormHelperText id = "files-text">
-                Indicate here where the event takes place.
+                Indicate here where the {this.props.label} takes place.
+              </FormHelperText>
+            </FormControl>
+
+        {/* Dates */}
+            <FormControl required fullWidth margin="normal">
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
+              {/* <EventDate value    = {this.props.doc.date ? this.props.doc.date : ''}
+                            required
+                            onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} /> */}
+              <EventDate value    = {this.props.doc.date}
+                         onChange = {(val) => {this.props.handleSelectChange('date', val);}}
+                         required />
+              <FormHelperText>
+                Indicate the date of the {this.props.label}.
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -185,17 +199,6 @@ class EventForm extends React.Component {
               <FormHelperText>
                 Click on the field and select where to publish the {this.props.label + ' '}
                 (operation, regional site or thematic site).
-              </FormHelperText>
-            </FormControl>
-
-        {/* Dates */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.publication_date)}>Date</FormLabel>
-              <EventDate value    = {this.props.doc.date ? this.props.doc.date : ''}
-                         required
-                         onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} />
-              <FormHelperText id = "publication_date-text">
-                Indicate the date of the {this.props.label + ' '}.
               </FormHelperText>
             </FormControl>
 
