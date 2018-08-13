@@ -14,6 +14,7 @@ import {FreeText, FreeTextSettings} from '../widgets/FreeText';
 import {HidContactsWidget, HidContactsWidgetSettings} from '../widgets/HidContactsWidget';
 import {ReliefwebDynamicContent, ReliefwebDynamicContentSettings} from '../widgets/ReliefwebDynamicContent';
 import {ReliefwebStaticContent, ReliefwebStaticContentSettings} from '../widgets/ReliefwebStaticContent';
+import {StaticMenu, StaticMenuSettings} from '../widgets/StaticMenu';
 
 class SelectWidget extends React.Component {
 
@@ -25,7 +26,8 @@ class SelectWidget extends React.Component {
       'FreeText': FreeText,
       'HidContactsWidget': HidContactsWidget,
       'ReliefwebDynamicContent': ReliefwebDynamicContent,
-      'ReliefwebStaticContent' : ReliefwebStaticContent
+      'ReliefwebStaticContent' : ReliefwebStaticContent,
+      'StaticMenu': StaticMenu
     },
     isSettingsOpen: {
       DynamicContent: false,
@@ -34,7 +36,8 @@ class SelectWidget extends React.Component {
       FreeText: false,
       HidContactsWidget: false,
       ReliefwebDynamicContent: false,
-      ReliefwebStaticContent: false
+      ReliefwebStaticContent: false,
+      StaticMenu: false
     },
     addWidgetOptions: {
       widgetSettings: {}
@@ -126,6 +129,9 @@ class SelectWidget extends React.Component {
               <ListItem>
                 <Button onClick={(s) => {this.openSettings('ReliefwebStaticContent')}}>Static Content from Reliefweb</Button>
               </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('StaticMenu')}}>Static Menu</Button>
+              </ListItem>
             </List>
           </DialogContent>
           <DialogActions>
@@ -185,6 +191,14 @@ class SelectWidget extends React.Component {
         <ReliefwebStaticContentSettings
           open={this.state.isSettingsOpen['ReliefwebStaticContent']}
           handleClose={() => { this.closeSettings('ReliefwebStaticContent') }}
+          handleSubmit={this.handleWidgetSelection}
+          addWidgetSetting={this.addWidgetSetting}
+          title=''
+          {...this.state.addWidgetOptions.widgetSettings}
+        />
+        <StaticMenuSettings
+          open={this.state.isSettingsOpen['StaticMenu']}
+          handleClose={() => { this.closeSettings('StaticMenu') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
           title=''

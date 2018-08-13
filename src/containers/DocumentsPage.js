@@ -181,11 +181,12 @@ class DocumentsPage extends React.Component {
             </div> : ''
           }
         </Paper>
-        <Link to="/documents/new">
-          <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
-            <AddIcon />
-          </Button>
-        </Link>
+        {this.props.doc && this.props.hasPermission('add', 'document', this.props.doc) ?
+          <Link to="/documents/new">
+            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+              <AddIcon />
+            </Button>
+          </Link> : '' }
       </div>
     );
   }

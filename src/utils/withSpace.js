@@ -27,6 +27,19 @@ const withSpace = function withSpace(Component, options) {
       this.hrinfoAPI = new HRInfoAPI();
       this.hidAPI = new HidAPI();
       this.hdxAPI = new HdxAPI();
+      this.handleChangePage = this.handleChangePage.bind(this);
+      this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+      this.onRangeChange = this.onRangeChange.bind(this);
+      this.toggleDrawer = this.toggleDrawer.bind(this);
+      this.setFilter = this.setFilter.bind(this);
+      this.removeFilter = this.removeFilter.bind(this);
+      this.getSpaceAndBreadcrumb = this.getSpaceAndBreadcrumb.bind(this);
+      this.setFromUrl = this.setFromUrl.bind(this);
+
+      this.setFromUrl();
+    }
+
+    setFromUrl () {
       const parts = this.props.match.url.split('/');
       this.spaceType = parts[1].slice(0, -1);
       this.hrinfoFilter = this.spaceType + 's';
@@ -50,12 +63,6 @@ const withSpace = function withSpace(Component, options) {
       // hrinfoFilter = ['operation', 'bundles', 'organizations', 'disasters', 'offices']
       // hidFilter = ['operations', 'bundles', 'organization', 'disasters', 'offices']
       // hrinfoType = ['operations', 'bundles', 'organizations', 'disasters', 'offices']
-      this.handleChangePage = this.handleChangePage.bind(this);
-      this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
-      this.onRangeChange = this.onRangeChange.bind(this);
-      this.toggleDrawer = this.toggleDrawer.bind(this);
-      this.setFilter = this.setFilter.bind(this);
-      this.removeFilter = this.removeFilter.bind(this);
     }
 
     handleChangePage (event, page) {
@@ -103,77 +110,92 @@ const withSpace = function withSpace(Component, options) {
       });
     }
 
+    async getSpaceAndBreadcrumb () {
+      let newState = {};
+      newState.doc = await this.hrinfoAPI.getItem(this.hrinfoType, this.props.match.params.id);
+      newState.doc.type = this.spaceType;
+      let breadcrumb = [];
+      if ((this.spaceType === 'group' || this.spaceType === 'office') && newState.doc.operation) {
+        breadcrumb.push({
+          href: '/operations/' + newState.doc.operation[0].id,
+          label: newState.doc.operation[0].label
+        });
+      }
+      breadcrumb.push({
+        href: '/' + this.spaceType + 's/' + newState.doc.id,
+        label: newState.doc.label
+      });
+      if (options.contentType) {
+        let params = {};
+        if (options.sort) {
+          params.sort = options.sort;
+        }
+        if (options.contentType === 'user') {
+          params.limit = this.state.rowsPerPage;
+          let listType = this.spaceType;
+          if (listType === 'group') {
+            listType = 'bundle';
+          }
+          const listParams = {
+            type: listType,
+            remote_id: newState.doc.id
+          };
+          const lists = await this.hidAPI.get('list', listParams);
+          newState.list = lists.data[0];
+          params.limit = this.state.rowsPerPage;
+          params[this.hidFilter + '.list'] = newState.list._id;
+          newState.content = await this.hidAPI.get(options.contentType, params);
+        }
+        else if (options.contentType === 'dataset') {
+          const iso3 = newState.doc && newState.doc.country ? newState.doc.country.iso3.toLowerCase() : '';
+          params.q = 'groups:' + iso3;
+          params.rows = this.state.rowsPerPage;
+          params.start = this.state.page * this.state.rowsPerPage;
+          newState.content = await this.hdxAPI.get(params);
+        }
+        else {
+          params.range = this.state.rowsPerPage;
+          params.page = this.state.page + 1;
+          params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
+          newState.content = await this.hrinfoAPI.get(options.contentType, params);
+        }
+        newState.content.data = newState.content.data.map(function (item) {
+          item.type = options.contentType;
+          return item;
+        });
+        let contentType = options.contentType;
+        if (contentType === 'user') {
+          contentType = 'contacts';
+        }
+        breadcrumb.push({
+          href: '/' + this.spaceType + 's/' + newState.doc.id + '/' + contentType,
+          label: options.contentLabel
+        });
+      }
+      return {
+        newState: newState,
+        breadcrumb: breadcrumb
+      };
+    }
+
 
     async componentDidMount() {
       if (this.props.match.params.id) {
-        let newState = {};
-        newState.doc = await this.hrinfoAPI.getItem(this.hrinfoType, this.props.match.params.id);
-        newState.doc.type = this.spaceType;
-        let breadcrumb = [];
-        if ((this.spaceType === 'group' || this.spaceType === 'office') && newState.doc.operation) {
-          breadcrumb.push({
-            href: '/operations/' + newState.doc.operation[0].id,
-            label: newState.doc.operation[0].label
-          });
-        }
-        breadcrumb.push({
-          href: '/' + this.spaceType + 's/' + newState.doc.id,
-          label: newState.doc.label
-        });
-        if (options.contentType) {
-          let params = {};
-          if (options.sort) {
-            params.sort = options.sort;
-          }
-          if (options.contentType === 'user') {
-            params.limit = this.state.rowsPerPage;
-            let listType = this.spaceType;
-            if (listType === 'group') {
-              listType = 'bundle';
-            }
-            const listParams = {
-              type: listType,
-              remote_id: newState.doc.id
-            };
-            const lists = await this.hidAPI.get('list', listParams);
-            newState.list = lists.data[0];
-            params.limit = this.state.rowsPerPage;
-            params[this.hidFilter + '.list'] = newState.list._id;
-            newState.content = await this.hidAPI.get(options.contentType, params);
-          }
-          else if (options.contentType === 'dataset') {
-            const iso3 = newState.doc && newState.doc.country ? newState.doc.country.iso3.toLowerCase() : '';
-            params.q = 'groups:' + iso3;
-            params.rows = this.state.rowsPerPage;
-            params.start = this.state.page * this.state.rowsPerPage;
-            newState.content = await this.hdxAPI.get(params);
-          }
-          else {
-            params.range = this.state.rowsPerPage;
-            params.page = this.state.page + 1;
-            params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
-            newState.content = await this.hrinfoAPI.get(options.contentType, params);
-          }
-          newState.content.data = newState.content.data.map(function (item) {
-            item.type = options.contentType;
-            return item;
-          });
-          let contentType = options.contentType;
-          if (contentType === 'user') {
-            contentType = 'contacts';
-          }
-          breadcrumb.push({
-            href: '/' + this.spaceType + 's/' + newState.doc.id + '/' + contentType,
-            label: options.contentLabel
-          });
-        }
-        this.setState(newState);
-        this.props.setGroup(newState.doc);
-        this.props.setBreadcrumb(breadcrumb);
+        const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
+        this.setState(stateAndBreadcrumb.newState);
+        this.props.setGroup(stateAndBreadcrumb.newState.doc);
+        this.props.setBreadcrumb(stateAndBreadcrumb.breadcrumb);
       }
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
+      if (prevProps.match.url !== this.props.match.url) {
+        this.setFromUrl();
+        const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
+        this.setState(stateAndBreadcrumb.newState);
+        this.props.setGroup(stateAndBreadcrumb.newState.doc);
+        this.props.setBreadcrumb(stateAndBreadcrumb.breadcrumb);
+      }
       if (prevState.rowsPerPage !== this.state.rowsPerPage ||
         prevState.page !== this.state.page ||
         JSON.stringify(prevState.filters) !== JSON.stringify(this.state.filters) ||
