@@ -1,14 +1,26 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoSelect from '../components/HRInfoSelect';
 import HRInfoLocation from '../components/HRInfoLocation';
 import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
 import HidContacts from '../components/HidContacts';
 import StringSelect from '../components/StringSelect';
 import LanguageSelect from '../components/LanguageSelect';
+
+// Material Imports
+import Grid             from '@material-ui/core/Grid';
+import Snackbar         from '@material-ui/core/Snackbar';
+import Typography       from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button           from '@material-ui/core/Button';
+import FormControl      from '@material-ui/core/FormControl';
+import FormLabel        from '@material-ui/core/FormLabel';
+import TextField        from '@material-ui/core/TextField';
+import FormHelperText   from '@material-ui/core/FormHelperText';
+
+//Material date picker
+import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 class OperationForm extends React.Component {
   constructor(props) {
@@ -33,101 +45,197 @@ class OperationForm extends React.Component {
   }
 
   render() {
-
     return (
-      <Form onSubmit={this.props.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated bg-white my-3 p-3': 'bg-white my-3 p-3'}>
-        <FormGroup className="required">
-          <Label for="language">Language</Label>
-          <LanguageSelect value={this.props.doc.language} onChange={(s) => this.props.handleSelectChange('language', s)} className={this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
-          <div className="invalid-feedback">
-            Please select a language
-          </div>
-        </FormGroup>
+      <Grid container direction="column" alignItems="center">
+        <Typography color="textSecondary" gutterBottom variant="headline">Create Operation</Typography>
+        <Grid item>
+          <Grid container justify="space-around">
+            <Grid item md={6} xs={11}>
+              {/* Title */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused htmlFor="label" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
+                <TextField type     = "text"
+                           name     = "label"
+                           id       = "label"
+                           value    = {this.props.doc.label}
+                           onChange = {this.props.handleInputChange}/>
+                <FormHelperText id = "label-text">
+                  Please enter the operation title.
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup className="required">
-          <Label for="label">Title</Label>
-          <Input type="text" name="label" id="label" placeholder="Enter the title of the operation" required="required" value={this.props.doc.label} onChange={this.props.handleInputChange} />
-          <div className="invalid-feedback">
-            Please enter the operation title
-          </div>
-        </FormGroup>
+              {/* Language */}
+               <FormControl required fullWidth margin="normal">
+                 <FormLabel focused htmlFor="language" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>Language</FormLabel>
+                 <LanguageSelect id        = "language"
+                                 value     = {this.props.doc.language}
+                                 onChange  = {(s) => this.props.handleSelectChange('language', s)}
+                                 className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
+                 <FormHelperText id="language-text">
+                   Please select a language.
+                 </FormHelperText>
+               </FormControl>
 
-        <FormGroup className="required">
-          <Label for="type">Type</Label>
-          <StringSelect id="type" name="type" options={this.state.operationTypes} value={this.props.doc.type} onChange={(s) => this.props.handleSelectChange('type', s)} className={this.props.isValid(this.props.doc.type) ? 'is-valid' : 'is-invalid'}/>
-          <div className="invalid-feedback">
-            You must select an operation type
-          </div>
-        </FormGroup>
+              {/* Type */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused htmlFor="type" error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.type)}>Type</FormLabel>
+                <StringSelect id        = "type"
+                              name      = "type"
+                              options   = {this.state.operationTypes}
+                              value     = {this.props.doc.type}
+                              onChange  = {(s) => this.props.handleSelectChange('type', s)}
+                              className = {this.props.isValid(this.props.doc.type) ? 'is-valid' : 'is-invalid'}/>
+                            <FormHelperText id="label-type">
+                  You must select an operation type.
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="region">Region</Label>
-          <HRInfoSelect type="operations" onChange={(s) => this.props.handleSelectChange('region', s)} value={this.props.doc.region} />
-        </FormGroup>
+              {/* Region */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="region">Region</FormLabel>
+                <HRInfoSelect id       = "region"
+                              type     = "operations"
+                              onChange = {(s) => this.props.handleSelectChange('region', s)}
+                              value    = {this.props.doc.region} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="country">Country</Label>
-          <HRInfoLocation onChange={(s) => this.props.handleSelectChange('country', s)} value={this.props.doc.country} level={0} />
-        </FormGroup>
+              {/* Country */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="country">Country</FormLabel>
+                <HRInfoLocation id       = "country"
+                                onChange = {(s) => this.props.handleSelectChange('country', s)}
+                                value    = {this.props.doc.country}
+                                level    = {0} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="status">Status</Label>
-          <StringSelect id="status" name="status" options={this.state.statuses} value={this.props.doc.status} onChange={(s) => this.props.handleSelectChange('status', s)} />
-        </FormGroup>
+              {/* Status */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="status">Status</FormLabel>
+                <StringSelect id       = "status"
+                              name     = "status"
+                              options  = {this.state.statuses}
+                              value    = {this.props.doc.status}
+                              onChange = {(s) => this.props.handleSelectChange('status', s)} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="launch_date">Launch date</Label>
-          <Input type="date" id="launch_date" name="launch_date" value={this.props.doc.launch_date} onChange={this.props.handleInputChange} />
-        </FormGroup>
+              {/* Launch Date */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="launch_date">Launch Date</FormLabel>
+                  <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <DatePicker
+                      id             = "launch_date"
+                      name           = "launch_date"
+                      format         = "DD/MM/YYYY"
+                      value          = {this.props.doc.launch_date ? this.props.doc.launch_date : ''}
+                      invalidLabel   = ""
+                      autoOk
+                      onChange       = {(s) => this.props.handleSelectChange('launch_date', s)}
+                      leftArrowIcon  = {<i className="icon-arrow-left" />}
+                      rightArrowIcon = {<i className="icon-arrow-right" />}
+                    />
+                  </MuiPickersUtilsProvider>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="cluster_configuration">Cluster Configuration</Label>
-          <HRInfoAsyncSelect type="documents" onChange={(s) => this.props.handleSelectChange('cluster_configuration', s)} value={this.props.doc.cluster_configuration} />
-        </FormGroup>
+            </Grid>
 
-        <FormGroup>
-          <Label for="website">Website</Label>
-          <Input type="url" id="website" name="website" value={this.props.doc.website} onChange={this.props.handleInputChange} />
-        </FormGroup>
+            <Grid item md={3} xs={11}>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="cluster_configuration">Cluster Configuration</FormLabel>
+                <HRInfoAsyncSelect type="documents"
+                                   id="cluster_configuration"
+                                   onChange={(s) => this.props.handleSelectChange('cluster_configuration', s)}
+                                   value={this.props.doc.cluster_configuration} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="email">Email</Label>
-          <Input type="email" id="email" name="email" value={this.props.doc.email} onChange={this.props.handleInputChange} />
-        </FormGroup>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="website">Website</FormLabel>
+                <TextField type="url"
+                          id="website"
+                          name="website"
+                          value={this.props.doc.website}
+                          onChange={this.props.handleInputChange} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="managed_by">Managed by</Label>
-          <HRInfoAsyncSelect type="organizations" onChange={(s) => this.props.handleSelectChange('managed_by', s)} value={this.props.doc.managed_by} />
-        </FormGroup>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <TextField type="email"
+                           id="email"
+                           name="email"
+                           value={this.props.doc.email}
+                           onChange={this.props.handleInputChange} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="focal_points">Focal points</Label>
-          <HidContacts isMulti={true} onChange={(s) => this.props.handleSelectChange('focal_points', s)} value={this.props.doc.focal_points} />
-        </FormGroup>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel for="managed_by">Managed by</FormLabel>
+                <HRInfoAsyncSelect type="organizations"
+                                   id="managed_by"
+                                   onChange={(s) => this.props.handleSelectChange('managed_by', s)}
+                                   value={this.props.doc.managed_by} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="social_media">Social media</Label>
-          <p>Todo</p>
-        </FormGroup>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel for="focal_points">Focal points</FormLabel>
+                <HidContacts isMulti={true}
+                             id="focal_points"
+                             onChange={(s) => this.props.handleSelectChange('focal_points', s)}
+                             value={this.props.doc.focal_points} />
+              </FormControl>
 
-        <FormGroup>
-          <Label for="hid_access">Secure Humanitarian ID contact list ?</Label>
-          <StringSelect id="hid_access" name="hid_access" options={this.state.hidAccesses} value={this.props.doc.hid_access} onChange={(s) => this.props.handleSelectChange('hid_access', s)} />
-        </FormGroup>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="social_media">Social media</FormLabel>
+                <p>Todo</p>
+              </FormControl>
 
-        {this.props.status !== 'submitting' &&
-          <span>
-            <Button color="primary">Publish</Button> &nbsp;
-            <Button color="secondary" onClick={(evt) => this.props.handleSubmit(evt, 1)}>Save as Draft</Button> &nbsp;
-          </span>
-        }
-        {(this.props.status === 'submitting' || this.props.status === 'deleting') &&
-          <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
-        }
-        {(this.props.match.params.id && this.props.status !== 'deleting') &&
-          <Button color="danger" onClick={this.props.handleDelete}>Delete</Button>
-        }
-      </Form>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel htmlFor="hid_access">Secure Humanitarian ID contact list ?</FormLabel>
+                <StringSelect id="hid_access"
+                              name="hid_access"
+                              options={this.state.hidAccesses}
+                              value={this.props.doc.hid_access}
+                              onChange={(s) => this.props.handleSelectChange('hid_access', s)} />
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item className="submission">
+          {
+            this.props.status !== 'submitting' &&
+            <span>
+              <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt)}}>Publish</Button>
+                &nbsp;
+              <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1)}}>Save as Draft</Button>
+                &nbsp;
+            </span>
+          }
+          {(this.props.status === 'submitting' || this.props.status === 'deleting') &&
+            <CircularProgress />
+          }
+          {(this.props.match.params.id && this.props.status !== 'deleting') &&
+            <span>
+              <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
+            </span>
+          }
+        </Grid>
+
+        <Snackbar anchorOrigin={{
+            vertical   : 'bottom',
+            horizontal : 'left'
+          }}
+          open             = {this.props.status === 'was-validated' && this.state.wasSubmitted}
+          autoHideDuration = {6000}
+          onClose          = {this.hideAlert}
+          ContentProps     = {{
+            'aria-describedby' : 'message-id'
+          }}
+          message  = {<Typography id ="message-id" color="error">The form is incomplete and could not be submitted.</Typography>}
+          action   = {[
+            <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
+            CLOSE
+            </Button>
+          ]}
+        />
+      </Grid>
     );
   }
 }

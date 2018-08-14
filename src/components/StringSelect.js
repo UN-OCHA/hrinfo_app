@@ -1,5 +1,6 @@
 import React from 'react';
-import Select from 'react-select';
+
+import MaterialSelect from './MaterialSelect';
 
 class StringSelect extends React.Component {
   constructor(props) {
@@ -20,20 +21,20 @@ class StringSelect extends React.Component {
 
   handleChange (selectedOption) {
     if (this.props.onChange) {
-      this.props.onChange(selectedOption.value);
+      this.props.onChange(selectedOption ? selectedOption.value : null);
     }
   }
 
   render() {
     return (
-        <Select
-          isMulti={this.props.isMulti}
-          id={this.props.id}
-          name={this.props.name}
-          onChange={this.handleChange}
-          options={this.props.options}
-          value={this.getValue(this.props.value)}
-          className={this.props.className} />
+      <MaterialSelect
+        isMulti={this.props.isMulti}
+        id={this.props.id}
+        name={this.props.name}
+        onChange={this.handleChange}
+        options={this.props.options}
+        value={this.getValue(this.props.value)}
+        className={this.props.className} />
     );
   }
 }
