@@ -5,6 +5,7 @@ import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
 import HidContacts from '../components/HidContacts';
 import StringSelect from '../components/StringSelect';
 import LanguageSelect from '../components/LanguageSelect';
+import SocialMedia from '../components/SocialMedia';
 
 // Material Imports
 import Grid             from '@material-ui/core/Grid';
@@ -148,12 +149,12 @@ class OperationForm extends React.Component {
               </FormControl>
 
               <FormControl fullWidth margin = "normal">
-                <FormLabel htmlFor="website">Website</FormLabel>
+                <FormLabel htmlFor="url">Website</FormLabel>
                 <TextField type="url"
-                          id="website"
-                          name="website"
-                          value={this.props.doc.website}
-                          onChange={this.props.handleInputChange} />
+                           id="url"
+                           name="url"
+                           value={this.props.doc.url}
+                           onChange={this.props.handleInputChange} />
               </FormControl>
 
               <FormControl fullWidth margin = "normal">
@@ -183,7 +184,9 @@ class OperationForm extends React.Component {
 
               <FormControl fullWidth margin = "normal">
                 <FormLabel htmlFor="social_media">Social media</FormLabel>
-                <p>Todo</p>
+                <SocialMedia onChange={(s) => this.props.handleSelectChange('social_media', s)}
+  									            value={this.props.doc.social_media}
+								                id="social_media"/>
               </FormControl>
 
               <FormControl fullWidth margin = "normal">
