@@ -240,7 +240,7 @@ class ClusterForm extends React.Component {
 
        {/* Cluster Coordinators */}
           <FormControl fullWidth margin = "normal">
-            <FormLabel for="cluster_coordinators">Cluster Coordinator</FormLabel>
+            <FormLabel htmlFor="cluster_coordinators">Cluster Coordinator</FormLabel>
             <HidContacts isMulti={true}
                          id="cluster_coordinators"
                          onChange={(s) => this.props.handleSelectChange('cluster_coordinators', s)}
