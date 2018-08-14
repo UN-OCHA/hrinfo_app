@@ -5,15 +5,9 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 //Components
 import HidContacts          from '../components/HidContacts';
 import HRInfoSelect         from '../components/HRInfoSelect';
-import HRInfoLocations      from '../components/HRInfoLocations';
-import Address              from '../components/Address';
 import HRInfoAsyncSelect    from '../components/HRInfoAsyncSelect';
-import RelatedContent       from '../components/RelatedContent';
 import LanguageSelect       from '../components/LanguageSelect';
-import EventCategorySelect  from '../components/EventCategorySelect';
 import ClusterTypeSelect    from '../components/ClusterTypeSelect';
-import EventDate            from '../components/EventDate';
-import StringSelect         from '../components/StringSelect';
 import SocialMedia          from '../components/SocialMedia';
 
 //Material plugin
@@ -28,7 +22,6 @@ import RadioGroup       from '@material-ui/core/RadioGroup';
 import Radio            from '@material-ui/core/Radio';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Collapse         from '@material-ui/core/Collapse';
 import Card             from '@material-ui/core/Card';
 import CardContent      from '@material-ui/core/CardContent';
 import Divider          from '@material-ui/core/Divider';
