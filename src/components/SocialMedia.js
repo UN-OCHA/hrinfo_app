@@ -36,7 +36,6 @@ class SocialMedia extends React.Component {
            </FormControl>
 			  </CardContent>
 		  </Card>
-
       );
     }
 

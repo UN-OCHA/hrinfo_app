@@ -157,7 +157,7 @@ class EventForm extends React.Component {
         {/* Address */}
             <FormControl required fullWidth margin = "normal">
               <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>Venue</FormLabel>
-              <Address onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
+              <Address />
               <FormHelperText id = "files-text">
                 Indicate here where the {this.props.label} takes place.
               </FormHelperText>

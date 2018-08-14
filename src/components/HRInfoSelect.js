@@ -8,10 +8,10 @@ class HRInfoSelect extends React.Component {
     this.state = {
       items: []
     };
-    this.hrinfoAPI = new HRInfoAPI();
-    this.getOptions = this.getOptions.bind(this);
+    this.hrinfoAPI    = new HRInfoAPI();
+    this.getOptions   = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.user = JSON.parse(localStorage.getItem('hid-user'));;
+    this.user         = JSON.parse(localStorage.getItem('hid-user'));;
   }
 
   getOptions (type, operationId, operationLabel) {
