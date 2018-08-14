@@ -66,6 +66,9 @@ class App extends Component {
         this.handlePopover = this.handlePopover.bind(this);
         this.setBreadcrumb = this.setBreadcrumb.bind(this);
         this.hasPermission = this.hasPermission.bind(this);
+        this.isManagerOrEditor = this.isManagerOrEditor.bind(this);
+        this.isManager = this.isManager.bind(this);
+        this.isBundleMember = this.isBundleMember.bind(this);
     }
 
     toggleMenu(event) {
@@ -190,23 +193,99 @@ class App extends Component {
       });
     }
 
+    isManagerOrEditor (space) {
+      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const perms = hrinfo.spaces[space.id];
+      if (!perms) {
+        return false;
+      }
+      if (perms.indexOf('manager') !== -1 || perms.indexOf('editor') !== -1) {
+        return true;
+      }
+      return false;
+    }
+
+    isManager (space) {
+      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const perms = hrinfo.spaces[space.id];
+      if (!perms) {
+        return false;
+      }
+      if (perms.indexOf('manager') !== -1) {
+        return true;
+      }
+      return false;
+    }
+
+    isBundleMember (space) {
+      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const perms = hrinfo.spaces[space.id];
+      if (!perms) {
+        return false;
+      }
+      if (perms.indexOf('bundle member') !== -1) {
+        return true;
+      }
+      return false;
+    }
+
     hasPermission (action, content, space) {
+      console.log(content);
+      const that = this;
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
       if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1) {
         return true;
       }
       let isAllowed = false;
-      Object.keys(hrinfo.spaces).forEach(function (id) {
-        if (id === space.id) {
-          const perms = hrinfo.spaces[id];
-          if (action === 'add' &&
-            content !== 'bundle' &&
-            content !== 'group' &&
-            (perms.indexOf('editor') !== -1 || perms.indexOf('manager') !== -1 || perms.indexOf('contributor') !== -1)) {
-            isAllowed = true;
+      if (action === 'add') {
+        // Allow user to add if he is a manager, contributor or editor of the space
+        const perms = hrinfo.spaces[space.id];
+        if (perms &&
+          content !== 'bundles' &&
+          (perms.indexOf('editor') !== -1 || perms.indexOf('manager') !== -1 || perms.indexOf('contributor') !== -1)) {
+          isAllowed = true;
+        }
+      }
+      if (action === 'edit') {
+        const contentTypes = ['events', 'documents', 'infographics', 'assessments', 'offices'];
+        // Allow user to edit operation if he is a manager of the operation
+        if (content.type === 'operation' && this.isManager(content)) {
+          isAllowed = true;
+        }
+        // Allow user to edit a group if he is a manager of the group or a manager of the operation
+        if (content.type === 'bundle' &&
+          (this.isManager(content) || this.isManager(content.operation[0]))) {
+          isAllowed = true;
+        }
+        if (contentTypes.indexOf(content.type) !== -1) {
+          let isOperationManagerEditor = true;
+          let isBundleMember = true;
+          content.operation.forEach(function (op) {
+            if (!that.isManagerOrEditor(op)) {
+              isOperationManagerEditor = false;
+            }
+            if (!that.isBundleMember(op)) {
+              isBundleMember = false;
+            }
+          });
+          if (content.bundles) {
+            let isBundleManagerEditor = true;
+            content.bundles.forEach(function (b) {
+              if (!that.isManagerOrEditor(b)) {
+                isBundleManagerEditor = false;
+              }
+            });
+            if (isOperationManagerEditor || (isBundleMember && isBundleManagerEditor)) {
+              isAllowed = true;
+            }
+          }
+          else {
+            if (isOperationManagerEditor) {
+              isAllowed = true;
+            }
           }
         }
-      });
+      }
       return isAllowed;
     }
 

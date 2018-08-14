@@ -50,37 +50,11 @@ class Item extends React.Component {
       super(props);
 
       this.state = {
-        canEdit: true,
         filesOpen: false
       };
 
-      this.canEdit = this.canEdit.bind(this);
       this.renderBadges = this.renderBadges.bind(this);
       this.openFiles = this.openFiles.bind(this);
-    }
-
-    canEdit () {
-      const user = this.props.user;
-      if (user.hrinfo.roles.indexOf('administrator') !== -1 || user.hrinfo.roles.indexOf('editor') !== -1) {
-        return true;
-      }
-      var canEdit = true;
-      const canWriteInSpace = function (op) {
-        if (op) {
-          const opId = parseInt(op.id, 10);
-          if (!user.hrinfo.spaces[opId]) {
-            canEdit = false;
-          }
-          else {
-            if (user.hrinfo.spaces[opId].indexOf('manager') === -1) {
-              canEdit = false;
-            }
-          }
-        }
-      };
-      this.props.item.operation.forEach(canWriteInSpace);
-      this.props.item.space.forEach(canWriteInSpace);
-      return canEdit;
     }
 
     openFiles () {
@@ -122,9 +96,6 @@ class Item extends React.Component {
     render() {
       const { classes, item } = this.props;
       if (this.props.viewMode === 'full' || this.props.viewMode === 'search') {
-        const editLink = this.props.viewMode === 'full' && this.canEdit() ? (
-          <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id + '/edit'}>Edit</Button>
-        ) : '';
         return (
           <Card className={classes.card}>
             <CardMedia
@@ -140,7 +111,6 @@ class Item extends React.Component {
               <CardActions>
                 {this.props.viewMode === 'search' ? <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id}>View more</Button> : '' }
                 &nbsp;<Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>&nbsp;
-                {editLink}
               </CardActions>
             </div>
             <List>

@@ -86,11 +86,12 @@ class EventsPage extends React.Component {
               onRangeChange={onRangeChange}
             />
           </Paper>
-          <Link to="/events/new">
-            <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
-              <AddIcon />
-            </Button>
-          </Link>
+          {this.props.doc && this.props.hasPermission('add', 'event', this.props.doc) ?
+            <Link to="/events/new">
+              <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
+                <AddIcon />
+              </Button>
+            </Link> : '' }
         </div>
       );
     }
