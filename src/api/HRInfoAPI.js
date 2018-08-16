@@ -51,16 +51,27 @@ class HRInfoAPI {
       });
   }
 
-  get (type, params) {
+  get (type, params, anonymous = true) {
     let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
       url += '?';
-      keys.forEach(function (key) {
-        url += key + '=' + params[key] + '&';
-      });
+      for (let i = 0; i < keys.length; i++) {
+        url += keys[i] + '=' + params[keys[i]];
+        if (i < keys.length - 1) {
+          url += '&';
+        }
+      }
     }
-    return fetch(url)
+    let queryParams = {};
+    if (!anonymous) {
+      queryParams.headers = {
+        'Authorization': 'Bearer ' + this.token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+    }
+    return fetch(url, queryParams)
       .then(results => {
         return results.json();
       }).then(data => {

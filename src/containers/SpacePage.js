@@ -117,9 +117,12 @@ class SpacePage extends React.Component {
       return (
         <Paper className={classes.root}>
           <Typography align = "right">
-            {this.props.doc && this.props.hasPermission('edit', this.props.doc) ?
+            {this.props.hasPermission('edit', this.props.doc) ?
               <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/edit'}><i className="icon-edit" /></Button> : ''}
-            <Button onClick={this.setEditable}><i className="icon-wheel" /></Button>
+            {this.props.hasPermission('customize', this.props.doc) ?
+              <Button onClick={this.setEditable}><i className="icon-eye" /></Button> : '' }
+            {this.props.hasPermission('customize', this.props.doc) && (this.props.doc.type === 'operation' || this.props.doc.type === 'bundle') ?
+              <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/manage'}><i className="icon-wheel" /></Button> : '' }
           </Typography>
           <div className="container">
             <Dashboard

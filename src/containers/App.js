@@ -230,10 +230,9 @@ class App extends Component {
     }
 
     hasPermission (action, content, space) {
-      console.log(content);
       const that = this;
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
-      if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1) {
+      if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1 && content.type !== 'dataset' && content.type !== 'users') {
         return true;
       }
       let isAllowed = false;
@@ -246,14 +245,15 @@ class App extends Component {
           isAllowed = true;
         }
       }
-      if (action === 'edit') {
+      if (action === 'edit' || action === 'delete') {
         const contentTypes = ['events', 'documents', 'infographics', 'assessments', 'offices'];
         // Allow user to edit operation if he is a manager of the operation
-        if (content.type === 'operation' && this.isManager(content)) {
+        if (content.type === 'operation' && this.isManager(content) && action === 'edit') {
           isAllowed = true;
         }
         // Allow user to edit a group if he is a manager of the group or a manager of the operation
         if (content.type === 'bundle' &&
+          action === 'edit' &&
           (this.isManager(content) || this.isManager(content.operation[0]))) {
           isAllowed = true;
         }
@@ -284,6 +284,18 @@ class App extends Component {
               isAllowed = true;
             }
           }
+        }
+      }
+      if (action === 'customize') {
+        if (content.type === 'operation' && this.isManager(content)) {
+          isAllowed = true;
+        }
+        if (content.type === 'bundle' &&
+          (this.isManager(content) || this.isManager(content.operation[0]))) {
+          isAllowed = true;
+        }
+        if (content.type === 'office' && this.isManager(content.operation[0])) {
+          isAllowed = true;
         }
       }
       return isAllowed;

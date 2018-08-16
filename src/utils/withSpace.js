@@ -153,6 +153,13 @@ const withSpace = function withSpace(Component, options) {
           params.start = this.state.page * this.state.rowsPerPage;
           newState.content = await this.hdxAPI.get(params);
         }
+        else if (options.contentType === 'og_membership') {
+          params.range = this.state.rowsPerPage;
+          params.page = this.state.page + 1;
+          params['filter[group]'] = this.props.match.params.id;
+          params['filter[entity_type]'] = 'user';
+          newState.content = await this.hrinfoAPI.get(options.contentType, params, false);
+        }
         else {
           params.range = this.state.rowsPerPage;
           params.page = this.state.page + 1;
