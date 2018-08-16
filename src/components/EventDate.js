@@ -1,7 +1,4 @@
 import React  from 'react';
-import Select from 'react-select';
-
-import RRuleGenerator          from 'react-rrule-generator';
 
 import moment                  from 'moment';
 import MaterialSelect          from './MaterialSelect';
@@ -13,7 +10,6 @@ import FormControl  from '@material-ui/core/FormControl';
 import FormLabel    from '@material-ui/core/FormLabel';
 import Checkbox     from '@material-ui/core/Checkbox';
 import Typography   from '@material-ui/core/Typography';
-import TextField    from '@material-ui/core/TextField';
 import Card         from '@material-ui/core/Card';
 import CardContent  from '@material-ui/core/CardContent';
 
@@ -37,7 +33,7 @@ class EventDate extends React.Component {
         offset      : 0,
         offset2     : 0,
         rrule       : '',
-        timezone_db : ''
+        timezone_db : 'UTC'
       },
       rrule     : '',
       status    : 'initial',
@@ -152,6 +148,7 @@ class EventDate extends React.Component {
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
+          val.timezone_db = {value: timezone, label: timezone};
         }
         val.value = moment(val.value, "YYYY-MM-DD HH:mm:ss");
         val.value2 = moment(val.value2, "YYYY-MM-DD HH:mm:ss");

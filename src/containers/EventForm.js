@@ -6,7 +6,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import HRInfoSelect          from '../components/HRInfoSelect';
 import HRInfoLocations       from '../components/HRInfoLocations';
 import Address               from '../components/Address';
-
+import HidContacts           from '../components/HidContacts';
 import HRInfoAsyncSelect     from '../components/HRInfoAsyncSelect';
 import RelatedContent        from '../components/RelatedContent';
 import LanguageSelect        from '../components/LanguageSelect';
@@ -139,6 +139,20 @@ class EventForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
+        {/* Dates */}
+            <FormControl required fullWidth margin="normal">
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
+              {/* <EventDate value    = {this.props.doc.date ? this.props.doc.date : ''}
+                            required
+                            onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} /> */}
+              <EventDate value    = {this.props.doc.date}
+                         onChange = {(val) => {this.props.handleSelectChange('date', val);}}
+                         required />
+              <FormHelperText>
+                Indicate the date of the {this.props.label}.
+              </FormHelperText>
+            </FormControl>
+
          {/* Event Description */}
             <FormControl fullWidth margin = "normal">
               <FormLabel>Event description</FormLabel>
@@ -154,28 +168,14 @@ class EventForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
-        {/* Address */}
-            <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>Venue</FormLabel>
-              <Address onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
-              <FormHelperText id = "files-text">
-                Indicate here where the {this.props.label} takes place.
-              </FormHelperText>
-            </FormControl>
-
-        {/* Dates */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
-              {/* <EventDate value    = {this.props.doc.date ? this.props.doc.date : ''}
-                            required
-                            onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} /> */}
-              <EventDate value    = {this.props.doc.date}
-                         onChange = {(val) => {this.props.handleSelectChange('date', val);}}
-                         required />
-              <FormHelperText>
-                Indicate the date of the {this.props.label}.
-              </FormHelperText>
-            </FormControl>
+          {/* Address */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>Venue</FormLabel>
+                <Address onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
+                <FormHelperText id = "files-text">
+                  Indicate here where the {this.props.label} takes place.
+                </FormHelperText>
+              </FormControl>
           </Grid>
 
           <Grid item md={3} xs={11}>
@@ -215,19 +215,20 @@ class EventForm extends React.Component {
             </FormControl>
 
         {/* Contacts */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.contacts)}>Contact(s)</FormLabel>
-              <HRInfoSelect type    = "spaces"
-                            isMulti = {true} onChange={(s) => this.props.handleSelectChange('contacts', s)}
-                            value   = {this.props.doc.contacts}/>
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Contact(s)</FormLabel>
+              <HidContacts isMulti={true}
+                           id="contacts"
+                           onChange={(s) => this.props.handleSelectChange('contacts', s)}
+                           value={this.props.doc.contacts} />
               <FormHelperText>
                 Indicate the person(s) to contact for information regarding the {this.props.label}. To show up in the list, the person must have a HumanitarianID profile.
               </FormHelperText>
             </FormControl>
 
         {/* Agenda(s) */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.agendas)}>Agenda(s)</FormLabel>
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Agenda(s)</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('agendas', s)}
                                  value    = {this.props.doc.agendas}
@@ -238,8 +239,8 @@ class EventForm extends React.Component {
             </FormControl>
 
         {/* Meeting minute(s) */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.meeting_minutes)}>Meeting minute(s)</FormLabel>
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Meeting minute(s)</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}
                                  value    = {this.props.doc.meeting_minutes}
