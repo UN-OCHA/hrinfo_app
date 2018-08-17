@@ -171,8 +171,8 @@ class EventForm extends React.Component {
           {/* Address */}
               <FormControl fullWidth margin = "normal">
                 <FormLabel>Venue</FormLabel>
-                <Address onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
-                <FormHelperText id = "files-text">
+                <Address onChange={(s) => this.props.handleSelectChange('address', s)} value={this.props.doc.address} />
+                <FormHelperText id = "address-text">
                   Indicate here where the {this.props.label} takes place.
                 </FormHelperText>
               </FormControl>
@@ -203,8 +203,8 @@ class EventForm extends React.Component {
             </FormControl>
 
         {/* Organizations */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>Organization(s)</FormLabel>
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Organization(s)</FormLabel>
               <HRInfoAsyncSelect type     = "organizations"
                                  onChange = {(s) => this.props.handleSelectChange('organizations', s)}
                                  value    = {this.props.doc.organizations}
@@ -230,8 +230,8 @@ class EventForm extends React.Component {
             <FormControl fullWidth margin="normal">
               <FormLabel>Agenda(s)</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
-                                 onChange = {(s) => this.props.handleSelectChange('agendas', s)}
-                                 value    = {this.props.doc.agendas}
+                                 onChange = {(s) => this.props.handleSelectChange('agenda', s)}
+                                 value    = {this.props.doc.agenda}
                                   isMulti={true} />
               <FormHelperText>
                 Add the agenda of the {this.props.label} as a document first, and then reference this document from here.

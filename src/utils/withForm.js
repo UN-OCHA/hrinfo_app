@@ -121,19 +121,20 @@ const withForm = function withForm(Component, hrinfoType, label) {
       let isValid = false;
       if (this.isValid(doc.language) &&
         this.isValid(doc.spaces) &&
-        this.isValid(doc.label) &&
-        this.isValid(doc.organizations)) {
+        this.isValid(doc.label)) {
         if (hrinfoType === 'documents' &&
           this.isValid(doc.document_type) &&
           this.isValid(doc.publication_date) &&
-          this.isValid(doc.files)
+          this.isValid(doc.files) &&
+          this.isValid(doc.organizations)
         ) {
           isValid = true;
         }
         if (hrinfoType === 'infographics' &&
           this.isValid(doc.infographic_type) &&
           this.isValid(doc.publication_date) &&
-          this.isValid(doc.files)
+          this.isValid(doc.files) &&
+          this.isValid(doc.organizations)
         ) {
           isValid = true;
         }
@@ -220,6 +221,21 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
           if (body.date[0] && body.date[0].timezone) {
             body.date[0].timezone = body.date[0].timezone.value;
+          }
+          if (body.contacts) {
+            body.contacts = body.contacts.map(function (c) {
+              return c.id;
+            });
+          }
+          if (body.agenda) {
+            body.agenda = body.agenda.map(function (a) {
+              return a.id;
+            });
+          }
+          if (body.meeting_minutes) {
+            body.meeting_minutes = body.meeting_minutes.map(function (a) {
+              return a.id;
+            });
           }
         }
         body.operation = [];
