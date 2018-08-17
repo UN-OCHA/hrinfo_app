@@ -21,7 +21,8 @@ const withSpace = function withSpace(Component, options) {
         rowsPerPage: 50,
         drawerState: false,
         filters: {},
-        dateFilters: {}
+        dateFilters: {},
+        status: ''
       };
 
       this.hrinfoAPI = new HRInfoAPI();
@@ -35,6 +36,7 @@ const withSpace = function withSpace(Component, options) {
       this.removeFilter = this.removeFilter.bind(this);
       this.getSpaceAndBreadcrumb = this.getSpaceAndBreadcrumb.bind(this);
       this.setFromUrl = this.setFromUrl.bind(this);
+      this.forceUpdate = this.forceUpdate.bind(this);
 
       this.setFromUrl();
     }
@@ -68,6 +70,12 @@ const withSpace = function withSpace(Component, options) {
     handleChangePage (event, page) {
       this.setState({
         page
+      });
+    }
+
+    forceUpdate () {
+      this.setState({
+        status: 'update'
       });
     }
 
@@ -196,7 +204,8 @@ const withSpace = function withSpace(Component, options) {
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
-      if (prevProps.match.url !== this.props.match.url) {
+      if (prevProps.match.url !== this.props.match.url ||
+        (prevState.status === '' && this.state.status === 'update')) {
         this.setFromUrl();
         const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
         this.setState(stateAndBreadcrumb.newState);
@@ -274,7 +283,8 @@ const withSpace = function withSpace(Component, options) {
           return item;
         });
         this.setState({
-          content: content
+          content: content,
+          status: ''
         });
       }
     }
@@ -350,7 +360,8 @@ const withSpace = function withSpace(Component, options) {
         toggleDrawer: this.toggleDrawer,
         setFilter: this.setFilter,
         removeFilter: this.removeFilter,
-        filters: this.state.filters
+        filters: this.state.filters,
+        forceUpdate: this.forceUpdate
       };
       return <Component {...this.props} {...newProps} />;
     }
