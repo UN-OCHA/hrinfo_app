@@ -224,7 +224,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
           if (body.contacts) {
             body.contacts = body.contacts.map(function (c) {
-              return c.id;
+              return {cid: c.id};
             });
           }
           if (body.agenda) {
