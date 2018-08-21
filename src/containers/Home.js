@@ -6,9 +6,10 @@ class Home extends React.Component {
 
     render() {
       const { t } = this.props;
+      const name = this.props.user.name;
       return (
         <div>
-          <p>Welcome {this.props.user.name}, you are logged in</p>
+          <p><Trans i18nKey='home.welcome' name={name}>Welcome {{name}}, you are logged in</Trans></p>
           <p>{t('home.what_do')}</p>
           <ul>
             <li><Link to="/documents/new">Add a document</Link></li>

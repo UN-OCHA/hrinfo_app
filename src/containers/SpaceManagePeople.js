@@ -47,7 +47,7 @@ class SpaceManagePeople extends React.Component {
             {content.data.map(n => {
               return (
                 <TableRow key={n.id}>
-                  <TableCell component="th" scope="row">{n.entity.label}</TableCell>
+                  <TableCell component="th" scope="row"><Link to={'/users/' + n.entity.hid}>{n.entity.label}</Link></TableCell>
                   <TableCell><ul>{n.roles.map(r => {
                     return (<li key={n.id + '_' + r}>{r}</li>);
                   })}</ul></TableCell>

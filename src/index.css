@@ -104,3 +104,8 @@ footer {
   grid-column: 4 / span 9;
   grid-row: 3;
 }
+
+.user-image {
+  max-width: 100%;
+  padding: 1em;
+}

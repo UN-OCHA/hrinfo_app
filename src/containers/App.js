@@ -25,9 +25,6 @@ import Hidden from '@material-ui/core/Hidden';
 
 import './App.css';
 
-import HRInfoAPI from '../api/HRInfoAPI';
-import HidAPI from '../api/HidAPI';
-
 import Routes from '../utils/Routes';
 import SearchPage from './SearchPage';
 import IconLogo from '../components/IconLogo';
@@ -163,10 +160,6 @@ class App extends Component {
           };
           this.setState(newState);
           this.props.history.push('/');
-        } else {
-          // Initialize HID API and HRInfo api
-          new HRInfoAPI(this.state.token);
-          new HidAPI(this.state.token);
         }
       }
     }

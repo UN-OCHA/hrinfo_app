@@ -1,5 +1,6 @@
 import React from 'react';
-import {Container, Row, Col} from 'reactstrap';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
 import HidAPI from '../api/HidAPI';
 
@@ -79,10 +80,10 @@ class User extends React.Component {
         });
         const userVerified = <span><i className="icon-check-circle" /> This user has been verified</span>;
         return (
-          <Container>
-            <Row>
-              <Col sm="3"><img src={user.picture} alt={user.name} className="img-thumbnail" /></Col>
-              <Col>
+          <Paper>
+            <Grid container>
+              <Grid item xs={3}><img src={user.picture} alt={user.name} className="user-image" /></Grid>
+              <Grid item xs={9}>
                 <h1>{this.state.user.name}</h1>
                 <ul className="list-inline">
                   <li>{org}</li>
@@ -91,10 +92,8 @@ class User extends React.Component {
                 <hr />
                 <p>{user.status}</p>
                 <p>{user.verified ? userVerified : 'This user has not been verified.'}</p>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <h2>Contact Information</h2>
                 <h3>Phone numbers</h3>
                 <ul>{phonesList}</ul>
@@ -104,8 +103,8 @@ class User extends React.Component {
                 <hr />
                 <h3>Social Networks</h3>
                 <ul>{socialsList}</ul>
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <h2>Humanitarian Details</h2>
                 <h3>Organizations</h3>
                 <ul>{orgsList}</ul>
@@ -116,8 +115,8 @@ class User extends React.Component {
                 <h3>Locations</h3>
                 <ul>{locsList}</ul>
                 <hr />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <h2>Additional Information</h2>
                 <h3>Functional Roles</h3>
                 <ul>{rolesList}</ul>
@@ -130,9 +129,9 @@ class User extends React.Component {
                   <li>Created: {moment(user.createdAt).format('MMMM DD, YYYY')}</li>
                 </ul>
                 <hr />
-              </Col>
-            </Row>
-          </Container>
+              </Grid>
+            </Grid>
+          </Paper>
         );
       }
       else {

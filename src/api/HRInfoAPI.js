@@ -1,4 +1,6 @@
 
+import Cookies from 'universal-cookie';
+
 let instance = null;
 
 class HRInfoAPI {
@@ -6,8 +8,9 @@ class HRInfoAPI {
     if (!instance){
       instance = this;
     }
-    if (token) {
-      instance.token = token;
+    if (!instance.token) {
+      const cookies = new Cookies();
+      instance.token = token ? token : cookies.get('hid-token');
     }
     return instance;
   }
