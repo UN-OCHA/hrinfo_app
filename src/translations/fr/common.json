@@ -1,0 +1,12 @@
+{
+  "login":{
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "email_helper": "Votre courriel Humanitarian ID",
+    "password_helper": "Votre mot de passe Humanitarian ID",
+    "button": "Se connecter"
+  },
+  "home": {
+    "what_do": "Que voulez-vous faire ?"
+  }
+}

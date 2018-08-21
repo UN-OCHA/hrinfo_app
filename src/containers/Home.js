@@ -1,13 +1,15 @@
 import React  from 'react';
 import {Link} from 'react-router-dom';
+import { translate, Trans } from 'react-i18next';
 
 class Home extends React.Component {
 
     render() {
+      const { t } = this.props;
       return (
         <div>
           <p>Welcome {this.props.user.name}, you are logged in</p>
-          <p>What would you like to do ?</p>
+          <p>{t('home.what_do')}</p>
           <ul>
             <li><Link to="/documents/new">Add a document</Link></li>
             <li><Link to="/infographics/new">Add a map/infographic</Link></li>
@@ -19,4 +21,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default translate('common')(Home);

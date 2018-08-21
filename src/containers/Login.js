@@ -1,6 +1,7 @@
 import React from 'react';
 import HRInfoAPI from '../api/HRInfoAPI';
 import HidAPI from '../api/HidAPI';
+import { translate, Trans } from 'react-i18next';
 
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -74,15 +75,16 @@ class Login extends React.Component {
     }
 
     render() {
+      const { t } = this.props;
         return (
 			<form className="login-container" onSubmit={this.handleSubmit}>
 				<FormControl required fullWidth margin="normal">
-					<InputLabel htmlFor="email">Email</InputLabel>
+					<InputLabel htmlFor="email">{t('login.email')}</InputLabel>
 					<Input id="email" value={this.state.email} onChange={this.handleChange}/>
-					<FormHelperText id="email-text">Your Humanitarian ID email</FormHelperText>
+					<FormHelperText id="email-text">{t('login.email_helper')}</FormHelperText>
 				</FormControl>
 				<FormControl required fullWidth margin="normal">
-					<InputLabel htmlFor="password">Password</InputLabel>
+					<InputLabel htmlFor="password">{t('login.password')}</InputLabel>
 					<Input id="password"
 						type={this.state.showPassword ? 'text' : 'password'}
 						value={this.state.password}
@@ -95,14 +97,14 @@ class Login extends React.Component {
 									{ this.state.showPassword ? <i className="icon-eye-hidden" /> : <i className="icon-eye" /> }
 								</IconButton>
 							</InputAdornment> }/>
-					<FormHelperText id="password-text">Your Humanitarian ID password</FormHelperText>
+					<FormHelperText id="password-text">{t('login.password_helper')}</FormHelperText>
 				</FormControl>
 				{ this.state.status === 'initial' &&
 					<Button variant="contained"
 						color="primary"
 						onClick={this.handleSubmit}
 						disabled={this.state.email === '' || this.state.password === ''}
-						>Login</Button>
+						>{t('login.button')}</Button>
 				}
 				{ this.state.status === 'submitting' &&
 					<CircularProgress/>
@@ -112,4 +114,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default translate('common')(Login);
