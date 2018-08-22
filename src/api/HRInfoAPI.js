@@ -8,9 +8,12 @@ class HRInfoAPI {
     if (!instance){
       instance = this;
     }
-    if (!instance.token) {
+    if (token) {
+      instance.token = token;
+    }
+    else {
       const cookies = new Cookies();
-      instance.token = token ? token : cookies.get('hid-token');
+      instance.token = cookies.get('hid-token');
     }
     return instance;
   }

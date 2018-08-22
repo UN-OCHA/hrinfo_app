@@ -208,7 +208,9 @@ const withSpace = function withSpace(Component, options) {
         (prevState.status === '' && this.state.status === 'update')) {
         this.setFromUrl();
         const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
-        this.setState(stateAndBreadcrumb.newState);
+        let newState = stateAndBreadcrumb.newState;
+        newState.status = '';
+        this.setState(newState);
         this.props.setGroup(stateAndBreadcrumb.newState.doc);
         this.props.setBreadcrumb(stateAndBreadcrumb.breadcrumb);
       }
