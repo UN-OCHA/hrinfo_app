@@ -95,17 +95,24 @@ class Item extends React.Component {
 
     render() {
       const { classes, item } = this.props;
+      let image = '';
+      if (item.type === 'user') {
+        image = item.picture ? item.picture : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png';
+      }
+      else {
+        image = item.files && item.files[0].file.preview !== 'https://www.humanitarianresponse.info/' ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png';
+      }
       if (this.props.viewMode === 'full' || this.props.viewMode === 'search') {
         return (
           <Card className={classes.card}>
             <CardMedia
               className={classes.cover}
-              image={item.files && item.files[0].file.preview !== 'https://www.humanitarianresponse.info/' ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png'}
+              image={image}
               title="Card Image"
             />
             <div className={classes.details}>
               <CardContent>
-                <Typography gutterBottom variant="headline" component="h2">{item.label}</Typography>
+                <Typography gutterBottom variant="headline" component="h2">{item.label ? item.label : item.name}</Typography>
                 {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
               </CardContent>
               <CardActions>

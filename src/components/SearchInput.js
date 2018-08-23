@@ -221,8 +221,7 @@ class SearchInput extends React.Component {
               getOptionLabel: this.props.getOptionLabel,
               getOptionValue: this.props.getOptionValue,
               placeholder: "Search or jump to...",
-              cacheOptions: true,
-              defaultOptions: true
+              cacheOptions: true
             },
             startAdornment: (
               <InputAdornment position = "start" >
