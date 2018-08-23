@@ -1,4 +1,7 @@
 {
+  "app": {
+    "search_placeholder": "Rechercher ou aller à..."
+  },
   "login":{
     "email": "Courriel",
     "password": "Mot de passe",

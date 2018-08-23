@@ -62,23 +62,23 @@ function SelectWrapped(props) {
   const { classes, ...other } = props;
   return (
 	<AsyncSelect
-      components={{
-        Option: Option,
-        DropdownIndicator: DropdownIndicator,
-		ClearIndicator: ClearIndicator,
-		IndicatorSeparator: null,
-		LoadingIndicator: LoadingIndicator,
-		Placeholder: () => {return (null);}
-      }}
-	  noOptionsMessage={() => <Typography>{'Type at least one character to see results'}</Typography>}
-	  loadingMessage={() => <Typography>{'Loading...'}</Typography>}
-      styles={customStyles}
-      isClearable={true}
-	  isMulti={props.isMulti}
-	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
-      getOptionLabel={(option) => { if (props.getOptionLabel) {return props.getOptionLabel(option)} else {return option.label}}}
-	  value={props.value}
-      {...other}
+    components={{
+      Option: Option,
+      DropdownIndicator: DropdownIndicator,
+	    ClearIndicator: ClearIndicator,
+	    IndicatorSeparator: null,
+	    LoadingIndicator: LoadingIndicator,
+	    Placeholder: () => {return (null);}
+    }}
+    noOptionsMessage={() => <Typography>{'Type at least one character to see results'}</Typography>}
+    loadingMessage={() => <Typography>{'Loading...'}</Typography>}
+    styles={customStyles}
+    isClearable={true}
+    isMulti={props.isMulti}
+    getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
+    getOptionLabel={(option) => { if (props.getOptionLabel) {return props.getOptionLabel(option)} else {return option.label}}}
+    value={props.value}
+    {...other}
     />
   );
 }
@@ -160,7 +160,8 @@ class MaterialAsyncSelect extends React.Component {
 	              loadOptions: this.props.loadOptions,
 				        value: this.props.value,
                 getOptionLabel: this.props.getOptionLabel,
-                getOptionValue: this.props.getOptionValue
+                getOptionValue: this.props.getOptionValue,
+                cacheOptions: this.props.cacheOptions ? this.props.cacheOptions : true
 	            },
 	          }}
 	        />

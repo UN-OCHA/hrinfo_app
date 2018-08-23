@@ -1,4 +1,7 @@
 {
+  "app": {
+    "search_placeholder": "Search or jump to..."
+  },
   "login":{
     "email": "Email",
     "password": "Password",

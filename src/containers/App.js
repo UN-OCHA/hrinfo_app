@@ -30,6 +30,7 @@ import SearchPage from './SearchPage';
 import IconLogo from '../components/IconLogo';
 import SpaceMenu from '../components/SpaceMenu';
 import Breadcrumb from '../components/Breadcrumb';
+import SearchInput from '../components/SearchInput';
 
 class App extends Component {
     static propTypes = {
@@ -164,14 +165,19 @@ class App extends Component {
       }
     }
 
-	setSearch(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox'
-            ? target.checked
-            : target.value;
-
-        this.setState({searchTerms: value});
+	setSearch(val) {
+    if (val && val.id) {
+      if (val.type === 'bundles') {
+        this.props.history.push('/groups/' + val.id);
+      }
+      else if (val.type === 'search') {
+        this.props.history.push('/search/' + val.label);
+      }
+      else {
+        this.props.history.push('/' + val.type + '/' + val.id);
+      }
     }
+  }
 
     setAlert(color, message) {
         this.setState({
@@ -349,17 +355,10 @@ class App extends Component {
 	                    </Typography>
 						<Hidden xsDown>
 							<Paper elevation={0} className="paper">
-								<Input value={this.state.searchTerms}
-									onChange={this.setSearch}
-									placeholder="Start typing to search..."
-									disableUnderline
-									fullWidth
-									startAdornment={
-										<InputAdornment position = "start" >
-											<i className="icon-search" />
-										</InputAdornment>
-									}
-									className="inputMargin"/>
+                <SearchInput
+                  onChange={this.setSearch}
+                  value={this.state.searchResult}
+                  />
 							</Paper>
 						</Hidden>
             <div>
@@ -414,7 +413,7 @@ class App extends Component {
 							<Paper elevation={0} className="paper">
 								<Input value={this.state.searchTerms}
 									onChange={this.setSearch}
-									placeholder="Start typing to search..."
+									placeholder={t('app.search_placeholder')}
 									disableUnderline
 									fullWidth
 									startAdornment={
@@ -460,7 +459,6 @@ class App extends Component {
 			)
             : '';
 
-        if (!this.state.searchTerms) {
             return (!this.state.isAuthenticating &&
 			<Grid container className="App" justify="center" alignItems="center">
 				{navbar}
@@ -470,17 +468,6 @@ class App extends Component {
                     <Routes childProps={childProps}/>
                 </Grid>
             </Grid>);
-        } else {
-            return (!this.state.isAuthenticating &&
-			<Grid container spacing={24} className="App" justify="center" alignItems="center">
-                {navbar}
-                {popover}
-                <Grid item className="container-fluid" sm={11}>
-                    {myAlert}
-                    <SearchPage searchTerms={this.state.searchTerms}/>
-                </Grid>
-            </Grid>);
-        }
     }
 }
 

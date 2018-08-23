@@ -8,7 +8,7 @@ class SearchPage extends React.Component {
     super(props);
     this.state = {
       items: {},
-      searchTerms: ''
+      q: ''
     };
     this.hrinfoAPI = new HRInfoAPI();
     this.getItems = this.getItems.bind(this);
@@ -58,8 +58,8 @@ class SearchPage extends React.Component {
   }
 
   async componentDidMount() {
-    if (this.props.searchTerms) {
-      const items = await this.getAllItems(this.props.searchTerms);
+    if (this.props.match.params.q) {
+      const items = await this.getAllItems(this.props.match.params.q);
       this.setState({
         items: items
       });
@@ -67,11 +67,11 @@ class SearchPage extends React.Component {
   }
 
   async componentDidUpdate() {
-    if (this.props.searchTerms && this.props.searchTerms !== this.state.searchTerms) {
-      const items = await this.getAllItems(this.props.searchTerms);
+    if (this.props.match.params.q && this.props.match.params.q !== this.state.q) {
+      const items = await this.getAllItems(this.props.match.params.q);
       this.setState({
         items: items,
-        searchTerms: this.props.searchTerms
+        q: this.props.match.params.q
       });
     }
   }

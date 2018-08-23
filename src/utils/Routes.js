@@ -22,6 +22,7 @@ import EventsPage           from '../containers/EventsPage';
 import DatasetsPage         from '../containers/DatasetsPage';
 import SpaceManagePage      from '../containers/SpaceManagePage';
 import SpaceManagePeople    from '../containers/SpaceManagePeople';
+import SearchPage           from '../containers/SearchPage';
 
 import AuthenticatedRoute   from "./AuthenticatedRoute";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
@@ -36,6 +37,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/home"            exact component={Home}           props={childProps} />
     <AuthenticatedRoute path="/admin"           exact component={Admin}          props={childProps} />
     <AuthenticatedRoute path="/users/:id"       exact component={User}           props={childProps} />
+    <AuthenticatedRoute path="/search/:q"       exact component={SearchPage}     props={childProps} />
 
 {/* Documents */}
     <AuthenticatedRoute path="/documents/new"      exact component={withForm(DocumentForm, 'documents', 'document')} props={childProps} />
@@ -66,6 +68,14 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/:id/offices"      exact component={OfficesPage}                                        props={childProps} />
     <AuthenticatedRoute path="/operations/:id/disasters"    exact component={DisastersPage}                                      props={childProps} />
     <AuthenticatedRoute path="/operations/:id/datasets"     exact component={DatasetsPage}                                       props={childProps} />
+
+{/* Spaces */}
+    <AuthenticatedRoute path="/spaces/:id"                  exact component={SpacePage}                                          props={childProps} />
+    <AuthenticatedRoute path="/spaces/:id/manage"           exact component={SpaceManagePage}                                    props={childProps} />
+    <AuthenticatedRoute path="/spaces/:id/manage/people"    exact component={SpaceManagePeople}                                  props={childProps} />
+    <AuthenticatedRoute path="/spaces/:id/documents"        exact component={DocumentsPage}                                      props={childProps} />
+    <AuthenticatedRoute path="/spaces/:id/infographics"     exact component={InfographicsPage}                                   props={childProps} />
+    <AuthenticatedRoute path="/spaces/:id/events"           exact component={EventsPage}                                         props={childProps} />
 
 {/* Groups */}
     <AuthenticatedRoute path="/groups/:id"              exact component={SpacePage}         props={childProps} />
