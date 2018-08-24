@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import lodash from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -146,10 +147,12 @@ class SearchInput extends React.Component {
       options: []
     };
     this.hrinfoAPI = new HRInfoAPI();
-    this.getOptions = this.getOptions.bind(this);
+    this.getOptionsDebounced = lodash.debounce(this.getOptions, 500);
+    //this.getOptions  = this.getOptions.bind(this);
   }
 
-  getOptions (input) {
+  getOptions (input, callback) {
+    const hrinfoAPI = new HRInfoAPI();
     const that = this;
     let params = {};
     params['filter[label][value]'] = input;
@@ -158,47 +161,37 @@ class SearchInput extends React.Component {
     params.sort = 'label';
     params.range = 10;
     let fullLabels = [];
-    if (input === '') {
-      fullLabels.push({
-        id: -1,
-        label: input,
-        type: 'search'
-      });
-      return fullLabels;
-    }
-    else {
-      return this.hrinfoAPI
-        .get('operations', params)
-        .then(data => {
-          fullLabels.push({
-            id: -1,
-            label: input,
-            type: 'search'
-          });
-          Array.prototype.push.apply(fullLabels, data.data);
-        })
-        .then(() => {
-          return that.hrinfoAPI.get('spaces', params);
-        })
-        .then(data => {
-          Array.prototype.push.apply(fullLabels, data.data);
-        })
-        .then(() => {
-          return that.hrinfoAPI.get('bundles', params);
-        })
-        .then(data => {
-          data.data.forEach(function (elt) {
-            if (elt.operation) {
-              elt.label = elt.label + ' (' + elt.operation[0].label + ')';
-            }
-    			  fullLabels.push(elt);
-    		  });
-          return fullLabels;
-        })
-        .catch(function(err) {
-            console.log("Fetch error: ", err);
+    hrinfoAPI
+      .get('operations', params)
+      .then(data => {
+        fullLabels.push({
+          id: -1,
+          label: input,
+          type: 'search'
         });
-    }
+        Array.prototype.push.apply(fullLabels, data.data);
+      })
+      .then(() => {
+        return hrinfoAPI.get('spaces', params);
+      })
+      .then(data => {
+        Array.prototype.push.apply(fullLabels, data.data);
+      })
+      .then(() => {
+        return hrinfoAPI.get('bundles', params);
+      })
+      .then(data => {
+        data.data.forEach(function (elt) {
+          if (elt.operation) {
+            elt.label = elt.label + ' (' + elt.operation[0].label + ')';
+          }
+  			  fullLabels.push(elt);
+  		  });
+        callback(fullLabels);
+      })
+      .catch(function(err) {
+          console.log("Fetch error: ", err);
+      });
   }
 
   render() {
@@ -216,7 +209,7 @@ class SearchInput extends React.Component {
               instanceId: 'search',
               id: 'search',
               simpleValue: true,
-              loadOptions: this.getOptions,
+              loadOptions: this.getOptionsDebounced,
               value: this.props.value,
               getOptionLabel: this.props.getOptionLabel,
               getOptionValue: this.props.getOptionValue,
