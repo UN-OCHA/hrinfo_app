@@ -1,14 +1,16 @@
 import React from 'react';
 import MaterialSelect from './MaterialSelect';
 
-class EventCategorySelect extends React.Component {
+class UserType extends React.Component {
+
   state = {
     options: [
-      { value: '82', label: 'Meetings'},
-      { value: '83', label: 'Trainings'},
-      { value: '84', label: 'Workshops'},
-      { value: '85', label: 'Conferences'}
-    ],
+      { value: 'is_orphan', label: 'Orphan'},
+      { value: 'is_ghost', label: 'Ghost' },
+      { value: 'verified', label: 'Verified'},
+      { value: 'unverified', label: 'Unverified'},
+      { value: 'isManager', label: 'Manager'}
+    ]
   };
 
   getValue = (val) => {
@@ -23,15 +25,15 @@ class EventCategorySelect extends React.Component {
 
   handleChange = (selectedOption) => {
     if (this.props.onChange) {
-      this.props.onChange(selectedOption ? selectedOption.value : selectedOption);
+      this.props.onChange(selectedOption);
     }
   };
 
   render() {
     return (
         <MaterialSelect
-          id        = "eventCategory"
-          name      = "eventCategory"
+          id        = "userType"
+          name      = "userType"
           onChange  = {this.handleChange}
           options   = {this.state.options}
           value     = {this.getValue(this.props.value)}
@@ -40,4 +42,4 @@ class EventCategorySelect extends React.Component {
   }
 }
 
-export default EventCategorySelect;
+export default UserType;

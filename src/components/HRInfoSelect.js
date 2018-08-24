@@ -3,18 +3,13 @@ import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: []
-    };
-    this.hrinfoAPI = new HRInfoAPI();
-    this.getOptions = this.getOptions.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.user = JSON.parse(localStorage.getItem('hid-user'));;
-  }
+  state = {
+    items: []
+  };
 
-  getOptions (type, operationId, operationLabel) {
+  hrinfoAPI = new HRInfoAPI();
+
+  getOptions = (type, operationId, operationLabel) => {
     let params = {};
     params.sort = 'label';
     if (type !== 'document_types' && type !== 'infographic_types') {
@@ -47,7 +42,7 @@ class HRInfoSelect extends React.Component {
         }
         else {
           if ((type === 'spaces' || type === 'operations' || type === 'bundles') && this.user.hrinfo.roles.indexOf('administrator') === -1) {
-            let user = this.user;
+            let user = JSON.parse(localStorage.getItem('hid-user'));
             elts.forEach(function (elt) {
               if (user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
                 pushed.push(elt);
@@ -77,13 +72,7 @@ class HRInfoSelect extends React.Component {
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
-  }
-
-  handleChange (selectedOption) {
-    if (this.props.onChange) {
-      this.props.onChange(selectedOption);
-    }
-  }
+  };
 
   componentDidMount() {
     if (this.props.spaces) {
@@ -134,7 +123,7 @@ class HRInfoSelect extends React.Component {
           isMulti={this.props.isMulti}
           id={this.props.type}
           name={this.props.type}
-          onChange={this.handleChange}
+          onChange={this.props.onChange}
           options={this.state.items}
           value={this.props.value} />
     );

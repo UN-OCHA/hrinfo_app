@@ -16,7 +16,7 @@ import ViewList from '@material-ui/icons/ViewList';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 
-import { Filters } from '../components/Filters';
+import { Filters, FilterChips } from '../components/Filters';
 import Item from '../components/Item';
 import withSpace from '../utils/withSpace';
 import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
@@ -62,6 +62,9 @@ class ContactsPage extends React.Component {
               <IconButton onClick={(v) => {this.setState({view: 'list'})}}>
                 <ViewList />
               </IconButton>
+            </Typography>
+            <Typography variant="subheading">
+              <FilterChips filters={filters} removeFilter={removeFilter} />&nbsp;<strong>{content.count}</strong> elements found
             </Typography>
             {view === 'list' ?
             <Table className={classes.table}>
@@ -144,4 +147,4 @@ ContactsPage.propTypes = {
   content: PropTypes.object.isRequired
 };
 
-export default withSpace(withStyles(styles)(ContactsPage), { contentType: 'user', contentLabel: 'Contacts', sort: 'name'});
+export default withSpace(withStyles(styles)(ContactsPage), { contentType: 'users', contentLabel: 'Contacts', sort: 'name'});

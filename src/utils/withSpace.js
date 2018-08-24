@@ -138,7 +138,7 @@ const withSpace = function withSpace(Component, options) {
         if (options.sort) {
           params.sort = options.sort;
         }
-        if (options.contentType === 'user') {
+        if (options.contentType === 'users') {
           params.limit = this.state.rowsPerPage;
           let listType = this.spaceType;
           if (listType === 'group') {
@@ -152,7 +152,7 @@ const withSpace = function withSpace(Component, options) {
           newState.list = lists.data[0];
           params.limit = this.state.rowsPerPage;
           params[this.hidFilter + '.list'] = newState.list._id;
-          newState.content = await this.hidAPI.get(options.contentType, params);
+          newState.content = await this.hidAPI.get('user', params);
         }
         else if (options.contentType === 'dataset') {
           const iso3 = newState.doc && newState.doc.country ? newState.doc.country.iso3.toLowerCase() : '';
@@ -174,12 +174,8 @@ const withSpace = function withSpace(Component, options) {
           params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
           newState.content = await this.hrinfoAPI.get(options.contentType, params);
         }
-        /*newState.content.data = newState.content.data.map(function (item) {
-          item.type = options.contentType;
-          return item;
-        });*/
         let contentType = options.contentType;
-        if (contentType === 'user') {
+        if (contentType === 'users') {
           contentType = 'contacts';
         }
         breadcrumb.push({
@@ -224,11 +220,26 @@ const withSpace = function withSpace(Component, options) {
           sort: options.sort
         };
         let filters = this.state.filters;
-        if (options.contentType === 'user') {
+        if (options.contentType === 'users') {
           params.limit = this.state.rowsPerPage;
           params.offset = this.state.page * this.state.rowsPerPage;
           params[this.hidFilter + '.list'] = this.state.list._id;
-          content = await this.hidAPI.get(options.contentType, params);
+          let cleanFilters = {...filters};
+          if (cleanFilters.user_type) {
+            if (cleanFilters.user_type.value === 'unverified') {
+              params['verified'] = false;
+            }
+            else {
+              params[cleanFilters.user_type.value] = true;
+            }
+            delete cleanFilters.user_type;
+          }
+          Object.keys(cleanFilters).forEach(function (key) {
+            params[key + '.list'] = cleanFilters[key]._id;
+            delete cleanFilters[key];
+          });
+          params = {...params, ...cleanFilters};
+          content = await this.hidAPI.get('user', params);
         }
         else if (options.contentType === 'dataset') {
           const iso3 = this.state.doc && this.state.doc.country ? this.state.doc.country.iso3.toLowerCase() : '';
@@ -320,12 +331,13 @@ const withSpace = function withSpace(Component, options) {
     }
 
     setFilter(name, val) {
+      console.log(val);
       const that = this;
       let filters = {};
       Object.keys(this.state.filters).forEach(function (key) {
         filters[key] = that.state.filters[key];
       });
-      if ((Array.isArray(val) && val.length !== 0) || val.id || typeof val.toDate !== 'undefined') {
+      if (val && ((Array.isArray(val) && val.length !== 0) || val.id || val._id || typeof val.toDate !== 'undefined' || name === 'user_type')) {
         if (typeof val.toDate !== 'undefined') {
           filters[name] = val.toDate();
         }
@@ -336,6 +348,7 @@ const withSpace = function withSpace(Component, options) {
       else {
         delete filters[name];
       }
+      console.log(filters);
       this.setState({
         filters: filters
       });

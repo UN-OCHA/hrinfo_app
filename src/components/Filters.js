@@ -9,8 +9,10 @@ import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import DatePicker from 'material-ui-pickers/DatePicker';
 
+import HidSelect from './HidSelect';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
+import UserType from './UserType';
 
 const styles = theme => ({
   list: {
@@ -125,6 +127,23 @@ class FiltersDrawer extends React.Component {
                   </MuiPickersUtilsProvider>
     		        </FormControl> : ''
             }
+
+            { (contentType === 'users')
+              ? <FormControl fullWidth margin="normal">
+      					<FormLabel>Role</FormLabel>
+      					<HidSelect
+                  type='functional_role'
+      						onChange={(s) => this.props.setFilter('functional_roles', s)}
+      						value={filters.functional_roles}/>
+      				</FormControl> : ''}
+
+            { (contentType === 'users')
+              ? <FormControl fullWidth margin="normal">
+      					<FormLabel>Type of User</FormLabel>
+      					<UserType
+      						onChange={(s) => this.props.setFilter('user_type', s)}
+      						value={filters.user_type}/>
+      				</FormControl> : ''}
           </div>
         </Drawer>
       );
