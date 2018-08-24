@@ -116,7 +116,7 @@ class Item extends React.Component {
                 {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
               </CardContent>
               <CardActions>
-                {this.props.viewMode === 'search' ? <Button variant='outlined' color='primary' href={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
+                {this.props.viewMode === 'search' ? <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
                 {item.type !== 'users' ? <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button> : ''}
               </CardActions>
             </div>

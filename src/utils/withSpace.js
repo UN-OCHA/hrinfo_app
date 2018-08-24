@@ -174,10 +174,10 @@ const withSpace = function withSpace(Component, options) {
           params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
           newState.content = await this.hrinfoAPI.get(options.contentType, params);
         }
-        newState.content.data = newState.content.data.map(function (item) {
+        /*newState.content.data = newState.content.data.map(function (item) {
           item.type = options.contentType;
           return item;
-        });
+        });*/
         let contentType = options.contentType;
         if (contentType === 'user') {
           contentType = 'contacts';
