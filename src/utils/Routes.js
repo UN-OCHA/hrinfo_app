@@ -68,6 +68,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/:id/offices"      exact component={OfficesPage}                                        props={childProps} />
     <AuthenticatedRoute path="/operations/:id/disasters"    exact component={DisastersPage}                                      props={childProps} />
     <AuthenticatedRoute path="/operations/:id/datasets"     exact component={DatasetsPage}                                       props={childProps} />
+    <AuthenticatedRoute path="/operations/:id/assessments"  exact component={AssessmentsPage}                                    props={childProps} />
 
 {/* Spaces */}
     <AuthenticatedRoute path="/spaces/:id"                  exact component={SpacePage}                                          props={childProps} />
@@ -85,6 +86,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/groups/:id/documents"    exact component={DocumentsPage}     props={childProps} />
     <AuthenticatedRoute path="/groups/:id/infographics" exact component={InfographicsPage}  props={childProps} />
     <AuthenticatedRoute path="/groups/:id/events"       exact component={EventsPage}        props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/assessments"  exact component={AssessmentsPage}   props={childProps} />
 
 {/* Offices */}
     <AuthenticatedRoute path="/offices/:id"              exact component={SpacePage}          props={childProps} />
@@ -99,6 +101,7 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/organizations/:id/documents"    exact component={DocumentsPage}    props={childProps} />
     <AuthenticatedRoute path="/organizations/:id/infographics" exact component={InfographicsPage} props={childProps} />
     <AuthenticatedRoute path="/organizations/:id/events"       exact component={EventsPage}       props={childProps} />
+    <AuthenticatedRoute path="/organizations/:id/assessments"  exact component={AssessmentsPage}  props={childProps} />
 
 {/* Disaster */}
     <AuthenticatedRoute path="/disasters/:id"              exact component={SpacePage}        props={childProps} />

@@ -17,6 +17,8 @@ import UserType from './UserType';
 import OrganizationType from './OrganizationType';
 import HRInfoLocation from './HRInfoLocation';
 import ContactSort from './ContactSort';
+import AssessmentStatus from './AssessmentStatus';
+import PopulationType from './PopulationType';
 
 const styles = theme => ({
   list: {
@@ -56,6 +58,14 @@ class FiltersDrawer extends React.Component {
                 <HRInfoAsyncSelect type="organizations" isMulti={true}
                   onChange={(s) => this.props.setFilter('organizations', s)}
                   value={filters.organizations}/>
+              </FormControl> : ''
+            }
+            { contentType === 'assessments' ?
+              <FormControl fullWidth margin="normal">
+                <FormLabel>Filter by Participating Organization(s)</FormLabel>
+                <HRInfoAsyncSelect type="organizations" isMulti={true}
+                  onChange={(s) => this.props.setFilter('participating_organizations', s)}
+                  value={filters.participating_organizations}/>
               </FormControl> : ''
             }
             { contentType === 'users'
@@ -217,6 +227,57 @@ class FiltersDrawer extends React.Component {
       						onChange={(s) => this.props.setFilter('sort', s)}
       						value={filters.sort}/>
       				</FormControl> : ''}
+
+              { (contentType === 'assessments')
+                ? <FormControl fullWidth margin="normal">
+        					<FormLabel>Filter by Status</FormLabel>
+        					<AssessmentStatus
+        						onChange={(s) => this.props.setFilter('status', s)}
+        						value={filters.status}/>
+        				</FormControl> : ''}
+
+              { (contentType === 'assessments')
+                ? <FormControl fullWidth margin="normal">
+        					<FormLabel>Filter by Population Type</FormLabel>
+        					<PopulationType
+        						onChange={(s) => this.props.setFilter('population_types', s)}
+        						value={filters.population_types}/>
+        				</FormControl> : ''}
+
+                { (contentType === 'assessments')
+                  ? <FormControl fullWidth margin="normal">
+                      <FormLabel>Start date after</FormLabel>
+                      <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <DatePicker
+                          id="date_after"
+                          name="date_after"
+                          format="DD/MM/YYYY"
+                          value={filters.date_after ? filters.date_after : ''}
+                          invalidLabel=""
+                          onChange={(s) => this.props.setFilter('date_after', s)}
+                          leftArrowIcon={<i className="icon-arrow-left" />}
+                          rightArrowIcon={<i className="icon-arrow-right" />}
+                        />
+                      </MuiPickersUtilsProvider>
+        		        </FormControl> : ''
+                }
+                { (contentType === 'assessments')
+                  ? <FormControl fullWidth margin="normal">
+                      <FormLabel>Start date before</FormLabel>
+                      <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <DatePicker
+                          id="date_before"
+                          name="date_before"
+                          format="DD/MM/YYYY"
+                          value={filters.date_before ? filters.date_before : ''}
+                          invalidLabel=""
+                          onChange={(s) => this.props.setFilter('date_before', s)}
+                          leftArrowIcon={<i className="icon-arrow-left" />}
+                          rightArrowIcon={<i className="icon-arrow-right" />}
+                        />
+                      </MuiPickersUtilsProvider>
+        		        </FormControl> : ''
+                }
           </div>
         </Drawer>
       );
@@ -238,10 +299,16 @@ class FilterChips extends React.Component {
         });
       }
       else {
-        if (key === 'publication_date_before' || key === 'publication_date_after') {
+        if (key === 'publication_date_before' || key === 'publication_date_after' || key === 'date_after' || key === 'date_before') {
           let label = 'Published before: ';
           if (key === 'publication_date_after') {
             label = 'Published after: ';
+          }
+          else if (key === 'date_before') {
+            label = 'Started before: ';
+          }
+          else if (key === 'date_after') {
+            label = 'Started after: ';
           }
           return (<Chip key={key + '_' + filters[key].id} label={label + filters[key].toDateString()} onDelete={() => {removeFilter(key, filters[key])}} />);
         }

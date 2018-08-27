@@ -275,22 +275,26 @@ const withSpace = function withSpace(Component, options) {
               }
             }
             else {
-              if (key === 'publication_date_after' || key === 'publication_date_before') {
+              if (key === 'publication_date_after' || key === 'publication_date_before' || key === 'date_before' || key === 'date_after') {
                 let index = 0;
-                if (key === 'publication_date_after') {
-                  params['filter[publication_date][value][0]'] = filters[key].toISOString();
-                  params['filter[publication_date][operator][0]'] = '>';
+                const name = key.substring(0, key.lastIndexOf('_'));
+                const direction = key.substring(key.lastIndexOf('_') + 1);
+                console.log(name);
+                console.log(direction);
+                if (direction === 'after') {
+                  params['filter[' + name + '][value][0]'] = filters[key].toISOString();
+                  params['filter[' + name + '][operator][0]'] = '>';
                 }
                 else {
-                  if (filterKeys.indexOf('publication_date_after') !== -1) {
+                  if (filterKeys.indexOf(name + '_after') !== -1) {
                     index = 1;
                   }
-                  params['filter[publication_date][value][' + index + ']'] = filters[key].toISOString();
-                  params['filter[publication_date][operator][' + index + ']'] = '<';
+                  params['filter[' + name + '][value][' + index + ']'] = filters[key].toISOString();
+                  params['filter[' + name + '][operator][' + index + ']'] = '<';
                 }
               }
               else {
-                params['filter[' + key + ']'] = filters[key].id;
+                params['filter[' + key + ']'] = filters[key].id ? filters[key].id : filters[key].value;
               }
             }
           });
@@ -350,8 +354,7 @@ const withSpace = function withSpace(Component, options) {
       });
       if (val &&
         ((Array.isArray(val) && val.length !== 0) ||
-          val.id || val._id || typeof val.toDate !== 'undefined' ||
-          name === 'user_type' || name === 'organization_type' || name === 'country' || name === 'sort')) {
+          val.id || val._id || val.value || typeof val.toDate !== 'undefined')) {
         if (typeof val.toDate !== 'undefined') {
           filters[name] = val.toDate();
         }
