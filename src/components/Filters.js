@@ -10,9 +10,12 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 import DatePicker from 'material-ui-pickers/DatePicker';
 
 import HidSelect from './HidSelect';
+import HidAsyncSelect from './HidAsyncSelect';
 import HRInfoSelect from './HRInfoSelect';
 import HRInfoAsyncSelect from './HRInfoAsyncSelect';
 import UserType from './UserType';
+import OrganizationType from './OrganizationType';
+import HRInfoLocation from './HRInfoLocation';
 
 const styles = theme => ({
   list: {
@@ -46,13 +49,33 @@ class FiltersDrawer extends React.Component {
                     }
     		        </FormControl> : ''
             }
-            <FormControl fullWidth margin="normal">
-              <FormLabel>Filter by Organization(s)</FormLabel>
-              <HRInfoAsyncSelect type="organizations" isMulti={true}
-                onChange={(s) => this.props.setFilter('organizations', s)}
-                value={filters.organizations}/>
-            </FormControl>
-            { spaceType === 'operation'
+            { contentType !== 'users' ?
+              <FormControl fullWidth margin="normal">
+                <FormLabel>Filter by Organization(s)</FormLabel>
+                <HRInfoAsyncSelect type="organizations" isMulti={true}
+                  onChange={(s) => this.props.setFilter('organizations', s)}
+                  value={filters.organizations}/>
+              </FormControl> : ''
+            }
+            { contentType === 'users'
+              ? <FormControl fullWidth margin="normal">
+        				<FormLabel>Filter by Organization Type</FormLabel>
+        				<OrganizationType
+        					onChange={(s) => this.props.setFilter('organization_type', s)}
+        					value={filters.organization_type}/>
+        			</FormControl> : ''
+            }
+            { contentType === 'users'
+              ? <FormControl fullWidth margin="normal">
+        				<FormLabel>Filter by Organization(s)</FormLabel>
+        				<HidAsyncSelect
+        					type="organization"
+        					onChange={(s) => this.props.setFilter('organization', s)}
+        					value={filters.organization}/>
+        			</FormControl> : ''
+            }
+
+            { spaceType === 'operation' && contentType !== 'users'
               ? <FormControl fullWidth margin="normal">
       					   <FormLabel>Filter by Clusters/Sectors</FormLabel>
                    <HRInfoSelect
@@ -63,7 +86,17 @@ class FiltersDrawer extends React.Component {
           						value={filters.bundles}/>
       				  </FormControl> : ''
             }
-            { spaceType === 'operation'
+            { spaceType === 'operation' && contentType === 'users'
+              ? <FormControl fullWidth margin="normal">
+        				<FormLabel>Filter by Clusters/Sectors</FormLabel>
+        				<HidSelect
+        					type="bundle"
+        					operation={this.props.doc ? this.props.doc.id : null}
+        					onChange={(s) => this.props.setFilter('bundles', s)}
+        					value={filters.bundles}/>
+        			</FormControl> : ''
+            }
+            { spaceType === 'operation' && contentType !== 'users'
               ? <FormControl fullWidth margin="normal">
         				<FormLabel>Filter by Coordination hub(s)</FormLabel>
         				<HRInfoSelect
@@ -74,21 +107,52 @@ class FiltersDrawer extends React.Component {
         					value={filters.offices}/>
         			</FormControl> : ''
             }
-            <FormControl fullWidth margin="normal">
-              <FormLabel>Filter by Theme(s)</FormLabel>
-              <HRInfoSelect type="themes"
-                isMulti={true}
-                onChange={(s) => this.props.setFilter('themes', s)}
-								value={filters.themes}
-                id="themes"/>
-            </FormControl>
-            { spaceType === 'operation'
+            { spaceType === 'operation' && contentType === 'users'
+              ? <FormControl fullWidth margin="normal">
+        				<FormLabel>Filter by Coordination hub(s)</FormLabel>
+        				<HidSelect
+        					type="office"
+        					operation={this.props.doc ? this.props.doc.id : null}
+        					onChange={(s) => this.props.setFilter('offices', s)}
+        					value={filters.offices}/>
+        			</FormControl> : ''
+            }
+            { contentType === 'users'
+              ? <FormControl fullWidth margin="normal">
+        				<FormLabel>Filter by Country</FormLabel>
+                <HRInfoLocation
+                  level="0"
+                  onChange={(row, level, opt) => this.props.setFilter('country', opt)}
+                  value={filters.country}/>
+        			</FormControl> : ''
+            }
+            { contentType !== 'users' ?
+              <FormControl fullWidth margin="normal">
+                <FormLabel>Filter by Theme(s)</FormLabel>
+                <HRInfoSelect type="themes"
+                  isMulti={true}
+                  onChange={(s) => this.props.setFilter('themes', s)}
+  								value={filters.themes}
+                  id="themes"/>
+              </FormControl> : ''
+            }
+            { spaceType === 'operation' && contentType !== 'users'
               ? <FormControl fullWidth margin="normal">
       					<FormLabel>Filter by Disaster</FormLabel>
       					<HRInfoSelect
       						type="disasters"
       						spaces={this.props.doc ? this.props.doc : null}
       						isMulti={true}
+      						onChange={(s) => this.props.setFilter('disasters', s)}
+      						value={filters.disasters}/>
+      				</FormControl> : ''
+            }
+            { spaceType === 'operation' && contentType === 'users'
+              ? <FormControl fullWidth margin="normal">
+      					<FormLabel>Filter by Disaster</FormLabel>
+      					<HidSelect
+      						type="disaster"
+      						operation={this.props.doc ? this.props.doc.id : null}
       						onChange={(s) => this.props.setFilter('disasters', s)}
       						value={filters.disasters}/>
       				</FormControl> : ''

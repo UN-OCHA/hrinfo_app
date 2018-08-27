@@ -234,6 +234,14 @@ const withSpace = function withSpace(Component, options) {
             }
             delete cleanFilters.user_type;
           }
+          if (cleanFilters.organization_type) {
+            params['organizations.orgTypeId'] = cleanFilters.organization_type.value;
+            delete cleanFilters.organization_type;
+          }
+          if (cleanFilters.country) {
+            params['country'] = 'hrinfo_loc_' + cleanFilters.country.id;
+            delete cleanFilters.country;
+          }
           Object.keys(cleanFilters).forEach(function (key) {
             params[key + '.list'] = cleanFilters[key]._id;
             delete cleanFilters[key];
@@ -331,13 +339,15 @@ const withSpace = function withSpace(Component, options) {
     }
 
     setFilter(name, val) {
-      console.log(val);
       const that = this;
       let filters = {};
       Object.keys(this.state.filters).forEach(function (key) {
         filters[key] = that.state.filters[key];
       });
-      if (val && ((Array.isArray(val) && val.length !== 0) || val.id || val._id || typeof val.toDate !== 'undefined' || name === 'user_type')) {
+      if (val &&
+        ((Array.isArray(val) && val.length !== 0) ||
+          val.id || val._id || typeof val.toDate !== 'undefined' ||
+          name === 'user_type' || name === 'organization_type' || name === 'country')) {
         if (typeof val.toDate !== 'undefined') {
           filters[name] = val.toDate();
         }
@@ -348,7 +358,6 @@ const withSpace = function withSpace(Component, options) {
       else {
         delete filters[name];
       }
-      console.log(filters);
       this.setState({
         filters: filters
       });

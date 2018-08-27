@@ -13,30 +13,14 @@ class UserType extends React.Component {
     ]
   };
 
-  getValue = (val) => {
-    let out = {};
-    this.state.options.forEach(function (option) {
-      if (option.value === val) {
-        out = option;
-      }
-    });
-    return out;
-  };
-
-  handleChange = (selectedOption) => {
-    if (this.props.onChange) {
-      this.props.onChange(selectedOption);
-    }
-  };
-
   render() {
     return (
         <MaterialSelect
           id        = "userType"
           name      = "userType"
-          onChange  = {this.handleChange}
+          onChange  = {this.props.onChange}
           options   = {this.state.options}
-          value     = {this.getValue(this.props.value)}
+          value     = {this.props.value}
           className = {this.props.className} />
     );
   }

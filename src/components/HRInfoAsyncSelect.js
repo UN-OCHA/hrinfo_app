@@ -3,16 +3,13 @@ import MaterialAsyncSelect from '../components/MaterialAsyncSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoAsyncSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: []
-    };
-    this.hrinfoAPI = new HRInfoAPI();
-    this.getOptions = this.getOptions.bind(this);
-  }
+  state = {
+    items: []
+  };
 
-  getOptions (input) {
+  hrinfoAPI = new HRInfoAPI();
+
+  getOptions = (input) => {
     const type = this.props.type;
     let params = {};
     if (type === 'organizations') {
@@ -42,7 +39,7 @@ class HRInfoAsyncSelect extends React.Component {
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
-  }
+  };
 
   render() {
     return (

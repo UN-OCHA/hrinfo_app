@@ -16,6 +16,9 @@ class HidSelect extends React.Component {
     params.limit = 50;
     params.sort = 'label';
     params.type = type;
+    if (this.props.operation) {
+      params['metadata.operation.id'] = this.props.operation;
+    }
     return this.hidAPI
       .get('list', params)
       .then(data => {
