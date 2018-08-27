@@ -8,10 +8,8 @@ class HidAPI {
     if (!instance){
       instance = this;
     }
-    if (!instance.token) {
-      const cookies = new Cookies();
-      instance.token = cookies.get('hid-token');
-    }
+    const cookies = new Cookies();
+    instance.token = cookies.get('hid-token');
     return instance;
   }
 

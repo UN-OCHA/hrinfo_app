@@ -16,6 +16,7 @@ import HRInfoAsyncSelect from './HRInfoAsyncSelect';
 import UserType from './UserType';
 import OrganizationType from './OrganizationType';
 import HRInfoLocation from './HRInfoLocation';
+import ContactSort from './ContactSort';
 
 const styles = theme => ({
   list: {
@@ -208,6 +209,14 @@ class FiltersDrawer extends React.Component {
       						onChange={(s) => this.props.setFilter('user_type', s)}
       						value={filters.user_type}/>
       				</FormControl> : ''}
+
+            { (contentType === 'users')
+              ? <FormControl fullWidth margin="normal">
+      					<FormLabel>Sort by</FormLabel>
+      					<ContactSort
+      						onChange={(s) => this.props.setFilter('sort', s)}
+      						value={filters.sort}/>
+      				</FormControl> : ''}
           </div>
         </Drawer>
       );
@@ -235,6 +244,9 @@ class FilterChips extends React.Component {
             label = 'Published after: ';
           }
           return (<Chip key={key + '_' + filters[key].id} label={label + filters[key].toDateString()} onDelete={() => {removeFilter(key, filters[key])}} />);
+        }
+        else if (key === 'sort') {
+          return '';
         }
         else {
           return (<Chip key={key + '_' + filters[key].id} label={filters[key].label} onDelete={() => {removeFilter(key, filters[key])}} />);
