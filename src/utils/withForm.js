@@ -120,9 +120,12 @@ const withForm = function withForm(Component, hrinfoType, label) {
       const doc = this.state.doc;
       let isValid = false;
       if (this.isValid(doc.language) &&
-        this.isValid(doc.spaces) &&
         this.isValid(doc.label)) {
+        if (hrinfoType === 'operations') {
+          isValid = true;
+        }
         if (hrinfoType === 'documents' &&
+          this.isValid(doc.spaces) &&
           this.isValid(doc.document_type) &&
           this.isValid(doc.publication_date) &&
           this.isValid(doc.files) &&
@@ -131,6 +134,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           isValid = true;
         }
         if (hrinfoType === 'infographics' &&
+          this.isValid(doc.spaces) &&
           this.isValid(doc.infographic_type) &&
           this.isValid(doc.publication_date) &&
           this.isValid(doc.files) &&
@@ -139,6 +143,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           isValid = true;
         }
         if (hrinfoType === 'events' &&
+          this.isValid(doc.spaces) &&
           this.isValid(doc.category) &&
           this.isValid(doc.date)) {
           isValid = true;

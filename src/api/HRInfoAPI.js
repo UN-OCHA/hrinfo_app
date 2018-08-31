@@ -1,5 +1,6 @@
 
 import Cookies from 'universal-cookie';
+import i18next from 'i18next';
 
 let instance = null;
 
@@ -19,7 +20,7 @@ class HRInfoAPI {
   }
 
   getItem(type, id) {
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + type + "/" + id, {
+    return fetch("https://www.humanitarianresponse.info/" + i18next.language + "/api/v1.0/" + type + "/" + id, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
@@ -58,7 +59,7 @@ class HRInfoAPI {
   }
 
   get (type, params, anonymous = true) {
-    let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type;
+    let url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
       url += '?';

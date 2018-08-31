@@ -1,6 +1,41 @@
 {
-  "coordination_hubs": "Bureau(x) de coordination",
-  "helpers": {
-    "offices": "Click on the field and select the coordination hub(s) the <1>{contentType}</1> refers to (if any)."
-  }
+    "coordination_hubs": "Bureau(x) de Coordination",
+    "disasters": "Catastrophe(s) / Urgence",
+    "bundles": "Cluster(s) / Secteur(s)",
+    "title": "Titre",
+    "description": "Description ou Résumé du contenu",
+    "files": "Fichier(s)",
+    "language": "Langue",
+    "spaces": "Operation(s) / Espace(s) web",
+    "publication_date": "Date de publication initiale",
+    "document_type": "Type de document",
+    "map_type": "Type de carte / infographie",
+    "organizations": "Organisation(s)",
+    "locations": "Lieu(x)",
+    "themes": "Thème(s)",
+    "related_content": "Contenu lié",
+    "publish": "Publier",
+    "save_as_draft": "Enregistrer comme brouillon",
+    "delete": "Supprimer",
+    "form_incomplete": "Le formulaire n'est pas complet et n'a pas pu être soumis.",
+    "close": "Fermer",
+    "exclude_from_reliefweb": "Ne pas partager avec ReliefWeb",
+    "add_more": "Ajouter plus d'informations",
+    "hide_information": "Cacher les informations facultatives",
+    "helpers": {
+        "offices": "Cliquer sur le champ et sélectionner le(s) bureau(x) de coordination ou auxquel(s) le <1> {{label}} </ 1> fait référence.",
+        "publication_date": "Indiquer quand le <1>{{label}}</1> a été initialement publié",
+        "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou urgenge ",
+        "bundles": "",
+        "title": "",
+        "description": "",
+        "files": "",
+        "language": "",
+        "spaces": "",
+        "document_type": "",
+        "organizations": "",
+        "locations": "",
+        "themes": "",
+        "related_content": ""
+    }
 }
