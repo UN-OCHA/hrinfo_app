@@ -1,0 +1,6 @@
+{
+  "coordination_hubs": "Bureau(x) de coordination",
+  "helpers": {
+    "offices": "Click on the field and select the coordination hub(s) the <1>{contentType}</1> refers to (if any)."
+  }
+}

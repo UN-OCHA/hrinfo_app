@@ -19,6 +19,7 @@ import HRInfoLocation from './HRInfoLocation';
 import ContactSort from './ContactSort';
 import AssessmentStatus from './AssessmentStatus';
 import PopulationType from './PopulationType';
+import GeographicLevel from './GeographicLevel';
 
 const styles = theme => ({
   list: {
@@ -235,6 +236,14 @@ class FiltersDrawer extends React.Component {
         						onChange={(s) => this.props.setFilter('status', s)}
         						value={filters.status}/>
         				</FormControl> : ''}
+
+                { (contentType === 'assessments')
+                  ? <FormControl fullWidth margin="normal">
+          					<FormLabel>Filter by Geographic Level</FormLabel>
+          					<GeographicLevel
+          						onChange={(s) => this.props.setFilter('geographic_level', s)}
+          						value={filters.geographic_level}/>
+          				</FormControl> : ''}
 
               { (contentType === 'assessments')
                 ? <FormControl fullWidth margin="normal">

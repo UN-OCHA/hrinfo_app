@@ -6,7 +6,9 @@ import App from './containers/App';
 import {I18nextProvider} from 'react-i18next';
 import i18next from 'i18next';
 import common_en from "./translations/en/common.json";
+import forms_en from "./translations/en/forms.json";
 import common_fr from "./translations/fr/common.json";
+import forms_fr from "./translations/fr/forms.json";
 import './index.css';
 import './images/unocha-icons.css';
 import registerServiceWorker from './utils/registerServiceWorker';
@@ -30,10 +32,12 @@ i18next.init({
   lng: 'en',
   resources: {
     en: {
-      common: common_en
+      common: common_en,
+      forms: forms_en
     },
     fr: {
-      common: common_fr
+      common: common_fr,
+      forms: forms_fr
     }
   }
 });
