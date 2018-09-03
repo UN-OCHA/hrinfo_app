@@ -59,7 +59,7 @@ class DocumentForm extends React.Component {
   }
 
   render() {
-    const { t, typeLabel, label } = this.props;
+    const { t, label } = this.props;
     const offices = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
@@ -71,9 +71,7 @@ class DocumentForm extends React.Component {
           onChange = {(s) => this.props.handleSelectChange('offices', s)}
           value    = {this.props.doc.offices}/>
         <FormHelperText id = "offices-text">
-          <Trans i18nKey='helpers.offices' label={label}>
-          Click on the field and select the coordination hub(s) the {{label}}
-          refers to (if any).</Trans>
+          {t(label + '.helpers.offices')}
         </FormHelperText>
       </FormControl>
     )
@@ -90,7 +88,7 @@ class DocumentForm extends React.Component {
           onChange  = {(s) => this.props.handleSelectChange('disasters', s)}
           value     = {this.props.doc.disasters}/>
         <FormHelperText id="disasters-text">
-          <Trans i18nKey='helpers.disasters' label={label}>Click on the field and select the disaster(s) or emergency the {{label}}
+          <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or emergency the document
           refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See
           <a href="http://glidenumer.net/?ref=hrinfo"> glidenumber.net</a>.</Trans>
         </FormHelperText>
@@ -109,7 +107,7 @@ class DocumentForm extends React.Component {
           onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
           value =  {this.props.doc.bundles}/>
         <FormHelperText id="bundles-text">
-          <Trans i18nKey='helpers.bundles' label={label}>Indicate the cluster(s)/sector(s) the {{label}} refers to.</Trans>
+          {t(label + '.helpers.bundles')}
         </FormHelperText>
       </FormControl>
     )
@@ -130,7 +128,7 @@ class DocumentForm extends React.Component {
                 value    = {this.props.doc.label}
                 onChange = {this.props.handleInputChange}/>
               <FormHelperText id = "label-text">
-                <Trans i18nKey='helpers.title' label={label}>Type the original title of the {{label}}. Try not to use abbreviations. To see Standards and Naming Conventions click
+                <Trans i18nKey={label + '.helpers.title'}>Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
                 <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
@@ -145,8 +143,7 @@ class DocumentForm extends React.Component {
                 />
               </Card>
               <FormHelperText id = "body-text">
-                <Trans i18nKey='helpers.description' label={label}>Try to always include here the text (in full or part of it) of the {{label}}
-                (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.</Trans>
+                {t(label + '.helpers.description')}
               </FormHelperText>
             </FormControl>
 
@@ -169,7 +166,7 @@ class DocumentForm extends React.Component {
                 onChange  = {(s) => this.props.handleSelectChange('language', s)}
                 className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
               <FormHelperText id="language-text">
-                <Trans i18nKey='helpers.language' label={label}>Select the language of the {{label}}.</Trans>
+                {t(label + '.helpers.language')}
               </FormHelperText>
             </FormControl>
 
@@ -177,8 +174,7 @@ class DocumentForm extends React.Component {
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
               <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces}/>
               <FormHelperText>
-                <Trans i18nKey='helpers.spaces' label={label}>Click on the field and select where to publish the {{label}}
-                (operation, regional site or thematic site).</Trans>
+                {t(label + '.helpers.spaces')}
               </FormHelperText>
             </FormControl>
 
@@ -198,7 +194,7 @@ class DocumentForm extends React.Component {
                 />
               </MuiPickersUtilsProvider>
               <FormHelperText id="publication_date-text">
-                <Trans i18nKey='helpers.publication_date' label={label}>Indicate when the {{label}} has originally been published.</Trans>
+                {t(label + '.helpers.publication_date')}
               </FormHelperText>
             </FormControl>
 
@@ -226,7 +222,7 @@ class DocumentForm extends React.Component {
                       : 'is-invalid'}/>
                 }
                 <FormHelperText>
-                  <Trans i18nKey='helpers.document_type' label={label}>Select the {{label}} type and sub-type that best describe the {{label}}.</Trans>
+                  {t(label + '.helpers.document_type')}
               </FormHelperText>
             </FormControl>
 
@@ -236,7 +232,7 @@ class DocumentForm extends React.Component {
                 onChange={(s) => this.props.handleSelectChange('organizations', s)}
                 value={this.props.doc.organizations}/>
               <FormHelperText id="organizations-text">
-                <Trans i18nKey='helpers.organizations' label={label}>Type in and select the source(s) of the {{label}}.</Trans>
+                {t(label + '.helpers.organizations')}
               </FormHelperText>
             </FormControl>
               {bundles}
@@ -264,7 +260,7 @@ class DocumentForm extends React.Component {
                     isMulti = "isMulti"
                     id      = "locations"/>
                   <FormHelperText id="locations-text">
-                    <Trans i18nKey='helpers.locations' label={label}>Select from the menu the country(ies) the {{label}} is about and indicate more specific locations by selecting multiple layers (region, province, town).</Trans>
+                    {t(label + '.helpers.locations')}
                   </FormHelperText>
                 </FormControl>
 
@@ -276,7 +272,7 @@ class DocumentForm extends React.Component {
                     value     = {this.props.doc.themes}
                     id        = "themes"/>
                   <FormHelperText id="themes-text">
-                    <Trans i18nKey='helpers.themes' label={label}>Click on the field and select all relevant themes. Choose only themes the {{label}} substantively refers to.</Trans>
+                    {t(label + '.helpers.themes')}
                   </FormHelperText>
                 </FormControl>
 
@@ -286,8 +282,7 @@ class DocumentForm extends React.Component {
 									value={this.props.doc.related_content}
 									id="related_content"/>
 								<FormHelperText id="related_content-text">
-									<Trans i18nKey='helpers.related_content' label={label}>Add links to content that is related to the {{label}}
-									you are publishing (example: language versions of the same {{label}}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.</Trans>
+                  {t(label + '.helpers.related_content')}
 								</FormHelperText>
 							</FormControl>
 

@@ -21,21 +21,5 @@
     "close": "Fermer",
     "exclude_from_reliefweb": "Ne pas partager avec ReliefWeb",
     "add_more": "Ajouter plus d'informations",
-    "hide_information": "Cacher les informations facultatives",
-    "helpers": {
-        "offices": "Cliquer sur le champ et sélectionner le(s) bureau(x) de coordination ou auxquel(s) le <1> {{label}} </ 1> fait référence.",
-        "publication_date": "Indiquer quand le <1>{{label}}</1> a été initialement publié",
-        "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou urgenge ",
-        "bundles": "",
-        "title": "",
-        "description": "",
-        "files": "",
-        "language": "",
-        "spaces": "",
-        "document_type": "",
-        "organizations": "",
-        "locations": "",
-        "themes": "",
-        "related_content": ""
-    }
+    "hide_information": "Cacher les informations facultatives"
 }
