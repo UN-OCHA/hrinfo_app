@@ -21,7 +21,8 @@ const withSpace = function withSpace(Component, options) {
         rowsPerPage: 50,
         drawerState: false,
         filters: {},
-        dateFilters: {}
+        dateFilters: {},
+        status: ''
       };
 
       this.hrinfoAPI = new HRInfoAPI();
@@ -35,6 +36,7 @@ const withSpace = function withSpace(Component, options) {
       this.removeFilter = this.removeFilter.bind(this);
       this.getSpaceAndBreadcrumb = this.getSpaceAndBreadcrumb.bind(this);
       this.setFromUrl = this.setFromUrl.bind(this);
+      this.forceUpdate = this.forceUpdate.bind(this);
 
       this.setFromUrl();
     }
@@ -68,6 +70,12 @@ const withSpace = function withSpace(Component, options) {
     handleChangePage (event, page) {
       this.setState({
         page
+      });
+    }
+
+    forceUpdate () {
+      this.setState({
+        status: 'update'
       });
     }
 
@@ -130,7 +138,7 @@ const withSpace = function withSpace(Component, options) {
         if (options.sort) {
           params.sort = options.sort;
         }
-        if (options.contentType === 'user') {
+        if (options.contentType === 'users') {
           params.limit = this.state.rowsPerPage;
           let listType = this.spaceType;
           if (listType === 'group') {
@@ -144,7 +152,7 @@ const withSpace = function withSpace(Component, options) {
           newState.list = lists.data[0];
           params.limit = this.state.rowsPerPage;
           params[this.hidFilter + '.list'] = newState.list._id;
-          newState.content = await this.hidAPI.get(options.contentType, params);
+          newState.content = await this.hidAPI.get('user', params);
         }
         else if (options.contentType === 'dataset') {
           const iso3 = newState.doc && newState.doc.country ? newState.doc.country.iso3.toLowerCase() : '';
@@ -153,18 +161,21 @@ const withSpace = function withSpace(Component, options) {
           params.start = this.state.page * this.state.rowsPerPage;
           newState.content = await this.hdxAPI.get(params);
         }
+        else if (options.contentType === 'og_membership') {
+          params.range = this.state.rowsPerPage;
+          params.page = this.state.page + 1;
+          params['filter[group]'] = this.props.match.params.id;
+          params['filter[entity_type]'] = 'user';
+          newState.content = await this.hrinfoAPI.get(options.contentType, params, false);
+        }
         else {
           params.range = this.state.rowsPerPage;
           params.page = this.state.page + 1;
           params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
           newState.content = await this.hrinfoAPI.get(options.contentType, params);
         }
-        newState.content.data = newState.content.data.map(function (item) {
-          item.type = options.contentType;
-          return item;
-        });
         let contentType = options.contentType;
-        if (contentType === 'user') {
+        if (contentType === 'users') {
           contentType = 'contacts';
         }
         breadcrumb.push({
@@ -189,10 +200,13 @@ const withSpace = function withSpace(Component, options) {
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
-      if (prevProps.match.url !== this.props.match.url) {
+      if (prevProps.match.url !== this.props.match.url ||
+        (prevState.status === '' && this.state.status === 'update')) {
         this.setFromUrl();
         const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
-        this.setState(stateAndBreadcrumb.newState);
+        let newState = stateAndBreadcrumb.newState;
+        newState.status = '';
+        this.setState(newState);
         this.props.setGroup(stateAndBreadcrumb.newState.doc);
         this.props.setBreadcrumb(stateAndBreadcrumb.breadcrumb);
       }
@@ -206,11 +220,38 @@ const withSpace = function withSpace(Component, options) {
           sort: options.sort
         };
         let filters = this.state.filters;
-        if (options.contentType === 'user') {
+        if (options.contentType === 'users') {
           params.limit = this.state.rowsPerPage;
           params.offset = this.state.page * this.state.rowsPerPage;
           params[this.hidFilter + '.list'] = this.state.list._id;
-          content = await this.hidAPI.get(options.contentType, params);
+          let cleanFilters = {...filters};
+          if (cleanFilters.user_type) {
+            if (cleanFilters.user_type.value === 'unverified') {
+              params['verified'] = false;
+            }
+            else {
+              params[cleanFilters.user_type.value] = true;
+            }
+            delete cleanFilters.user_type;
+          }
+          if (cleanFilters.organization_type) {
+            params['organizations.orgTypeId'] = cleanFilters.organization_type.value;
+            delete cleanFilters.organization_type;
+          }
+          if (cleanFilters.country) {
+            params['country'] = 'hrinfo_loc_' + cleanFilters.country.id;
+            delete cleanFilters.country;
+          }
+          if (cleanFilters.sort) {
+            params['sort'] = cleanFilters.sort.value;
+            delete cleanFilters.sort;
+          }
+          Object.keys(cleanFilters).forEach(function (key) {
+            params[key + '.list'] = cleanFilters[key]._id;
+            delete cleanFilters[key];
+          });
+          params = {...params, ...cleanFilters};
+          content = await this.hidAPI.get('user', params);
         }
         else if (options.contentType === 'dataset') {
           const iso3 = this.state.doc && this.state.doc.country ? this.state.doc.country.iso3.toLowerCase() : '';
@@ -234,22 +275,26 @@ const withSpace = function withSpace(Component, options) {
               }
             }
             else {
-              if (key === 'publication_date_after' || key === 'publication_date_before') {
+              if (key === 'publication_date_after' || key === 'publication_date_before' || key === 'date_before' || key === 'date_after') {
                 let index = 0;
-                if (key === 'publication_date_after') {
-                  params['filter[publication_date][value][0]'] = filters[key].toISOString();
-                  params['filter[publication_date][operator][0]'] = '>';
+                const name = key.substring(0, key.lastIndexOf('_'));
+                const direction = key.substring(key.lastIndexOf('_') + 1);
+                console.log(name);
+                console.log(direction);
+                if (direction === 'after') {
+                  params['filter[' + name + '][value][0]'] = filters[key].toISOString();
+                  params['filter[' + name + '][operator][0]'] = '>';
                 }
                 else {
-                  if (filterKeys.indexOf('publication_date_after') !== -1) {
+                  if (filterKeys.indexOf(name + '_after') !== -1) {
                     index = 1;
                   }
-                  params['filter[publication_date][value][' + index + ']'] = filters[key].toISOString();
-                  params['filter[publication_date][operator][' + index + ']'] = '<';
+                  params['filter[' + name + '][value][' + index + ']'] = filters[key].toISOString();
+                  params['filter[' + name + '][operator][' + index + ']'] = '<';
                 }
               }
               else {
-                params['filter[' + key + ']'] = filters[key].id;
+                params['filter[' + key + ']'] = filters[key].id ? filters[key].id : filters[key].value;
               }
             }
           });
@@ -267,7 +312,8 @@ const withSpace = function withSpace(Component, options) {
           return item;
         });
         this.setState({
-          content: content
+          content: content,
+          status: ''
         });
       }
     }
@@ -306,7 +352,9 @@ const withSpace = function withSpace(Component, options) {
       Object.keys(this.state.filters).forEach(function (key) {
         filters[key] = that.state.filters[key];
       });
-      if ((Array.isArray(val) && val.length !== 0) || val.id || typeof val.toDate !== 'undefined') {
+      if (val &&
+        ((Array.isArray(val) && val.length !== 0) ||
+          val.id || val._id || val.value || typeof val.toDate !== 'undefined')) {
         if (typeof val.toDate !== 'undefined') {
           filters[name] = val.toDate();
         }
@@ -343,7 +391,8 @@ const withSpace = function withSpace(Component, options) {
         toggleDrawer: this.toggleDrawer,
         setFilter: this.setFilter,
         removeFilter: this.removeFilter,
-        filters: this.state.filters
+        filters: this.state.filters,
+        forceUpdate: this.forceUpdate
       };
       return <Component {...this.props} {...newProps} />;
     }

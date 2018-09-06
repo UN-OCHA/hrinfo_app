@@ -31,6 +31,9 @@ class HdxAPI {
         return results.json();
       })
       .then(data => {
+        data.result.results.forEach(function (item) {
+          item.type = 'dataset';
+        });
         return {
           count: data.result.count,
           data: data.result.results

@@ -1,12 +1,9 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import HRInfoAPI from '../api/HRInfoAPI';
 import HRInfoSelect from '../components/HRInfoSelect';
 import HRInfoLocations from '../components/HRInfoLocations';
@@ -294,7 +291,9 @@ class AssessmentForm extends React.Component {
 
   render() {
 
-    const disasters = this.state.doc.hasOperation ? (
+    return '';
+
+    /*const disasters = this.state.doc.hasOperation ? (
       <FormGroup>
         <Label for="disasters">Disaster(s) / Emergency</Label>
         <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
@@ -513,7 +512,7 @@ class AssessmentForm extends React.Component {
           <Button color="danger" onClick={this.handleDelete}>Delete</Button>
         }
       </Form>
-    );
+    );*/
   }
 }
 

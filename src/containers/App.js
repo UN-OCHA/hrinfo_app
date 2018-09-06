@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';
 import {withRouter, NavLink} from "react-router-dom";
+import { translate, Trans } from 'react-i18next';
 // Material Components
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -17,20 +18,19 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Avatar from '@material-ui/core/Avatar';
 import ViewModule from '@material-ui/icons/ViewModule';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import Popover from '@material-ui/core/Popover';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
 import './App.css';
 
-import HRInfoAPI from '../api/HRInfoAPI';
-import HidAPI from '../api/HidAPI';
-
 import Routes from '../utils/Routes';
 import SearchPage from './SearchPage';
 import IconLogo from '../components/IconLogo';
 import SpaceMenu from '../components/SpaceMenu';
 import Breadcrumb from '../components/Breadcrumb';
+import SearchInput from '../components/SearchInput';
 
 class App extends Component {
     static propTypes = {
@@ -46,9 +46,10 @@ class App extends Component {
             user: {},
             token: '',
             anchorEl: null,
+            anchorLanguage: null,
             alert: {},
             searchTerms: '',
-			searchEnabled: false,
+			      searchEnabled: false,
             group: null,
             openPopover: false,
             anchorPopover: null,
@@ -60,6 +61,7 @@ class App extends Component {
         this.handleLogout = this.handleLogout.bind(this);
         this.setSearch = this.setSearch.bind(this);
         this.toggleMenu = this.toggleMenu.bind(this);
+        this.toggleMenuLanguage = this.toggleMenuLanguage.bind(this);
         this.setAlert = this.setAlert.bind(this);
         this.hideAlert = this.hideAlert.bind(this);
         this.setGroup = this.setGroup.bind(this);
@@ -77,6 +79,14 @@ class App extends Component {
         } else {
             this.setState({anchorEl: event.currentTarget});
         }
+    }
+
+    toggleMenuLanguage(event) {
+      if (this.state.anchorLanguage) {
+        this.setState({anchorLanguage: null});
+      } else {
+        this.setState({anchorLanguage: event.currentTarget});
+      }
     }
 
     userHasAuthenticated(authenticated, user, token, setState = true) {
@@ -151,22 +161,23 @@ class App extends Component {
           };
           this.setState(newState);
           this.props.history.push('/');
-        } else {
-          // Initialize HID API and HRInfo api
-          new HRInfoAPI(this.state.token);
-          new HidAPI(this.state.token);
         }
       }
     }
 
-	setSearch(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox'
-            ? target.checked
-            : target.value;
-
-        this.setState({searchTerms: value});
+	setSearch(val) {
+    if (val && val.id) {
+      if (val.type === 'bundles') {
+        this.props.history.push('/groups/' + val.id);
+      }
+      else if (val.type === 'search') {
+        this.props.history.push('/search/' + val.label);
+      }
+      else {
+        this.props.history.push('/' + val.type + '/' + val.id);
+      }
     }
+  }
 
     setAlert(color, message) {
         this.setState({
@@ -230,10 +241,9 @@ class App extends Component {
     }
 
     hasPermission (action, content, space) {
-      console.log(content);
       const that = this;
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
-      if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1) {
+      if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1 && content.type !== 'dataset' && content.type !== 'users') {
         return true;
       }
       let isAllowed = false;
@@ -246,14 +256,15 @@ class App extends Component {
           isAllowed = true;
         }
       }
-      if (action === 'edit') {
+      if (action === 'edit' || action === 'delete') {
         const contentTypes = ['events', 'documents', 'infographics', 'assessments', 'offices'];
         // Allow user to edit operation if he is a manager of the operation
-        if (content.type === 'operation' && this.isManager(content)) {
+        if (content.type === 'operation' && this.isManager(content) && action === 'edit') {
           isAllowed = true;
         }
         // Allow user to edit a group if he is a manager of the group or a manager of the operation
         if (content.type === 'bundle' &&
+          action === 'edit' &&
           (this.isManager(content) || this.isManager(content.operation[0]))) {
           isAllowed = true;
         }
@@ -286,10 +297,23 @@ class App extends Component {
           }
         }
       }
+      if (action === 'customize') {
+        if (content.type === 'operation' && this.isManager(content)) {
+          isAllowed = true;
+        }
+        if (content.type === 'bundle' &&
+          (this.isManager(content) || this.isManager(content.operation[0]))) {
+          isAllowed = true;
+        }
+        if (content.type === 'office' && this.isManager(content.operation[0])) {
+          isAllowed = true;
+        }
+      }
       return isAllowed;
     }
 
     render() {
+        const {t, i18n} = this.props;
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
             userHasAuthenticated: this.userHasAuthenticated,
@@ -331,19 +355,19 @@ class App extends Component {
 	                    </Typography>
 						<Hidden xsDown>
 							<Paper elevation={0} className="paper">
-								<Input value={this.state.searchTerms}
-									onChange={this.setSearch}
-									placeholder="Start typing to search..."
-									disableUnderline
-									fullWidth
-									startAdornment={
-										<InputAdornment position = "start" >
-											<i className="icon-search" />
-										</InputAdornment>
-									}
-									className="inputMargin"/>
+                <SearchInput
+                  onChange={this.setSearch}
+                  value={this.state.searchResult}
+                  />
 							</Paper>
 						</Hidden>
+            <div>
+              <Button color="secondary" onClick={this.toggleMenuLanguage}>{i18n.language} <KeyboardArrowDown /> </Button>
+              <Menu id="language-menu" anchorEl={this.state.anchorLanguage} onClose={this.toggleMenuLanguage} open={Boolean(this.state.anchorLanguage)}>
+                <MenuItem key='en' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('en'); }}>EN</MenuItem>
+                <MenuItem key='fr' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('fr'); }}>FR</MenuItem>
+              </Menu>
+            </div>
 	                    <div>
 	                        {modulesButton}
 	                        <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
@@ -389,7 +413,7 @@ class App extends Component {
 							<Paper elevation={0} className="paper">
 								<Input value={this.state.searchTerms}
 									onChange={this.setSearch}
-									placeholder="Start typing to search..."
+									placeholder={t('app.search_placeholder')}
 									disableUnderline
 									fullWidth
 									startAdornment={
@@ -435,7 +459,6 @@ class App extends Component {
 			)
             : '';
 
-        if (!this.state.searchTerms) {
             return (!this.state.isAuthenticating &&
 			<Grid container className="App" justify="center" alignItems="center">
 				{navbar}
@@ -445,18 +468,7 @@ class App extends Component {
                     <Routes childProps={childProps}/>
                 </Grid>
             </Grid>);
-        } else {
-            return (!this.state.isAuthenticating &&
-			<Grid container spacing={24} className="App" justify="center" alignItems="center">
-                {navbar}
-                {popover}
-                <Grid item className="container-fluid" sm={11}>
-                    {myAlert}
-                    <SearchPage searchTerms={this.state.searchTerms}/>
-                </Grid>
-            </Grid>);
-        }
     }
 }
 
-export default withRouter(withCookies(App));
+export default withRouter(withCookies(translate('common')(App)));

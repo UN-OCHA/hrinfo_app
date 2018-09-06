@@ -1,4 +1,7 @@
 
+import Cookies from 'universal-cookie';
+import i18next from 'i18next';
+
 let instance = null;
 
 class HRInfoAPI {
@@ -9,11 +12,15 @@ class HRInfoAPI {
     if (token) {
       instance.token = token;
     }
+    else {
+      const cookies = new Cookies();
+      instance.token = cookies.get('hid-token');
+    }
     return instance;
   }
 
   getItem(type, id) {
-    return fetch("https://www.humanitarianresponse.info/api/v1.0/" + type + "/" + id, {
+    return fetch("https://www.humanitarianresponse.info/" + i18next.language + "/api/v1.0/" + type + "/" + id, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
@@ -51,16 +58,27 @@ class HRInfoAPI {
       });
   }
 
-  get (type, params) {
-    let url = 'https://www.humanitarianresponse.info/en/api/v1.0/' + type;
+  get (type, params, anonymous = true) {
+    let url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
       url += '?';
-      keys.forEach(function (key) {
-        url += key + '=' + params[key] + '&';
-      });
+      for (let i = 0; i < keys.length; i++) {
+        url += keys[i] + '=' + params[keys[i]];
+        if (i < keys.length - 1) {
+          url += '&';
+        }
+      }
     }
-    return fetch(url)
+    let queryParams = {};
+    if (!anonymous) {
+      queryParams.headers = {
+        'Authorization': 'Bearer ' + this.token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+    }
+    return fetch(url, queryParams)
       .then(results => {
         return results.json();
       }).then(data => {

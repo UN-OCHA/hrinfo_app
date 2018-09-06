@@ -1,7 +1,4 @@
 import React  from 'react';
-import Select from 'react-select';
-
-import RRuleGenerator          from 'react-rrule-generator';
 
 import moment                  from 'moment';
 import MaterialSelect          from './MaterialSelect';
@@ -10,17 +7,18 @@ import 'moment-timezone';
 
 // Material
 import FormControl  from '@material-ui/core/FormControl';
+import FormControlLabel  from '@material-ui/core/FormControlLabel';
 import FormLabel    from '@material-ui/core/FormLabel';
 import Checkbox     from '@material-ui/core/Checkbox';
 import Typography   from '@material-ui/core/Typography';
-import TextField    from '@material-ui/core/TextField';
 import Card         from '@material-ui/core/Card';
 import CardContent  from '@material-ui/core/CardContent';
+import TextField    from '@material-ui/core/TextField';
 
 //Material date picker
 import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import DateTimePicker                 from 'material-ui-pickers/DateTimePicker';
+import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 class EventDate extends React.Component {
   constructor(props) {
@@ -31,13 +29,13 @@ class EventDate extends React.Component {
       allDay  : false,
       repeats : false,
       val : {
-        value       : '',
-        value2      : '',
+        value_from  : '',
+        value_to    : '',
         timezone    : 'UTC',
         offset      : 0,
         offset2     : 0,
         rrule       : '',
-        timezone_db : ''
+        timezone_db : 'UTC'
       },
       rrule     : '',
       status    : 'initial',
@@ -46,6 +44,7 @@ class EventDate extends React.Component {
     this.setCheckbox  = this.setCheckbox.bind(this);
     this.setRrule     = this.setRrule.bind(this);
     this.setTimezone  = this.setTimezone.bind(this);
+    this.getTime      = this.getTime.bind(this);
   }
 
   // Checkbox
@@ -59,42 +58,53 @@ class EventDate extends React.Component {
 
     if (target.name === 'allDay' && value) {
       newState.val        = this.state.val;
-      newState.val.value  = new Date(newState.val.value);
-      newState.val.value.setHours(0);
-      newState.val.value.setMinutes(0);
+      newState.val.value_from.setHours(0);
+      newState.val.value_from.setMinutes(0);
 
-      newState.val.value2 = new Date(newState.val.value);
-      newState.val.value2.setHours(0);
-      newState.val.value2.setMinutes(0);
+      newState.val.value_to.setHours(0);
+      newState.val.value_to.setMinutes(0);
     }
     if (target.name === 'endDate' && value) {
       newState.val = this.state.val;
-      newState.val.value2 = newState.val.value;
+      newState.val.value_to = newState.val.value_from;
     }
     this.setState(newState);
   }
 
   //Changes
   handleChange (event, type) {
-    const value  = event.toDate();
-    const name   = type;
-    let val      = this.state.val;
-
-    // FROM
-    if (name === 'from') {
-      val.value = new Date(value);
-      this.setState({
-        val : val
-      });
+    let value: Date;
+    let val = this.state.val;
+    if (!event.target) {
+      value  = event.toDate();
+      // FROM
+      if (type === 'from') {
+        val.value_from = value;
+      }
+      // TO
+      if (type === 'to') {
+        val.value_to = value;
+      }
+    }
+    else {
+      value = event.target.value;
+      // FROM
+      if (type === 'from') {
+        val.value_from.setHours(value.split(":")[0]);
+        val.value_from.setMinutes(value.split(":")[1]);
+      }
+      // TO
+      if (type === 'to') {
+        val.value_to.setHours(value.split(":")[0]);
+        val.value_to.setMinutes(value.split(":")[1]);
+      }
     }
 
-    // TO
-    if (name === 'to') {
-      val.value2 = new Date(value);
-      this.setState({
-        val : val
-      });
-    }
+    this.setState({
+      val : val,
+      // check if time has changed for all allDay
+      allDay: this.isAllDay(val.value_from, val.value_to)
+    });
 
     if (this.props.onChange) {
       this.props.onChange(val);
@@ -124,14 +134,14 @@ class EventDate extends React.Component {
     val.timezone_db  = timezone;
     val.timezone     = timezone;
 
-    if (val.value) {
-      dateVal = new Date(val.value);
+    if (val.value_from) {
+      dateVal = new Date(val.value_from);
     }
     val.offset = moment.tz.zone(timezone.value).utcOffset(dateVal.valueOf());
     val.offset = -val.offset * 60;
 
-    if (val.value2) {
-      date2Val = new Date(val.value2);
+    if (val.value_to) {
+      date2Val = new Date(val.value_to);
     }
     val.offset2 = moment.tz.zone(timezone.value).utcOffset(date2Val.valueOf());
     val.offset2 = -val.offset2 * 60;
@@ -145,6 +155,18 @@ class EventDate extends React.Component {
     }
   }
 
+  getTime(date) {
+    let hours   = ("0" + date.getHours()).slice(-2);
+    let minutes = ("0" + date.getMinutes()).slice(-2);
+    return (hours + ":" + minutes);
+  }
+
+  isAllDay(date_from, date_to) {
+    let sum_from = date_from ? date_from.getHours() + date_from.getMinutes() : 0;
+    let sum_to   = date_to ? date_to.getHours() + date_to.getMinutes() : 0;
+    return sum_from + sum_to === 0;
+  }
+
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
@@ -152,14 +174,15 @@ class EventDate extends React.Component {
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
+          val.timezone_db = {value: timezone, label: timezone};
         }
-        val.value = moment(val.value, "YYYY-MM-DD HH:mm:ss");
-        val.value2 = moment(val.value2, "YYYY-MM-DD HH:mm:ss");
+        val.value_from = new Date(val.value_from);
+        val.value_to = new Date(val.value_to);
       });
       let newState = {
         val       : val,
-        endDate   : (val.value.isSame(val.value2) ? false : true),
-        allDay    : (val.value2.hours() + val.value2.minutes() === 0 ? true : false),
+        endDate   : (val.value_from.getTime() === val.value_to.getTime() ? false : true),
+        allDay    : this.isAllDay(val.value_from, val.value_to),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'
       };
@@ -175,20 +198,33 @@ class EventDate extends React.Component {
           <FormControl margin = "normal">
             <FormLabel htmlFor="from">From</FormLabel>
             <MuiPickersUtilsProvider utils={MomentUtils}>
-              <DateTimePicker
+              <DatePicker
                 id             = "from"
                 name           = "from"
-                format         = "DD/MM/YYYY hh:mm A"
-                value          = {this.state.val.value ? this.state.val.value : ''}
+                label          = "Date"
+                format         = "DD/MM/YYYY"
+                value          = {this.state.val.value_from ? this.state.val.value_from : ''}
                 invalidLabel   = ""
                 autoOk
                 onChange       = {(e) => this.handleChange(e, 'from')}
                 leftArrowIcon  = {<i className="icon-arrow-left" />}
                 rightArrowIcon = {<i className="icon-arrow-right" />}
-                dateRangeIcon  = {<i className="icon-calendar" />}
-                timeIcon       = {<i className="icon-clock" />}
+                InputLabelProps={{
+                    shrink: true,
+                }}
               />
             </MuiPickersUtilsProvider>
+            <TextField
+               id             = "time_from"
+               label          = "Time"
+               type           = "time"
+               disabled       = {!this.state.val.value_from}
+               value          = {this.state.val.value_from ? this.getTime(this.state.val.value_from) : ''}
+               onChange       = {(e) => this.handleChange(e, 'from')}
+               InputLabelProps={{
+                   shrink: true,
+               }}
+            />
           </FormControl>
 
       {/* Date 'To'*/}
@@ -196,58 +232,79 @@ class EventDate extends React.Component {
           <FormControl  margin="normal">
             <FormLabel htmlFor="to">To</FormLabel>
             <MuiPickersUtilsProvider utils={MomentUtils}>
-              <DateTimePicker
+              <DatePicker
                 id             = "to"
                 name           = "to"
-                format         = "DD/MM/YYYY hh:mm A"
-                minDate        = {this.state.val.value}
-                value          = {this.state.val.value2 ? this.state.val.value2 : ''}
+                label          = "Date"
+                format         = "DD/MM/YYYY"
+                minDate        = {this.state.val.value_from}
+                value          = {this.state.val.value_to ? this.state.val.value_to : ''}
                 invalidLabel   = ""
                 autoOk
                 onChange       = {(e) => this.handleChange(e, 'to')}
                 leftArrowIcon  = {<i className="icon-arrow-left" />}
                 rightArrowIcon = {<i className="icon-arrow-right" />}
-                dateRangeIcon  = {<i className="icon-calendar" />}
-                timeIcon       = {<i className="icon-clock" />}
+                InputLabelProps={{
+                    shrink: true,
+                }}
                 />
             </MuiPickersUtilsProvider>
+            <TextField
+               id             = "time_to"
+               label          = "Time"
+               type           = "time"
+               disabled       = {!this.state.val.value_to}
+               value          = {this.state.val.value_to ? this.getTime(this.state.val.value_to) : ''}
+               onChange       = {(e) => this.handleChange(e, 'to')}
+               InputLabelProps={{
+                   shrink: true,
+               }}
+            />
           </FormControl>
         }
         </CardContent>
 
        {/* 'All day' checkbox & 'Repeat' checkbox */}
         <CardContent className = "date-container">
-          <FormControl>
-            <Checkbox name     = "endDate"
-                      color    = "primary"
-                      onChange = {this.setCheckbox}
-                      checked  = {this.state.endDate}
-            /> End date
-          </FormControl>
-          <FormControl>
-            <Checkbox name     = "allDay"
-                      color    = "primary"
-                      onChange = {this.setCheckbox}
-                      disabled = {!this.state.val.value}
-                      checked  = {this.state.allDay}
-            /> All day
-          </FormControl>
-          <FormControl>
-            <Checkbox name     = "repeats"
-                      color    = "primary"
-                      onChange = {this.setCheckbox}
-                      checked  = {this.state.repeats}
-            /> Repeat
-          </FormControl>
+          <FormControlLabel
+            control = {
+              <Checkbox name     = "endDate"
+                        color    = "primary"
+                        onChange = {this.setCheckbox}
+                        checked  = {this.state.endDate}
+              />
+            }
+            label   = "End date"
+          />
+          <FormControlLabel
+            control = {
+              <Checkbox name     = "allDay"
+                        color    = "primary"
+                        onChange = {this.setCheckbox}
+                        disabled = {!this.state.val.value_from}
+                        checked  = {this.state.allDay}
+              />
+            }
+            label   = "All day"
+          />
+         <FormControlLabel
+            control = {
+              <Checkbox name     = "repeats"
+                        color    = "primary"
+                        onChange = {this.setCheckbox}
+                        checked  = {this.state.repeats}
+              />
+            }
+            label = "Repeat"
+         />
         </CardContent>
 
         {/* 'Repeat' div hidden */}
-        <CardContent className = "date-container">
-          {this.state.repeats === true &&
-              /* <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} /> */
+        {this.state.repeats === true &&
+          <CardContent className = "date-container">
               <RRule onChange={(rrule) => this.setRrule(rrule)} value={this.state.val.rrule}/>
-          }
-        </CardContent>
+          </CardContent>
+        }
 
         {/* Timezone */}
         <CardContent >

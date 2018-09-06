@@ -1,0 +1,62 @@
+{
+  "coordination_hubs": "Coordination hub(s)",
+  "disasters": "Disaster(s) / Emergency",
+  "bundles": "Cluster(s)/Sector(s)",
+  "title": "Title",
+  "description" : "Description or Summary of Content",
+  "files": "File(s)",
+  "language": "Language",
+  "spaces": "Operation(s) / Webspace(s)",
+  "publication_date": "Original Publication Date",
+  "document_type": "Document type",
+  "map_type": "Map/Infographic type",
+  "organizations": "Organization(s)",
+  "locations": "Location(s)",
+  "themes": "Theme(s)",
+  "related_content": "Related Content",
+  "publish": "Publish",
+  "save_as_draft": "Save as Draft",
+  "delete": "Delete",
+  "form_incomplete": "The form is incomplete and could not be submitted.",
+  "close": "Close",
+  "exclude_from_reliefweb": "Do not share with ReliefWeb",
+  "add_more": "Add More Information",
+  "hide_information": "Hide Optional Information",
+  "helpers": {
+    "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
+  },
+  "document": {
+    "helpers": {
+      "title": "Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+      "offices": "Click on the field and select the coordination hub(s) the document refers to (if any).",
+      "publication_date": "Indicate when the document has originally been published.",
+      "disasters": "Click on the field and select the disaster(s) or emergency the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <1>glidenumber.net</1>.",
+      "bundles": "Indicate the cluster(s)/sector(s) the document refers to.",
+      "description": "Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.",
+      "language": "Select the language of the document.",
+      "spaces": "Click on the field and select where to publish the document (operation, regional site or thematic site).",
+      "document_type": "Select the document type and sub-type that best describe the document.",
+      "organizations": "Type in and select the source(s) of the document.",
+      "locations": "Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).",
+      "themes": "Click on the field and select all relevant themes. Choose only themes the document substantively refers to.",
+      "related_content": "Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+    }
+  },
+  "infographic": {
+    "helpers": {
+      "title": "Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+      "offices": "Click on the field and select the coordination hub(s) the infographic refers to (if any).",
+      "publication_date": "Indicate when the infographic has originally been published.",
+      "disasters": "Click on the field and select the disaster(s) or emergency the infographic refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <1>glidenumber.net</1>.",
+      "bundles": "Indicate the cluster(s)/sector(s) the infographic refers to.",
+      "description": "Try to always include here the text (in full or part of it) of the infographic (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.",
+      "language": "Select the language of the infographic.",
+      "spaces": "Click on the field and select where to publish the infographic (operation, regional site or thematic site).",
+      "document_type": "Select the infographic type and sub-type that best describe the infographic.",
+      "organizations": "Type in and select the source(s) of the infographic.",
+      "locations": "Select from the menu the country(ies) the infographic is about and indicate more specific locations by selecting multiple layers (region, province, town).",
+      "themes": "Click on the field and select all relevant themes. Choose only themes the infographic substantively refers to.",
+      "related_content": "Add links to content that is related to the infographic you are publishing (example: language versions of the same infographic, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+    }
+  }
+}

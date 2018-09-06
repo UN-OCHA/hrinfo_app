@@ -29,7 +29,6 @@ class HRInfoLocation extends React.Component {
       .then(elts => {
         this.setState({
           items  : elts,
-          status : 'ready'
         });
       }).catch(function(err) {
           console.log("Fetch error: ", err);

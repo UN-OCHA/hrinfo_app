@@ -1,6 +1,7 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
+import moment from 'moment';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 const withForm = function withForm(Component, hrinfoType, label) {
@@ -10,7 +11,8 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
       this.state = {
         doc: {
-          label: ''
+          label: '',
+          language: {}
         },
         editorState: EditorState.createEmpty(),
         status: ''
@@ -116,18 +118,38 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
     validateForm () {
       const doc = this.state.doc;
+      let isValid = false;
       if (this.isValid(doc.language) &&
-        this.isValid(doc.spaces) &&
-        this.isValid(doc.label) &&
-        ((hrinfoType === 'documents' && this.isValid(doc.document_type)) || (hrinfoType === 'infographics' && this.isValid(doc.infographic_type)))  &&
-        this.isValid(doc.publication_date) &&
-        this.isValid(doc.files) &&
-        this.isValid(doc.organizations)) {
-        return true;
+        this.isValid(doc.label)) {
+        if (hrinfoType === 'operations') {
+          isValid = true;
+        }
+        if (hrinfoType === 'documents' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.document_type) &&
+          this.isValid(doc.publication_date) &&
+          this.isValid(doc.files) &&
+          this.isValid(doc.organizations)
+        ) {
+          isValid = true;
+        }
+        if (hrinfoType === 'infographics' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.infographic_type) &&
+          this.isValid(doc.publication_date) &&
+          this.isValid(doc.files) &&
+          this.isValid(doc.organizations)
+        ) {
+          isValid = true;
+        }
+        if (hrinfoType === 'events' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.category) &&
+          this.isValid(doc.date)) {
+          isValid = true;
+        }
       }
-      else {
-        return false;
-      }
+      return isValid;
     }
 
     async postFieldCollections (docid, field_collections) {
@@ -186,15 +208,39 @@ const withForm = function withForm(Component, hrinfoType, label) {
           body.document_type = body.document_type.id;
         }
         if (hrinfoType === 'events') {
-          body.category = body.category.value;
+          //body.category = body.category.value;
           if (body.address && body.address.country && typeof body.address.country === 'object') {
             body.address.country = body.address.country.pcode;
+          }
+          if (!Array.isArray(body.date)) {
+            body.date = [body.date];
+          }
+          if (body.date[0] && body.date[0].value) {
+            body.date[0].value = moment(body.date[0].value).format('YYYY-MM-DD HH:mm:ss');
+          }
+          if (body.date[0] && body.date[0].value2) {
+            body.date[0].value2 = moment(body.date[0].value2).format('YYYY-MM-DD HH:mm:ss');
           }
           if (body.date[0] && body.date[0].timezone_db) {
             body.date[0].timezone_db = body.date[0].timezone_db.value;
           }
           if (body.date[0] && body.date[0].timezone) {
             body.date[0].timezone = body.date[0].timezone.value;
+          }
+          if (body.contacts) {
+            body.contacts = body.contacts.map(function (c) {
+              return {cid: c.id};
+            });
+          }
+          if (body.agenda) {
+            body.agenda = body.agenda.map(function (a) {
+              return a.id;
+            });
+          }
+          if (body.meeting_minutes) {
+            body.meeting_minutes = body.meeting_minutes.map(function (a) {
+              return a.id;
+            });
           }
         }
         body.operation = [];

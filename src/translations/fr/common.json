@@ -1,0 +1,16 @@
+{
+  "app": {
+    "search_placeholder": "Rechercher ou aller à..."
+  },
+  "login":{
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "email_helper": "Votre courriel Humanitarian ID",
+    "password_helper": "Votre mot de passe Humanitarian ID",
+    "button": "Se connecter"
+  },
+  "home": {
+    "welcome": "Bienvenue <1>{{name}}</1>, vous êtes connecté(e)",
+    "what_do": "Que voulez-vous faire ?"
+  }
+}

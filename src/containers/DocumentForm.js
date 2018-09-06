@@ -1,6 +1,7 @@
 import React      from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { translate, Trans } from 'react-i18next';
 
 //Components
 import HRInfoSelect       from '../components/HRInfoSelect';
@@ -58,10 +59,11 @@ class DocumentForm extends React.Component {
   }
 
   render() {
+    const { t, label } = this.props;
     const offices = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>Coordination hub(s)</FormLabel>
+        <FormLabel>{t('coordination_hubs')}</FormLabel>
         <HRInfoSelect
           type     = "offices"
           spaces   = {this.props.doc.spaces}
@@ -69,8 +71,7 @@ class DocumentForm extends React.Component {
           onChange = {(s) => this.props.handleSelectChange('offices', s)}
           value    = {this.props.doc.offices}/>
         <FormHelperText id = "offices-text">
-          Click on the field and select the coordination hub(s) the {this.props.typeLabel + ' '}
-          refers to (if any).
+          {t(label + '.helpers.offices')}
         </FormHelperText>
       </FormControl>
     )
@@ -79,7 +80,7 @@ class DocumentForm extends React.Component {
     const disasters = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>Disaster(s) / Emergency</FormLabel>
+        <FormLabel>{t('disasters')}</FormLabel>
         <HRInfoSelect
           type      = "disasters"
           spaces    = {this.props.doc.spaces}
@@ -87,9 +88,9 @@ class DocumentForm extends React.Component {
           onChange  = {(s) => this.props.handleSelectChange('disasters', s)}
           value     = {this.props.doc.disasters}/>
         <FormHelperText id="disasters-text">
-          Click on the field and select the disaster(s) or emergency the {this.props.typeLabel + ' '}
+          <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or emergency the document
           refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See
-          <a href="http://glidenumer.net/?ref=hrinfo"> glidenumber.net</a>.
+          <a href="http://glidenumer.net/?ref=hrinfo"> glidenumber.net</a>.</Trans>
         </FormHelperText>
       </FormControl>
     )
@@ -98,7 +99,7 @@ class DocumentForm extends React.Component {
     const bundles = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>Cluster(s)/Sector(s)</FormLabel>
+        <FormLabel>{t('bundles')}</FormLabel>
         <HRInfoSelect
           type     =  "bundles"
           spaces   =  {this.props.doc.spaces}
@@ -106,8 +107,7 @@ class DocumentForm extends React.Component {
           onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
           value =  {this.props.doc.bundles}/>
         <FormHelperText id="bundles-text">
-          Indicate the cluster(s)/sector(s) the {this.props.label + ' '}
-          refers to.
+          {t(label + '.helpers.bundles')}
         </FormHelperText>
       </FormControl>
     )
@@ -120,7 +120,7 @@ class DocumentForm extends React.Component {
         <Grid container justify = "space-around">
           <Grid item md ={6} xs ={11}>
             <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
               <TextField
                 type     = "text"
                 name     = "label"
@@ -128,13 +128,13 @@ class DocumentForm extends React.Component {
                 value    = {this.props.doc.label}
                 onChange = {this.props.handleInputChange}/>
               <FormHelperText id = "label-text">
-                Type the original title of the {this.props.label + ' '}. Try not to use abbreviations. To see Standards and Naming Conventions click
-                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                <Trans i18nKey={label + '.helpers.title'}>Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
+                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
 
             <FormControl fullWidth margin = "normal">
-              <FormLabel>Description or Summary of Content</FormLabel>
+              <FormLabel>{t('description')}</FormLabel>
               <Card className         = "card-container">
                 <Editor editorState   = {this.props.editorState}
                   editorClassName     = "editor-content"
@@ -143,17 +143,17 @@ class DocumentForm extends React.Component {
                 />
               </Card>
               <FormHelperText id = "body-text">
-                Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
-                (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+                {t(label + '.helpers.description')}
               </FormHelperText>
             </FormControl>
 
             <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>File(s)</FormLabel>
+              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>{t('files')}</FormLabel>
               <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
               <FormHelperText id = "files-text">
-                Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click
-                <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                <Trans i18nKey='helpers.files'>Upload the file to publish from your computer, and specify its language. It is best to publish one file per record,
+                however you can add more if needed. To see Standards and Naming Conventions click
+                <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -161,26 +161,25 @@ class DocumentForm extends React.Component {
 
           <Grid item md={3} xs={11}>
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>Language</FormLabel>
+              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>
               <LanguageSelect value     = {this.props.doc.language}
                 onChange  = {(s) => this.props.handleSelectChange('language', s)}
                 className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
               <FormHelperText id="language-text">
-                Select the language of the {this.props.label}.
+                {t(label + '.helpers.language')}
               </FormHelperText>
             </FormControl>
 
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>Operation(s) / Webspace(s)</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
               <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces}/>
               <FormHelperText>
-                Click on the field and select where to publish the {this.props.label + ' '}
-                (operation, regional site or thematic site).
+                {t(label + '.helpers.spaces')}
               </FormHelperText>
             </FormControl>
 
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.publication_date)}>Original Publication Date</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.publication_date)}>{t('publication_date')}</FormLabel>
               <MuiPickersUtilsProvider utils={MomentUtils}>
                 <DatePicker
                   id     = "publication_date"
@@ -195,8 +194,7 @@ class DocumentForm extends React.Component {
                 />
               </MuiPickersUtilsProvider>
               <FormHelperText id="publication_date-text">
-                Indicate when the {this.props.label + ' '}
-                has originally been published.
+                {t(label + '.helpers.publication_date')}
               </FormHelperText>
             </FormControl>
 
@@ -204,8 +202,8 @@ class DocumentForm extends React.Component {
               <FormLabel focused error={this.props.status === 'was-validated' && ((this.props.hrinfoType === 'documents' && !this.props.isValid(this.props.doc.document_type)) ||
                 (this.props.hrinfoType === 'infographics' && !this.props.isValid(this.props.doc.infographic_type)))}>
                 { this.props.hrinfoType === 'documents'
-                ? 'Document type'
-                : 'Map/Infographic type' }
+                ? t('document_type')
+                : t('map_type') }
               </FormLabel>
               {
                 this.props.hrinfoType === 'documents'
@@ -224,18 +222,17 @@ class DocumentForm extends React.Component {
                       : 'is-invalid'}/>
                 }
                 <FormHelperText>
-                  Select the {this.props.label + ' '}
-                  type and sub-type that best describe the {this.props.label}.
+                  {t(label + '.helpers.document_type')}
               </FormHelperText>
             </FormControl>
 
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>Organization(s)</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>{t('organizations')}</FormLabel>
               <HRInfoAsyncSelect type="organizations" isMulti={true}
                 onChange={(s) => this.props.handleSelectChange('organizations', s)}
                 value={this.props.doc.organizations}/>
               <FormHelperText id="organizations-text">
-                Type in and select the source(s) of the {this.props.label}.
+                {t(label + '.helpers.organizations')}
               </FormHelperText>
             </FormControl>
               {bundles}
@@ -245,57 +242,54 @@ class DocumentForm extends React.Component {
               <div className="more-info-button">
                 { !this.state.collapse &&
                   <Button color="secondary" variant="contained" onClick={this.toggle}>
-                    <i className = "icon-plus" /> &nbsp; Add More Information
+                    <i className = "icon-plus" /> &nbsp; {t('add_more')}
                   </Button>
                 }
                 { this.state.collapse &&
                   <Button color="secondary" variant="contained" onClick={this.toggle}>
-                    <i className = "icon-cancel" /> &nbsp; Hide Optional Information
+                    <i className = "icon-cancel" /> &nbsp; {t('hide_information')}
                   </Button>
                 }
               </div>
 
               <Collapse in={this.state.collapse}>
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Location(s)</FormLabel>
+                  <FormLabel>{t('locations')}</FormLabel>
                   <HRInfoLocations onChange={(s) => this.props.handleSelectChange('locations', s)}
                     value   = {this.props.doc.locations}
                     isMulti = "isMulti"
                     id      = "locations"/>
                   <FormHelperText id="locations-text">
-                    Select from the menu the country(ies) the {this.props.label + ' '}
-                    is about and indicate more specific locations by selecting multiple layers (region, province, town).
+                    {t(label + '.helpers.locations')}
                   </FormHelperText>
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Theme(s)</FormLabel>
+                  <FormLabel>{t('themes')}</FormLabel>
                   <HRInfoSelect type="themes"
                     isMulti   = {true}
                     onChange  = {(s) => this.props.handleSelectChange('themes', s)}
                     value     = {this.props.doc.themes}
                     id        = "themes"/>
                   <FormHelperText id="themes-text">
-                    Click on the field and select all relevant themes. Choose only themes the {this.props.label + ' '}
-                    substantively refers to.
+                    {t(label + '.helpers.themes')}
                   </FormHelperText>
                 </FormControl>
 
 							<FormControl fullWidth margin="normal">
-								<FormLabel>Related Content</FormLabel>
+								<FormLabel>{t('related_content')}</FormLabel>
 								<RelatedContent onChange={(s) => this.props.handleSelectChange('related_content', s)}
 									value={this.props.doc.related_content}
 									id="related_content"/>
 								<FormHelperText id="related_content-text">
-									Add links to content that is related to the {this.props.label + ' '}
-									you are publishing (example: language versions of the same {this.props.label}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+                  {t(label + '.helpers.related_content')}
 								</FormHelperText>
 							</FormControl>
 
               <FormControl fullWidth margin="normal">
 								<FormControlLabel
                   control={<Checkbox checked={this.props.doc.exclude_from_reliefweb === true ? true : false} name="exclude_from_reliefweb" onChange={this.props.handleInputChange} color="primary" />}
-                  label="Do not share with ReliefWeb"
+                  label={t('exclude_from_reliefweb')}
                 />
 							</FormControl>
 
@@ -308,9 +302,9 @@ class DocumentForm extends React.Component {
         {
           this.props.status !== 'submitting' &&
           <span>
-            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
+            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
               &nbsp;
-            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>Save as Draft</Button>
+            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
               &nbsp;
           </span>
         }
@@ -319,7 +313,7 @@ class DocumentForm extends React.Component {
         }
         {(this.props.match.params.id && this.props.status !== 'deleting') &&
           <span>
-          <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
+          <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
           </span>
         }
         </Grid>
@@ -333,10 +327,10 @@ class DocumentForm extends React.Component {
           ContentProps     = {{
             'aria-describedby' : 'message-id'
           }}
-          message={<Typography id ="message-id" color="error">The form is incomplete and could not be submitted.</Typography>}
+          message={<Typography id ="message-id" color="error">{t('form_incomplete')}</Typography>}
           action={[
             <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
-            CLOSE
+            {t('close')}
             </Button>
           ]}
         />
@@ -344,4 +338,4 @@ class DocumentForm extends React.Component {
   }
 }
 
-export default DocumentForm;
+export default translate('forms')(DocumentForm);

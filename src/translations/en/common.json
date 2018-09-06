@@ -1,0 +1,16 @@
+{
+  "app": {
+    "search_placeholder": "Search or jump to..."
+  },
+  "login":{
+    "email": "Email",
+    "password": "Password",
+    "email_helper": "Your Humanitarian ID email",
+    "password_helper": "Your Humanitarian ID password",
+    "button": "Login"
+  },
+  "home": {
+    "welcome": "Welcome <1>{{name}}</1>, you are logged in",
+    "what_do": "What would you like to do ?"
+  }
+}

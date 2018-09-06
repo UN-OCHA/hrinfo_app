@@ -1,11 +1,8 @@
 import React                  from 'react';
 
-import { withStyles }         from '@material-ui/core/styles';
 import FormControl            from '@material-ui/core/FormControl';
 import InputLabel             from '@material-ui/core/InputLabel';
-import FormLabel              from '@material-ui/core/FormLabel';
 import TextField              from '@material-ui/core/TextField';
-import Typography             from '@material-ui/core/Typography';
 import Card                   from '@material-ui/core/Card';
 import CardContent            from '@material-ui/core/CardContent';
 import Select                 from '@material-ui/core/Select';

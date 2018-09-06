@@ -1,14 +1,15 @@
 
+import Cookies from 'universal-cookie';
+
 let instance = null;
 
 class HidAPI {
-  constructor(token) {
-    if(!instance){
+  constructor() {
+    if (!instance){
       instance = this;
     }
-    if (token) {
-      instance.token = token;
-    }
+    const cookies = new Cookies();
+    instance.token = cookies.get('hid-token');
     return instance;
   }
 
