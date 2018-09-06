@@ -15,6 +15,7 @@ import {HidContactsWidget, HidContactsWidgetSettings} from '../widgets/HidContac
 import {ReliefwebDynamicContent, ReliefwebDynamicContentSettings} from '../widgets/ReliefwebDynamicContent';
 import {ReliefwebStaticContent, ReliefwebStaticContentSettings} from '../widgets/ReliefwebStaticContent';
 import {StaticMenu, StaticMenuSettings} from '../widgets/StaticMenu';
+import {FTSWidget, FTSSettings} from '../widgets/FTS';
 
 class SelectWidget extends React.Component {
 
@@ -27,7 +28,8 @@ class SelectWidget extends React.Component {
       'HidContactsWidget': HidContactsWidget,
       'ReliefwebDynamicContent': ReliefwebDynamicContent,
       'ReliefwebStaticContent' : ReliefwebStaticContent,
-      'StaticMenu': StaticMenu
+      'StaticMenu': StaticMenu,
+      'FTSWidget': FTSWidget
     },
     isSettingsOpen: {
       DynamicContent: false,
@@ -37,7 +39,8 @@ class SelectWidget extends React.Component {
       HidContactsWidget: false,
       ReliefwebDynamicContent: false,
       ReliefwebStaticContent: false,
-      StaticMenu: false
+      StaticMenu: false,
+      FTSWidget: false
     },
     addWidgetOptions: {
       widgetSettings: {}
@@ -132,6 +135,9 @@ class SelectWidget extends React.Component {
               <ListItem>
                 <Button onClick={(s) => {this.openSettings('StaticMenu')}}>Static Menu</Button>
               </ListItem>
+              <ListItem>
+                <Button onClick={(s) => {this.openSettings('FTSWidget')}}>FTS</Button>
+              </ListItem>
             </List>
           </DialogContent>
           <DialogActions>
@@ -199,6 +205,14 @@ class SelectWidget extends React.Component {
         <StaticMenuSettings
           open={this.state.isSettingsOpen['StaticMenu']}
           handleClose={() => { this.closeSettings('StaticMenu') }}
+          handleSubmit={this.handleWidgetSelection}
+          addWidgetSetting={this.addWidgetSetting}
+          title=''
+          {...this.state.addWidgetOptions.widgetSettings}
+        />
+        <FTSSettings
+          open={this.state.isSettingsOpen['FTSWidget']}
+          handleClose={() => { this.closeSettings('FTSWidget') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
           title=''

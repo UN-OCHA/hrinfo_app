@@ -121,7 +121,7 @@ class SpacePage extends React.Component {
               <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/edit'}><i className="icon-edit" /></Button> : ''}
             {this.props.hasPermission('customize', this.props.doc) ?
               <Button onClick={this.setEditable}><i className="icon-eye" /></Button> : '' }
-            {this.props.hasPermission('customize', this.props.doc) && (this.props.doc.type === 'operation' || this.props.doc.type === 'bundle') ?
+            {this.props.hasPermission('customize', this.props.doc) && (this.props.doc.type === 'operation' || this.props.doc.type === 'group') ?
               <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/manage'}><i className="icon-wheel" /></Button> : '' }
           </Typography>
           <div className="container">
