@@ -7,6 +7,7 @@ import 'moment-timezone';
 
 // Material
 import FormControl  from '@material-ui/core/FormControl';
+import FormControlLabel  from '@material-ui/core/FormControlLabel';
 import FormLabel    from '@material-ui/core/FormLabel';
 import Checkbox     from '@material-ui/core/Checkbox';
 import Typography   from '@material-ui/core/Typography';
@@ -265,37 +266,45 @@ class EventDate extends React.Component {
 
        {/* 'All day' checkbox & 'Repeat' checkbox */}
         <CardContent className = "date-container">
-          <FormControl>
-            <Checkbox name     = "endDate"
-                      color    = "primary"
-                      onChange = {this.setCheckbox}
-                      checked  = {this.state.endDate}
-            /> End date
-          </FormControl>
-          <FormControl>
-            <Checkbox name     = "allDay"
-                      color    = "primary"
-                      onChange = {this.setCheckbox}
-                      disabled = {!this.state.val.value_from}
-                      checked  = {this.state.allDay}
-            /> All day
-          </FormControl>
-          <FormControl>
-            <Checkbox name     = "repeats"
-                      color    = "primary"
-                      onChange = {this.setCheckbox}
-                      checked  = {this.state.repeats}
-            /> Repeat
-          </FormControl>
+          <FormControlLabel
+            control = {
+              <Checkbox name     = "endDate"
+                        color    = "primary"
+                        onChange = {this.setCheckbox}
+                        checked  = {this.state.endDate}
+              />
+            }
+            label   = "End date"
+          />
+          <FormControlLabel
+            control = {
+              <Checkbox name     = "allDay"
+                        color    = "primary"
+                        onChange = {this.setCheckbox}
+                        disabled = {!this.state.val.value_from}
+                        checked  = {this.state.allDay}
+              />
+            }
+            label   = "All day"
+          />
+         <FormControlLabel
+            control = {
+              <Checkbox name     = "repeats"
+                        color    = "primary"
+                        onChange = {this.setCheckbox}
+                        checked  = {this.state.repeats}
+              />
+            }
+            label = "Repeat"
+         />
         </CardContent>
 
         {/* 'Repeat' div hidden */}
-        <CardContent className = "date-container">
-          {this.state.repeats === true &&
-              /* <RRuleGenerator onChange={this.setRrule} value={this.state.val.rrule} /> */
+        {this.state.repeats === true &&
+          <CardContent className = "date-container">
               <RRule onChange={(rrule) => this.setRrule(rrule)} value={this.state.val.rrule}/>
-          }
-        </CardContent>
+          </CardContent>
+        }
 
         {/* Timezone */}
         <CardContent >
