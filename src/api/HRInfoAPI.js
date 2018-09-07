@@ -41,17 +41,17 @@ class HRInfoAPI {
 
   async getAll (type, params) {
     const that = this;
-    let items = [];
-    if (!params.page) {
-      params.page = 1;
+    let items = [], clonedParams = Object.assign({}, params);
+    if (!clonedParams.page) {
+      clonedParams.page = 1;
     }
     return this
-      .get(type, params)
+      .get(type, clonedParams)
       .then(async function(data) {
         items = items.concat(data.data);
         if (data.next) {
-          params.page = params.page + 1;
-          let newItems = await that.getAll(type, params);
+          clonedParams.page = clonedParams.page + 1;
+          let newItems = await that.getAll(type, clonedParams);
           items = items.concat(newItems);
         }
         return items;
