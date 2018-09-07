@@ -24,6 +24,12 @@ class HidContacts extends React.Component {
     return this.hidAPI
       .get('user', params)
       .then(data => {
+        let formatedData = data.data.map(
+          user => {
+            user.label = user.name;
+            return user;
+          }
+        );
         return data.data;
       });
   }
@@ -44,7 +50,15 @@ class HidContacts extends React.Component {
         if (this.props.isMulti) {
           let promises = [];
           this.props.value.forEach(function (v) {
-            promises.push(that.hidAPI.getItem('user', v));
+            if (v.name && v.email) {
+              v.id = v.email;
+              promises.push(v);
+            }
+            else {
+              let user = that.hidAPI.getItem('user', v);
+              user.label = user.name;
+              promises.push(user);
+            }
           });
           let out = await Promise.all(promises);
           this.setState({
@@ -72,10 +86,9 @@ class HidContacts extends React.Component {
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        getOptionLabel={(option) => {return option.name}}
-        onChange={this.handleChange}
         value={this.state.contacts}
         className={this.props.className}
+        onChange={this.handleChange}
         />
     );
   }

@@ -3,24 +3,11 @@ import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoSelect extends React.Component {
-<<<<<<< HEAD
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: []
-    };
-    this.hrinfoAPI    = new HRInfoAPI();
-    this.getOptions   = this.getOptions.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.user         = JSON.parse(localStorage.getItem('hid-user'));;
-  }
-=======
   state = {
     items: []
   };
 
   hrinfoAPI = new HRInfoAPI();
->>>>>>> dev
 
   getOptions = (type, operationId, operationLabel) => {
     let params = {};
@@ -57,7 +44,7 @@ class HRInfoSelect extends React.Component {
           let user = JSON.parse(localStorage.getItem('hid-user'));
           if ((type === 'spaces' || type === 'operations' || type === 'bundles') && user.hrinfo.roles.indexOf('administrator') === -1) {
             elts.forEach(function (elt) {
-              if (user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
+              if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
                 pushed.push(elt);
               }
             });

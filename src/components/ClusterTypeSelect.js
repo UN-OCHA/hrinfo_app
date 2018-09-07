@@ -6,14 +6,14 @@ class ClusterTypeSelect extends React.Component {
     super(props);
     this.state = {
       options: [
-        { value: '82', label: 'Area of Responsability (Sub-Cluster)'},
-        { value: '83', label: 'Cluster'},
-        { value: '84', label: 'Sector'},
-        { value: '85', label: 'Working Group'}
+        { value: 'cluster', label: 'Cluster'},
+        { value: 'sub_cluster', label: 'Area of Responsability (Sub-Cluster)' },
+        { value: 'sector', label: 'Sector' },
+        { value: 'working_group', label: 'Working Group' }
       ],
     };
     this.handleChange = this.handleChange.bind(this);
-    this.getValue     = this.getValue.bind(this);
+    this.getValue = this.getValue.bind(this);
   }
 
   getValue (val) {
@@ -35,12 +35,12 @@ class ClusterTypeSelect extends React.Component {
   render() {
     return (
         <MaterialSelect
-          id        = "clusterType"
-          name      = "clusterType"
-          onChange  = {this.handleChange}
-          options   = {this.state.options}
-          value     = {this.getValue(this.props.value)}
-          className = {this.props.className} />
+          id="type"
+          name="type"
+          onChange={this.handleChange}
+          options={this.state.options}
+          value={this.getValue(this.props.value)}
+          className={this.props.className} />
     );
   }
 }

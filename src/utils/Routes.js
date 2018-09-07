@@ -80,8 +80,8 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/spaces/:id/events"           exact component={EventsPage}                                         props={childProps} />
 
 {/* Cluster */}
-    <AuthenticatedRoute path="/cluster/new"       exact component={withForm(ClusterForm, 'cluster', 'cluster')}  props={childProps} />
-    <AuthenticatedRoute path="/cluster/:id/edit"  exact component={withForm(ClusterForm, 'cluster', 'cluster')}  props={childProps} />
+    <AuthenticatedRoute path="/cluster/new"       exact component={withForm(ClusterForm, 'bundles', 'Cluster')}  props={childProps} />
+    <AuthenticatedRoute path="/cluster/:id/edit"  exact component={withForm(ClusterForm, 'bundles', 'Cluster')}  props={childProps} />
     <AuthenticatedRoute path="/cluster/:id"       exact component={ItemPage}                                     props={childProps} />
 
 {/* Groups */}

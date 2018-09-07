@@ -77,10 +77,10 @@ class ClusterForm extends React.Component {
       <Grid item>
         <Grid container justify = "space-around">
 
-{/* LEFT COLUMN */}
+          {/* LEFT COLUMN */}
           <Grid item md ={6} xs ={11}>
 
-         {/* Title */}
+            {/* Title */}
             <FormControl required fullWidth margin = "normal">
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
               <TextField type     = "text"
@@ -94,222 +94,208 @@ class ClusterForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
-         {/* Type */}
+            {/* Type */}
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.type)}>Type</FormLabel>
-              <ClusterTypeSelect  value      = {this.props.doc.type}
-                                   onChange  = {(s) => this.props.handleSelectChange('type', s)}
-                                   className = {this.props.isValid(this.props.doc.type) ? 'is-valid' : 'is-invalid'}/>
+              <ClusterTypeSelect  value     = {this.props.doc.type}
+                                  onChange  = {(s) => this.props.handleSelectChange('type', s)}
+                                  className = {this.props.isValid(this.props.doc.type) ? 'is-valid' : 'is-invalid'}/>
               <FormHelperText id="type-text">
                   From the list, select the type of {this.props.label} you are creating.
               </FormHelperText>
             </FormControl>
 
-         {/* Language */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>Language</FormLabel>
-              <LanguageSelect value     = {this.props.doc.language}
-                              onChange  = {(s) => this.props.handleSelectChange('language', s)}
-                              className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
-              <FormHelperText id="language-text">
-                Please select a language.
+            {/* HID Access */}
+            <FormControl required component="fieldset" fullWidth margin="normal">
+              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.hid_access)}>HID Access</FormLabel>
+              <Card className="card-container">
+                <CardContent className="card-content">
+                  <RadioGroup
+                    name       = "hid_access"
+                    className  = {classes.group}
+                    value      = {this.props.doc.hid_access}
+                    onChange   = {(s) => this.props.handleSelectChange('hid_access', s)}>
+                    <FormControlLabel value="do_not_create"  control={<Radio color="primary"/>} label="Do not create a list" />
+                    <FormControlLabel value="open"  control={<Radio color="primary"/>} label="Open" />
+                    <FormControlLabel value="closed"  control={<Radio color="primary"/>} label="Closed" />
+                  </RadioGroup>
+                </CardContent>
+              </Card>
+              <FormHelperText id = "hid_access-text">
+                Select "Open" if you want HID users to add themselves to this cluster/sector. Select "Closed" if you want only HID managers to be allowed to add HID users to this cluster/sector.
               </FormHelperText>
             </FormControl>
 
-            <Card  className="card-container">
-            {/* Radio group 'HID Access' */}
-              <CardContent>
-                 <FormControl required component="fieldset" fullWidth margin="normal">
-                  <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.hid_access)}>HID Access</FormLabel>
-                  <RadioGroup
-                    name       = "hidAccess"
-                    className  = {classes.group}
-                    value      = {this.props.doc.hid_access}
-                    onChange   = {this.handleRadioChange}
-                  >
-                    <FormControlLabel value="0"  control={<Radio color="primary"/>} label="Do not create a list" />
-                    <FormControlLabel value="1"  control={<Radio color="primary"/>} label="Open" />
-                    <FormControlLabel value="2"  control={<Radio color="primary"/>} label="Closed" />
-                  </RadioGroup>
-                </FormControl>
-                <FormHelperText id = "hidAccess-text">
-                  Select "Open" if you want HID users to add themselves to this cluster/sector. Select "Closed" if you want only HID managers to be allowed to add HID users to this cluster/sector.
-                </FormHelperText>
-              </CardContent>
-            </Card>
-
-        {/* Body */}
-             <FormControl fullWidth margin = "normal">
+            {/* Body */}
+            <FormControl fullWidth margin = "normal">
                <FormLabel>Body</FormLabel>
                <Card className = "card-container">
                  <Editor editorState         = {this.props.editorState}
                          editorClassName     = "editor-content"
                          toolbarClassName    = "editor-toolbar"
-                         onEditorStateChange = {this.props.handleInputChange}/>
+                         onEditorStateChange = {this.props.onEditorStateChange}/>
                </Card>
                <FormHelperText id = "body-text">
                  Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
                  (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
                </FormHelperText>
-             </FormControl>
+            </FormControl>
 
 
-        {/* Social Media */}
-             <FormControl fullWidth margin = "normal">
+            {/* Social Media */}
+            <FormControl fullWidth margin = "normal">
                <FormLabel htmlFor="social_media">Social media</FormLabel>
                <SocialMedia onChange={(s) => this.props.handleSelectChange('social_media', s)}
                                value={this.props.doc.social_media}
                                id="social_media"/>
-             </FormControl>
+            </FormControl>
 
-        {/* Groups audience */}
-             <FormControl required fullWidth margin="normal">
+            {/* Groups audience */}
+            <FormControl required fullWidth margin="normal">
                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>Groups audience</FormLabel>
-               <HRInfoSelect type    = "spaces"
-                             isMulti = {true} onChange={(s) => this.props.handleSelectChange('operation', s)}
-                             value   = {this.props.doc.operation}/>
-             </FormControl>
+               <HRInfoAsyncSelect type    = "operations"
+                                  isMulti = {true}
+                                  onChange={(s) => this.props.handleSelectChange('operation', s)}
+                                  value   = {this.props.doc.operation}/>
+            </FormControl>
 
-        {/* Website */}
-             <FormControl fullWidth margin = "normal">
+            {/* Website */}
+            <FormControl fullWidth margin = "normal">
                <FormLabel>Website</FormLabel>
                <TextField type     = "text"
                           name     = "url"
                           id       = "url"
-                          value    = {this.props.doc.url}
+                          value    = {this.props.doc.url ? this.props.doc.url : ""}
                           onChange = {this.props.handleInputChange}/>
-             </FormControl>
+            </FormControl>
 
-        {/* Email */}
-               <FormControl fullWidth margin = "normal">
-                 <FormLabel>Email</FormLabel>
-                 <TextField type     = "text"
-                            name     = "email"
-                            id       = "email"
-                            value    = {this.props.doc.email}
-                            onChange = {this.props.handleInputChange}/>
-               </FormControl>
+            {/* Email */}
+            <FormControl fullWidth margin = "normal">
+                <FormLabel>Email</FormLabel>
+                <TextField type     = "text"
+                           name     = "email"
+                           id       = "email"
+                           value    = {this.props.doc.email ? this.props.doc.email : ""}
+                           onChange = {this.props.handleInputChange}/>
+            </FormControl>
           </Grid>
+
+          {/* RIGHT COLUMN */}
           <Grid item md={3} xs={11}>
+            {/* Global Cluster */}
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Global Cluster</FormLabel>
+              <HRInfoSelect type    = "global_clusters"
+                            isMulti = {false}
+                            onChange={(s) => this.props.handleSelectChange('global_cluster', s)}
+                            value   = {this.props.doc.global_cluster}/>
+            </FormControl>
 
+            {/* Parent Cluster */}
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Parent Cluster</FormLabel>
+              <HRInfoAsyncSelect
+                  type     = "bundles"
+                  spaces   = {this.props.doc ? this.props.doc : null}
+                  isMulti  = {true}
+                  onChange = {(s) => this.props.setFilter('bundles', s)}
+                  value    = {this.props.doc.parent_cluster}/>
+            </FormControl>
 
-{/* RIGHT COLUMN */}
+            {/* Lead Agencies */}
+            <FormControl fullWidth margin = "normal">
+              <FormLabel>Lead Agencies</FormLabel>
+              <HRInfoAsyncSelect
+                  type     = "organizations"
+                  isMulti  = {true}
+                  onChange = {(s) => this.props.setFilter('lead_agencies', s)}
+                  value    = {this.props.doc.lead_agencies}/>
+            </FormControl>
 
-       {/* Global Cluster */}
-           <FormControl fullWidth margin="normal">
-             <FormLabel>Global Cluster</FormLabel>
-             TODO   {/* Use HRInfoSelect and import data from https://www.humanitarianresponse.info/en/api/v1.0/global_clusters */}
-           </FormControl>
+            {/* Activation document */}
+            <FormControl fullWidth margin = "normal">
+              <FormLabel >Activation document</FormLabel>
+              <HRInfoAsyncSelect
+                    type     = "documents"
+                    name     = "activation_document"
+                    id       = "activation_document"
+                    isMulti  = {false}
+                    onChange = {(s) => this.props.handleSelectChange('activation_document', s)}
+                    value    = {this.props.doc.activation_document}/>
+            </FormControl>
 
-       {/* Parent Cluster */}
-           <FormControl fullWidth margin="normal">
-             <FormLabel>Parent Cluster</FormLabel>
-             <HRInfoSelect
-                 type     = "bundles"
-                 spaces   = {this.props.doc ? this.props.doc : null}
-                 isMulti  = {true}
-                 onChange = {(s) => this.props.setFilter('bundles', s)}
-                 value    = {this.props.doc.bundles}/>
-           </FormControl>
+            {/* Cluster Coordinators */}
+            <FormControl fullWidth margin = "normal">
+              <FormLabel htmlFor="cluster_coordinators">Cluster Coordinator</FormLabel>
+              <HidContacts isMulti={true}
+                          id="cluster_coordinators"
+                          onChange={(s) => {this.props.handleSelectChange('cluster_coordinators', s)}}
+                          value={this.props.doc.cluster_coordinators} />
+            </FormControl>
 
-       {/* Lead Agencies */}
-           <FormControl fullWidth margin = "normal">
-             <FormLabel>Lead Agencies</FormLabel>
-            {/* <HRInfoSelect
-                 type     = "lead_agencies"
-                 spaces   = {this.props.doc ? this.props.doc : null}
-                 isMulti  = {true}
-                 onChange = {(s) => this.props.setFilter('lead_agencies', s)}
-                 value    = {this.props.doc.lead_agencies}/>
-          {/*    <TextField type     = "text"
-                        name     = "lead_agencies"
-                        id       = "lead_agencies"
-                        value    = {this.props.doc.lead_agencies}
-                        onChange = {this.props.handleInputChange}/> */}
-           </FormControl>
+            {/* Partners */}
+            <FormControl fullWidth margin="normal">
+              <FormLabel>Partners</FormLabel>
+              <HRInfoAsyncSelect type="organizations"
+                                 isMulti  = {true}
+                                 onChange = {(s) => this.props.handleSelectChange('organizations', s)}
+                                 value    = {this.props.doc.partners}/>
+            </FormControl>
 
-       {/* Activation document */}
-          <FormControl fullWidth margin = "normal">
-            <FormLabel >Activation document</FormLabel>
-            <TextField type     = "text"
-                       name     = "activationdocument"
-                       id       = "activationdocument"
-                       value    = {this.props.doc.activationdocument}
-                       onChange = {this.props.handleInputChange}/>
-          </FormControl>
-
-       {/* Cluster Coordinators */}
-          <FormControl fullWidth margin = "normal">
-            <FormLabel htmlFor="cluster_coordinators">Cluster Coordinator</FormLabel>
-            <HidContacts isMulti={true}
-                         id="cluster_coordinators"
-                         onChange={(s) => this.props.handleSelectChange('cluster_coordinators', s)}
-                         value={this.props.doc.cluster_coordinators} />
-          </FormControl>
-
-      {/* Partners */}
-           <FormControl fullWidth margin="normal">
-             <FormLabel>Partners</FormLabel>
-             <HRInfoAsyncSelect type="organizations"
-                                isMulti  = {true}
-                                onChange = {(s) => this.props.handleSelectChange('organizations', s)}
-                                value    = {this.props.doc.organizations}/>
-           </FormControl>
-
-
-          <Card  className="card-container">
-          {/* Radio group 'NGO Participation' */}
-            <CardContent>
-               <FormControl component="fieldset" fullWidth margin="normal">
-                <FormLabel>NGO Participation</FormLabel>
-                <RadioGroup
-                  name       = "NGOParticipation"
-                  value      = {this.props.doc.NGOParticipation}
-                  onChange   = {this.props.handleRadioChange}
-                >
-                  <FormControlLabel value="0"  control={<Radio />} label="N/A" />
-                  <FormControlLabel value="1"  control={<Radio />} label="No" />
-                  <FormControlLabel value="2"  control={<Radio />} label="Yes" />
-                </RadioGroup>
-              </FormControl>
-            </CardContent>
-
-            <Divider/>
+            {/* Radio group 'NGO Participation' */}
+            <FormControl component="fieldset" fullWidth margin="normal">
+              <FormLabel>NGO Participation</FormLabel>
+              <Card  className="card-container">
+                <CardContent className="card-content">
+                    <RadioGroup
+                      name       = "ngo_participation"
+                      value      = {this.props.doc.ngo_participation}
+                      onChange   = {this.props.handleRadioChange}
+                    >
+                      <FormControlLabel value="0"  control={<Radio />} label="N/A" />
+                      <FormControlLabel value="1"  control={<Radio />} label="No" />
+                      <FormControlLabel value="2"  control={<Radio />} label="Yes" />
+                    </RadioGroup>
+                </CardContent>
+              </Card>
+            </FormControl>
 
             {/* Radio group 'Government Participation' */}
-            <CardContent>
-               <FormControl component="fieldset" fullWidth margin="normal">
-                <FormLabel>Government Participation</FormLabel>
-                <RadioGroup
-                  name        = "GovernmentParticipation"
-                  value       = {this.props.doc.GovernmentParticipation}
-                  onChange    = {this.props.handleRadioChange}
-                >
-                  <FormControlLabel value="0"  control={<Radio />} label="N/A" />
-                  <FormControlLabel value="1"   control={<Radio />} label="No" />
-                  <FormControlLabel value="2"  control={<Radio />} label="Yes" />
-                </RadioGroup>
-              </FormControl>
-            </CardContent>
-
-            <Divider/>
+            <FormControl component="fieldset" fullWidth margin="normal">
+              <FormLabel>Government Participation</FormLabel>
+              <Card className="card-container">
+                <CardContent className="card-content">
+                    <RadioGroup
+                      name        = "government_participation"
+                      value       = {this.props.doc.government_participation}
+                      onChange    = {this.props.handleRadioChange}
+                    >
+                      <FormControlLabel value="0"  control={<Radio />} label="N/A" />
+                      <FormControlLabel value="1"   control={<Radio />} label="No" />
+                      <FormControlLabel value="2"  control={<Radio />} label="Yes" />
+                    </RadioGroup>
+                </CardContent>
+              </Card>
+            </FormControl>
 
             {/* Radio group 'Inter cluster' */}
-            <CardContent>
-               <FormControl component="fieldset" fullWidth margin="normal">
-                <FormLabel>Inter cluster</FormLabel>
-                <RadioGroup
-                  name        = "InterCluster"
-                  value       = {this.props.doc.GovernmentParticipation}
-                  onChange    = {this.props.handleRadioChange}
-                >
-                  <FormControlLabel value="0"  control={<Radio color="primary" />} label="N/A" />
-                  <FormControlLabel value="1"  control={<Radio color="primary" />} label="No" />
-                  <FormControlLabel value="2"  control={<Radio color="primary" />} label="Yes" />
-                </RadioGroup>
-              </FormControl>
-            </CardContent>
-          </Card>
+            <FormControl component="fieldset" fullWidth margin="normal">
+              <FormLabel>Inter cluster</FormLabel>
+              <Card className="card-container">
+                <CardContent className="card-content">
+                    <RadioGroup
+                      name        = "inter_cluster"
+                      value       = {this.props.doc.inter_cluster}
+                      onChange    = {this.props.handleRadioChange}
+                    >
+                      <FormControlLabel value="0"  control={<Radio color="primary" />} label="N/A" />
+                      <FormControlLabel value="1"  control={<Radio color="primary" />} label="No" />
+                      <FormControlLabel value="2"  control={<Radio color="primary" />} label="Yes" />
+                    </RadioGroup>
+                </CardContent>
+              </Card>
+            </FormControl>
+
         </Grid>
       </Grid>
     </Grid>

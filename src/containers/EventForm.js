@@ -168,12 +168,11 @@ class EventForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
-<<<<<<< HEAD
         {/* Address */}
             <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>Venue</FormLabel>
-              <Address />
-              <FormHelperText id = "files-text">
+              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>Venue</FormLabel>
+              <Address onChange={(s) => this.props.handleSelectChange('address', s)} value={this.props.doc.address} />
+              <FormHelperText id = "address-text">
                 Indicate here where the {this.props.label} takes place.
               </FormHelperText>
             </FormControl>
@@ -181,9 +180,6 @@ class EventForm extends React.Component {
         {/* Dates */}
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
-              {/* <EventDate value    = {this.props.doc.date ? this.props.doc.date : ''}
-                            required
-                            onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} /> */}
               <EventDate value    = {this.props.doc.date}
                          onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                          required />
@@ -191,16 +187,6 @@ class EventForm extends React.Component {
                 Indicate the date of the {this.props.label}.
               </FormHelperText>
             </FormControl>
-=======
-          {/* Address */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>Venue</FormLabel>
-                <Address onChange={(s) => this.props.handleSelectChange('address', s)} value={this.props.doc.address} />
-                <FormHelperText id = "address-text">
-                  Indicate here where the {this.props.label} takes place.
-                </FormHelperText>
-              </FormControl>
->>>>>>> dev
           </Grid>
 
           <Grid item md={3} xs={11}>

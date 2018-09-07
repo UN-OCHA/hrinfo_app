@@ -75,8 +75,8 @@ function SelectWrapped(props) {
     styles={customStyles}
     isClearable={true}
     isMulti={props.isMulti}
-    getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
-    getOptionLabel={(option) => { if (props.getOptionLabel) {return props.getOptionLabel(option)} else {return option.label}}}
+    getOptionValue={(option) => option.id}
+    getOptionLabel={(option) => (option.label ? option.label : option.name)}
     value={props.value}
     {...other}
     />
@@ -159,8 +159,6 @@ class MaterialAsyncSelect extends React.Component {
 	              simpleValue: true,
 	              loadOptions: this.props.loadOptions,
 				        value: this.props.value,
-                getOptionLabel: this.props.getOptionLabel,
-                getOptionValue: this.props.getOptionValue,
                 cacheOptions: this.props.cacheOptions ? this.props.cacheOptions : true
 	            },
 	          }}
