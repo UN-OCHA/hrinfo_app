@@ -1,23 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ViewModule from '@material-ui/icons/ViewModule';
-import ViewList from '@material-ui/icons/ViewList';
 import moment from 'moment';
 import FormControl      from '@material-ui/core/FormControl';
 import FormLabel        from '@material-ui/core/FormLabel';
@@ -44,7 +33,7 @@ const styles = theme => ({
   }
 });
 
-class ContributorsPage extends React.Component {
+class ContributionsPage extends React.Component {
 
   state = {
     data: {},
@@ -205,8 +194,8 @@ class ContributorsPage extends React.Component {
   }
 }
 
-ContributorsPage.propTypes = {
+ContributionsPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ContributorsPage);
+export default withStyles(styles)(ContributionsPage);
