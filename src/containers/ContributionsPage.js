@@ -115,6 +115,7 @@ class ContributionsPage extends React.Component {
 
   render() {
     const { classes } = this.props;
+    let row = 0;
 
     return (
       <Paper>
@@ -164,25 +165,35 @@ class ContributionsPage extends React.Component {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
+              <TableCell>Row</TableCell>
               <TableCell>Operation</TableCell>
               <TableCell>Group</TableCell>
               <TableCell>Assessments</TableCell>
               <TableCell>Events</TableCell>
               <TableCell>Documents</TableCell>
               <TableCell>Infographics</TableCell>
+              <TableCell>Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {Object.keys(this.state.data).sort().map(op => {
               return Object.keys(this.state.data[op]).sort().map(b => {
+                row++;
+                let nbAssessments = this.state.data[op][b]['assessments'] ? this.state.data[op][b]['assessments'] : 0;
+                let nbEvents = this.state.data[op][b]['events'] ? this.state.data[op][b]['events'] : 0;
+                let nbDocuments = this.state.data[op][b]['documents'] ? this.state.data[op][b]['documents'] : 0;
+                let nbInfographics = this.state.data[op][b]['infographics'] ? this.state.data[op][b]['infographics'] : 0;
+                let total = nbAssessments + nbEvents + nbDocuments + nbInfographics;
                 return (
                   <TableRow>
-                    <TableCell component="th" scope="row">{op}</TableCell>
+                    <TableCell>{row}</TableCell>
+                    <TableCell>{op}</TableCell>
                     <TableCell>{b}</TableCell>
-                    <TableCell>{this.state.data[op][b]['assessments'] ? this.state.data[op][b]['assessments'] : 0}</TableCell>
-                    <TableCell>{this.state.data[op][b]['events'] ? this.state.data[op][b]['events'] : 0}</TableCell>
-                    <TableCell>{this.state.data[op][b]['documents'] ? this.state.data[op][b]['documents'] : 0}</TableCell>
-                    <TableCell>{this.state.data[op][b]['infographics'] ? this.state.data[op][b]['infographics'] : 0}</TableCell>
+                    <TableCell>{nbAssessments}</TableCell>
+                    <TableCell>{nbEvents}</TableCell>
+                    <TableCell>{nbDocuments}</TableCell>
+                    <TableCell>{nbInfographics}</TableCell>
+                    <TableCell>{total}</TableCell>
                   </TableRow>
                 );
               });
