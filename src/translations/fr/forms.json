@@ -21,5 +21,42 @@
     "close": "Fermer",
     "exclude_from_reliefweb": "Ne pas partager avec ReliefWeb",
     "add_more": "Ajouter plus d'informations",
-    "hide_information": "Cacher les informations facultatives"
+    "hide_information": "Cacher les informations facultatives",
+    "helpers": {
+        "files": "Télécharger le fichier à publier et spécifier sa langue. Il est préférable de publier un fichier par enregistrement, mais vous pouvez en ajouter si nécessaire. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>."
+    },
+    "document": {
+        "helpers": {
+            "title": "Taper le titre original du document. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+            "offices": "Cliquer sur le champ et sélectionner le(s) bureau(x) de coordination au(x) quel(s) le document fait référence.",
+            "publication_date": "Indiquer la date inital de publication du document.",
+            "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou l'urgence au(x) quelle(s) le document fait référence.",
+            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) le document fait référence.",
+            "description": "Essayer de toujours adjouter ici le texte (en totalité ou en partie) du document (exemple : utiliser l’introduction ou le résumé). Si aucun texte est disponible, ajouter une description du(des) fichier(s) que vous allez publier.",
+            "language": "Sélectionner la langue du document.",
+            "spaces": "Cliquer sur le champ et sélectionner ou publier le document (l'operation, le site regional ou thematique etc).",
+            "document_type": "Sélectionner le type ou le sous-type de document que mieux décrive le document.",
+            "organizations": "Taper et sélectionner la(les) source(s) du document.",
+            "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
+            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisisser seulment les themes auquels le document fait une reference substantielle.",
+            "related_content": "Ajouter des liens vers contenu liés à le document que vous êtes en train de publier (exemple : versions linguistiques du même document, ou lien à l’événement relatif aux minutes de réunion) en indiquant le titre du contenu et son url."
+        }
+    },
+    "infographic": {
+        "helpers": {
+            "title": "Taper le titre original de la carte/infographie. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+            "offices": "Cliquer sur le champ et sélectionner le(s) bureau(x) de coordination au(x) quel(s) la carte/l'infographie fait référence",
+            "publication_date": "Indiquer la date inital de publication de la carte/infographie.",
+            "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou l'urgence au(x) quelle(s) la carte/inforgraphie fait référence.",
+            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) la carte/infographie fait référence.",
+            "description": "Essayer de toujours adjouter le texte (en totalité ou en partie) de la carte/infographie. Si aucun texte est disponible, ajouter une description du(des) fichier(s) que vous allez publier.",
+            "language": "Sélectionner la langue de la carte/infographie",
+            "spaces": "Cliquer sur le champ et sélectionner ou publier la carte/infographie (l'operation, le site regional ou thematique etc)",
+            "document_type": "Sélectionner le type ou le sous-type de carte/infographie que mieux décrive la carte/infographie.",
+            "organizations": "Taper et sélectionner la(les) source(s) de la carte/infographie.",
+            "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
+            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisisser seulment les themes auquels la carte/infographie fait une reference substantielle.",
+            "related_content": "Ajouter des liens vers contenu liés à la carte/infographie que vous êtes en train de publier (exemple : versions linguistiques de la même infographie) en indiquant le titre du contenu et son url."
+        }
+    }
 }
