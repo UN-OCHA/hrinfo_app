@@ -15,6 +15,7 @@ import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickers
 import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 import HRInfoAPI from '../api/HRInfoAPI';
+import HidAPI from '../api/HidAPI';
 
 const styles = theme => ({
   root: {
@@ -33,15 +34,17 @@ const styles = theme => ({
   }
 });
 
-class ContributionsPage extends React.Component {
+class ContributorsPage extends React.Component {
 
   state = {
-    data: {},
+    users: [],
     from: 0,
     to: 0
   };
 
   hrinfoApi = new HRInfoAPI();
+
+  hidApi = new HidAPI();
 
   componentDidMount() {
     let date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -60,11 +63,12 @@ class ContributionsPage extends React.Component {
         'filter[created][value][0]': this.state.from,
         'filter[created][value][1]': this.state.to,
         'filter[created][operator]': 'BETWEEN',
-        fields: 'id,label,operation.id,operation.label,bundles.id,bundles.label'
+        fields: 'id,label,author.hid'
       };
-      let data = {}, rawData = [];
+      const that = this;
+      let users = [], rawData = [], numbers = {}, promises = [];
       this.setState({
-        data: data
+        users: users
       });
       await this
         .hrinfoApi
@@ -83,31 +87,27 @@ class ContributionsPage extends React.Component {
         })
         .then(infographics => {
           rawData = rawData.concat(infographics);
-          rawData.forEach(function (item) {
-            let opLabel = item.operation[0] ? item.operation[0].label : '';
-            if (opLabel !== '') {
-              if (!data[opLabel]) {
-                data[opLabel] = {};
-                data[opLabel]['All'] = {};
-                data[opLabel]['All'][item.type] = 0;
+          for (const item of rawData) {
+            let hid = item.author ? item.author.hid : '';
+            if (hid) {
+              if (!numbers[hid]) {
+                numbers[hid] = 0;
               }
-              item.bundles.forEach(function (b) {
-                if (b && b.label) {
-                  if (!data[opLabel][b.label]) {
-                    data[opLabel][b.label] = {};
-                    data[opLabel][b.label][item.type] = 0;
-                  }
-                  data[opLabel][b.label][item.type]++;
-                }
-              });
-              if (!data[opLabel]['All'][item.type]) {
-                data[opLabel]['All'][item.type] = 0;
-              }
-              data[opLabel]['All'][item.type]++;
+              numbers[hid]++;
             }
+          }
+          Object.keys(numbers).forEach(function (hid) {
+            promises.push(that.hidApi.getItem('user', hid));
+          });
+          return Promise.all(promises);
+        })
+        .then(values => {
+          values.forEach(function (user) {
+            user.number = numbers[user.id];
+            users.push(user);
           });
           this.setState({
-            data: data
+            users: users
           });
         });
     }
@@ -166,37 +166,22 @@ class ContributionsPage extends React.Component {
           <TableHead>
             <TableRow>
               <TableCell>Row</TableCell>
-              <TableCell>Operation</TableCell>
-              <TableCell>Group</TableCell>
-              <TableCell>Assessments</TableCell>
-              <TableCell>Events</TableCell>
-              <TableCell>Documents</TableCell>
-              <TableCell>Infographics</TableCell>
-              <TableCell>Total</TableCell>
+              <TableCell>User</TableCell>
+              <TableCell>Organization</TableCell>
+              <TableCell># of content items published</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(this.state.data).sort().map(op => {
-              return Object.keys(this.state.data[op]).sort().map(b => {
-                row++;
-                let nbAssessments = this.state.data[op][b]['assessments'] ? this.state.data[op][b]['assessments'] : 0;
-                let nbEvents = this.state.data[op][b]['events'] ? this.state.data[op][b]['events'] : 0;
-                let nbDocuments = this.state.data[op][b]['documents'] ? this.state.data[op][b]['documents'] : 0;
-                let nbInfographics = this.state.data[op][b]['infographics'] ? this.state.data[op][b]['infographics'] : 0;
-                let total = nbAssessments + nbEvents + nbDocuments + nbInfographics;
-                return (
-                  <TableRow>
-                    <TableCell>{row}</TableCell>
-                    <TableCell>{op}</TableCell>
-                    <TableCell>{b}</TableCell>
-                    <TableCell>{nbAssessments}</TableCell>
-                    <TableCell>{nbEvents}</TableCell>
-                    <TableCell>{nbDocuments}</TableCell>
-                    <TableCell>{nbInfographics}</TableCell>
-                    <TableCell>{total}</TableCell>
-                  </TableRow>
-                );
-              });
+            {this.state.users.map(user => {
+              row++;
+              return (
+                <TableRow>
+                  <TableCell>{row}</TableCell>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.organization ? user.organization.name : ''}</TableCell>
+                  <TableCell>{user.number}</TableCell>
+                </TableRow>
+              );
             })}
           </TableBody>
         </Table>
@@ -205,8 +190,8 @@ class ContributionsPage extends React.Component {
   }
 }
 
-ContributionsPage.propTypes = {
+ContributorsPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ContributionsPage);
+export default withStyles(styles)(ContributorsPage);
