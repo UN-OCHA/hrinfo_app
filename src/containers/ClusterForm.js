@@ -224,15 +224,6 @@ class ClusterForm extends React.Component {
                     value    = {this.props.doc.activation_document}/>
             </FormControl>
 
-            {/* Cluster Coordinators */}
-            <FormControl fullWidth margin = "normal">
-              <FormLabel htmlFor="cluster_coordinators">Cluster Coordinator</FormLabel>
-              <HidContacts isMulti={true}
-                          id="cluster_coordinators"
-                          onChange={(s) => {this.props.handleSelectChange('cluster_coordinators', s)}}
-                          value={this.props.doc.cluster_coordinators} />
-            </FormControl>
-
             {/* Partners */}
             <FormControl fullWidth margin="normal">
               <FormLabel>Partners</FormLabel>
