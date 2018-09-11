@@ -28,6 +28,7 @@ import Divider          from '@material-ui/core/Divider';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
+import Switch           from '@material-ui/core/Switch';
 
 //Material
 import './EventForm.css';
@@ -64,13 +65,8 @@ class ClusterForm extends React.Component {
     this.setState({ wasSubmitted: true });
   }
 
-  handleRadioChange = event => {
-    this.setState({ selectedValue: event.target.value });
-  };
-
   render() {
     const { classes } = this.props;
-
     return (
       <Grid container direction = "column" alignItems = "center">
       <Typography color = "textSecondary" gutterBottom variant = "headline">Create {this.props.label}</Typography>
@@ -233,59 +229,49 @@ class ClusterForm extends React.Component {
                                  value    = {this.props.doc.partners}/>
             </FormControl>
 
-            {/* Radio group 'NGO Participation' */}
-            <FormControl component="fieldset" fullWidth margin="normal">
-              <FormLabel>NGO Participation</FormLabel>
-              <Card  className="card-container">
+            {/* Participation */}
+            <FormControl fullWidth margin="normal">
+              <FormLabel focused={false}>Participation</FormLabel>
+              <Card className="card-container">
                 <CardContent className="card-content">
-                    <RadioGroup
-                      name       = "ngo_participation"
-                      value      = {this.props.doc.ngo_participation}
-                      onChange   = {this.props.handleRadioChange}
-                    >
-                      <FormControlLabel value="0"  control={<Radio />} label="N/A" />
-                      <FormControlLabel value="1"  control={<Radio />} label="No" />
-                      <FormControlLabel value="2"  control={<Radio />} label="Yes" />
-                    </RadioGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={this.props.doc.ngo_participation ? true : false}
+                        onChange={this.props.handleInputChange}
+                        name="ngo_participation"
+                        color="primary"
+                      />
+                    }
+                    label="NGO Participation"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={this.props.doc.government_participation ? true : false}
+                        onChange={this.props.handleInputChange}
+                        name="government_participation"
+                        color="primary"
+                      />
+                    }
+                    label="Government Participation"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={this.props.doc.inter_cluster ? true : false}
+                        onChange={this.props.handleInputChange}
+                        name="inter_cluster"
+                        color="primary"
+                      />
+                    }
+                    label="Inter Cluster"
+                  />
                 </CardContent>
               </Card>
             </FormControl>
 
-            {/* Radio group 'Government Participation' */}
-            <FormControl component="fieldset" fullWidth margin="normal">
-              <FormLabel>Government Participation</FormLabel>
-              <Card className="card-container">
-                <CardContent className="card-content">
-                    <RadioGroup
-                      name        = "government_participation"
-                      value       = {this.props.doc.government_participation}
-                      onChange    = {this.props.handleRadioChange}
-                    >
-                      <FormControlLabel value="0"  control={<Radio />} label="N/A" />
-                      <FormControlLabel value="1"   control={<Radio />} label="No" />
-                      <FormControlLabel value="2"  control={<Radio />} label="Yes" />
-                    </RadioGroup>
-                </CardContent>
-              </Card>
-            </FormControl>
 
-            {/* Radio group 'Inter cluster' */}
-            <FormControl component="fieldset" fullWidth margin="normal">
-              <FormLabel>Inter cluster</FormLabel>
-              <Card className="card-container">
-                <CardContent className="card-content">
-                    <RadioGroup
-                      name        = "inter_cluster"
-                      value       = {this.props.doc.inter_cluster}
-                      onChange    = {this.props.handleRadioChange}
-                    >
-                      <FormControlLabel value="0"  control={<Radio color="primary" />} label="N/A" />
-                      <FormControlLabel value="1"  control={<Radio color="primary" />} label="No" />
-                      <FormControlLabel value="2"  control={<Radio color="primary" />} label="Yes" />
-                    </RadioGroup>
-                </CardContent>
-              </Card>
-            </FormControl>
 
         </Grid>
       </Grid>
