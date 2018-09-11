@@ -142,9 +142,6 @@ class EventForm extends React.Component {
         {/* Dates */}
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
-              {/* <EventDate value    = {this.props.doc.date ? this.props.doc.date : ''}
-                            required
-                            onChange = {(val) => {console.log(val); this.props.handleSelectChange('date', val);}} /> */}
               <EventDate value    = {this.props.doc.date}
                          onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                          required />
@@ -174,17 +171,6 @@ class EventForm extends React.Component {
               <Address onChange={(s) => this.props.handleSelectChange('address', s)} value={this.props.doc.address} />
               <FormHelperText id = "address-text">
                 Indicate here where the {this.props.label} takes place.
-              </FormHelperText>
-            </FormControl>
-
-        {/* Dates */}
-            <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
-              <EventDate value    = {this.props.doc.date}
-                         onChange = {(val) => {this.props.handleSelectChange('date', val);}}
-                         required />
-              <FormHelperText>
-                Indicate the date of the {this.props.label}.
               </FormHelperText>
             </FormControl>
           </Grid>
