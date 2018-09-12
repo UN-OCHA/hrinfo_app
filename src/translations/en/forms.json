@@ -4,7 +4,6 @@
     "bundles": "Cluster(s)/Sector(s)",
     "title": "Title",
     "description": "Description or Summary of Content",
-    "files": "File(s)",
     "language": "Language",
     "spaces": "Operation(s) / Webspace(s)",
     "publication_date": "Original Publication Date",
@@ -13,7 +12,6 @@
     "organizations": "Organization(s)",
     "locations": "Location(s)",
     "themes": "Theme(s)",
-    "related_content": "Related Content",
     "publish": "Publish",
     "save_as_draft": "Save as Draft",
     "delete": "Delete",
@@ -63,12 +61,14 @@
         }
     },
     "files": {
+      "files": "File(s)",
       "new_file": "New file",
       "from_storage": "From storage",
       "from_dropbox": "From Dropbox",
       "language": "File Language"
     },
     "related_content": {
+      "related_content": "Related content",
       "title": "Title",
       "url": "URL",
       "helpers": {

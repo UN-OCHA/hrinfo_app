@@ -148,7 +148,7 @@ class DocumentForm extends React.Component {
             </FormControl>
 
             <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>{t('files')}</FormLabel>
+              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>{t('files.files')}</FormLabel>
               <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
               <FormHelperText id = "files-text">
                 <Trans i18nKey='helpers.files'>Upload the file to publish from your computer, and specify its language. It is best to publish one file per record,
@@ -277,7 +277,7 @@ class DocumentForm extends React.Component {
                 </FormControl>
 
 							<FormControl fullWidth margin="normal">
-								<FormLabel>{t('related_content')}</FormLabel>
+								<FormLabel>{t('related_content.related_content')}</FormLabel>
 								<RelatedContent onChange={(s) => this.props.handleSelectChange('related_content', s)}
 									value={this.props.doc.related_content}
 									id="related_content"/>
