@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialSelect from './MaterialSelect';
 import DropboxChooser from 'react-dropbox-chooser';
+import { translate } from 'react-i18next';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 import Button from '@material-ui/core/Button';
@@ -222,6 +223,7 @@ class HRInfoFiles extends React.Component {
     }
 
     getRow (number) {
+      const { t } = this.props;
       return (
 		<Card key={number} className="card-container">
 			<CardHeader
@@ -237,11 +239,11 @@ class HRInfoFiles extends React.Component {
 				}
 				title={
 					typeof this.state.files[number] === 'object' ?
-		           		<a href={this.state.files[number].uri} target="__blank" className="file-name">{this.state.files[number].label}</a> : 'New File'
+		           		<a href={this.state.files[number].uri} target="__blank" className="file-name">{this.state.files[number].label}</a> : t('files.new_file')
 		        }
 			/>
 			<CardContent className="file-container-language">
-				<Typography>File Language</Typography>
+				<Typography>{t('files.language')}</Typography>
 				<MaterialSelect options={this.languages}
 					name={'languages_' + number}
 					onChange={ (s) => this.handleChange(number, 'language', s)}
@@ -257,7 +259,7 @@ class HRInfoFiles extends React.Component {
 							onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
 	                	<label htmlFor={'files_' + number}>
 	                  		<Button component="span" color="primary" variant="outlined" size="small">
-	                    		From Storage
+	                    		{t('files.from_storage')}
 	                  		</Button>
 	                	</label>
 	                  	<DropboxChooser
@@ -265,7 +267,7 @@ class HRInfoFiles extends React.Component {
 		                    success={files => this.handleChange(number, 'file', files)}
 		                    multiselect={false}
 		                    extensions={['.pdf']}>
-		                    <Button color="primary" variant="outlined" size="small">From Dropbox</Button>
+		                    <Button color="primary" variant="outlined" size="small">{t('files.from_dropbox')}</Button>
 	                	</DropboxChooser>
               		</span> : ''
               	}
@@ -347,9 +349,9 @@ class HRInfoFiles extends React.Component {
       }
       else {
         this.setState((prevState, props) => {
-			prevState.files.splice(number, 1);
-			return {
-          		files: prevState.files,
+        prevState.files.splice(number, 1);
+        return {
+        	    files: prevState.files,
           		inputNumber: prevState.inputNumber - 1,
           		collections: collections
 	  		}
@@ -399,6 +401,7 @@ class HRInfoFiles extends React.Component {
     }
 
     render () {
+      const { t } = this.props;
       let rows = [];
       for (let i = 0; i < this.state.inputNumber; i++) {
         rows.push(this.getRow(i));
@@ -407,11 +410,11 @@ class HRInfoFiles extends React.Component {
         <div className={this.props.className}>
           {rows}
           <Button variant="outlined" onClick={this.onAddBtnClick}>
-			  <i className="icon-document" /> &nbsp; Add another
+			  <i className="icon-document" /> &nbsp; {t('add_another')}
 		  </Button>
         </div>
         );
     }
 }
 
-export default HRInfoFiles;
+export default translate('forms')(HRInfoFiles);

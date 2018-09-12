@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from 'react-i18next';
 import HRInfoLocation from './HRInfoLocation';
 import HRInfoAPI from '../api/HRInfoAPI';
 
@@ -139,6 +140,7 @@ class HRInfoLocations extends React.Component {
   }
 
   render () {
+    const { t } = this.props;
     let rows = [];
     for (let i = 0; i < this.state.inputNumber; i++) {
       rows.push(this.getRow(i));
@@ -148,11 +150,11 @@ class HRInfoLocations extends React.Component {
         {rows}
         {this.props.isMulti ?
 		<Button variant="outlined" onClick={this.onAddBtnClick}>
-			<i className="icon-map-pin" /> &nbsp; Add another
+			<i className="icon-map-pin" /> &nbsp; {t('add_another')}
 		</Button> : '' }
       </div>
       );
   }
 }
 
-export default HRInfoLocations;
+export default translate('forms')(HRInfoLocations);

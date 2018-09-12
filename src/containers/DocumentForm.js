@@ -115,7 +115,7 @@ class DocumentForm extends React.Component {
 
     return (
       <Grid container direction = "column" alignItems="center">
-      <Typography color = "textSecondary" gutterBottom variant = "headline">Create {this.props.label}</Typography>
+      <Typography color = "textSecondary" gutterBottom variant = "headline">{t(label + '.create')}</Typography>
       <Grid item>
         <Grid container justify = "space-around">
           <Grid item md ={6} xs ={11}>

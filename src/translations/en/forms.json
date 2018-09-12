@@ -22,10 +22,12 @@
     "exclude_from_reliefweb": "Do not share with ReliefWeb",
     "add_more": "Add More Information",
     "hide_information": "Hide Optional Information",
+    "add_another": "Add Another",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
     "document": {
+        "create": "Create document",
         "helpers": {
             "title": "Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
             "offices": "Click on the field and select the coordination hub(s) the document refers to (if any).",
@@ -43,6 +45,7 @@
         }
     },
     "infographic": {
+        "create": "Create infographic",
         "helpers": {
             "title": "Type the original title of the map/infographic. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
             "offices": "Click on the field and select the coordination hub(s) the map/infographic refers to (if any).",
@@ -58,5 +61,19 @@
             "themes": "Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.",
             "related_content": "Add links to content that is related to the map/infographicc you are publishing (example: language versions of the same infographic, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
         }
+    },
+    "files": {
+      "new_file": "New file",
+      "from_storage": "From storage",
+      "from_dropbox": "From Dropbox",
+      "language": "File Language"
+    },
+    "related_content": {
+      "title": "Title",
+      "url": "URL",
+      "helpers": {
+        "title": "Type in the title of the related content.",
+        "url": "Type in the URL of the related content"
+      }
     }
 }
