@@ -118,6 +118,7 @@ class HRInfoSelect extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
         <MaterialSelect
           isMulti={this.props.isMulti}

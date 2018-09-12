@@ -3,10 +3,8 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 //Components
-import HidContacts          from '../components/HidContacts';
 import HRInfoSelect         from '../components/HRInfoSelect';
 import HRInfoAsyncSelect    from '../components/HRInfoAsyncSelect';
-import LanguageSelect       from '../components/LanguageSelect';
 import ClusterTypeSelect    from '../components/ClusterTypeSelect';
 import SocialMedia          from '../components/SocialMedia';
 
@@ -24,7 +22,6 @@ import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Card             from '@material-ui/core/Card';
 import CardContent      from '@material-ui/core/CardContent';
-import Divider          from '@material-ui/core/Divider';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
@@ -67,6 +64,21 @@ class ClusterForm extends React.Component {
 
   render() {
     const { classes } = this.props;
+
+    const parent_cluster = this.props.doc.operation
+    ? (
+      <FormControl fullWidth margin="normal">
+        <FormLabel>Parent Cluster</FormLabel>
+        <HRInfoSelect
+            type     = "bundles"
+            spaces   = {this.props.doc.operation}
+            isMulti  = {true}
+            onChange = {(s) => this.props.handleSelectChange('parent_cluster', s)}
+            value    = {this.props.doc.parent_cluster}/>
+      </FormControl>
+    )
+    : '';
+
     return (
       <Grid container direction = "column" alignItems = "center">
       <Typography color = "textSecondary" gutterBottom variant = "headline">Create {this.props.label}</Typography>
@@ -146,9 +158,9 @@ class ClusterForm extends React.Component {
                                id="social_media"/>
             </FormControl>
 
-            {/* Groups audience */}
+            {/* Operation */}
             <FormControl required fullWidth margin="normal">
-               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>Groups audience</FormLabel>
+               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>Operation</FormLabel>
                <HRInfoAsyncSelect type    = "operations"
                                   isMulti = {true}
                                   onChange={(s) => this.props.handleSelectChange('operation', s)}
@@ -188,15 +200,7 @@ class ClusterForm extends React.Component {
             </FormControl>
 
             {/* Parent Cluster */}
-            <FormControl fullWidth margin="normal">
-              <FormLabel>Parent Cluster</FormLabel>
-              <HRInfoAsyncSelect
-                  type     = "bundles"
-                  spaces   = {this.props.doc ? this.props.doc : null}
-                  isMulti  = {true}
-                  onChange = {(s) => this.props.setFilter('bundles', s)}
-                  value    = {this.props.doc.parent_cluster}/>
-            </FormControl>
+            {parent_cluster}
 
             {/* Lead Agencies */}
             <FormControl fullWidth margin = "normal">
@@ -204,7 +208,7 @@ class ClusterForm extends React.Component {
               <HRInfoAsyncSelect
                   type     = "organizations"
                   isMulti  = {true}
-                  onChange = {(s) => this.props.setFilter('lead_agencies', s)}
+                  onChange = {(s) => this.props.handleSelectChange('lead_agencies', s)}
                   value    = {this.props.doc.lead_agencies}/>
             </FormControl>
 
