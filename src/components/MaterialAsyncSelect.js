@@ -158,9 +158,9 @@ class MaterialAsyncSelect extends React.Component {
 	              id: this.props.id,
 	              simpleValue: true,
 	              loadOptions: this.props.loadOptions,
-				        value: this.props.value,
                 getOptionLabel: this.props.getOptionLabel,
                 getOptionValue: this.props.getOptionValue,
+				        value: this.props.value,
                 cacheOptions: this.props.cacheOptions ? this.props.cacheOptions : true
 	            },
 	          }}

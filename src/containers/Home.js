@@ -16,6 +16,7 @@ class Home extends React.Component {
             <li><Link to="/infographics/new">Add a map/infographic</Link></li>
             <li><Link to="/events/new">Add a new event</Link></li>
             <li><Link to="/operations/new">Add a new operation</Link></li>
+            <li><Link to="/groups/new">Add a new cluster</Link></li>
           </ul>
         </div>
       );

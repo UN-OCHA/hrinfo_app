@@ -27,6 +27,7 @@ class Option extends React.Component {
 		        style={{
           			fontWeight: isSelected ? 500 : 400,
         		}}
+            key={this.props.data.id}
       		>
         		{children}
       		</MenuItem>
@@ -57,18 +58,18 @@ function SelectWrapped(props) {
       components={{
         Option: Option,
         DropdownIndicator: DropdownIndicator,
-		ClearIndicator: ClearIndicator,
-		IndicatorSeparator: null,
-		Placeholder: () => {return (null);}
+    		ClearIndicator: ClearIndicator,
+    		IndicatorSeparator: null,
+    		Placeholder: () => {return (null);}
       }}
-	  pageSize={2}
-	  noOptionsMessage={() => <Typography>{'No results found'}</Typography>}
+  	  pageSize={2}
+  	  noOptionsMessage={() => <Typography>{'No results found'}</Typography>}
       styles={customStyles}
       isClearable={true}
-	  isMulti={props.isMulti}
-	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
-	  getOptionLabel={(option) => { if (props.getOptionLabel) { return props.getOptionLabel(option) } else { return option.label } }}
-	  value={props.value}
+  	  isMulti={props.isMulti}
+  	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
+  	  getOptionLabel={(option) => { if (props.getOptionLabel) { return props.getOptionLabel(option) } else { return option.label } }}
+  	  value={props.value}
       {...other}
     />
   );

@@ -7,6 +7,7 @@ import EventForm            from '../containers/EventForm';
 import AssessmentForm       from "../containers/AssessmentForm";
 import AssessmentsPage      from "../containers/AssessmentsPage";
 import OperationForm        from "../containers/OperationForm";
+import ClusterForm          from "../containers/ClusterForm";
 import Home                 from "../containers/Home";
 import Admin                from "../containers/Admin";
 import ItemPage             from "../containers/ItemPage";
@@ -81,6 +82,11 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/spaces/:id/documents"        exact component={DocumentsPage}                                      props={childProps} />
     <AuthenticatedRoute path="/spaces/:id/infographics"     exact component={InfographicsPage}                                   props={childProps} />
     <AuthenticatedRoute path="/spaces/:id/events"           exact component={EventsPage}                                         props={childProps} />
+
+{/* Cluster */}
+    <AuthenticatedRoute path="/groups/new"       exact component={withForm(ClusterForm, 'bundles', 'Cluster')}  props={childProps} />
+    <AuthenticatedRoute path="/groups/:id/edit"  exact component={withForm(ClusterForm, 'bundles', 'Cluster')}  props={childProps} />
+    <AuthenticatedRoute path="/groups/:id"       exact component={ItemPage}                                     props={childProps} />
 
 {/* Groups */}
     <AuthenticatedRoute path="/groups/:id"              exact component={SpacePage}         props={childProps} />

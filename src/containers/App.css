@@ -45,3 +45,8 @@
 .container-fluid {
 	margin-top: 2% !important;
 }
+
+.card-content {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}

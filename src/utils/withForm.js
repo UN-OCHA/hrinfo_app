@@ -309,12 +309,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
               doc.spaces.push(op);
             }
           });
-          doc.space.forEach(function (sp) {
-            if (sp) {
-              sp.type = "spaces";
-              doc.spaces.push(sp);
-            }
-          });
+          if (doc.space) {
+            doc.space.forEach(function (sp) {
+              if (sp) {
+                sp.type = "spaces";
+                doc.spaces.push(sp);
+              }
+            });
+          }
           if (doc['body-html']) {
             const blocksFromHTML = convertFromHTML(doc['body-html']);
             const contentState = ContentState.createFromBlockArray(

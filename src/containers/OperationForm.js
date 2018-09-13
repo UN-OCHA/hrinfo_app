@@ -167,7 +167,7 @@ class OperationForm extends React.Component {
               </FormControl>
 
               <FormControl fullWidth margin = "normal">
-                <FormLabel for="managed_by">Managed by</FormLabel>
+                <FormLabel htmlFor="managed_by">Managed by</FormLabel>
                 <HRInfoAsyncSelect type="organizations"
                                    id="managed_by"
                                    onChange={(s) => this.props.handleSelectChange('managed_by', s)}
@@ -175,7 +175,7 @@ class OperationForm extends React.Component {
               </FormControl>
 
               <FormControl fullWidth margin = "normal">
-                <FormLabel for="focal_points">Focal points</FormLabel>
+                <FormLabel htmlFor="focal_points">Focal points</FormLabel>
                 <HidContacts isMulti={true}
                              id="focal_points"
                              onChange={(s) => this.props.handleSelectChange('focal_points', s)}
