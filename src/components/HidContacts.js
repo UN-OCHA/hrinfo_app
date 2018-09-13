@@ -24,12 +24,6 @@ class HidContacts extends React.Component {
     return this.hidAPI
       .get('user', params)
       .then(data => {
-        let formatedData = data.data.map(
-          user => {
-            user.label = user.name;
-            return user;
-          }
-        );
         return data.data;
       });
   }
@@ -50,15 +44,7 @@ class HidContacts extends React.Component {
         if (this.props.isMulti) {
           let promises = [];
           this.props.value.forEach(function (v) {
-            if (v.name && v.email) {
-              v.id = v.email;
-              promises.push(v);
-            }
-            else {
-              let user = that.hidAPI.getItem('user', v);
-              user.label = user.name;
-              promises.push(user);
-            }
+            promises.push(that.hidAPI.getItem('user', v));
           });
           let out = await Promise.all(promises);
           this.setState({
