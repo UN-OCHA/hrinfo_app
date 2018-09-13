@@ -71,8 +71,8 @@ class ClusterForm extends React.Component {
         <FormLabel>Parent Cluster</FormLabel>
         <HRInfoSelect
             type     = "bundles"
-            spaces   = {this.props.doc.operation}
-            isMulti  = {true}
+            spaces   = {[this.props.doc.operation]}
+            isMulti  = {false}
             onChange = {(s) => this.props.handleSelectChange('parent_cluster', s)}
             value    = {this.props.doc.parent_cluster}/>
       </FormControl>
@@ -158,15 +158,6 @@ class ClusterForm extends React.Component {
                                id="social_media"/>
             </FormControl>
 
-            {/* Operation */}
-            <FormControl required fullWidth margin="normal">
-               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>Operation</FormLabel>
-               <HRInfoAsyncSelect type    = "operations"
-                                  isMulti = {true}
-                                  onChange={(s) => this.props.handleSelectChange('operation', s)}
-                                  value   = {this.props.doc.operation}/>
-            </FormControl>
-
             {/* Website */}
             <FormControl fullWidth margin = "normal">
                <FormLabel>Website</FormLabel>
@@ -190,6 +181,15 @@ class ClusterForm extends React.Component {
 
           {/* RIGHT COLUMN */}
           <Grid item md={3} xs={11}>
+            {/* Operation */}
+            <FormControl required fullWidth margin="normal">
+               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>Operation</FormLabel>
+               <HRInfoSelect type    = "operations"
+                                  isMulti = {false}
+                                  onChange={(s) => this.props.handleSelectChange('operation', s)}
+                                  value   = {this.props.doc.operation}/>
+            </FormControl>
+
             {/* Global Cluster */}
             <FormControl fullWidth margin="normal">
               <FormLabel>Global Cluster</FormLabel>

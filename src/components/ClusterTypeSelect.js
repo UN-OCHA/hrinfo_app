@@ -7,7 +7,7 @@ class ClusterTypeSelect extends React.Component {
     this.state = {
       options: [
         { value: 'cluster', label: 'Cluster'},
-        { value: 'sub_cluster', label: 'Area of Responsability (Sub-Cluster)' },
+        { value: 'aor', label: 'Area of Responsability (Sub-Cluster)' },
         { value: 'sector', label: 'Sector' },
         { value: 'working_group', label: 'Working Group' }
       ],
