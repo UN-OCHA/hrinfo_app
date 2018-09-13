@@ -4,7 +4,6 @@
     "bundles": "Cluster(s) / Secteur(s)",
     "title": "Titre",
     "description": "Description ou Résumé du contenu",
-    "files": "Fichier(s)",
     "language": "Langue",
     "spaces": "Operation(s) / Espace(s) web",
     "publication_date": "Date de publication initiale",
@@ -13,7 +12,6 @@
     "organizations": "Organisation(s)",
     "locations": "Lieu(x)",
     "themes": "Thème(s)",
-    "related_content": "Contenu lié",
     "publish": "Publier",
     "save_as_draft": "Enregistrer comme brouillon",
     "delete": "Supprimer",
@@ -40,7 +38,8 @@
             "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
             "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisisser seulment les themes auquels le document fait une reference substantielle.",
             "related_content": "Ajouter des liens vers contenu liés à le document que vous êtes en train de publier (exemple : versions linguistiques du même document, ou lien à l’événement relatif aux minutes de réunion) en indiquant le titre du contenu et son url."
-        }
+        },
+        "create": "Créer un document"
     },
     "infographic": {
         "helpers": {
@@ -57,6 +56,24 @@
             "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
             "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisisser seulment les themes auquels la carte/infographie fait une reference substantielle.",
             "related_content": "Ajouter des liens vers contenu liés à la carte/infographie que vous êtes en train de publier (exemple : versions linguistiques de la même infographie) en indiquant le titre du contenu et son url."
-        }
-    }
+        },
+        "create": "Créer une carte/infographique"
+    },
+    "files": {
+        "new_file": "Nouveau fichier",
+        "from_storage": "Depuis votre ordinateur",
+        "from_dropbox": "Depuis Dropbox",
+        "language": "Langue du Fichier",
+        "files": "Fichier(s)"
+    },
+    "related_content": {
+        "title": "Titre",
+        "url": "URL",
+        "helpers": {
+            "title": "Entrez le titre du contenu lié",
+            "url": "Entrez l'URL du contenu lié"
+        },
+        "related_content": "Contenu lié"
+    },
+    "add_another": "Ajouter un(e) autre"
 }

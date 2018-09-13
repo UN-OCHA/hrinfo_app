@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from 'react-i18next';
 
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
@@ -23,24 +24,25 @@ class RelatedContent extends React.Component {
     }
 
     getRow (number) {
+      const { t } = this.props;
       return (
 		  <Card key={number} className="card-container">
 			  <CardContent>
 				  <FormControl>
 					  <TextField type="text"
 						  name={'related_content_titles_' + number}
-						  label="Title"
+						  label={t('related_content.title')}
 						  value={this.state.value[number]['title']}
 						  onChange={(v) => this.handleChange(number, 'title', v)}
-						  helperText="Type in the title of the related content."/>
+						  helperText={t('related_content.helpers.title')}/>
 				  </FormControl>
 				  <FormControl>
 					  <TextField type="text"
 						  name={'related_content_urls_' + number}
-						  label="URL"
+						  label={t('related_content.url')}
 						  value={this.state.value[number]['url']}
 						  onChange={(v) => this.handleChange(number, 'url', v)}
-						  helperText="Type in the URL of the related content."/>
+						  helperText={t('related_content.helpers.url')}/>
 				  </FormControl>
 			  </CardContent>
 		  </Card>
@@ -89,6 +91,7 @@ class RelatedContent extends React.Component {
     }
 
     render () {
+      const { t } = this.props;
       let rows = [];
       for (let i = 0; i < this.state.inputNumber; i++) {
         rows.push(this.getRow(i));
@@ -97,11 +100,11 @@ class RelatedContent extends React.Component {
         <div>
           	{rows}
 		  	<Button variant="outlined" onClick={this.onAddBtnClick}>
-				<i className="icon-news" /> &nbsp; Add another
+				<i className="icon-news" /> &nbsp; {t('add_another')}
 			</Button>
         </div>
         );
     }
 }
 
-export default RelatedContent;
+export default translate('forms')(RelatedContent);
