@@ -89,6 +89,7 @@ class HidContacts extends React.Component {
         value={this.state.contacts}
         className={this.props.className}
         onChange={this.handleChange}
+        getOptionLabel={(option) => {return option.name}}
         />
     );
   }

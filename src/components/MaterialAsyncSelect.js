@@ -75,8 +75,8 @@ function SelectWrapped(props) {
     styles={customStyles}
     isClearable={true}
     isMulti={props.isMulti}
-    getOptionValue={(option) => option.id}
-    getOptionLabel={(option) => (option.label ? option.label : option.name)}
+    getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
+    getOptionLabel={(option) => { if (props.getOptionLabel) {return props.getOptionLabel(option)} else {return option.label}}}
     value={props.value}
     {...other}
     />
