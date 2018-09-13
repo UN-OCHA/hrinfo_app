@@ -82,7 +82,7 @@ class FTSWidget extends React.Component {
       params.groupby = this.props.groupBy.id
     }
     if (this.props.cluster) {
-      params.groupby = 'globalCluster';
+      params.groupby = 'cluster';
     }
     await this
       .ftsApi
@@ -158,23 +158,33 @@ class FTSSettings extends React.Component {
   };
 
   componentDidMount () {
-    let clusters = [];
     let appeals = [];
     this
       .ftsApi
       .getAppeals(2018)
       .then (data => {
         appeals = data.data;
-        return this.ftsApi.getGlobalClusters();
-      })
-      .then(data => {
-        clusters = data.data;
         this.setState({
-          clusters: clusters,
           appeals: appeals
         });
       });
   }
+
+  setAppeal = (s) => {
+    const params = {
+      planId: s.id,
+      groupBy: 'cluster'
+    };
+    this
+      .ftsApi
+      .getFlow(params)
+      .then(data => {
+        this.setState({
+          clusters: data.data.requirements.objects
+        });
+      });
+    this.props.addWidgetSetting('appeal', s);
+  };
 
   render () {
 
@@ -202,7 +212,7 @@ class FTSSettings extends React.Component {
                 value    = {this.props.appeal}
                 options  = {this.state.appeals}
                 getOptionLabel = {(option) => { return option.name }}
-                onChange = {(s) => {this.props.addWidgetSetting('appeal', s)}}/>
+                onChange = {this.setAppeal}/>
             </FormControl>
             <FormControl required fullWidth margin = "normal">
               <FormLabel>Type</FormLabel>
