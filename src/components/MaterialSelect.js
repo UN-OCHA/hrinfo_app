@@ -44,7 +44,7 @@ const DropdownIndicator = (props) => {
 }
 
 const ClearIndicator = (props) => {
-  	return components.DropdownIndicator && (
+  	return components.ClearIndicator && (
     	<components.DropdownIndicator {...props}>
 			<Clear color="primary" fontSize="inherit" style={{cursor: 'pointer'}}/>
     	</components.DropdownIndicator>
