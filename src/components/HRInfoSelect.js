@@ -124,7 +124,7 @@ class HRInfoSelect extends React.Component {
           id={this.props.type}
           name={this.props.type}
           onChange={this.props.onChange}
-          options={this.state.items}
+          options={this.props.options || this.state.items}
           value={this.props.value} />
     );
   }

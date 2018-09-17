@@ -21,6 +21,16 @@
     "add_more": "Add More Information",
     "hide_information": "Hide Optional Information",
     "add_another": "Add Another",
+    "status": "Status",
+    "leading_organizations": "Leading/Coordinating Organization(s)",
+    "participating_organizations": "Participating Organization(s)",
+    "other_location": "Other location",
+    "population_types": "Population Type(s)",
+    "subject": "Subject/Objective",
+    "methodology": "Methodology",
+    "key_findings": "Key findings",
+    "collection_method": "Collection Method(s)",
+    "measurement_units": "Unit(s) of Measurement",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -40,6 +50,28 @@
             "locations": "Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).",
             "themes": "Click on the field and select all relevant themes. Choose only themes the document substantively refers to.",
             "related_content": "Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+        }
+    },
+    "assessment": {
+        "create": "Create assessment",
+        "helpers": {
+            "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+            "bundles": "Indicate the cluster(s)/sector(s) the document refers to.",
+            "description": "Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.",
+            "language": "Select the language of the assessment.",
+            "spaces": "Click on the field and select where to publish the assessment (operation, regional site or thematic site).",
+            "locations": "Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).",
+            "themes": "Click on the field and select all relevant themes. Choose only themes the document substantively refers to.",
+            "status": "Indicate the phase of the assessment. Please remember to update this field as phases move on.",
+            "organizations": "Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.",
+            "participating_organizations": "Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.",
+            "other_location": "You can specify here a location not available in the Location(s) field list.",
+            "population_types": "Click on the field and select the segment(s) of the population targeted by the assessment. You can select multiple population types.",
+            "subject": "Insert a brief description of the topic of the assessment and what its goals are.",
+            "methodology": "Insert a brief description of the procedures and the techniques used to collect, store and analyse the data.",
+            "key_findings": "Insert a brief summary of the assessment’s results.",
+            "collection_method": "Click on the field and select the collection method(s) used to gather information during the assessment.",
+            "measurement_units": "Click on the field and select the unit(s) of measurement used for the assessment."
         }
     },
     "infographic": {
