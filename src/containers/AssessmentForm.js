@@ -4,14 +4,33 @@ import { Editor } from 'react-draft-wysiwyg';
 import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Select from 'react-select';
+import { translate, Trans } from 'react-i18next';
+
 import HRInfoAPI from '../api/HRInfoAPI';
-import HRInfoSelect from '../components/HRInfoSelect';
-import HRInfoLocations from '../components/HRInfoLocations';
-import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
-import RelatedContent from '../components/RelatedContent';
-import HidContacts from '../components/HidContacts';
-import Address from '../components/Address';
-import EventDate from '../components/EventDate';
+
+// Components
+import HRInfoSelect       from '../components/HRInfoSelect';
+import HRInfoLocations    from '../components/HRInfoLocations';
+import HRInfoAsyncSelect  from '../components/HRInfoAsyncSelect';
+import RelatedContent     from '../components/RelatedContent';
+import HidContacts        from '../components/HidContacts';
+import Address            from '../components/Address';
+import EventDate          from '../components/EventDate';
+
+// Material plugin
+import FormHelperText   from '@material-ui/core/FormHelperText';
+import FormControl      from '@material-ui/core/FormControl';
+import FormLabel        from '@material-ui/core/FormLabel';
+import TextField        from '@material-ui/core/TextField';
+import Button           from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Collapse         from '@material-ui/core/Collapse';
+import Card             from '@material-ui/core/Card';
+import Grid             from '@material-ui/core/Grid';
+import Snackbar         from '@material-ui/core/Snackbar';
+import Typography       from '@material-ui/core/Typography';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox         from '@material-ui/core/Checkbox';
 
 class AssessmentForm extends React.Component {
   constructor(props) {
@@ -290,8 +309,118 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
+    const { t, label } = this.props;
 
-    return '';
+    const disasters = this.state.doc.hasOperation ? (
+      <FormControl fullWidth margin="normal">
+        <FormLabel error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.disasters)}>Disaster(s) / Emergency</FormLabel>
+        <HRInfoSelect type="disasters"
+          spaces={this.props.doc.spaces}
+          isMulti={true}
+          onChange={(s) => this.props.handleSelectChange('disasters', s)}
+          value={this.props.doc.disasters} />
+        <FormHelperText id = "disasters-text">
+          Click on the field and select the disaster(s) or emergency the assessment refers to.
+          Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations.
+          See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
+        </FormHelperText>
+      </FormControl>
+    ) : '';
+
+    const bundles = this.state.doc.hasOperation ? (
+      <FormControl fullWidth margin="normal">
+        <FormLabel error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>Cluster(s)/Sector(s)</FormLabel>
+        <HRInfoSelect type="bundles"
+          spaces={this.props.doc.spaces}
+          isMulti={true}
+          onChange={(s) => this.props.handleSelectChange('bundles', s)}
+          value={this.props.doc.bundles} />
+        <FormHelperText id = "bundles-text">
+          Indicate the cluster(s)/sector(s) the assessment refers to.
+        </FormHelperText>
+      </FormControl>
+    ) : '';
+
+    const { editorState } = this.state;
+
+    return (
+      <Grid container direction="column" alignItems="center">
+        <Typography color="textSecondary" gutterBottom variant = "headline">Create Assessment</Typography>
+        <Grid item>
+          <Grid container justify="space-around">
+
+            {/* FIRST COLUMN */}
+            <Grid item md={6} xs={11}>
+              {/* Copied from Document Form, TODO change */}
+              {/*<FormControl required fullWidth margin = "normal">
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
+                <TextField
+                  type     = "text"
+                  name     = "label"
+                  id       = "label"
+                  value    = {this.props.doc.label}
+                  onChange = {this.props.handleInputChange}/>
+                <FormHelperText id = "label-text">
+                  <Trans i18nKey={label + '.helpers.title'}>Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
+                  <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                </FormHelperText>
+              </FormControl>
+            </Grid>*/}
+
+            {/* SECOND COLUMN */}
+            <Grid item md={3} xs={11}>
+              {/* TODO same */}
+              {/*<FormControl required fullWidth margin="normal">
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
+                <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.props.handleSelectChange('spaces', s)} value={this.props.doc.spaces}/>
+                <FormHelperText>
+                  {t(label + '.helpers.spaces')}
+                </FormHelperText>
+              </FormControl>*/}
+  					</Grid>
+  				</Grid>
+  			</Grid>
+
+        <Grid item className="submission">
+        {
+          this.props.status !== 'submitting' &&
+          <span>
+            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
+              &nbsp;
+            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
+              &nbsp;
+          </span>
+        }
+        {
+          (this.props.status === 'submitting' || this.props.status === 'deleting') &&
+          <CircularProgress />
+        }
+        {
+          (this.props.match.params.id && this.props.status !== 'deleting') &&
+          <span>
+            <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
+          </span>
+        }
+        </Grid>
+        <Snackbar anchorOrigin={{
+            vertical  : 'bottom',
+            horizontal: 'left'
+          }}
+          open             = {this.props.status === 'was-validated' && this.state.wasSubmitted}
+          autoHideDuration = {6000}
+          onClose          = {this.hideAlert}
+          ContentProps     = {{
+            'aria-describedby' : 'message-id'
+          }}
+          message={<Typography id ="message-id" color="error">{t('form_incomplete')}</Typography>}
+          action={[
+            <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
+            {t('close')}
+            </Button>
+          ]}
+        />
+      </Grid>
+    );
 
     /*const disasters = this.state.doc.hasOperation ? (
       <FormGroup>
@@ -516,4 +645,4 @@ class AssessmentForm extends React.Component {
   }
 }
 
-export default AssessmentForm;
+export default translate('forms')(AssessmentForm);
