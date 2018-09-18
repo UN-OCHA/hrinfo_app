@@ -20,7 +20,7 @@
     "exclude_from_reliefweb": "Ne pas partager avec ReliefWeb",
     "add_more": "Ajouter plus d'informations",
     "hide_information": "Cacher les informations facultatives",
-    "add_another": "Ajouter un autre",
+    "add_another": "Ajouter un(e) autre",
     "status": "Statut",
     "leading_organizations": "Agence chef de file",
     "participating_organizations": "Organisations participantes",
@@ -30,7 +30,12 @@
     "methodology": "Méthodologie",
     "key_findings": "Résultats Principaux",
     "collection_method": "Méthode de collecte",
-    "measurement_units": "Unité(s) de mesure",
+    "unit_measurement": "Unité(s) de mesure",
+    "sample_size": "Taille de l’échantillon ",
+    "geographic_level": "Niveau de représentation",
+    "contacts": "Contact(s)",
+    "agendas": "Agenda(s)",
+    "meeting_minutes": "Durée réunion",
     "helpers": {
         "files": "Télécharger le fichier à publier et spécifier sa langue. Il est préférable de publier un fichier par enregistrement, mais vous pouvez en ajouter si nécessaire. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>."
     },
@@ -55,23 +60,29 @@
     "assessment": {
         "create": "Créer un assessment",
         "helpers": {
-          "title": "Taper le titre original du document. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
-          "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) le document fait référence.",
-          "description": "Essayer de toujours adjouter ici le texte (en totalité ou en partie) du document (exemple : utiliser l’introduction ou le résumé). Si aucun texte est disponible, ajouter une description du(des) fichier(s) que vous allez publier.",
-          "language": "Sélectionner la langue du document.",
-          "spaces": "Cliquer sur le champ et sélectionner ou publier le document (l'operation, le site regional ou thematique etc).",
-          "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
-          "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisir seulement les themes auxquels le document fait une reference substantielle.",
-          "status": "Indiquer la phase de l'évaluation. Ne pas oublier de mettre à jour ce champ quand les phases avancent.",
-          "organizations": "Taper et sélectionner la ou les organisations menant les assessments. Pour indiquer plusieurs organisations, merci de les séparer par une virgule.",
-          "participating_organizations": "Taper et sélectionner la ou les organisations faisant part (mais ne menant pas) les assessments. Pour indiquer plusieurs organisations, merci de les séparer par une virgule.",
-          "other_location": "Spécifier ici un lieu qui n'est pas disponible dans la liste des lieux.",
-          "population_types": "Cliquer sur le champ et sélectionner le ou les segment(s) de population ciblés par l'assessment. Vous pouvez sélectionner plusieurs types de population.",
-          "subject": "Insérer une brève description du sujet de l'assessment and quels sont ses buts.",
-          "methodology": "Insérer une brève description des procédures et des techniques utilisées pour collecter, stocker et analyser les données.",
-          "key_findings": "Insérer un bref résumé des résultats de l'assessment.",
-          "collection_method": "Cliquer sur le champ et sélectionner une ou des méthode(s) de collecte utilisés pour collecter des informations durant l'assessment.",
-          "measurement_units": "Cliquer sur le champ et sélectionner la ou les unités de mesure utilisés pour l'assessment."
+            "title": "Taper le titre original du document. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1>ici</ 1>.",
+            "spaces": "Cliquer sur le champ et sélectionner ou publier le document (l'operation, le site regional ou thematique etc).",
+            "status": "Indiquer la phase de l'évaluation. Ne pas oublier de mettre à jour ce champ quand les phases avancent.",
+            "leading_organizations": "Taper et sélectionner la ou les organisations menant les assessments. Pour indiquer plusieurs organisations, merci de les séparer par une virgule.",
+            "participating_organizations": "Taper et sélectionner la ou les organisations faisant part (mais ne menant pas) les assessments. Pour indiquer plusieurs organisations, merci de les séparer par une virgule.",
+            "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
+            "other_location": "Spécifier ici un lieu qui n'est pas disponible dans la liste des lieux.",
+            "population_types": "Cliquer sur le champ et sélectionner le ou les segment(s) de population ciblés par l'assessment. Vous pouvez sélectionner plusieurs types de population.",
+            "subject": "Insérer une brève description du sujet de l'assessment and quels sont ses buts.",
+            "methodology": "Insérer une brève description des procédures et des techniques utilisées pour collecter, stocker et analyser les données.",
+            "key_findings": "Insérer un bref résumé des résultats de l'assessment.",
+            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) le document fait référence.",
+            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisir seulement les themes auxquels le document fait une reference substantielle.",
+            "disasters": "Cliquer sur le champ et sélectionner le ou les désastres(s) ou urgences auxquels l'assessment se réfère.",
+            "collection_method": "Cliquer sur le champ et sélectionner une ou des méthode(s) de collecte utilisés pour collecter des informations durant l'assessment.",
+            "unit_measurement": "Cliquer sur le champ et sélectionner la ou les unités de mesure utilisés pour l'assessment.",
+            "sample_size": "Indiquer le nombre de communautés/foyers/individus interrogés durant l'assessment.",
+            "geographic_level": "Sélectionner le niveau auquel l'assessment est (a été) réalisé.",
+            "contacts": "Indiquer la ou les personne(s) à contacter pour une information concernant l'événement. Pour être affichée dans la liste, la personne doit avoir un profil HumanitarianID.",
+            "agendas": "Ajouter l'agenda de l'événement comme un document en premier puis référencer ce document à partir d'ici.",
+            "meeting_minutes": "Ajouter les minutes d'entretien de l'événement comme un document en premier puis référencer ce document à partir d'ici.",
+            "related_content": "Ajouter des liens au contenu qui sont se rapportent à l'événement en création en indiquant le titre du contentu et son url. L'utilisation de la fonction de recherche sous entend une recherche par titre de contenu.",
+            "language": "Sélectionner la langue du document."
         }
     },
     "infographic": {
@@ -107,6 +118,5 @@
             "url": "Entrez l'URL du contenu lié"
         },
         "related_content": "Contenu lié"
-    },
-    "add_another": "Ajouter un(e) autre"
+    }
 }

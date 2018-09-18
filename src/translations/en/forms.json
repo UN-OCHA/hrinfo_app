@@ -30,7 +30,13 @@
     "methodology": "Methodology",
     "key_findings": "Key findings",
     "collection_method": "Collection Method(s)",
-    "measurement_units": "Unit(s) of Measurement",
+    "unit_measurement": "Unit(s) of Measurement",
+    "sample_size": "Sample size",
+    "geographic_level": "Level of Representation",
+    "contacts": "Contact(s)",
+    "agendas": "Agenda(s)",
+    "meeting_minutes": "Meeting minute(s)",
+    "date": "Date",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -56,22 +62,31 @@
         "create": "Create assessment",
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
-            "bundles": "Indicate the cluster(s)/sector(s) the document refers to.",
-            "description": "Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.",
-            "language": "Select the language of the assessment.",
             "spaces": "Click on the field and select where to publish the assessment (operation, regional site or thematic site).",
-            "locations": "Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).",
-            "themes": "Click on the field and select all relevant themes. Choose only themes the document substantively refers to.",
             "status": "Indicate the phase of the assessment. Please remember to update this field as phases move on.",
-            "organizations": "Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.",
+            "leading_organizations": "Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.",
             "participating_organizations": "Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.",
+            "locations": "Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town).",
             "other_location": "You can specify here a location not available in the Location(s) field list.",
             "population_types": "Click on the field and select the segment(s) of the population targeted by the assessment. You can select multiple population types.",
             "subject": "Insert a brief description of the topic of the assessment and what its goals are.",
             "methodology": "Insert a brief description of the procedures and the techniques used to collect, store and analyse the data.",
             "key_findings": "Insert a brief summary of the assessment’s results.",
+            "bundles": "Indicate the cluster(s)/sector(s) the assessment refers to.",
+            "themes": "Click on the field and select all relevant themes. Choose only themes the assessment substantively refers to.",
+            "disasters": "Click on the field and select the disaster(s) or emergency the assessment refers to.",
             "collection_method": "Click on the field and select the collection method(s) used to gather information during the assessment.",
-            "measurement_units": "Click on the field and select the unit(s) of measurement used for the assessment."
+            "unit_measurement": "Click on the field and select the unit(s) of measurement used for the assessment.",
+            "sample_size": "Indicate the number of communities/households/individuals surveyed during the assessment.",
+            "geographic_level": "Select at what geographical level the assessment is (has been) conducted.",
+            "contacts": "Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.",
+            "agendas": "Add the agenda of the event as a document first, and then reference this document from here.",
+            "meeting_minutes": "Add the meeting minutes of the event as a document first, and then reference this document from here.",
+            "related_content": "Add links to content that is related to the event you are creating by indicating the title of the content and its url. When using the Search function make sure to search by content title.",
+            "language": "Select the language of the assessment.",
+            "assessment_report": "Upload the assessment report file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions click <1>here</1>.",
+            "assessment_questionnaire": "Upload the assessment questionnaire file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions click <1>here</1>.",
+            "assessment_data": "Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions  <1>here</1>."
         }
     },
     "infographic": {
@@ -93,11 +108,23 @@
         }
     },
     "files": {
-      "files": "File(s)",
-      "new_file": "New file",
-      "from_storage": "From storage",
-      "from_dropbox": "From Dropbox",
-      "language": "File Language"
+        "files": "File(s)",
+        "assessment_report": "Assessment Report",
+        "assessment_questionnaire": "Assessment Questionnaire",
+        "assessment_data": "Assessment Data",
+        "new_file": "New file",
+        "from_storage": "From storage",
+        "from_dropbox": "From Dropbox",
+        "accessibility": "Accessibility",
+        "language": "File Language",
+        "accessibilities": {
+          "none": "- None -",
+          "available": "Publicly Available",
+          "request": "Available on Request",
+          "restricted": "Restricted Distribution",
+          "not_available": "Not Available",
+          "not_applicable": "Not Applicable"
+        }
     },
     "related_content": {
       "related_content": "Related content",
