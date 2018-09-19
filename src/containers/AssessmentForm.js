@@ -1,7 +1,7 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import {stateToHTML} from 'draft-js-export-html';
+// import { Editor } from 'react-draft-wysiwyg';
+// import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import Select from 'react-select';
 import { translate, Trans } from 'react-i18next';
@@ -12,11 +12,11 @@ import HRInfoAPI from '../api/HRInfoAPI';
 import HRInfoSelect       from '../components/HRInfoSelect';
 import HRInfoLocations    from '../components/HRInfoLocations';
 import HRInfoAsyncSelect  from '../components/HRInfoAsyncSelect';
-import HidContacts        from '../components/HidContacts';
+// import HidContacts        from '../components/HidContacts';
 import EventDate          from '../components/EventDate';
 import AssessmentStatus from "../components/AssessmentStatus";
 import HRInfoFilesAccessibility from "../components/HRInfoFilesAccessibility";
-import LanguageSelect     from '../components/LanguageSelect';
+// import LanguageSelect     from '../components/LanguageSelect';
 
 // Material plugin
 import FormHelperText   from '@material-ui/core/FormHelperText';
@@ -25,13 +25,13 @@ import FormLabel        from '@material-ui/core/FormLabel';
 import TextField        from '@material-ui/core/TextField';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Collapse         from '@material-ui/core/Collapse';
-import Card             from '@material-ui/core/Card';
+// import Collapse         from '@material-ui/core/Collapse';
+// import Card             from '@material-ui/core/Card';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox         from '@material-ui/core/Checkbox';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox         from '@material-ui/core/Checkbox';
 
 class AssessmentForm extends React.Component {
   constructor(props) {
@@ -51,7 +51,7 @@ class AssessmentForm extends React.Component {
         { value: 'Mixed', label: 'Mixed'},
         { value: 'Other', label: 'Other'}
       ],
-      measurement_units: [
+      unit_measurements: [
         { value: 'Community', label: 'Community'},
         { value: 'Settlements', label: 'Settlements'},
         { value: 'Households', label: 'Households'},
@@ -71,169 +71,7 @@ class AssessmentForm extends React.Component {
     };
 
     this.hrinfoAPI = new HRInfoAPI();
-
-    // this.handleInputChange = this.handleInputChange.bind(this);
-    // this.handleSelectChange = this.handleSelectChange.bind(this);
-    // this.onEditorStateChange = this.onEditorStateChange.bind(this);
-    // this.validateForm = this.validateForm.bind(this);
-    // this.isValid = this.isValid.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleDelete = this.handleDelete.bind(this);
-    this.submit    = this.submit.bind(this);
   }
-
-  submit() {
-    this.setState({ wasSubmitted: true });
-  }
-
-  // handleInputChange(event) {
-  //   const target = event.target;
-  //   const value = target.type === 'checkbox' ? target.checked : target.value;
-  //   const name = target.name;
-  //
-  //   let doc = this.state.doc;
-  //   doc[name] = value;
-  //   this.setState({
-  //     doc: doc
-  //   });
-  // }
-
-  // handleSelectChange (name, selected) {
-  //   let doc = this.state.doc;
-  //   if (name === 'date') {
-  //     doc[name][0] = selected;
-  //   }
-  //   else {
-  //     doc[name] = selected;
-  //   }
-  //   let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
-  //   if (name === 'spaces') {
-  //     doc.spaces.forEach(function (val) {
-  //       if (val.type === 'operations') {
-  //         hasOperation = true;
-  //       }
-  //     });
-  //   }
-  //   doc.hasOperation = hasOperation;
-  //   this.setState({
-  //     doc: doc
-  //   });
-  // }
-
-  // validateForm () {
-  //   const doc = this.state.doc;
-  //   if (this.isValid(doc.language) &&
-  //     this.isValid(doc.spaces) &&
-  //     this.isValid(doc.label) &&
-  //     this.isValid(doc.category)  &&
-  //     this.isValid(doc.date) &&
-  //     this.isValid(doc.organizations)) {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
-
-  // handleSubmit(event, isDraft = 0) {
-  //   event.preventDefault();
-  //   const isValid = this.validateForm();
-  //   /*if (!isValid) {
-  //     this.setState({
-  //       status: 'was-validated'
-  //     });
-  //     return;
-  //   }*/
-  //   this.setState({
-  //     status: 'submitting'
-  //   });
-  //   const token = this.props.token;
-  //   let doc = {};
-  //   let body = JSON.stringify(this.state.doc);
-  //   body = JSON.parse(body);
-  //   body.published = isDraft ? 0 : 1;
-  //   body.category = body.category.value;
-  //   body.operation = [];
-  //   body.space = [];
-  //   body.spaces.forEach(function (sp) {
-  //     if (sp.type === 'operations') {
-  //       body.operation.push(sp.id);
-  //     }
-  //     else {
-  //       body.space.push(sp.id);
-  //     }
-  //   });
-  //   delete body.spaces;
-  //   delete body.hasOperation;
-  //   const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
-  //   selectFields.forEach(function (field) {
-  //     if (body[field]) {
-  //       for (let i = 0; i < body[field].length; i++) {
-  //         body[field][i] = parseInt(body[field][i].id, 10);
-  //       }
-  //     }
-  //   });
-  //   if (body.locations) {
-  //     let locations = [];
-  //     body.locations.forEach(function (location, index) {
-  //       let last = 0;
-  //       for (let j = 0; j < location.length; j++) {
-  //         if (typeof location[j] === 'object') {
-  //           last = j;
-  //         }
-  //       }
-  //       locations.push(parseInt(location[last].id, 10));
-  //     });
-  //     body.locations = locations;
-  //   }
-  //   body.language = body.language.value;
-  //   if (body.address && body.address.country && typeof body.address.country === 'object') {
-  //     body.address.country = body.address.country.pcode;
-  //   }
-  //   if (body.date[0] && body.date[0].timezone_db) {
-  //     body.date[0].timezone_db = body.date[0].timezone_db.value;
-  //   }
-  //   if (body.date[0] && body.date[0].timezone) {
-  //     body.date[0].timezone = body.date[0].timezone.value;
-  //   }
-  //
-  //   this.hrinfoAPI
-  //     .save('assessments', body)
-  //     .then(doc => {
-  //       this.props.history.push('/assessments/' + doc.id);
-  //     })
-  //     .catch(err => {
-  //       this.props.setAlert('danger', 'There was an error uploading your document');
-  //     });
-  // }
-
-  // handleDelete () {
-  //   if (this.props.match.params.id) {
-  //     const that = this;
-  //     this.setState({
-  //       status: 'deleting'
-  //     });
-  //     this.hrinfoAPI
-  //       .remove('assessments', this.props.match.params.id)
-  //       .then(results => {
-  //         that.props.setAlert('success', 'Assessment deleted successfully');
-  //         that.props.history.push('/home');
-  //       }).catch(function(err) {
-  //         that.props.setAlert('danger', 'There was an error deleting your assessment');
-  //         that.props.history.push('/home');
-  //       });
-  //   }
-  // }
-
-  // onEditorStateChange (editorState) {
-  //   let html = stateToHTML(editorState.getCurrentContent());
-  //   let doc = this.state.doc;
-  //   doc.body = html;
-  //   this.setState({
-  //     editorState,
-  //     doc: doc
-  //   });
-  // }
 
   async componentDidMount() {
     if (this.props.match.params.id) {
@@ -279,7 +117,7 @@ class AssessmentForm extends React.Component {
 
   render() {
     const { t, label } = this.props;
-    const { editorState } = this.state;
+    // const { editorState } = this.state;
 
     return (
       <Grid container direction="column" alignItems="center">
@@ -323,10 +161,12 @@ class AssessmentForm extends React.Component {
               <FormControl fullWidth margin = "normal">
                 <FormLabel focused error    = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>{t('leading_organizations')}</FormLabel>
                 <HRInfoAsyncSelect type="organizations"
-                                   value     = {this.props.doc.organizations}
-                                   onChange  = {(s) => this.props.handleSelectChange('organizations', s)}
-                                   className = {this.props.isValid(this.props.doc.organizations) ? 'is-valid' : 'is-invalid'}
-                                   classNamePrefix = {this.props.isValid(this.props.doc.organizations) ? 'is-valid' : 'is-invalid'}/>
+                                   value           = {this.props.doc.organizations}
+                                   onChange        = {(s) => this.props.handleSelectChange('organizations', s)}
+                                   className       = {this.props.isValid(this.props.doc.organizations) ? 'is-valid' : 'is-invalid'}
+                                   classNamePrefix = {this.props.isValid(this.props.doc.organizations) ? 'is-valid' : 'is-invalid'}
+                                   isMulti         = {true}
+                />
                 <FormHelperText id = "organizations-text">
                   <Trans i18nKey={label + '.helpers.leading_organizations'}>Type in and select from the list the organization(s)
                     conducting the assessment. To indicate multiple organizations add a comma after each entry.</Trans>
@@ -336,11 +176,13 @@ class AssessmentForm extends React.Component {
               {/* Participation Organization(s) */}
               <FormControl fullWidth margin = "normal">
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.participating_organizations)}>{t('participating_organizations')}</FormLabel>
-                <HRInfoAsyncSelect type      = "organizations"
-                                   value     = {this.props.doc.participating_organizations}
-                                   onChange  = {(s) => this.props.handleSelectChange('participating_organizations', s)}
-                                   className = {this.props.isValid(this.props.doc.participating_organizations) ? 'is-valid' : 'is-invalid'}
-                                   classNamePrefix = {this.props.isValid(this.props.doc.participating_organizations) ? 'is-valid' : 'is-invalid'}/>
+                <HRInfoAsyncSelect type            = "organizations"
+                                   value           = {this.props.doc.participating_organizations}
+                                   onChange        = {(s) => this.props.handleSelectChange('participating_organizations', s)}
+                                   className       = {this.props.isValid(this.props.doc.participating_organizations) ? 'is-valid' : 'is-invalid'}
+                                   classNamePrefix = {this.props.isValid(this.props.doc.participating_organizations) ? 'is-valid' : 'is-invalid'}
+                                   isMulti         = {true}
+                />
                 <FormHelperText id = "participating_organizations-text">
                   <Trans i18nKey={label + '.helpers.participating_organizations'}>Type in and select from the list
                     the organization(s) taking part into (but not leading) the assessment.
@@ -393,6 +235,8 @@ class AssessmentForm extends React.Component {
                 <TextField id       = "subject"
                            type     = "textarea"
                            name     = "subject"
+                           multiline = {true}
+                           rowsMax   = "4"
                            value    = {this.props.doc.subject}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "subject-text">
@@ -407,6 +251,8 @@ class AssessmentForm extends React.Component {
                 <TextField id       = "methodology"
                            type     = "textarea"
                            name     = "methodology"
+                           multiline = {true}
+                           rowsMax   = "4"
                            value    = {this.props.doc.methodology}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "methodology-text">
@@ -421,6 +267,8 @@ class AssessmentForm extends React.Component {
                 <TextField id       = "key_findings"
                            type     = "textarea"
                            name     = "key_findings"
+                           multiline = {true}
+                           rowsMax   = "4"
                            value    = {this.props.doc.key_findings}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "key_findings-text">
@@ -433,8 +281,9 @@ class AssessmentForm extends React.Component {
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.collection_method)}>{t('collection_method')}</FormLabel>
                 <HRInfoSelect type     = "collection_method"
                               onChange = {(s) => this.props.handleSelectChange('collection_method', s)}
-                              options  = {this.state.collection_method}
-                              value    = {this.props.doc.collection_method}/>
+                              options  = {this.state.collection_methods}
+                              value    = {this.props.doc.collection_method}
+                              isMulti  = {true}/>
                 <FormHelperText id = "collection_method-text">
                   <Trans i18nKey={label + '.helpers.collection_method'}>Click on the field and select the collection
                     method(s) used to gather information during the assessment.</Trans>
@@ -582,7 +431,7 @@ class AssessmentForm extends React.Component {
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.geographic_level)}>{t('geographic_level')}</FormLabel>
                 <HRInfoSelect type     = "geographic_level"
                               onChange = {(s) => this.props.handleSelectChange('geographic_level', s)}
-                              options  = {this.props.geographic_levels}
+                              options  = {this.state.geographic_levels}
                               value    = {this.props.doc.geographic_level}/>
                 <FormHelperText id = "geographic_level-text">
                   <Trans i18nKey={label + '.helpers.geographic_level'}>Select at what geographical level the
@@ -595,8 +444,9 @@ class AssessmentForm extends React.Component {
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.unit_measurement)}>{t('unit_measurement')}</FormLabel>
                 <HRInfoSelect type     = "measurement_units"
                               onChange = {(s) => this.props.handleSelectChange('unit_measurement', s)}
-                              options  = {this.props.unit_measurement}
-                              value    = {this.props.doc.unit_measurement}/>
+                              options  = {this.state.unit_measurements}
+                              value    = {this.props.doc.unit_measurement}
+                              isMulti  = {true}/>
                 <FormHelperText id = "unit_measurement-text">
                   <Trans i18nKey={label + '.helpers.unit_measurement'}>Click on the field and select the unit(s) of
                     measurement used for the assessment.</Trans>
@@ -607,7 +457,8 @@ class AssessmentForm extends React.Component {
               <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.report)}>{t('files.assessment_report')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('report', s)}
-                             value={this.props.doc.report} />
+                                          onInputChange={this.props.handleInputChange}
+                                          value={this.props.doc.report} />
                 <FormHelperText id = "report-text">
                   <Trans i18nKey='helpers.assessment_report'>Upload the assessment report file, stored on your computer
                     or on your Dropbox account, and indicate its level of accessibility. If the file is
@@ -621,7 +472,7 @@ class AssessmentForm extends React.Component {
               <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.questionnaire)}>{t('files.assessment_questionnaire')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('questionnaire', s)}
-                             value={this.props.doc.questionnaire} />
+                                          value={this.props.doc.questionnaire} />
                 <FormHelperText id = "questionnaire-text">
                   <Trans i18nKey='helpers.assessment_questionnaire'>Upload the assessment questionnaire file, stored on
                     your computer or on your Dropbox account, and indicate its level of accessibility.
@@ -635,7 +486,7 @@ class AssessmentForm extends React.Component {
               <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.data)}>{t('files.assessment_data')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('data', s)}
-                             value={this.props.doc.data} />
+                                          value={this.props.doc.data} />
                 <FormHelperText id = "data-text">
                   <Trans i18nKey='helpers.assessment_data'>Upload the assessment data file, stored on your computer or
                     on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”,
@@ -651,7 +502,6 @@ class AssessmentForm extends React.Component {
         {
           this.props.status !== 'submitting' &&
           <span>
-            {/*<Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>*/}
             <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt);}}>{t('publish')}</Button>
               &nbsp;
             {/*<Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>*/}

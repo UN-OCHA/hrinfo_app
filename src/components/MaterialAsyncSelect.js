@@ -62,6 +62,8 @@ function SelectWrapped(props) {
   const { classes, ...other } = props;
   return (
 	<AsyncSelect
+    className=""
+    classNamePrefix=""
     components={{
       Option: Option,
       DropdownIndicator: DropdownIndicator,

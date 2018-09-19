@@ -25,6 +25,7 @@ class HRInfoLocations extends React.Component {
   }
 
   getRow (number) {
+    console.log(this.state.locations[number][0]);
     const locations1 = this.state.locations[number][0] ? (
       <HRInfoLocation level="1" parent={this.state.locations[number][0].id} row={number} onChange={this.handleChange} value={this.state.locations[number][1]}/>
     ) : '';

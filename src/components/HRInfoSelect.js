@@ -25,6 +25,7 @@ class HRInfoSelect extends React.Component {
         let items = this.state.items;
         if (type === 'document_types' || type === 'infographic_types') {
           elts.forEach(function (elt) {
+            elt.value = elt.id;
             if (elt.parent.length === 1) {
               elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
@@ -37,6 +38,7 @@ class HRInfoSelect extends React.Component {
         else if (type === 'bundles' || type === 'offices') {
           elts.forEach(function (elt) {
             elt.label = elt.label + " (" + operationLabel + ")";
+            elt.value = elt.id;
             pushed.push(elt);
           });
         }
@@ -54,6 +56,7 @@ class HRInfoSelect extends React.Component {
           }
           pushed = pushed.map(function (val) {
             val.type = type;
+            val.value = val.id;
             return val;
           });
         }
@@ -75,24 +78,32 @@ class HRInfoSelect extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.spaces) {
-      const that = this;
-      if (Array.isArray(this.props.spaces)) {
-        this.props.spaces.forEach(function (space) {
-          if (space.type === 'operations') {
-            that.getOptions(that.props.type, space.id, space.label);
-          }
-        });
+    if (this.props.options) {
+      this.setState({
+        items: this.props.options
+      });
+    }
+    else
+    {
+      if (this.props.spaces) {
+        const that = this;
+        if (Array.isArray(this.props.spaces)) {
+          this.props.spaces.forEach(function (space) {
+            if (space.type === 'operations') {
+              that.getOptions(that.props.type, space.id, space.label);
+            }
+          });
+        }
+        else {
+          this.getOptions(this.props.type, this.props.spaces.id, this.props.spaces.label);
+        }
       }
       else {
-        this.getOptions(this.props.type, this.props.spaces.id, this.props.spaces.label);
+        this.getOptions(this.props.type);
       }
-    }
-    else {
-      this.getOptions(this.props.type);
-    }
-    if (this.props.type === 'spaces') {
-      this.getOptions('operations');
+      if (this.props.type === 'spaces') {
+        this.getOptions('operations');
+      }
     }
   }
 
@@ -124,7 +135,7 @@ class HRInfoSelect extends React.Component {
           id={this.props.type}
           name={this.props.type}
           onChange={this.props.onChange}
-          options={this.props.options || this.state.items}
+          options={this.state.items}
           value={this.props.value} />
     );
   }

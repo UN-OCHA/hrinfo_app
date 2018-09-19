@@ -13,13 +13,13 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
+import TextField from "@material-ui/core/TextField/TextField";
 
 class HRInfoFilesAccessibility extends React.Component {
   constructor(props) {
     super(props);
     const { t } = this.props;
     this.accessibility = [
-      {value: t('files.accessibilities.none'), label: t('files.accessibilities.none') },
       {value: t('files.accessibilities.available'), label: t('files.accessibilities.available') },
       {value: t('files.accessibilities.request'), label: t('files.accessibilities.request') },
       {value: t('files.accessibilities.restricted'), label: t('files.accessibilities.restricted') },
@@ -32,16 +32,16 @@ class HRInfoFilesAccessibility extends React.Component {
       files: [''],
       accessibility: [''],
       status: '',
-      instructions: ''
+      instructions: '',
+      url: ''
     };
 
     this.hrinfoAPI = new HRInfoAPI();
 
     this.getRow = this.getRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.onAddBtnClick = this.onAddBtnClick.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.changeState = this.changeState.bind(this);
-    this.removeFileRow = this.removeFileRow.bind(this);
   }
 
   getRow (number) {
@@ -53,11 +53,6 @@ class HRInfoFilesAccessibility extends React.Component {
             <Avatar>
               <i className="icon-document" />
             </Avatar>
-          }
-          action={
-            <IconButton color="primary" onClick={(e) => this.removeFileRow(number)}>
-              <i className="icon-trash" />
-            </IconButton>
           }
           title={
             typeof this.state.files[number] === 'object' ?
@@ -71,8 +66,34 @@ class HRInfoFilesAccessibility extends React.Component {
                           onChange={ (s) => this.handleChange(number, 'accessibility', s)}
                           value={this.state.accessibility[number]} />
         </CardContent>
-        <CardActions>
-          {this.state.accessibility[number].value === t('files.accessibilities.available') ?
+        {this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.request') ?
+          <CardContent className="file-container-language">
+            <Typography>
+              {t('files.accessibilities.instructions')}
+            </Typography>
+            <TextField type      = "text"
+                       name      = "instructions"
+                       id        = "instructions"
+                       multiline = {true}
+                       rowsMax   = "4"
+                       fullWidth = {true}
+                       value     = {this.state.instructions}
+                       onChange  = {this.handleInputChange}/>
+          </CardContent> : ''
+        }
+        {this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.available') ?
+          <CardContent className="file-container-language">
+            <Typography>{t('url')}</Typography>
+              <TextField type      = "text"
+                         name      = "url"
+                         id        = "url"
+                         fullWidth = {true}
+                         value     = {this.state.url}
+                         onChange  = {this.handleInputChange}/>
+          </CardContent> : ''
+        }
+        <CardActions className="file-container-language">
+          {this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.available') ?
             <span className="file-container-actions">
               <label htmlFor={'files_' + number}>
                 <Button component="span" color="primary" variant="outlined" size="small">
@@ -88,162 +109,104 @@ class HRInfoFilesAccessibility extends React.Component {
               </DropboxChooser>
             </span> : ''
           }
-          {this.state.accessibility[number].value === t('files.accessibilities.request') ?
-            <span className="file-container-actions">
-              <label htmlFor={'instructions'}>
-                Instructions
-              </label>
-                <input id       = "instructions"
-                       type     = "textarea"
-                       name     = "instructions"
-                       onChange = {(s) => this.props.handleSelectChange('instructions', s)}
-                       value    = {this.state.instructions}/>
-            </span> : ''
-            }
-            {this.state.files[number] === 'uploading' ?
-              <CircularProgress/> : ''
-            }
-            </CardActions>
-            </Card>
-            );
+          {this.state.files[number] === 'uploading' ?
+            <CircularProgress/> : ''
           }
+        </CardActions>
+      </Card>
+    );
+  }
 
-          handleChange(number, type, v) {
-          if (this.state.status === '') {
-          this.setState({
-          status: 'ready'
-        });
-        }
-          if (type === 'file') {
-          let files = this.state.files;
-          const that = this;
-          files[number] = 'uploading';
-          this.setState({
-          files: files
-        });
+  handleChange(number, type, v) {
+    if (this.state.status === '') {
+      this.setState({
+        status: 'ready'
+      });
+    }
+    if (type === 'file') {
+      let files = this.state.files;
+      const that = this;
+      files[number] = 'uploading';
+      this.setState({
+        files: files
+      });
 
-          this.hrinfoAPI
-          .saveFile(v)
-          .then(doc => {
+      this.hrinfoAPI
+        .saveFile(v)
+        .then(doc => {
           files[number] = doc[0];
           that.changeState({
-          files: files
+            files: files
+          });
         });
-        });
-        }
-          else {
-          let accessibility = this.state.accessibility;
-          accessibility[number] = v;
-          this.changeState({
-          accessibility: accessibility
-        });
-        }
-        }
+    }
+    else {
+      let accessibility = this.state.accessibility;
+      accessibility[number] = v;
+      this.changeState({
+        accessibility: accessibility
+      });
+    }
+  }
 
-          changeState(newState) {
-          this.setState(newState);
-          if (this.props.onChange) {
-          this.props.onChange({
-          files: newState.files ? newState.files : this.state.files,
-          accessibility: newState.accessibility ? newState.accessibility : this.state.accessibility,
-          collections: newState.collections ? newState.collections : this.state.collections
-        });
-        }
-        }
 
-          removeFileRow (number) {
-          let collections = this.state.collections;
-          const itemId = this.state.files[number].item_id;
-          if (itemId) {
-          const that = this;
-          // The file is already part of a field_collection, send a DELETE request
-          this.hrinfoAPI
-          .remove('files_collection', itemId)
-          .then(results => {
-          const colIndex = this.state.collections.indexOf(itemId);
-          if (colIndex !== -1) {
-          collections = collections.filter(function (id) {
-          return id !== itemId;
-        });
-        }
-          that.setState((prevState, props) => {
-          prevState.files.splice(number, 1);
-          return {
-          files: prevState.files,
-          inputNumber: prevState.inputNumber - 1,
-          collections: collections
-        }
-        });
-        })
-        }
-          else {
-          this.setState((prevState, props) => {
-          prevState.files.splice(number, 1);
-          return {
-          files: prevState.files,
-          inputNumber: prevState.inputNumber - 1,
-          collections: collections
-        }
-        });
-        }
-        }
 
-          onAddBtnClick (event) {
-          let files = this.state.files;
-          for (let i = 0; i < this.state.inputNumber + 1; i++) {
-          if (!files[i]) {
-          files[i] = "";
+  handleInputChange(event) {
+    this.setState({
+      instructions: event.target.value
+    });
+  }
 
-        }
-        }
-          this.setState({
-          inputNumber: this.state.inputNumber + 1,
-          files: files
-        });
-        }
+  changeState(newState) {
+    this.setState(newState);
+    if (this.props.onChange) {
+      this.props.onChange({
+        files: newState.files ? newState.files : this.state.files,
+        accessibility: newState.accessibility ? newState.accessibility : this.state.accessibility,
+        collections: newState.collections ? newState.collections : this.state.collections
+      });
+    }
+  }
 
-          componentDidUpdate() {
-          if (this.props.value && this.state.status === '') {
-          const that = this;
-          let state = {
-          inputNumber: 0,
-          collections: [],
-          files: [],
-          languages: [],
-          status: 'updated'
-        };
-          this.props.value.forEach(function (fc) {
-          state.collections.push(fc.item_id);
-          fc.fid = fc.file.fid;
-          fc.uri = fc.file.url;
-          fc.label = fc.file.filename;
-          state.files.push(fc);
-          that.languages.forEach(function (l) {
+  componentDidUpdate() {
+    if (this.props.value && this.state.status === '') {
+      const that = this;
+      let state = {
+        inputNumber: 0,
+        collections: [],
+        files: [],
+        languages: [],
+        status: 'updated'
+      };
+      this.props.value.forEach(function (fc) {
+        state.collections.push(fc.item_id);
+        fc.fid = fc.file.fid;
+        fc.uri = fc.file.url;
+        fc.label = fc.file.filename;
+        state.files.push(fc);
+        that.languages.forEach(function (l) {
           if (l.value === fc.language) {
-          state.languages.push(l);
-        }
-        });
-          state.inputNumber++;
-        });
-          this.changeState(state);
-        }
-        }
-
-          render () {
-          const { t } = this.props;
-          let rows = [];
-          for (let i = 0; i < this.state.inputNumber; i++) {
-          rows.push(this.getRow(i));
-        }
-          return (
-          <div className={this.props.className}>
-          {rows}
-          <Button variant="outlined" onClick={this.onAddBtnClick}>
-          <i className="icon-document" /> &nbsp; {t('add_another')}
-          </Button>
-          </div>
-          );
-        }
+            state.languages.push(l);
           }
+        });
+        state.inputNumber++;
+      });
+      this.changeState(state);
+    }
+  }
 
-          export default translate('forms')(HRInfoFilesAccessibility);
+  render () {
+    const { t } = this.props;
+    let rows = [];
+    for (let i = 0; i < this.state.inputNumber; i++) {
+      rows.push(this.getRow(i));
+    }
+    return (
+      <div className={this.props.className}>
+        {rows}
+      </div>
+    );
+  }
+}
+
+export default translate('forms')(HRInfoFilesAccessibility);

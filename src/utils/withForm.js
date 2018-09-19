@@ -31,6 +31,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
     }
 
     handleInputChange(event) {
+      console.log("--------", this.state.doc, event);
 		let value = null;
 		let name = null;
   	if (event.target) {
@@ -51,7 +52,12 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
     handleSelectChange (name, selected) {
       let doc = this.state.doc;
-      doc[name] = selected;
+      if (name === 'date') {
+        doc[name][0] = selected;
+      }
+      else {
+        doc[name] = selected;
+      }
 
       if (hrinfoType !== 'operations') {
         let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
@@ -146,6 +152,13 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.spaces) &&
           this.isValid(doc.category) &&
           this.isValid(doc.date)) {
+          isValid = true;
+        }
+        if (hrinfoType === 'assessments' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.category) &&
+          this.isValid(doc.date) &&
+          this.isValid(doc.organizations)) {
           isValid = true;
         }
       }
@@ -243,6 +256,43 @@ const withForm = function withForm(Component, hrinfoType, label) {
             });
           }
         }
+        if (hrinfoType === 'assessments') {
+          body.category = body.category.value;
+          body.language = body.language.value;
+          if (body.address && body.address.country && typeof body.address.country === 'object') {
+            body.address.country = body.address.country.pcode;
+          }
+          if (!Array.isArray(body.date)) {
+            body.date = [body.date];
+          }
+          if (body.date[0] && body.date[0].value) {
+            body.date[0].value = moment(body.date[0].value).format('YYYY-MM-DD HH:mm:ss');
+          }
+          if (body.date[0] && body.date[0].value2) {
+            body.date[0].value2 = moment(body.date[0].value2).format('YYYY-MM-DD HH:mm:ss');
+          }
+          if (body.date[0] && body.date[0].timezone_db) {
+            body.date[0].timezone_db = body.date[0].timezone_db.value;
+          }
+          if (body.date[0] && body.date[0].timezone) {
+            body.date[0].timezone = body.date[0].timezone.value;
+          }
+          // if (body.contacts) {
+          //   body.contacts = body.contacts.map(function (c) {
+          //     return {cid: c.id};
+          //   });
+          // }
+          // if (body.agenda) {
+          //   body.agenda = body.agenda.map(function (a) {
+          //     return a.id;
+          //   });
+          // }
+          // if (body.meeting_minutes) {
+          //   body.meeting_minutes = body.meeting_minutes.map(function (a) {
+          //     return a.id;
+          //   });
+          // }
+        }
         body.operation = [];
         body.space     = [];
         body.spaces.forEach(function (sp) {
@@ -338,6 +388,10 @@ const withForm = function withForm(Component, hrinfoType, label) {
         state.doc = doc;
         this.setState(state);
       }
+    }
+
+    componentWillUnmount() {
+      this.setState({});
     }
 
     render () {

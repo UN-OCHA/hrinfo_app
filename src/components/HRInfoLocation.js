@@ -77,15 +77,20 @@ class HRInfoLocation extends React.Component {
   }
 
   render() {
-    return (
+    if (this.state.items.length > 0) {
+      return (
         <MaterialSelect
           id="locations"
           name="locations"
           onChange={this.handleChange}
           options={this.state.items}
           value={this.state.val}
-          className={this.props.className} />
-    );
+          className={this.props.className}/>
+      );
+    }
+    else {
+      return ('');
+    }
   }
 }
 
