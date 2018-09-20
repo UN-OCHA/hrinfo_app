@@ -68,6 +68,10 @@ class EventDate extends React.Component {
       newState.val = this.state.val;
       newState.val.value_to = newState.val.value_from;
     }
+    else if (target.name === 'endDate' && !value) {
+      newState.val = this.state.val;
+      newState.val.value_to = (new Date(0, 0, 0));
+    }
     this.setState(newState);
   }
 

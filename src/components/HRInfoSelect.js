@@ -24,27 +24,33 @@ class HRInfoSelect extends React.Component {
         let pushed = [];
         let items = this.state.items;
         if (type === 'document_types' || type === 'infographic_types') {
+          console.log("27");
           elts.forEach(function (elt) {
-            elt.value = elt.id;
+            elt.value = elt.label;
             if (elt.parent.length === 1) {
+              console.log("31");
               elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
             }
             else {
+              console.log("36");
               pushed.push(elt);
             }
           });
         }
         else if (type === 'bundles' || type === 'offices') {
+          console.log("40");
           elts.forEach(function (elt) {
             elt.label = elt.label + " (" + operationLabel + ")";
-            elt.value = elt.id;
+            elt.value = elt.label;
             pushed.push(elt);
           });
         }
         else {
           let user = JSON.parse(localStorage.getItem('hid-user'));
+          console.log("50", user.hrinfo);
           if ((type === 'spaces' || type === 'operations' || type === 'bundles') && user.hrinfo.roles.indexOf('administrator') === -1) {
+            console.log("53", elts, user.hrinfo.spaces);
             elts.forEach(function (elt) {
               if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
                 pushed.push(elt);
@@ -52,14 +58,16 @@ class HRInfoSelect extends React.Component {
             });
           }
           else {
+            console.log("61", elts);
             pushed = elts;
           }
           pushed = pushed.map(function (val) {
             val.type = type;
-            val.value = val.id;
+            val.value = val.label;
             return val;
           });
         }
+        console.log(type, pushed);
         this.setState({
           items: items.concat(pushed).sort(function (a, b) {
             if (a.label < b.label) {

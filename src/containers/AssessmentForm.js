@@ -158,7 +158,7 @@ class AssessmentForm extends React.Component {
               </FormControl>
 
               {/* Leading Organization */}
-              <FormControl fullWidth margin = "normal">
+              <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error    = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>{t('leading_organizations')}</FormLabel>
                 <HRInfoAsyncSelect type="organizations"
                                    value           = {this.props.doc.organizations}
@@ -175,7 +175,7 @@ class AssessmentForm extends React.Component {
 
               {/* Participation Organization(s) */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.participating_organizations)}>{t('participating_organizations')}</FormLabel>
+                <FormLabel>{t('participating_organizations')}</FormLabel>
                 <HRInfoAsyncSelect type            = "organizations"
                                    value           = {this.props.doc.participating_organizations}
                                    onChange        = {(s) => this.props.handleSelectChange('participating_organizations', s)}
@@ -191,7 +191,7 @@ class AssessmentForm extends React.Component {
               </FormControl>
 
               {/* Locations */}
-              <FormControl fullWidth margin = "normal">
+              <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.locations)}>{t('locations')}</FormLabel>
                 <HRInfoLocations isMulti  = {true}
                                  onChange = {(s) => this.props.handleSelectChange('locations', s)}
@@ -204,7 +204,7 @@ class AssessmentForm extends React.Component {
 
               {/* Other location */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.other_location)}>{t('other_location')}</FormLabel>
+                <FormLabel>{t('other_location')}</FormLabel>
                 <TextField id       = "other_location"
                            type     = "text"
                            name     = "other_location"
@@ -217,7 +217,7 @@ class AssessmentForm extends React.Component {
               </FormControl>
 
               {/* Population Type(s) */}
-              <FormControl fullWidth margin = "normal">
+              <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.population_types)}>{t('population_types')}</FormLabel>
                 <HRInfoSelect type     = "population_types"
                               isMulti  = {true}
@@ -231,7 +231,7 @@ class AssessmentForm extends React.Component {
 
               {/* Subject */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.subject)}>{t('subject')}</FormLabel>
+                <FormLabel>{t('subject')}</FormLabel>
                 <TextField id       = "subject"
                            type     = "textarea"
                            name     = "subject"
@@ -247,7 +247,7 @@ class AssessmentForm extends React.Component {
 
               {/* Methodology */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.methodology)}>{t('methodology')}</FormLabel>
+                <FormLabel>{t('methodology')}</FormLabel>
                 <TextField id       = "methodology"
                            type     = "textarea"
                            name     = "methodology"
@@ -263,7 +263,7 @@ class AssessmentForm extends React.Component {
 
               {/* Key findings */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.key_findings)}>{t('key_findings')}</FormLabel>
+                <FormLabel>{t('key_findings')}</FormLabel>
                 <TextField id       = "key_findings"
                            type     = "textarea"
                            name     = "key_findings"
@@ -278,7 +278,7 @@ class AssessmentForm extends React.Component {
 
               {/* Collection Method(s) */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.collection_method)}>{t('collection_method')}</FormLabel>
+                <FormLabel>{t('collection_method')}</FormLabel>
                 <HRInfoSelect type     = "collection_method"
                               onChange = {(s) => this.props.handleSelectChange('collection_method', s)}
                               options  = {this.state.collection_methods}
@@ -292,7 +292,7 @@ class AssessmentForm extends React.Component {
 
               {/* Sample size */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.sample_size)}>{t('sample_size')}</FormLabel>
+                <FormLabel>{t('sample_size')}</FormLabel>
                 <TextField id       = "sample_size"
                            type     = "text"
                            name     = "sample_size"
@@ -374,7 +374,7 @@ class AssessmentForm extends React.Component {
               {/*</div>*/}
               {/* Status */}
               <FormControl required fullWidth margin = "normal">
-                <FormLabel focused error    = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.status)}>{t('status')}</FormLabel>
+                <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.status)}>{t('status')}</FormLabel>
                 <AssessmentStatus value     = {this.props.doc.status}
                                   onChange  = {(s) => this.props.handleSelectChange('status', s)}
                                   className = {this.props.isValid(this.props.doc.status) ? 'is-valid' : 'is-invalid'}
@@ -385,8 +385,21 @@ class AssessmentForm extends React.Component {
                 </FormHelperText>
               </FormControl>
 
-              {/* Bundles */}
-              <FormControl fullWidth margin="normal">
+              {/* Operation(s) / Webspace(s) */}
+              <FormControl required fullWidth margin="normal">
+                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
+                <HRInfoSelect type    = "spaces"
+                              isMulti = {true}
+                              onChange={(s) => this.props.handleSelectChange('spaces', s)}
+                              value   = {this.props.doc.spaces}/>
+                <FormHelperText>
+                  <Trans i18nKey={label + '.helpers.spaces'}>Click on the field and select where to publish the assessment
+                    (operation, regional site or thematic site).</Trans>
+                </FormHelperText>
+              </FormControl>
+
+              {/* Bundles (Cluster(s)/Sector(s)) */}
+              <FormControl required fullWidth margin="normal">
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>{t('bundles')}</FormLabel>
                 <HRInfoSelect type="bundles"
                               spaces={this.props.doc.spaces}
@@ -400,7 +413,7 @@ class AssessmentForm extends React.Component {
 
               {/* Theme(s) */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.themes)}>{t('themes')}</FormLabel>
+                <FormLabel>{t('themes')}</FormLabel>
                 <HRInfoSelect type     = "themes"
                               isMulti  = {true}
                               onChange = {(s) => this.props.handleSelectChange('themes', s)}
@@ -413,7 +426,7 @@ class AssessmentForm extends React.Component {
 
               {/* Disasters */}
               <FormControl fullWidth margin="normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.disasters)}>{t('disasters')}</FormLabel>
+                <FormLabel>{t('disasters')}</FormLabel>
                 <HRInfoSelect type     = "disasters"
                               spaces   = {this.props.doc.spaces}
                               isMulti  = {true}
@@ -428,7 +441,7 @@ class AssessmentForm extends React.Component {
 
               {/* Level of Representation */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.geographic_level)}>{t('geographic_level')}</FormLabel>
+                <FormLabel>{t('geographic_level')}</FormLabel>
                 <HRInfoSelect type     = "geographic_level"
                               onChange = {(s) => this.props.handleSelectChange('geographic_level', s)}
                               options  = {this.state.geographic_levels}
@@ -441,7 +454,7 @@ class AssessmentForm extends React.Component {
 
               {/* Unit(s) of Measurement */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.unit_measurement)}>{t('unit_measurement')}</FormLabel>
+                <FormLabel>{t('unit_measurement')}</FormLabel>
                 <HRInfoSelect type     = "measurement_units"
                               onChange = {(s) => this.props.handleSelectChange('unit_measurement', s)}
                               options  = {this.state.unit_measurements}
@@ -469,8 +482,8 @@ class AssessmentForm extends React.Component {
               </FormControl>
 
               {/* Questionnaire */}
-              <FormControl required fullWidth margin = "normal">
-                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.questionnaire)}>{t('files.assessment_questionnaire')}</FormLabel>
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('files.assessment_questionnaire')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('questionnaire', s)}
                                           value={this.props.doc.questionnaire} />
                 <FormHelperText id = "questionnaire-text">
