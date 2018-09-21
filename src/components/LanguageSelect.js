@@ -40,7 +40,8 @@ class LanguageSelect extends React.Component {
           onChange={this.handleChange}
           options={this.state.options}
           value={this.getValue(this.props.value)}
-          className={this.props.className} />
+          className={this.props.className}
+          getOptionValue={() => {return this.props.value.value}} />
     );
   }
 }

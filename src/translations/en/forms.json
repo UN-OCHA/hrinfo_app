@@ -1,11 +1,11 @@
 {
     "coordination_hubs": "Coordination hub(s)",
-    "disasters": "Disaster(s) / Emergency",
+    "disasters": "Disaster(s)/Emergency",
     "bundles": "Cluster(s)/Sector(s)",
     "title": "Title",
     "description": "Description or Summary of Content",
     "language": "Language",
-    "spaces": "Operation(s) / Webspace(s)",
+    "spaces": "Operation(s)/Webspace(s)",
     "publication_date": "Original Publication Date",
     "document_type": "Document type",
     "map_type": "Map/Infographic type",

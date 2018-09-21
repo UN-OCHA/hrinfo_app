@@ -6,6 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from "@material-ui/core/CardActions/CardActions";
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 class RelatedContent extends React.Component {
     constructor(props) {
@@ -28,7 +30,7 @@ class RelatedContent extends React.Component {
       return (
 		  <Card key={number} className="card-container">
 			  <CardContent>
-				  <FormControl>
+				  <FormControl fullWidth>
 					  <TextField type="text"
 						  name={'related_content_titles_' + number}
 						  label={t('related_content.title')}
@@ -36,15 +38,22 @@ class RelatedContent extends React.Component {
 						  onChange={(v) => this.handleChange(number, 'title', v)}
 						  helperText={t('related_content.helpers.title')}/>
 				  </FormControl>
-				  <FormControl>
-					  <TextField type="text"
-						  name={'related_content_urls_' + number}
-						  label={t('related_content.url')}
-						  value={this.state.value[number]['url']}
-						  onChange={(v) => this.handleChange(number, 'url', v)}
-						  helperText={t('related_content.helpers.url')}/>
-				  </FormControl>
 			  </CardContent>
+        <CardContent>
+          <FormControl fullWidth>
+            <TextField type="text"
+                       name={'related_content_urls_' + number}
+                       label={t('related_content.url')}
+                       value={this.state.value[number]['url']}
+                       onChange={(v) => this.handleChange(number, 'url', v)}
+                       helperText={t('related_content.helpers.url')}/>
+          </FormControl>
+        </CardContent>
+        <CardActions>
+          <IconButton color="primary" onClick={(e) => this.removeRelatedContent(number)}>
+            <i className="icon-trash" />
+          </IconButton>
+        </CardActions>
 		  </Card>
 
       );
@@ -62,6 +71,16 @@ class RelatedContent extends React.Component {
       if (this.props.onChange) {
         this.props.onChange(val);
       }
+    }
+
+    removeRelatedContent (number) {
+      this.setState((prevState, props) => {
+        prevState.value.splice(number, 1);
+        return {
+          value: prevState.value,
+          inputNumber: prevState.inputNumber - 1
+        }
+      });
     }
 
     onAddBtnClick (event) {

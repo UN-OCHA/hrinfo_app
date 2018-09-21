@@ -5,7 +5,6 @@ import { translate } from 'react-i18next';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Card from '@material-ui/core/Card';
@@ -30,17 +29,16 @@ class HRInfoFilesAccessibility extends React.Component {
       inputNumber: 1,
       collections: [''],
       files: [''],
-      accessibility: [''],
+      accessibility: [{}],
       status: '',
-      instructions: '',
-      url: ''
+      instructions: [''],
+      url: ['']
     };
 
     this.hrinfoAPI = new HRInfoAPI();
 
     this.getRow = this.getRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.changeState = this.changeState.bind(this);
   }
 
@@ -77,8 +75,8 @@ class HRInfoFilesAccessibility extends React.Component {
                        multiline = {true}
                        rowsMax   = "4"
                        fullWidth = {true}
-                       value     = {this.state.instructions}
-                       onChange  = {this.handleInputChange}/>
+                       value     = {this.state.instructions[number]}
+                       onChange  = { (s) => this.handleChange(number, 'instructions', s)}/>
           </CardContent> : ''
         }
         {this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.available') ?
@@ -88,13 +86,18 @@ class HRInfoFilesAccessibility extends React.Component {
                          name      = "url"
                          id        = "url"
                          fullWidth = {true}
-                         value     = {this.state.url}
-                         onChange  = {this.handleInputChange}/>
+                         value     = {this.state.url[number]}
+                         onChange  = { (s) => this.handleChange(number, 'url', s)}/>
           </CardContent> : ''
         }
         <CardActions className="file-container-language">
           {this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.available') ?
             <span className="file-container-actions">
+              <input type="file"
+                     id={'files_' + number }
+                     name={'files_' + number }
+                     className="none"
+                     onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
               <label htmlFor={'files_' + number}>
                 <Button component="span" color="primary" variant="outlined" size="small">
                   {t('files.from_storage')}
@@ -140,6 +143,20 @@ class HRInfoFilesAccessibility extends React.Component {
           });
         });
     }
+    else if (type === 'instructions') {
+      let instructions = this.state.instructions;
+      instructions[number] = v.target.value;
+      this.setState({
+        instructions: instructions
+      });
+    }
+    else if (type === 'url') {
+      let url = this.state.url;
+      url[number] = v.target.value;
+      this.setState({
+        url: url
+      });
+    }
     else {
       let accessibility = this.state.accessibility;
       accessibility[number] = v;
@@ -149,21 +166,15 @@ class HRInfoFilesAccessibility extends React.Component {
     }
   }
 
-
-
-  handleInputChange(event) {
-    this.setState({
-      instructions: event.target.value
-    });
-  }
-
   changeState(newState) {
     this.setState(newState);
     if (this.props.onChange) {
       this.props.onChange({
         files: newState.files ? newState.files : this.state.files,
         accessibility: newState.accessibility ? newState.accessibility : this.state.accessibility,
-        collections: newState.collections ? newState.collections : this.state.collections
+        collections: newState.collections ? newState.collections : this.state.collections,
+        instructions: newState.instructions ? newState.instructions : this.state.instructions,
+        url: newState.url ? newState.url : this.state.url
       });
     }
   }
@@ -173,30 +184,25 @@ class HRInfoFilesAccessibility extends React.Component {
       const that = this;
       let state = {
         inputNumber: 0,
-        collections: [],
+        url: '',
         files: [],
-        languages: [],
+        instructions: '',
         status: 'updated'
       };
       this.props.value.forEach(function (fc) {
-        state.collections.push(fc.item_id);
         fc.fid = fc.file.fid;
         fc.uri = fc.file.url;
         fc.label = fc.file.filename;
         state.files.push(fc);
-        that.languages.forEach(function (l) {
-          if (l.value === fc.language) {
-            state.languages.push(l);
-          }
-        });
         state.inputNumber++;
       });
+      state.url = this.state.url;
+      state.instructions = this.state.instructions;
       this.changeState(state);
     }
   }
 
   render () {
-    const { t } = this.props;
     let rows = [];
     for (let i = 0; i < this.state.inputNumber; i++) {
       rows.push(this.getRow(i));

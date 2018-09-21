@@ -12,11 +12,12 @@ import HRInfoAPI from '../api/HRInfoAPI';
 import HRInfoSelect       from '../components/HRInfoSelect';
 import HRInfoLocations    from '../components/HRInfoLocations';
 import HRInfoAsyncSelect  from '../components/HRInfoAsyncSelect';
-// import HidContacts        from '../components/HidContacts';
+import HidContacts        from '../components/HidContacts';
 import EventDate          from '../components/EventDate';
 import AssessmentStatus from "../components/AssessmentStatus";
 import HRInfoFilesAccessibility from "../components/HRInfoFilesAccessibility";
-// import LanguageSelect     from '../components/LanguageSelect';
+import LanguageSelect     from '../components/LanguageSelect';
+import RelatedContent     from '../components/RelatedContent';
 
 // Material plugin
 import FormHelperText   from '@material-ui/core/FormHelperText';
@@ -208,7 +209,7 @@ class AssessmentForm extends React.Component {
                 <TextField id       = "other_location"
                            type     = "text"
                            name     = "other_location"
-                           value    = {this.props.doc.other_location}
+                           value    = {this.props.doc.other_location || ''}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "other_location-text">
                   <Trans i18nKey={label + '.helpers.other_location'}>You can specify here a location not available
@@ -296,61 +297,36 @@ class AssessmentForm extends React.Component {
                 <TextField id       = "sample_size"
                            type     = "text"
                            name     = "sample_size"
-                           onChange = {(s) => this.props.handleSelectChange('sample_size', s)}
-                           value    = {this.props.doc.sample_size}/>
+                           onChange = {this.props.handleInputChange}
+                           value    = {this.props.doc.sample_size || ''}/>
                 <FormHelperText id = "sample_size-text">
                   <Trans i18nKey={label + '.helpers.sample_size'}>Indicate the number of
                     communities/households/individuals surveyed during the assessment.</Trans>
                 </FormHelperText>
               </FormControl>
 
-              {/*/!* Contact(s) *!/*/}
-              {/*<FormControl fullWidth margin = "normal">*/}
-                {/*<FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.contacts)}>{t('contacts')}</FormLabel>*/}
-                {/*<HidContacts isMulti={true}*/}
-                             {/*token={this.props.token}*/}
-                             {/*onChange={(s) => this.props.handleSelectChange('contacts', s)}*/}
-                             {/*value={this.props.doc.contacts}/>*/}
-                {/*<FormHelperText id = "contacts-text">*/}
-                  {/*<Trans i18nKey={label + '.helpers.contacts'}>Select at what geographical level the*/}
-                    {/*assessment is (has been) conducted.</Trans>*/}
-                {/*</FormHelperText>*/}
-              {/*</FormControl>*/}
+              {/* Contact(s) */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('contacts')}</FormLabel>
+                <HidContacts isMulti={true}
+                             id="contacts"
+                             onChange={(s) => this.props.handleSelectChange('contacts', s)}
+                             value={this.props.doc.contacts}/>
+                <FormHelperText id = "contacts-text">
+                  <Trans i18nKey={label + '.helpers.contacts'}></Trans>
+                </FormHelperText>
+              </FormControl>
 
-              {/*/!* Agenda(s) *!/*/}
-              {/*<FormControl fullWidth margin = "normal">*/}
-                {/*<FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.agendas)}>{t('agendas')}</FormLabel>*/}
-                {/*<HRInfoAsyncSelect type     = "documents"*/}
-                                   {/*onChange = {(s) => this.props.handleSelectChange('agendas', s)}*/}
-                                   {/*value    = {this.props.doc.agendas}/>*/}
-                {/*<FormHelperText id = "agendas-text">*/}
-                  {/*<Trans i18nKey={label + '.helpers.agendas'}>Add the agenda of the event as a document first, and*/}
-                    {/*then reference this document from here.</Trans>*/}
-                {/*</FormHelperText>*/}
-              {/*</FormControl>*/}
-
-              {/*/!* Meeting minute(s) *!/*/}
-              {/*<FormControl fullWidth margin = "normal">*/}
-                {/*<FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.meeting_minutes)}>{t('meeting_minutes')}</FormLabel>*/}
-                {/*<HRInfoAsyncSelect type     = "documents"*/}
-                                   {/*onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}*/}
-                                   {/*value    = {this.props.doc.meeting_minutes}/>*/}
-                {/*<FormHelperText id = "agendas-text">*/}
-                  {/*<Trans i18nKey={label + '.helpers.agendas'}>Add the meeting minutes of the event as a document first,*/}
-                    {/*and then reference this document from here.</Trans>*/}
-                {/*</FormHelperText>*/}
-              {/*</FormControl>*/}
-
-              {/*/!* Related Content *!/*/}
-              {/*<FormControl fullWidth margin = "normal">*/}
-                {/*<FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.related_content)}>{t('related_content.related_content')}</FormLabel>*/}
-                {/*<RelatedContent onChange = {(s) => this.props.handleSelectChange('related_content', s)}*/}
-                                {/*value    = {this.props.doc.related_content}/>*/}
-                {/*<FormHelperText id = "agendas-text">*/}
-                  {/*<Trans i18nKey={label + '.helpers.agendas'}>Add the meeting minutes of the event as a document first,*/}
-                    {/*and then reference this document from here.</Trans>*/}
-                {/*</FormHelperText>*/}
-              {/*</FormControl>*/}
+              {/* Related Content */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('related_content.related_content')}</FormLabel>
+                <RelatedContent onChange = {(s) => this.props.handleSelectChange('related_content', s)}
+                                value    = {this.props.doc.related_content}/>
+                <FormHelperText id = "agendas-text">
+                  <Trans i18nKey={label + '.helpers.agendas'}>Add the meeting minutes of the event as a document first,
+                    and then reference this document from here.</Trans>
+                </FormHelperText>
+              </FormControl>
             </Grid>
 
             {/* SECOND COLUMN */}
@@ -358,16 +334,16 @@ class AssessmentForm extends React.Component {
               {/*<div className="invalid-feedback">*/}
               {/*Please select a language*/}
               {/*</div>*/}
-              {/*/!* Languages *!/*/}
-              {/*<FormControl required fullWidth margin="normal">*/}
-                {/*<FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>*/}
-                {/*<LanguageSelect value     = {this.props.doc.language}*/}
-                                {/*onChange  = {(s) => this.props.handleSelectChange('language', s)}*/}
-                                {/*className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>*/}
-                {/*<FormHelperText id="language-text">*/}
-                  {/*<Trans i18nKey={label + '.helpers.language'}>Select the language of the document.</Trans>*/}
-                {/*</FormHelperText>*/}
-              {/*</FormControl>*/}
+              {/* Languages */}
+              <FormControl required fullWidth margin="normal">
+                <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>
+                <LanguageSelect value     = {this.props.doc.language}
+                                onChange  = {(s) => this.props.handleSelectChange('language', s)}
+                                className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
+                <FormHelperText id="language-text">
+                  <Trans i18nKey={label + '.helpers.language'}>Select the language of the document.</Trans>
+                </FormHelperText>
+              </FormControl>
 
               {/*<div className="invalid-feedback">*/}
               {/*You must select an assessment status*/}
@@ -385,10 +361,10 @@ class AssessmentForm extends React.Component {
                 </FormHelperText>
               </FormControl>
 
-              {/* Operation(s) / Webspace(s) */}
+              {/* Operation(s)/Webspace(s) */}
               <FormControl required fullWidth margin="normal">
                 <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
-                <HRInfoSelect type    = "spaces"
+                <HRInfoSelect type    = "operations"
                               isMulti = {true}
                               onChange={(s) => this.props.handleSelectChange('spaces', s)}
                               value   = {this.props.doc.spaces}/>
@@ -402,7 +378,6 @@ class AssessmentForm extends React.Component {
               <FormControl required fullWidth margin="normal">
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>{t('bundles')}</FormLabel>
                 <HRInfoSelect type="bundles"
-                              spaces={this.props.doc.spaces}
                               isMulti={true}
                               onChange={(s) => this.props.handleSelectChange('bundles', s)}
                               value={this.props.doc.bundles} />
@@ -507,6 +482,17 @@ class AssessmentForm extends React.Component {
                     <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
                 </FormHelperText>
               </FormControl>
+
+              {/*<FormControl>*/}
+                {/*<FormLabel></FormLabel>*/}
+                {/*<HRInfoSelect/>*/}
+                {/*<FormHelperText id = "data-text">*/}
+                  {/*<Trans i18nKey='helpers.assessment_data'>Upload the assessment data file, stored on your computer or*/}
+                    {/*on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”,*/}
+                    {/*write the instructions in the related space. To see File Standards and Naming Conventions  click*/}
+                    {/*<a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>*/}
+                {/*</FormHelperText>*/}
+              {/*</FormControl>*/}
   					</Grid>
   				</Grid>
   			</Grid>

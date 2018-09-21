@@ -157,7 +157,8 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.locations) &&
           this.isValid(doc.population_types) &&
           this.isValid(doc.report) &&
-          this.isValid(doc.data)) {
+          this.isValid(doc.data) &&
+          this.isValid(doc.language)) {
           isValid = true;
         }
       }
@@ -256,39 +257,72 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
         }
         if (hrinfoType === 'assessments') {
-          body.language = body.language.value;
+          let date = {};
           if (body.date && body.date.value_from) {
-            body.date.from = moment(body.date.value_from).format('YYYY-MM-DD HH:mm:ss');
+            date.from = moment(body.date.value_from).format('YYYY-MM-DD HH:mm:ss');
           }
           if (body.date && body.date.value_to) {
             if (body.date.value_to === (new Date(0, 0, 0))) {
-              body.date.to = undefined;
+              date.to = undefined;
             }
             else {
-              body.date.to = moment(body.date.value_to).format('YYYY-MM-DD HH:mm:ss');
+              date.to = moment(body.date.value_to).format('YYYY-MM-DD HH:mm:ss');
             }
           }
           if (body.date && body.date.timezone) {
-            body.date.timezone = body.date.timezone.value;
+            date.timezone = body.date.timezone.value;
           }
           if (body.date && body.date.rrule) {
             body.frequency = body.date.rrule.split(";")[0].split("=")[1];
           }
-          // if (body.contacts) {
-          //   body.contacts = body.contacts.map(function (c) {
-          //     return {cid: c.id};
-          //   });
-          // }
-          // if (body.agenda) {
-          //   body.agenda = body.agenda.map(function (a) {
-          //     return a.id;
-          //   });
-          // }
-          // if (body.meeting_minutes) {
-          //   body.meeting_minutes = body.meeting_minutes.map(function (a) {
-          //     return a.id;
-          //   });
-          // }
+          body.date = date;
+          if (body.unit_measurement) {
+            let unit_measurement = [];
+            body.unit_measurement.forEach((um) => {
+              unit_measurement.push(um.label);
+            });
+            body.unit_measurement = unit_measurement;
+          }
+          if (body.collection_method) {
+            let collection_method = [];
+            body.collection_method.forEach((cm) => {
+              collection_method.push(cm.label);
+            });
+            body.collection_method = collection_method;
+          }
+          if (body.geographic_level) {
+            body.geographic_level = body.geographic_level.label;
+          }
+          if (body.status) {
+            body.status = body.status.label;
+          }
+          if (body.report && body.report.accessibility[0]) {
+            body.report.accessibility = body.report.accessibility[0].label;
+            if (body.report.instructions[0]) {
+              body.report.instructions = body.report.instructions[0];
+            }
+            if (body.report.url[0]) {
+              body.report.url = body.report.url[0];
+            }
+          }
+          if (body.data && body.data.accessibility[0]) {
+            body.data.accessibility = body.data.accessibility[0].label;
+            if (body.data.instructions[0]) {
+              body.data.instructions = body.data.instructions[0];
+            }
+            if (body.data.url[0]) {
+              body.data.url = body.data.url[0];
+            }
+          }
+          if (body.questionnaire && body.questionnaire.accessibility[0]) {
+            body.questionnaire.accessibility = body.questionnaire.accessibility[0].label;
+            if (body.questionnaire.instructions[0]) {
+              body.questionnaire.instructions = body.questionnaire.instructions[0];
+            }
+            if (body.questionnaire.url[0]) {
+              body.questionnaire.url = body.questionnaire.url[0];
+            }
+          }
         }
         body.operation = [];
         body.space     = [];
@@ -302,7 +336,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
         });
         delete body.spaces;
         delete body.hasOperation;
-        const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
+        const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes', 'participating_organizations', 'population_types'];
         selectFields.forEach(function (field) {
           if (body[field]) {
             for (let i = 0; i < body[field].length; i++) {

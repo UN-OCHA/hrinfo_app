@@ -185,7 +185,7 @@ class EventDate extends React.Component {
       });
       let newState = {
         val       : val,
-        endDate   : (val.value_from.getTime() === val.value_to.getTime() ? false : true),
+        endDate   : this.state.endDate,
         allDay    : this.isAllDay(val.value_from, val.value_to),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'
