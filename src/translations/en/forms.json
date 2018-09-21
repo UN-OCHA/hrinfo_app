@@ -63,7 +63,7 @@
     "files": {
       "files": "File(s)",
       "new_file": "New file",
-      "from_storage": "From storage",
+      "from_storage": "From computer",
       "from_dropbox": "From Dropbox",
       "language": "File Language"
     },
