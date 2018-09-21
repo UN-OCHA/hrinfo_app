@@ -16,6 +16,7 @@ import SpacePage            from "../containers/SpacePage";
 import GroupsPage           from '../containers/GroupsPage';
 import ContactsPage         from '../containers/ContactsPage';
 import OfficesPage          from '../containers/OfficesPage';
+import OfficesForm          from '../containers/OfficesForm';
 import DocumentsPage        from '../containers/DocumentsPage';
 import InfographicsPage     from '../containers/InfographicsPage';
 import DisastersPage        from '../containers/DisastersPage';
@@ -72,6 +73,8 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/operations/:id/events"       exact component={EventsPage}                                         props={childProps} />
     <AuthenticatedRoute path="/operations/:id/contacts"     exact component={ContactsPage}                                       props={childProps} />
     <AuthenticatedRoute path="/operations/:id/offices"      exact component={OfficesPage}                                        props={childProps} />
+    <AuthenticatedRoute path="/operations/offices/new"      exact component={withForm(OfficesForm, 'offices', 'Offices')}        props={childProps} />
+    <AuthenticatedRoute path="/operations/offices/:id/edit" exact component={withForm(OfficesForm, 'offices', 'Offices')}        props={childProps} />
     <AuthenticatedRoute path="/operations/:id/disasters"    exact component={DisastersPage}                                      props={childProps} />
     <AuthenticatedRoute path="/operations/:id/datasets"     exact component={DatasetsPage}                                       props={childProps} />
     <AuthenticatedRoute path="/operations/:id/assessments"  exact component={AssessmentsPage}                                    props={childProps} />
