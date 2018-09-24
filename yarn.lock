@@ -6169,9 +6169,9 @@ react-cookie@^2.1.4:
     prop-types "^15.0.0"
     universal-cookie "^2.1.2"
 
-react-dazzle@^1.4.0:
+"react-dazzle@git://github.com/UN-OCHA/dazzle.git#hrinfo":
   version "1.4.0"
-  resolved "https://registry.yarnpkg.com/react-dazzle/-/react-dazzle-1.4.0.tgz#84f15140f3b8b98a5e9ea83a121a41d89e7ada51"
+  resolved "git://github.com/UN-OCHA/dazzle.git#e5b47d29a51677007c2c4f450755884e2ed090b6"
   dependencies:
     immutability-helper "^2.3.1"
     jquery "^3.3.1"
