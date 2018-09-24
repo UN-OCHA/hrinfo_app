@@ -3,7 +3,6 @@ import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 // import { Editor } from 'react-draft-wysiwyg';
 // import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-// import Select from 'react-select';
 import { translate, Trans } from 'react-i18next';
 
 import HRInfoAPI from '../api/HRInfoAPI';
@@ -26,13 +25,10 @@ import FormLabel        from '@material-ui/core/FormLabel';
 import TextField        from '@material-ui/core/TextField';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-// import Collapse         from '@material-ui/core/Collapse';
-// import Card             from '@material-ui/core/Card';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox         from '@material-ui/core/Checkbox';
+import Collapse from "@material-ui/core/Collapse/Collapse";
 
 class AssessmentForm extends React.Component {
   constructor(props) {
@@ -40,7 +36,7 @@ class AssessmentForm extends React.Component {
 
     this.state = {
       editorState: EditorState.createEmpty(),
-      collection_methods: [
+      collection_methods : [
         { value: 'Structured Interview', label: 'Structured Interview'},
         { value: 'Unstructured Interview', label: 'Unstructured Interview'},
         { value: 'Key Informant Interview', label: 'Key Informant Interview'},
@@ -52,13 +48,13 @@ class AssessmentForm extends React.Component {
         { value: 'Mixed', label: 'Mixed'},
         { value: 'Other', label: 'Other'}
       ],
-      unit_measurements: [
+      unit_measurements  : [
         { value: 'Community', label: 'Community'},
         { value: 'Settlements', label: 'Settlements'},
         { value: 'Households', label: 'Households'},
         { value: 'Individuals', label: 'Individuals'},
       ],
-      geographic_levels: [
+      geographic_levels  : [
         { value: 'District', label: 'District'},
         { value: 'National', label: 'National'},
         { value: 'Non-representative', label: 'Non-representative'},
@@ -68,10 +64,14 @@ class AssessmentForm extends React.Component {
         { value: 'Sub-district', label: 'Sub-district'},
         { value: 'Village', label: 'Village'}
       ],
-      status: ''
+      status             : '',
+      collapseMain       : false,
+      collapseSecondary  : false,
     };
 
-    this.hrinfoAPI = new HRInfoAPI();
+    this.hrinfoAPI      = new HRInfoAPI();
+
+    this.toggleCollapse = this.toggleCollapse.bind(this);
   }
 
   async componentDidMount() {
@@ -96,11 +96,6 @@ class AssessmentForm extends React.Component {
           doc.language = lang;
         }
       });
-      this.state.event_categories.forEach(function (category) {
-        if (category.value === parseInt(doc.category, 10)) {
-          doc.category = category;
-        }
-      });
       let state = {
         doc: doc
       };
@@ -116,6 +111,15 @@ class AssessmentForm extends React.Component {
     }
   }
 
+  toggleCollapse(collapse) {
+    if (collapse === "secondary") {
+      this.setState({collapseSecondary: !this.state.collapseSecondary});
+    }
+    else if (collapse === "main") {
+      this.setState({collapseMain: !this.state.collapseMain});
+    }
+  }
+
   render() {
     const { t, label } = this.props;
     // const { editorState } = this.state;
@@ -128,10 +132,6 @@ class AssessmentForm extends React.Component {
 
             {/* LEFT COLUMN */}
             <Grid item md={6} xs={11}>
-
-                {/*<div className="invalid-feedback">*/}
-                  {/*Please enter the assessment title*/}
-                {/*</div>*/}
               {/* Title */}
               <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
@@ -141,10 +141,13 @@ class AssessmentForm extends React.Component {
                            value    = {this.props.doc.label || ''}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "label-text">
-                  <Trans i18nKey={label + '.helpers.title'}>Type the original title of the document.
+                  <Trans i18nKey={label + '.helpers.title'}>Type the original title of the assessment.
                     Try not to use abbreviations. To see Standards and Naming Conventions click
                   <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
                 </FormHelperText>
+                {/*<div className="invalid-feedback">*/}
+                  {/*Please enter the assessment title*/}
+                {/*</div>*/}
               </FormControl>
 
               {/* Dates */}
@@ -154,7 +157,7 @@ class AssessmentForm extends React.Component {
                            onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                            required />
                 <FormHelperText>
-                  <Trans i18nKey={label + '.helpers.date'}>Indicate the date of the assessment.</Trans>
+                  <Trans i18nKey={label + '.helpers.date'}>Indicate the start/end dates of the assessment.</Trans>
                 </FormHelperText>
               </FormControl>
 
@@ -170,7 +173,7 @@ class AssessmentForm extends React.Component {
                 />
                 <FormHelperText id = "organizations-text">
                   <Trans i18nKey={label + '.helpers.leading_organizations'}>Type in and select from the list the organization(s)
-                    conducting the assessment. To indicate multiple organizations add a comma after each entry.</Trans>
+                    conducting the assessment.</Trans>
                 </FormHelperText>
               </FormControl>
 
@@ -230,103 +233,93 @@ class AssessmentForm extends React.Component {
                 </FormHelperText>
               </FormControl>
 
-              {/* Subject */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('subject')}</FormLabel>
-                <TextField id       = "subject"
-                           type     = "textarea"
-                           name     = "subject"
-                           multiline = {true}
-                           rowsMax   = "4"
-                           value    = {this.props.doc.subject}
-                           onChange = {this.props.handleInputChange}/>
-                <FormHelperText id = "subject-text">
-                  <Trans i18nKey={label + '.helpers.subject'}>Insert a brief description of the topic of the
-                    assessment and what its goals are.</Trans>
-                </FormHelperText>
-              </FormControl>
+              <div className="more-info-button">
+              { !this.state.collapseMain &&
+              <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("main")}>
+                <i className = "icon-plus" /> &nbsp; {t('add_more')}
+              </Button>
+              }
+              { this.state.collapseMain &&
+              <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("main")}>
+                <i className = "icon-cancel" /> &nbsp; {t('hide_information')}
+              </Button>
+              }
+            </div>
 
-              {/* Methodology */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('methodology')}</FormLabel>
-                <TextField id       = "methodology"
-                           type     = "textarea"
-                           name     = "methodology"
-                           multiline = {true}
-                           rowsMax   = "4"
-                           value    = {this.props.doc.methodology}
-                           onChange = {this.props.handleInputChange}/>
-                <FormHelperText id = "methodology-text">
-                  <Trans i18nKey={label + '.helpers.methodology'}>Insert a brief description of the topic of the
-                    assessment and what its goals are.</Trans>
-                </FormHelperText>
-              </FormControl>
+              <Collapse in={this.state.collapseMain}>
+                {/* Subject */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('subject')}</FormLabel>
+                  <TextField id       = "subject"
+                             type     = "textarea"
+                             name     = "subject"
+                             multiline = {true}
+                             rowsMax   = "4"
+                             value    = {this.props.doc.subject}
+                             onChange = {this.props.handleInputChange}/>
+                  <FormHelperText id = "subject-text">
+                    <Trans i18nKey={label + '.helpers.subject'}>Insert a brief description of the topic of the
+                      assessment and what its goals are.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-              {/* Key findings */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('key_findings')}</FormLabel>
-                <TextField id       = "key_findings"
-                           type     = "textarea"
-                           name     = "key_findings"
-                           multiline = {true}
-                           rowsMax   = "4"
-                           value    = {this.props.doc.key_findings}
-                           onChange = {this.props.handleInputChange}/>
-                <FormHelperText id = "key_findings-text">
-                  <Trans i18nKey={label + '.helpers.key_findings'}>Insert a brief summary of the assessment’s results.</Trans>
-                </FormHelperText>
-              </FormControl>
+                {/* Methodology */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('methodology')}</FormLabel>
+                  <TextField id       = "methodology"
+                             type     = "textarea"
+                             name     = "methodology"
+                             multiline = {true}
+                             rowsMax   = "4"
+                             value    = {this.props.doc.methodology}
+                             onChange = {this.props.handleInputChange}/>
+                  <FormHelperText id = "methodology-text">
+                    <Trans i18nKey={label + '.helpers.methodology'}>Insert a brief description of the procedures and the
+                      techniques used to collect, store and analyse the data.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-              {/* Collection Method(s) */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('collection_method')}</FormLabel>
-                <HRInfoSelect type     = "collection_method"
-                              onChange = {(s) => this.props.handleSelectChange('collection_method', s)}
-                              options  = {this.state.collection_methods}
-                              value    = {this.props.doc.collection_method}
-                              isMulti  = {true}/>
-                <FormHelperText id = "collection_method-text">
-                  <Trans i18nKey={label + '.helpers.collection_method'}>Click on the field and select the collection
-                    method(s) used to gather information during the assessment.</Trans>
-                </FormHelperText>
-              </FormControl>
+                {/* Key findings */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('key_findings')}</FormLabel>
+                  <TextField id       = "key_findings"
+                             type     = "textarea"
+                             name     = "key_findings"
+                             multiline = {true}
+                             rowsMax   = "4"
+                             value    = {this.props.doc.key_findings}
+                             onChange = {this.props.handleInputChange}/>
+                  <FormHelperText id = "key_findings-text">
+                    <Trans i18nKey={label + '.helpers.key_findings'}>Insert a brief summary of the assessment’s results.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-              {/* Sample size */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('sample_size')}</FormLabel>
-                <TextField id       = "sample_size"
-                           type     = "text"
-                           name     = "sample_size"
-                           onChange = {this.props.handleInputChange}
-                           value    = {this.props.doc.sample_size || ''}/>
-                <FormHelperText id = "sample_size-text">
-                  <Trans i18nKey={label + '.helpers.sample_size'}>Indicate the number of
-                    communities/households/individuals surveyed during the assessment.</Trans>
-                </FormHelperText>
-              </FormControl>
+                {/* Sample size */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('sample_size')}</FormLabel>
+                  <TextField id       = "sample_size"
+                             type     = "text"
+                             name     = "sample_size"
+                             onChange = {this.props.handleInputChange}
+                             value    = {this.props.doc.sample_size || ''}/>
+                  <FormHelperText id = "sample_size-text">
+                    <Trans i18nKey={label + '.helpers.sample_size'}>Indicate the number of
+                      communities/households/individuals surveyed during the assessment.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-              {/* Contact(s) */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('contacts')}</FormLabel>
-                <HidContacts isMulti={true}
-                             id="contacts"
-                             onChange={(s) => this.props.handleSelectChange('contacts', s)}
-                             value={this.props.doc.contacts}/>
-                <FormHelperText id = "contacts-text">
-                  <Trans i18nKey={label + '.helpers.contacts'}></Trans>
-                </FormHelperText>
-              </FormControl>
-
-              {/* Related Content */}
-              <FormControl fullWidth margin = "normal">
+                {/* Related Content */}
+                <FormControl fullWidth margin = "normal">
                 <FormLabel>{t('related_content.related_content')}</FormLabel>
                 <RelatedContent onChange = {(s) => this.props.handleSelectChange('related_content', s)}
                                 value    = {this.props.doc.related_content}/>
                 <FormHelperText id = "agendas-text">
-                  <Trans i18nKey={label + '.helpers.agendas'}>Add the meeting minutes of the event as a document first,
-                    and then reference this document from here.</Trans>
+                  <Trans i18nKey={label + '.helpers.related_content'}>Add links to content that is related to the event
+                    you are creating by indicating the title of the content and its url. When using the Search function
+                    make sure to search by content title.</Trans>
                 </FormHelperText>
               </FormControl>
+              </Collapse>
             </Grid>
 
             {/* SECOND COLUMN */}
@@ -345,9 +338,6 @@ class AssessmentForm extends React.Component {
                 </FormHelperText>
               </FormControl>
 
-              {/*<div className="invalid-feedback">*/}
-              {/*You must select an assessment status*/}
-              {/*</div>*/}
               {/* Status */}
               <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.status)}>{t('status')}</FormLabel>
@@ -359,6 +349,9 @@ class AssessmentForm extends React.Component {
                   <Trans i18nKey={label + '.helpers.status'}>Indicate the phase of the assessment.
                     Please remember to update this field as phases move on.</Trans>
                 </FormHelperText>
+                {/*<div className="invalid-feedback">*/}
+                  {/*You must select an assessment status*/}
+                {/*</div>*/}
               </FormControl>
 
               {/* Operation(s)/Webspace(s) */}
@@ -383,61 +376,6 @@ class AssessmentForm extends React.Component {
                               value={this.props.doc.bundles} />
                 <FormHelperText id = "bundles-text">
                   <Trans i18nKey={label + '.helpers.bundles'}>Indicate the cluster(s)/sector(s) the assessment refers to.</Trans>
-                </FormHelperText>
-              </FormControl>
-
-              {/* Theme(s) */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('themes')}</FormLabel>
-                <HRInfoSelect type     = "themes"
-                              isMulti  = {true}
-                              onChange = {(s) => this.props.handleSelectChange('themes', s)}
-                              value    = {this.props.doc.themes}/>
-                <FormHelperText id = "themes-text">
-                  <Trans i18nKey={label + '.helpers.themes'}>Click on the field and select all relevant themes.
-                    Choose only themes the document substantively refers to.</Trans>
-                </FormHelperText>
-              </FormControl>
-
-              {/* Disasters */}
-              <FormControl fullWidth margin="normal">
-                <FormLabel>{t('disasters')}</FormLabel>
-                <HRInfoSelect type     = "disasters"
-                              spaces   = {this.props.doc.spaces}
-                              isMulti  = {true}
-                              onChange = {(s) => this.props.handleSelectChange('disasters', s)}
-                              value    = {this.props.doc.disasters} />
-                <FormHelperText id = "disasters-text">
-                  <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or emergency the assessment refers to.
-                    Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations.
-                    See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.</Trans>
-                </FormHelperText>
-              </FormControl>
-
-              {/* Level of Representation */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('geographic_level')}</FormLabel>
-                <HRInfoSelect type     = "geographic_level"
-                              onChange = {(s) => this.props.handleSelectChange('geographic_level', s)}
-                              options  = {this.state.geographic_levels}
-                              value    = {this.props.doc.geographic_level}/>
-                <FormHelperText id = "geographic_level-text">
-                  <Trans i18nKey={label + '.helpers.geographic_level'}>Select at what geographical level the
-                    assessment is (has been) conducted.</Trans>
-                </FormHelperText>
-              </FormControl>
-
-              {/* Unit(s) of Measurement */}
-              <FormControl fullWidth margin = "normal">
-                <FormLabel>{t('unit_measurement')}</FormLabel>
-                <HRInfoSelect type     = "measurement_units"
-                              onChange = {(s) => this.props.handleSelectChange('unit_measurement', s)}
-                              options  = {this.state.unit_measurements}
-                              value    = {this.props.doc.unit_measurement}
-                              isMulti  = {true}/>
-                <FormHelperText id = "unit_measurement-text">
-                  <Trans i18nKey={label + '.helpers.unit_measurement'}>Click on the field and select the unit(s) of
-                    measurement used for the assessment.</Trans>
                 </FormHelperText>
               </FormControl>
 
@@ -483,16 +421,101 @@ class AssessmentForm extends React.Component {
                 </FormHelperText>
               </FormControl>
 
-              {/*<FormControl>*/}
-                {/*<FormLabel></FormLabel>*/}
-                {/*<HRInfoSelect/>*/}
-                {/*<FormHelperText id = "data-text">*/}
-                  {/*<Trans i18nKey='helpers.assessment_data'>Upload the assessment data file, stored on your computer or*/}
-                    {/*on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”,*/}
-                    {/*write the instructions in the related space. To see File Standards and Naming Conventions  click*/}
-                    {/*<a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>*/}
-                {/*</FormHelperText>*/}
-              {/*</FormControl>*/}
+              <div className="more-info-button">
+                { !this.state.collapseSecondary &&
+                <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("secondary")}>
+                  <i className = "icon-plus" /> &nbsp; {t('add_more')}
+                </Button>
+                }
+                { this.state.collapseSecondary &&
+                <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("secondary")}>
+                  <i className = "icon-cancel" /> &nbsp; {t('hide_information')}
+                </Button>
+                }
+              </div>
+
+              <Collapse in={this.state.collapseSecondary}>
+                {/* Theme(s) */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('themes')}</FormLabel>
+                  <HRInfoSelect type     = "themes"
+                                isMulti  = {true}
+                                onChange = {(s) => this.props.handleSelectChange('themes', s)}
+                                value    = {this.props.doc.themes}/>
+                  <FormHelperText id = "themes-text">
+                    <Trans i18nKey={label + '.helpers.themes'}>Click on the field and select all relevant themes.
+                      Choose only themes the document substantively refers to.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Disasters */}
+                <FormControl fullWidth margin="normal">
+                  <FormLabel>{t('disasters')}</FormLabel>
+                  <HRInfoSelect type     = "disasters"
+                                spaces   = {this.props.doc.spaces}
+                                isMulti  = {true}
+                                onChange = {(s) => this.props.handleSelectChange('disasters', s)}
+                                value    = {this.props.doc.disasters} />
+                  <FormHelperText id = "disasters-text">
+                    <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or
+                      emergency the assessment refers to.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Level of Representation */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('geographic_level')}</FormLabel>
+                  <HRInfoSelect type     = "geographic_level"
+                                onChange = {(s) => this.props.handleSelectChange('geographic_level', s)}
+                                options  = {this.state.geographic_levels}
+                                value    = {this.props.doc.geographic_level}/>
+                  <FormHelperText id = "geographic_level-text">
+                    <Trans i18nKey={label + '.helpers.geographic_level'}>Select at what geographical level the
+                      assessment is (has been) conducted.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Unit(s) of Measurement */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('unit_measurement')}</FormLabel>
+                  <HRInfoSelect type     = "measurement_units"
+                                onChange = {(s) => this.props.handleSelectChange('unit_measurement', s)}
+                                options  = {this.state.unit_measurements}
+                                value    = {this.props.doc.unit_measurement}
+                                isMulti  = {true}/>
+                  <FormHelperText id = "unit_measurement-text">
+                    <Trans i18nKey={label + '.helpers.unit_measurement'}>Click on the field and select the unit(s) of
+                      measurement used for the assessment.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Collection Method(s) */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('collection_method')}</FormLabel>
+                  <HRInfoSelect type     = "collection_method"
+                                onChange = {(s) => this.props.handleSelectChange('collection_method', s)}
+                                options  = {this.state.collection_methods}
+                                value    = {this.props.doc.collection_method}
+                                isMulti  = {true}/>
+                  <FormHelperText id = "collection_method-text">
+                    <Trans i18nKey={label + '.helpers.collection_method'}>Click on the field and select the collection
+                      method(s) used to gather information during the assessment.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Contact(s) */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('contacts')}</FormLabel>
+                  <HidContacts isMulti={true}
+                               id="contacts"
+                               onChange={(s) => this.props.handleSelectChange('contacts', s)}
+                               value={this.props.doc.contacts}/>
+                  <FormHelperText id = "contacts-text">
+                    <Trans i18nKey={label + '.helpers.contacts'}>Indicate the person(s) to contact for information
+                      regarding the event. To show up in the list, the person must have a HumanitarianID profile.</Trans>
+                  </FormHelperText>
+                </FormControl>
+              </Collapse>
   					</Grid>
   				</Grid>
   			</Grid>

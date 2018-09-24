@@ -63,6 +63,7 @@
         "create": "Create assessment",
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
+            "date": "Indicate the start/end dates of the assessment.",
             "spaces": "Click on the field and select where to publish the assessment (operation, regional site or thematic site).",
             "status": "Indicate the phase of the assessment. Please remember to update this field as phases move on.",
             "leading_organizations": "Type in and select from the list the organization(s) conducting the assessment.",

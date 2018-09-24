@@ -36,6 +36,8 @@
     "contacts": "Contact(s)",
     "agendas": "Agenda(s)",
     "meeting_minutes": "Durée réunion",
+    "date": "Date",
+    "url": "URL",
     "helpers": {
         "files": "Télécharger le fichier à publier et spécifier sa langue. Il est préférable de publier un fichier par enregistrement, mais vous pouvez en ajouter si nécessaire. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>."
     },
@@ -60,29 +62,33 @@
     "assessment": {
         "create": "Créer un assessment",
         "helpers": {
-            "title": "Taper le titre original du document. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1>ici</ 1>.",
-            "spaces": "Cliquer sur le champ et sélectionner ou publier le document (l'operation, le site regional ou thematique etc).",
+            "title": "Taper le titre original de l'évaluation. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1>ici</ 1>.",
+            "date": "Indiquer les dates de début et de fin de l'évaluation.",
+            "spaces": "Cliquer sur le champ et sélectionner ou publier l'évaluation (l'operation, le site regional ou thematique etc).",
             "status": "Indiquer la phase de l'évaluation. Ne pas oublier de mettre à jour ce champ quand les phases avancent.",
-            "leading_organizations": "Taper et sélectionner la ou les organisations menant les assessments.",
-            "participating_organizations": "Taper et sélectionner la ou les organisations faisant part (mais ne menant pas) les assessments.",
+            "leading_organizations": "Taper et sélectionner la ou les organisations menant les évaluations.",
+            "participating_organizations": "Taper et sélectionner la ou les organisations faisant part (mais ne menant pas) les évaluations.",
             "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
             "other_location": "Spécifier ici un lieu qui n'est pas disponible dans la liste des lieux.",
-            "population_types": "Cliquer sur le champ et sélectionner le ou les segment(s) de population ciblés par l'assessment. Vous pouvez sélectionner plusieurs types de population.",
-            "subject": "Insérer une brève description du sujet de l'assessment and quels sont ses buts.",
+            "population_types": "Cliquer sur le champ et sélectionner le ou les segment(s) de population ciblés par l'évaluation. Vous pouvez sélectionner plusieurs types de population.",
+            "subject": "Insérer une brève description du sujet de l'évaluation and quels sont ses buts.",
             "methodology": "Insérer une brève description des procédures et des techniques utilisées pour collecter, stocker et analyser les données.",
-            "key_findings": "Insérer un bref résumé des résultats de l'assessment.",
-            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) le document fait référence.",
-            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisir seulement les themes auxquels le document fait une reference substantielle.",
-            "disasters": "Cliquer sur le champ et sélectionner le ou les désastres(s) ou urgences auxquels l'assessment se réfère.",
-            "collection_method": "Cliquer sur le champ et sélectionner une ou des méthode(s) de collecte utilisés pour collecter des informations durant l'assessment.",
-            "unit_measurement": "Cliquer sur le champ et sélectionner la ou les unités de mesure utilisés pour l'assessment.",
-            "sample_size": "Indiquer le nombre de communautés/foyers/individus interrogés durant l'assessment.",
-            "geographic_level": "Sélectionner le niveau auquel l'assessment est (a été) réalisé.",
-            "contacts": "Indiquer la ou les personne(s) à contacter pour une information concernant l'événement. Pour être affichée dans la liste, la personne doit avoir un profil HumanitarianID.",
-            "agendas": "Ajouter l'agenda de l'événement comme un document en premier puis référencer ce document à partir d'ici.",
-            "meeting_minutes": "Ajouter les minutes d'entretien de l'événement comme un document en premier puis référencer ce document à partir d'ici.",
-            "related_content": "Ajouter des liens au contenu qui sont se rapportent à l'événement en création en indiquant le titre du contentu et son url. L'utilisation de la fonction de recherche sous entend une recherche par titre de contenu.",
-            "language": "Sélectionner la langue du document."
+            "key_findings": "Insérer un bref résumé des résultats de l'évaluation.",
+            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) l'évaluation' fait référence.",
+            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisir seulement les themes auxquels l'évaluation' fait une reference substantielle.",
+            "disasters": "Cliquer sur le champ et sélectionner le ou les désastres(s) ou urgences auxquels l'évaluation se réfère.",
+            "collection_method": "Cliquer sur le champ et sélectionner une ou des méthode(s) de collecte utilisés pour collecter des informations durant l'évaluation.",
+            "unit_measurement": "Cliquer sur le champ et sélectionner la ou les unités de mesure utilisés pour l'évaluation.",
+            "sample_size": "Indiquer le nombre de communautés/foyers/individus interrogés durant l'évaluation.",
+            "geographic_level": "Sélectionner le niveau auquel l'évaluation est (a été) réalisé.",
+            "contacts": "Indiquer la ou les personne(s) à contacter pour une information concernant l'évaluation. Pour être affichée dans la liste, la personne doit avoir un profil HumanitarianID.",
+            "agendas": "Ajouter l'agenda de l'évaluation comme un document en premier puis référencer ce document à partir d'ici.",
+            "meeting_minutes": "Ajouter les minutes d'entretien de l'évaluation comme un document en premier puis référencer ce document à partir d'ici.",
+            "related_content": "Ajouter des liens au contenu qui sont se rapportent à l'évaluation en création en indiquant le titre du contentu et son url. L'utilisation de la fonction de recherche sous entend une recherche par titre de contenu.",
+            "language": "Sélectionner la langue de l'évaluation.",
+            "assessment_report": "Téléversez le rapport de l'évaluation, stocké dans votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d'accessibilité. Si le fichier est uniquement ”Disponible sur demande”, écrivez les instructions dans l'espace réservé. Pour voir les normes et les conventions de dénomination, <1>cliquer ici</ 1>.",
+            "assessment_questionnaire": "Téléversez l'évaluation du questionnaire, stocké dans votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d'accessibilité. Si le fichier est uniquement ”Disponible sur demande”, écrivez les instructions dans l'espace réservé. Pour voir les normes et les conventions de dénomination, <1>cliquer ici</ 1>",
+            "assessment_data": "Téléversez le fichier de donnée associé à l'évalutation, stocké dans votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d'accessibilité. Si le fichier est uniquement ”Disponible sur demande”, écrivez les instructions dans l'espace réservé. Pour voir les normes et les conventions de dénomination, <1>cliquer ici</ 1>"
         }
     },
     "infographic": {
@@ -104,11 +110,23 @@
         "create": "Créer une carte/infographique"
     },
     "files": {
+        "files": "Fichier(s)",
+        "assessment_report": "Rapport d’évaluation",
+        "assessment_questionnaire": "Questionnaire d'évaluation",
+        "assessment_data": "Données d'évaluation",
         "new_file": "Nouveau fichier",
         "from_storage": "Depuis votre ordinateur",
         "from_dropbox": "Depuis Dropbox",
+        "accessibility": "Accessibilité",
         "language": "Langue du Fichier",
-        "files": "Fichier(s)"
+        "accessibilities": {
+          "instructions": "Instructions",
+          "available": "Disponibilité publique",
+          "request": "Disponible sur Demande",
+          "restricted": "Distribution limitée",
+          "not_available": "Indisponible",
+          "not_applicable": "Non Appliquable"
+        }
     },
     "related_content": {
         "title": "Titre",

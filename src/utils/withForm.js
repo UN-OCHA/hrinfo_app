@@ -301,8 +301,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
             if (body.report.instructions[0]) {
               body.report.instructions = body.report.instructions[0];
             }
+            else {
+              delete body.report.instructions;
+            }
             if (body.report.url[0]) {
               body.report.url = body.report.url[0];
+            }
+            else {
+              delete body.report.url;
             }
           }
           if (body.data && body.data.accessibility[0]) {
@@ -310,8 +316,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
             if (body.data.instructions[0]) {
               body.data.instructions = body.data.instructions[0];
             }
+            else {
+              delete body.data.instructions;
+            }
             if (body.data.url[0]) {
               body.data.url = body.data.url[0];
+            }
+            else {
+              delete body.data.url;
             }
           }
           if (body.questionnaire && body.questionnaire.accessibility[0]) {
@@ -319,8 +331,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
             if (body.questionnaire.instructions[0]) {
               body.questionnaire.instructions = body.questionnaire.instructions[0];
             }
+            else {
+              delete body.questionnaire.instructions;
+            }
             if (body.questionnaire.url[0]) {
               body.questionnaire.url = body.questionnaire.url[0];
+            }
+            else {
+              delete body.questionnaire.url;
             }
           }
         }
