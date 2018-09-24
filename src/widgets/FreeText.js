@@ -52,7 +52,7 @@ class FreeTextSettings extends React.Component {
     this.props.handleSubmit();
   };
 
-  /*componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     let html = stateToHTML(this.state.editorState.getCurrentContent());
     let text = this.props.text ? this.props.text : '<p><br></p>';
     if (text && html !== text) {
@@ -65,7 +65,7 @@ class FreeTextSettings extends React.Component {
         editorState: EditorState.createWithContent(contentState)
       });
     }
-  }*/
+  }
 
   render () {
 

@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import C3Chart from 'react-c3js';
 import 'c3/c3.css';
+import lodash from 'lodash';
 
 import MaterialSelect from '../components/MaterialSelect';
 import FTSApi from '../api/FTSApi';
@@ -75,7 +76,7 @@ class FTSWidget extends React.Component {
     return out;
   }
 
-  async componentDidMount() {
+  setChartStatus = async () => {
     const params = {};
     params.planId = this.props.appeal.id;
     if (this.props.groupBy) {
@@ -93,6 +94,16 @@ class FTSWidget extends React.Component {
           chartData: this.getFundingFromFlow(data.data)
         });
       });
+  }
+
+  async componentDidMount() {
+    await this.setChartStatus();
+  }
+
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!lodash.isEqual(prevProps, this.props)) {
+      await this.setChartStatus();
+    }
   }
 
   render() {

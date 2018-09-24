@@ -58,7 +58,8 @@ class SelectWidget extends React.Component {
       randomName = this.props.editedWidget.key;
     }
 
-    this.closeSettings(widgetName);
+    let isSettingsOpen = this.state.isSettingsOpen;
+    isSettingsOpen[widgetName] = false;
 
     const widget = {
       type: this.state.widgetTypes[widgetName],
@@ -69,7 +70,8 @@ class SelectWidget extends React.Component {
     this.setState({
       addWidgetOptions: {
         widgetSettings: {}
-      }
+      },
+      isSettingsOpen
     });
   }
 
@@ -108,11 +110,15 @@ class SelectWidget extends React.Component {
     this.setState({
       isSettingsOpen
     });
+    this.props.onWidgetClose();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(this.props.editedWidget);
     if (prevProps.editedWidget === null && this.props.editedWidget) {
-      this.openSettings(this.props.editedWidget.widget.type.name);
+      const names = this.props.editedWidget.key.split('-');
+      console.log(names[0]);
+      this.openSettings(names[0]);
     }
   }
 

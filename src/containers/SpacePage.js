@@ -136,6 +136,15 @@ class SpacePage extends React.Component {
     });
   }
 
+  /**
+   * Closes a widget without setting layout
+   */
+  onWidgetClose = () => {
+    this.setState({
+      editedWidget: null
+    });
+  }
+
   render() {
     const {classes} = this.props;
 
@@ -170,7 +179,8 @@ class SpacePage extends React.Component {
               isModalOpen={this.state.isModalOpen}
               onRequestClose={this.handleClose}
               onWidgetSelect={this.handleWidgetSelection}
-              editedWidget={this.state.editedWidget} /> : ''}
+              editedWidget={this.state.editedWidget}
+              onWidgetClose={this.onWidgetClose} /> : ''}
       </Paper>);
     }
     else {

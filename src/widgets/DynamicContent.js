@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
+import lodash from 'lodash';
 
 import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
@@ -29,9 +30,8 @@ class DynamicContent extends React.Component {
     this.setState({ value });
   };
 
-  async componentDidMount() {
+  getParamsFromProps = (props) => {
     const contentType = this.props.content ? this.props.content.value : 'documents';
-    const props = this.props;
     const params = {};
     Object.keys(props).forEach(function (key) {
       if (key !== 'title' && key !== 'content' && key !== 'number') {
@@ -57,9 +57,25 @@ class DynamicContent extends React.Component {
       params['sort'] = '-publication_date';
     }
     params['range'] = this.props.number ? this.props.number : 10;
+    return params;
+  };
+
+  async componentDidMount() {
+    const contentType = this.props.content ? this.props.content.value : 'documents';
+    const params = this.getParamsFromProps(this.props);
     this.setState({
       documents: await this.hrinfoAPI.get(contentType, params)
     });
+  }
+
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!lodash.isEqual(prevProps, this.props)) {
+      const contentType = this.props.content ? this.props.content.value : 'documents';
+      const params = this.getParamsFromProps(this.props);
+      this.setState({
+        documents: await this.hrinfoAPI.get(contentType, params)
+      });
+    }
   }
 
   render() {

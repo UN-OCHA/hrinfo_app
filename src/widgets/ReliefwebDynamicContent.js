@@ -1,4 +1,5 @@
 import React from 'react';
+import lodash from 'lodash';
 import List from '@material-ui/core/List';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -25,7 +26,7 @@ class ReliefwebDynamicContent extends React.Component {
     this.setState({ value });
   };
 
-  async componentDidMount() {
+  getParamsFromProps = async () => {
     const props = this.props;
     const params = {
       appname: 'hrinfo',
@@ -43,6 +44,16 @@ class ReliefwebDynamicContent extends React.Component {
     this.setState({
       documents: await this.reliefwebAPI.get(params)
     });
+  };
+
+  async componentDidMount() {
+    await this.getParamsFromProps();
+  }
+
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!lodash.isEqual(prevProps, this.props)) {
+      await this.getParamsFromProps();
+    }
   }
 
   render() {
