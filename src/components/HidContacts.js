@@ -38,32 +38,10 @@ class HidContacts extends React.Component {
   }
 
   async componentDidUpdate (prevProps, prevState, snapshot) {
-    const that = this;
     if (this.state.status === 'initial') {
-      if (this.props.value) {
-        if (this.props.isMulti) {
-          let promises = [];
-          this.props.value.forEach(function (v) {
-            promises.push(that.hidAPI.getItem('user', v));
-          });
-          let out = await Promise.all(promises);
-          this.setState({
-            contacts: out,
-            status: 'loaded'
-          });
-        }
-        else {
-          this.setState({
-            contacts: that.props.value,
-            status: 'loaded'
-          });
-        }
-      }
-      else {
-        this.setState({
-          status: 'loaded'
-        });
-      }
+      this.setState({
+        status: 'loaded'
+      });
     }
   }
 
@@ -76,6 +54,7 @@ class HidContacts extends React.Component {
         className={this.props.className}
         onChange={this.handleChange}
         getOptionLabel={(option) => {return option.name}}
+        getOptionValue={(option) => {return option.id}}
         />
     );
   }

@@ -93,7 +93,7 @@ function TitlebarGridList(props) {
           menus[space.type].indexOf(tile.href) !== -1 ?
             <Link to={'/' + space.type + 's/' + space.id + '/' + tile.href} key={tile.label}>
               <GridListTile key={tile.label} className={classes.center} onClick={props.handlePopover}>
-                <h2 className={tile.icon} />
+                <h2 className={tile.icon}> </h2>
                 <h5>{tile.label}</h5>
               </GridListTile>
             </Link> : ''

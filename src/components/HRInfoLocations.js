@@ -6,6 +6,8 @@ import HRInfoAPI from '../api/HRInfoAPI';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from "@material-ui/core/CardActions/CardActions";
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 class HRInfoLocations extends React.Component {
 
@@ -22,6 +24,7 @@ class HRInfoLocations extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.getInitialLocations = this.getInitialLocations.bind(this);
     this.getInitialLocation = this.getInitialLocation.bind(this);
+    this.removeLocation = this.removeLocation.bind(this);
   }
 
   getRow (number) {
@@ -38,14 +41,19 @@ class HRInfoLocations extends React.Component {
     ) : '';
 
     return (
-      	<Card key={number} className="card-container">
-			<CardContent>
-				<HRInfoLocation level="0" onChange={this.handleChange} row={number} value={this.state.locations[number][0]}/>
-				{locations1}
-				{locations2}
-				{locations3}
-			</CardContent>
-		</Card>
+      <Card key={number} className="card-container">
+        <CardContent>
+          <HRInfoLocation level="0" onChange={this.handleChange} row={number} value={this.state.locations[number][0]}/>
+          {locations1}
+          {locations2}
+          {locations3}
+        </CardContent>
+        <CardActions>
+          <IconButton color="primary" onClick={(e) => this.removeLocation(number)}>
+            <i className="icon-trash" />
+          </IconButton>
+        </CardActions>
+      </Card>
     );
   }
 
@@ -60,9 +68,19 @@ class HRInfoLocations extends React.Component {
     }
     state['status'] = 'ready';
     this.setState(state);
-    if (this.props.onChange) {
+    if (this.props.onChange !== undefined) {
       this.props.onChange(state['locations']);
     }
+  }
+
+  removeLocation (number) {
+    this.setState((prevState, props) => {
+      prevState.locations.splice(number, 1);
+      return {
+        locations: prevState.locations,
+        inputNumber: prevState.inputNumber - 1
+      }
+    });
   }
 
   onAddBtnClick (event) {
@@ -149,11 +167,11 @@ class HRInfoLocations extends React.Component {
       <div>
         {rows}
         {this.props.isMulti ?
-		<Button variant="outlined" onClick={this.onAddBtnClick}>
-			<i className="icon-map-pin" /> &nbsp; {t('add_another')}
-		</Button> : '' }
+          <Button variant="outlined" onClick={this.onAddBtnClick}>
+            <i className="icon-map-pin" /> &nbsp; {t('add_another')}
+          </Button> : '' }
       </div>
-      );
+    );
   }
 }
 

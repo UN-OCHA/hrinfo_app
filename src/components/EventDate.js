@@ -68,6 +68,10 @@ class EventDate extends React.Component {
       newState.val = this.state.val;
       newState.val.value_to = newState.val.value_from;
     }
+    else if (target.name === 'endDate' && !value) {
+      newState.val = this.state.val;
+      newState.val.value_to = (new Date(0, 0, 0));
+    }
     this.setState(newState);
   }
 
@@ -181,7 +185,7 @@ class EventDate extends React.Component {
       });
       let newState = {
         val       : val,
-        endDate   : (val.value_from.getTime() === val.value_to.getTime() ? false : true),
+        endDate   : this.state.endDate,
         allDay    : this.isAllDay(val.value_from, val.value_to),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'

@@ -1,43 +1,42 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import {stateToHTML} from 'draft-js-export-html';
+// import { Editor } from 'react-draft-wysiwyg';
+// import {stateToHTML} from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import Select from 'react-select';
+import { translate, Trans } from 'react-i18next';
+
 import HRInfoAPI from '../api/HRInfoAPI';
-import HRInfoSelect from '../components/HRInfoSelect';
-import HRInfoLocations from '../components/HRInfoLocations';
-import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
-import RelatedContent from '../components/RelatedContent';
-import HidContacts from '../components/HidContacts';
-import Address from '../components/Address';
-import EventDate from '../components/EventDate';
+
+// Components
+import HRInfoSelect             from '../components/HRInfoSelect';
+import HRInfoLocations          from '../components/HRInfoLocations';
+import HRInfoAsyncSelect        from '../components/HRInfoAsyncSelect';
+import HidContacts              from '../components/HidContacts';
+import EventDate                from '../components/EventDate';
+import AssessmentStatus         from "../components/AssessmentStatus";
+import HRInfoFilesAccessibility from "../components/HRInfoFilesAccessibility";
+import LanguageSelect           from '../components/LanguageSelect';
+import RelatedContent           from '../components/RelatedContent';
+
+// Material plugin
+import FormHelperText   from '@material-ui/core/FormHelperText';
+import FormControl      from '@material-ui/core/FormControl';
+import FormLabel        from '@material-ui/core/FormLabel';
+import TextField        from '@material-ui/core/TextField';
+import Button           from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid             from '@material-ui/core/Grid';
+import Snackbar         from '@material-ui/core/Snackbar';
+import Typography       from '@material-ui/core/Typography';
+import Collapse         from "@material-ui/core/Collapse/Collapse";
 
 class AssessmentForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      doc: {
-        label: '',
-        date: [{}],
-        address: {}
-      },
       editorState: EditorState.createEmpty(),
-      languages: [
-        { value: 'en', label: 'English'},
-        { value: 'fr', label: 'French' },
-        { value: 'es', label: 'Spanish' },
-        { value: 'ru', label: 'Russian' }
-      ],
-      assessment_statuses: [
-        { value: 'Planned', label: 'Planned'},
-        { value: 'Ongoing', label: 'Ongoing'},
-        { value: 'Draft / Preliminary Results', label: 'Draft / Preliminary Results'},
-        { value: 'Field work completed', label: 'Field work completed'},
-        { value: 'Report completed', label: 'Report completed'}
-      ],
-      collection_methods: [
+      collection_methods : [
         { value: 'Structured Interview', label: 'Structured Interview'},
         { value: 'Unstructured Interview', label: 'Unstructured Interview'},
         { value: 'Key Informant Interview', label: 'Key Informant Interview'},
@@ -49,13 +48,13 @@ class AssessmentForm extends React.Component {
         { value: 'Mixed', label: 'Mixed'},
         { value: 'Other', label: 'Other'}
       ],
-      masurement_units: [
+      unit_measurements  : [
         { value: 'Community', label: 'Community'},
         { value: 'Settlements', label: 'Settlements'},
         { value: 'Households', label: 'Households'},
         { value: 'Individuals', label: 'Individuals'},
       ],
-      geographic_levels: [
+      geographic_levels  : [
         { value: 'District', label: 'District'},
         { value: 'National', label: 'National'},
         { value: 'Non-representative', label: 'Non-representative'},
@@ -65,186 +64,15 @@ class AssessmentForm extends React.Component {
         { value: 'Sub-district', label: 'Sub-district'},
         { value: 'Village', label: 'Village'}
       ],
-      status: ''
+      status             : '',
+      collapseMain       : false,
+      collapseSecondary  : false,
+      wasSubmitted       : false,
     };
 
-    this.hrinfoAPI = new HRInfoAPI();
+    this.hrinfoAPI      = new HRInfoAPI();
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.onEditorStateChange = this.onEditorStateChange.bind(this);
-    this.validateForm = this.validateForm.bind(this);
-    this.isValid = this.isValid.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    let doc = this.state.doc;
-    doc[name] = value;
-    this.setState({
-      doc: doc
-    });
-  }
-
-  handleSelectChange (name, selected) {
-    let doc = this.state.doc;
-    if (name === 'date') {
-      doc[name][0] = selected;
-    }
-    else {
-      doc[name] = selected;
-    }
-    let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
-    if (name === 'spaces') {
-      doc.spaces.forEach(function (val) {
-        if (val.type === 'operations') {
-          hasOperation = true;
-        }
-      });
-    }
-    doc.hasOperation = hasOperation;
-    this.setState({
-      doc: doc
-    });
-  }
-
-  isValid (value) {
-    if (typeof value === 'undefined') {
-      return false;
-    }
-    if (!value) {
-      return false;
-    }
-    if (Array.isArray(value) && value.length === 0) {
-      return false;
-    }
-    if (value.files && value.files.length === 0) {
-      return false;
-    }
-    if (typeof value === 'string' && value === 'und') {
-      return false;
-    }
-    return true;
-  }
-
-  validateForm () {
-    const doc = this.state.doc;
-    if (this.isValid(doc.language) &&
-      this.isValid(doc.spaces) &&
-      this.isValid(doc.label) &&
-      this.isValid(doc.category)  &&
-      this.isValid(doc.date) &&
-      this.isValid(doc.organizations)) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  handleSubmit(event, isDraft = 0) {
-    event.preventDefault();
-    const isValid = this.validateForm();
-    /*if (!isValid) {
-      this.setState({
-        status: 'was-validated'
-      });
-      return;
-    }*/
-    this.setState({
-      status: 'submitting'
-    });
-    const token = this.props.token;
-    let doc = {};
-    let body = JSON.stringify(this.state.doc);
-    body = JSON.parse(body);
-    body.published = isDraft ? 0 : 1;
-    body.category = body.category.value;
-    body.operation = [];
-    body.space = [];
-    body.spaces.forEach(function (sp) {
-      if (sp.type === 'operations') {
-        body.operation.push(sp.id);
-      }
-      else {
-        body.space.push(sp.id);
-      }
-    });
-    delete body.spaces;
-    delete body.hasOperation;
-    const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
-    selectFields.forEach(function (field) {
-      if (body[field]) {
-        for (let i = 0; i < body[field].length; i++) {
-          body[field][i] = parseInt(body[field][i].id, 10);
-        }
-      }
-    });
-    if (body.locations) {
-      let locations = [];
-      body.locations.forEach(function (location, index) {
-        let last = 0;
-        for (let j = 0; j < location.length; j++) {
-          if (typeof location[j] === 'object') {
-            last = j;
-          }
-        }
-        locations.push(parseInt(location[last].id, 10));
-      });
-      body.locations = locations;
-    }
-    body.language = body.language.value;
-    if (body.address && body.address.country && typeof body.address.country === 'object') {
-      body.address.country = body.address.country.pcode;
-    }
-    if (body.date[0] && body.date[0].timezone_db) {
-      body.date[0].timezone_db = body.date[0].timezone_db.value;
-    }
-    if (body.date[0] && body.date[0].timezone) {
-      body.date[0].timezone = body.date[0].timezone.value;
-    }
-
-    this.hrinfoAPI
-      .save('assessments', body)
-      .then(doc => {
-        this.props.history.push('/assessments/' + doc.id);
-      })
-      .catch(err => {
-        this.props.setAlert('danger', 'There was an error uploading your document');
-      });
-  }
-
-  handleDelete () {
-    if (this.props.match.params.id) {
-      const that = this;
-      this.setState({
-        status: 'deleting'
-      });
-      this.hrinfoAPI
-        .remove('assessments', this.props.match.params.id)
-        .then(results => {
-          that.props.setAlert('success', 'Assessment deleted successfully');
-          that.props.history.push('/home');
-        }).catch(function(err) {
-          that.props.setAlert('danger', 'There was an error deleting your assessment');
-          that.props.history.push('/home');
-        });
-    }
-  }
-
-  onEditorStateChange (editorState) {
-    let html = stateToHTML(editorState.getCurrentContent());
-    let doc = this.state.doc;
-    doc.body = html;
-    this.setState({
-      editorState,
-      doc: doc
-    });
+    this.toggleCollapse = this.toggleCollapse.bind(this);
   }
 
   async componentDidMount() {
@@ -269,11 +97,6 @@ class AssessmentForm extends React.Component {
           doc.language = lang;
         }
       });
-      this.state.event_categories.forEach(function (category) {
-        if (category.value === parseInt(doc.category, 10)) {
-          doc.category = category;
-        }
-      });
       let state = {
         doc: doc
       };
@@ -289,231 +112,451 @@ class AssessmentForm extends React.Component {
     }
   }
 
+  toggleCollapse(collapse) {
+    if (collapse === "secondary") {
+      this.setState({collapseSecondary: !this.state.collapseSecondary});
+    }
+    else if (collapse === "main") {
+      this.setState({collapseMain: !this.state.collapseMain});
+    }
+  }
+
+  submit() {
+    this.setState({ wasSubmitted: true });
+  }
+
   render() {
-
-    return '';
-
-    /*const disasters = this.state.doc.hasOperation ? (
-      <FormGroup>
-        <Label for="disasters">Disaster(s) / Emergency</Label>
-        <HRInfoSelect type="disasters" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('disasters', s)} value={this.state.doc.disasters} />
-        <FormText color="muted">
-          Click on the field and select the disaster(s) or emergency the assessment refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumer.net/?ref=hrinfo">glidenumber.net</a>.
-        </FormText>
-      </FormGroup>
-    ) : '';
-
-    const bundles = this.state.doc.hasOperation ? (
-      <FormGroup>
-        <Label for="bundles">Cluster(s)/Sector(s)</Label>
-        <HRInfoSelect type="bundles" spaces={this.state.doc.spaces} isMulti={true} onChange={(s) => this.handleSelectChange('bundles', s)} value={this.state.doc.bundles} />
-        <FormText color="muted">
-          Indicate the cluster(s)/sector(s) the assessment refers to.
-        </FormText>
-      </FormGroup>
-    ) : '';
-
-    const { editorState } = this.state;
+    const { t, label } = this.props;
+    // const { editorState } = this.state;
 
     return (
-      <Form onSubmit={this.handleSubmit} noValidate className={this.state.status === 'was-validated' ? 'was-validated bg-white my-3 p-3': 'bg-white my-3 p-3'}>
-        <FormGroup className="required">
-          <Label for="language">Language</Label>
-          <Select id="language" name="language" options={this.state.languages} value={this.state.doc.language} onChange={(s) => this.handleSelectChange('language', s)} className={this.isValid(this.state.doc.language) ? 'is-valid' : 'is-invalid'}/>
-          <div className="invalid-feedback">
-            Please select a language
-          </div>
-        </FormGroup>
+      <Grid container direction="column" alignItems="center">
+        <Typography color="textSecondary" gutterBottom variant = "headline">{t(label + '.create')}</Typography>
+        <Grid item>
+          <Grid container justify="space-around">
 
-        <FormGroup className="required">
-          <Label for="spaces">Operation(s) / Webspace(s)</Label>
-          <HRInfoSelect type="spaces" isMulti={true} onChange={(s) => this.handleSelectChange('spaces', s)} value={this.state.doc.spaces} className={this.isValid(this.state.doc.spaces) ? 'is-valid' : 'is-invalid'} />
-          <FormText color="muted">
-            Click on the field and select where to publish the event (operation, regional site or thematic site).
-          </FormText>
-          <div className="invalid-feedback">
-            You must select an operation or a space
-          </div>
-        </FormGroup>
+            {/* LEFT COLUMN */}
+            <Grid item md={6} xs={11}>
+              {/* Title */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
+                <TextField type     = "text"
+                           name     = "label"
+                           id       = "label"
+                           value    = {this.props.doc.label || ''}
+                           onChange = {this.props.handleInputChange}/>
+                <FormHelperText id = "label-text">
+                  <Trans i18nKey={label + '.helpers.title'}>Type the original title of the assessment.
+                    Try not to use abbreviations. To see Standards and Naming Conventions click
+                  <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup className="required">
-          <Label for="status">Status</Label>
-          <Select id="status" name="status" options={this.state.assessment_statuses} value={this.state.doc.status} onChange={(s) => this.handleSelectChange('status', s)} className={this.isValid(this.state.doc.category) ? 'is-valid' : 'is-invalid'}/>
-          <FormText color="muted">
-            Indicate the phase of the assessment. Please remember to update this field as phases move on.
-          </FormText>
-          <div className="invalid-feedback">
-            You must select an assessment status
-          </div>
-        </FormGroup>
+              {/* Dates */}
+              <FormControl required fullWidth margin="normal">
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>{t('date')}</FormLabel>
+                <EventDate value    = {this.props.doc.date}
+                           onChange = {(val) => {this.props.handleSelectChange('date', val);}}
+                           required />
+                <FormHelperText>
+                  <Trans i18nKey={label + '.helpers.date'}>Indicate the start/end dates of the assessment.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="organizations">Leading/Coordinating Organization(s)</Label>
-          <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('organizations', s)} value={this.state.doc.organizations} className={this.isValid(this.state.doc.organizations) ? 'is-valid' : 'is-invalid'} />
-          <FormText color="muted">
-            Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.
-          </FormText>
-        </FormGroup>
+              {/* Leading Organization */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error    = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.organizations)}>{t('leading_organizations')}</FormLabel>
+                <HRInfoAsyncSelect type="organizations"
+                                   value           = {this.props.doc.organizations}
+                                   onChange        = {(s) => this.props.handleSelectChange('organizations', s)}
+                                   className       = {this.props.isValid(this.props.doc.organizations) ? 'is-valid' : 'is-invalid'}
+                                   classNamePrefix = {this.props.isValid(this.props.doc.organizations) ? 'is-valid' : 'is-invalid'}
+                                   isMulti         = {true}
+                />
+                <FormHelperText id = "organizations-text">
+                  <Trans i18nKey={label + '.helpers.leading_organizations'}>Type in and select from the list the organization(s)
+                    conducting the assessment.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="participating_organizations">Participating Organization(s)</Label>
-          <HRInfoAsyncSelect type="organizations" onChange={(s) => this.handleSelectChange('participating_organizations', s)} value={this.state.doc.participating_organizations} className={this.isValid(this.state.doc.participating_organizations) ? 'is-valid' : 'is-invalid'} />
-          <FormText color="muted">
-            Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.
-          </FormText>
-        </FormGroup>
+              {/* Participation Organization(s) */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('participating_organizations')}</FormLabel>
+                <HRInfoAsyncSelect type            = "organizations"
+                                   value           = {this.props.doc.participating_organizations}
+                                   onChange        = {(s) => this.props.handleSelectChange('participating_organizations', s)}
+                                   className       = {this.props.isValid(this.props.doc.participating_organizations) ? 'is-valid' : 'is-invalid'}
+                                   classNamePrefix = {this.props.isValid(this.props.doc.participating_organizations) ? 'is-valid' : 'is-invalid'}
+                                   isMulti         = {true}
+                />
+                <FormHelperText id = "participating_organizations-text">
+                  <Trans i18nKey={label + '.helpers.participating_organizations'}>Type in and select from the list
+                    the organization(s) taking part into (but not leading) the assessment.
+                    To indicate multiple organizations add a comma after each entry.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="locations">Location(s)</Label>
-          <HRInfoLocations onChange={(s) => this.handleSelectChange('location', s)} value={this.state.doc.location} isMulti />
-          <FormText color="muted">
-            Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town).
-            You can indicate up to four locations right away. If you need to indicate more than four, save your assessment as draft then edit it to add more locations.
-          </FormText>
-        </FormGroup>
+              {/* Locations */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.locations)}>{t('locations')}</FormLabel>
+                <HRInfoLocations isMulti  = {true}
+                                 onChange = {(s) => this.props.handleSelectChange('locations', s)}
+                                 value    = {this.props.doc.locations}/>
+                <FormHelperText id = "locations-text">
+                  <Trans i18nKey={label + '.helpers.locations'}>Select from the menu the country(ies) the assessment is
+                    about and indicate more specific locations by selecting multiple layers (region, province, town). </Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="other_location">Other location</Label>
-          <Input type="text" name="other_location" id="other_location" value={this.state.doc.other_location} onChange={this.handleInputChange} />
-          <FormText color="muted">
-            You can specify here a location not available in the Location(s) field list.
-          </FormText>
-        </FormGroup>
+              {/* Other location */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('other_location')}</FormLabel>
+                <TextField id       = "other_location"
+                           type     = "text"
+                           name     = "other_location"
+                           value    = {this.props.doc.other_location || ''}
+                           onChange = {this.props.handleInputChange}/>
+                <FormHelperText id = "other_location-text">
+                  <Trans i18nKey={label + '.helpers.other_location'}>You can specify here a location not available
+                    in the Location(s) field list.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="population_types">Population Type(s)</Label>
-          <HRInfoSelect type="population_types" isMulti={true} onChange={(s) => this.handleSelectChange('population_types', s)} value={this.state.doc.population_types} />
-          <FormText color="muted">
-            Click on the field and select the segment(s) of the population targeted by the assessment. You can select multiple population types.
-          </FormText>
-        </FormGroup>
+              {/* Population Type(s) */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.population_types)}>{t('population_types')}</FormLabel>
+                <HRInfoSelect type     = "population_types"
+                              isMulti  = {true}
+                              onChange = {(s) => this.props.handleSelectChange('population_types', s)}
+                              value    = {this.props.doc.population_types}/>
+                <FormHelperText id = "population_types-text">
+                  <Trans i18nKey={label + '.helpers.population_types'}>Click on the field and select the segment(s) of
+                    the population targeted by the assessment. You can select multiple population types. </Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup className="required">
-          <Label for="label">Title</Label>
-          <Input type="text" name="label" id="label" placeholder="Enter the title of the assessment" required="required" value={this.state.doc.label} onChange={this.handleInputChange} />
-          <FormText color="muted">
-            Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions click <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>.
-          </FormText>
-          <div className="invalid-feedback">
-            Please enter the assessment title
-          </div>
-        </FormGroup>
+              <div className="more-info-button">
+              { !this.state.collapseMain &&
+              <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("main")}>
+                <i className = "icon-plus" /> &nbsp; {t('add_more')}
+              </Button>
+              }
+              { this.state.collapseMain &&
+              <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("main")}>
+                <i className = "icon-cancel" /> &nbsp; {t('hide_information')}
+              </Button>
+              }
+            </div>
 
-        <FormGroup>
-          <Label for="subject">Subject/Objective</Label>
-          <Input type="textarea" name="subject" id="subject" value={this.state.doc.subject} onChange={this.handleInputChange} />
-          <FormText color="muted">
-            Insert a brief description of the topic of the assessment and what its goals are.
-          </FormText>
-        </FormGroup>
+              <Collapse in={this.state.collapseMain}>
+                {/* Subject */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('subject')}</FormLabel>
+                  <TextField id       = "subject"
+                             type     = "textarea"
+                             name     = "subject"
+                             multiline = {true}
+                             rowsMax   = "4"
+                             value    = {this.props.doc.subject}
+                             onChange = {this.props.handleInputChange}/>
+                  <FormHelperText id = "subject-text">
+                    <Trans i18nKey={label + '.helpers.subject'}>Insert a brief description of the topic of the
+                      assessment and what its goals are.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-        <FormGroup>
-          <Label for="methodology">Methodology</Label>
-          <Input type="textarea" name="methodology" id="methodology" value={this.state.doc.methodology} onChange={this.handleInputChange} />
-          <FormText color="muted">
-            Insert a brief description of the procedures and the techniques used to collect, store and analyse the data.
-          </FormText>
-        </FormGroup>
+                {/* Methodology */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('methodology')}</FormLabel>
+                  <TextField id       = "methodology"
+                             type     = "textarea"
+                             name     = "methodology"
+                             multiline = {true}
+                             rowsMax   = "4"
+                             value    = {this.props.doc.methodology}
+                             onChange = {this.props.handleInputChange}/>
+                  <FormHelperText id = "methodology-text">
+                    <Trans i18nKey={label + '.helpers.methodology'}>Insert a brief description of the procedures and the
+                      techniques used to collect, store and analyse the data.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-        <FormGroup>
-          <Label for="key_findings">Key findings</Label>
-          <Input type="textarea" name="key_findings" id="key_findings" value={this.state.doc.key_findings} onChange={this.handleInputChange} />
-          <FormText color="muted">
-            Insert a brief summary of the assessment’s results.
-          </FormText>
-        </FormGroup>
+                {/* Key findings */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('key_findings')}</FormLabel>
+                  <TextField id       = "key_findings"
+                             type     = "textarea"
+                             name     = "key_findings"
+                             multiline = {true}
+                             rowsMax   = "4"
+                             value    = {this.props.doc.key_findings}
+                             onChange = {this.props.handleInputChange}/>
+                  <FormHelperText id = "key_findings-text">
+                    <Trans i18nKey={label + '.helpers.key_findings'}>Insert a brief summary of the assessment’s results.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-        {bundles}
+                {/* Sample size */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('sample_size')}</FormLabel>
+                  <TextField id       = "sample_size"
+                             type     = "text"
+                             name     = "sample_size"
+                             onChange = {this.props.handleInputChange}
+                             value    = {this.props.doc.sample_size || ''}/>
+                  <FormHelperText id = "sample_size-text">
+                    <Trans i18nKey={label + '.helpers.sample_size'}>Indicate the number of
+                      communities/households/individuals surveyed during the assessment.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-        <FormGroup>
-          <Label for="themes">Themes</Label>
-          <HRInfoSelect type="themes" isMulti={true} onChange={(s) => this.handleSelectChange('themes', s)} value={this.state.doc.themes} />
-          <FormText color="muted">
-            Click on the field and select all relevant themes. Choose only themes the event substantively refers to.
-          </FormText>
-        </FormGroup>
+                {/* Related Content */}
+                <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('related_content.related_content')}</FormLabel>
+                <RelatedContent onChange = {(s) => this.props.handleSelectChange('related_content', s)}
+                                value    = {this.props.doc.related_content}/>
+                <FormHelperText id = "agendas-text">
+                  <Trans i18nKey={label + '.helpers.related_content'}>Add links to content that is related to the event
+                    you are creating by indicating the title of the content and its url. When using the Search function
+                    make sure to search by content title.</Trans>
+                </FormHelperText>
+              </FormControl>
+              </Collapse>
+            </Grid>
 
-        {disasters}
+            {/* SECOND COLUMN */}
+            <Grid item md={3} xs={11}>
+              {/* Languages */}
+              <FormControl required fullWidth margin="normal">
+                <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>
+                <LanguageSelect value     = {this.props.doc.language}
+                                onChange  = {(s) => this.props.handleSelectChange('language', s)}
+                                className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
+                <FormHelperText id="language-text">
+                  <Trans i18nKey={label + '.helpers.language'}>Select the language of the document.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="collection_method">Collection method(s)</Label>
-          <Select id="collection_method" name="collection_method" options={this.state.collection_methods} value={this.state.doc.collection_method} onChange={(s) => this.handleSelectChange('collection_method', s)} />
-          <FormText color="muted">
-            Click on the field and select the collection method(s) used to gather information during the assessment.
-          </FormText>
-        </FormGroup>
+              {/* Status */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.status)}>{t('status')}</FormLabel>
+                <AssessmentStatus value     = {this.props.doc.status}
+                                  onChange  = {(s) => this.props.handleSelectChange('status', s)}
+                                  className = {this.props.isValid(this.props.doc.status) ? 'is-valid' : 'is-invalid'}
+                                  classNamePrefix = {this.props.isValid(this.props.doc.status) ? 'is-valid' : 'is-invalid'}/>
+                <FormHelperText id = "status-text">
+                  <Trans i18nKey={label + '.helpers.status'}>Indicate the phase of the assessment.
+                    Please remember to update this field as phases move on.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="unit_measurement">Unit(s) of Measurement</Label>
-          <Select id="unit_measurement" name="unit_measurement" options={this.state.measurement_units} value={this.state.doc.unit_measurement} onChange={(s) => this.handleSelectChange('unit_measurement', s)} />
-          <FormText color="muted">
-            Click on the field and select the unit(s) of measurement used for the assessment.
-          </FormText>
-        </FormGroup>
+              {/* Operation(s)/Webspace(s) */}
+              <FormControl required fullWidth margin="normal">
+                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
+                <HRInfoSelect type    = "operations"
+                              isMulti = {true}
+                              onChange={(s) => this.props.handleSelectChange('spaces', s)}
+                              value   = {this.props.doc.spaces}/>
+                <FormHelperText>
+                  <Trans i18nKey={label + '.helpers.spaces'}>Click on the field and select where to publish the assessment
+                    (operation, regional site or thematic site).</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="sample_size">Sample size</Label>
-          <Input type="text" name="sample_size" id="sample_size" value={this.state.doc.sample_size} onChange={this.handleInputChange} />
-          <FormText color="muted">
-            Indicate the number of communities/households/individuals surveyed during the assessment.
-          </FormText>
-        </FormGroup>
+              {/* Bundles (Cluster(s)/Sector(s)) */}
+              <FormControl required fullWidth margin="normal">
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>{t('bundles')}</FormLabel>
+                <HRInfoSelect type="bundles"
+                              isMulti={true}
+                              onChange={(s) => this.props.handleSelectChange('bundles', s)}
+                              value={this.props.doc.bundles} />
+                <FormHelperText id = "bundles-text">
+                  <Trans i18nKey={label + '.helpers.bundles'}>Indicate the cluster(s)/sector(s) the assessment refers to.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="geographic_level">Level of Representation</Label>
-          <Select id="geographic_level" name="geographic_level" options={this.state.geographic_levels} value={this.state.doc.geographic_level} onChange={(s) => this.handleSelectChange('geographic_level', s)} />
-          <FormText color="muted">
-            Select at what geographical level the assessment is (has been) conducted.
-          </FormText>
-        </FormGroup>
+              {/* Report */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.report)}>{t('files.assessment_report')}</FormLabel>
+                <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('report', s)}
+                                          onInputChange={this.props.handleInputChange}
+                                          value={this.props.doc.report} />
+                <FormHelperText id = "report-text">
+                  <Trans i18nKey='helpers.assessment_report'>Upload the assessment report file, stored on your computer
+                    or on your Dropbox account, and indicate its level of accessibility. If the file is
+                    “Available on request”, write the instructions in the related space.
+                    To see File Standards and Naming Conventions click
+                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="contacts">Contact(s)</Label>
-          <HidContacts isMulti={true} token={this.props.token} onChange={(s) => this.handleSelectChange('contacts', s)} value={this.state.doc.contacts} />
-          <FormText color="muted">
-            Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.
-          </FormText>
-        </FormGroup>
+              {/* Questionnaire */}
+              <FormControl fullWidth margin = "normal">
+                <FormLabel>{t('files.assessment_questionnaire')}</FormLabel>
+                <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('questionnaire', s)}
+                                          value={this.props.doc.questionnaire} />
+                <FormHelperText id = "questionnaire-text">
+                  <Trans i18nKey='helpers.assessment_questionnaire'>Upload the assessment questionnaire file, stored on
+                    your computer or on your Dropbox account, and indicate its level of accessibility.
+                    If the file is “Available on request”, write the instructions in the related space.
+                    To see File Standards and Naming Conventions click
+                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="agendas">Agenda(s)</Label>
-          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('agendas', s)} value={this.state.doc.agendas} />
-          <FormText color="muted">
-            Add the agenda of the event as a document first, and then reference this document from here.
-          </FormText>
-        </FormGroup>
+              {/* Data */}
+              <FormControl required fullWidth margin = "normal">
+                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.data)}>{t('files.assessment_data')}</FormLabel>
+                <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('data', s)}
+                                          value={this.props.doc.data} />
+                <FormHelperText id = "data-text">
+                  <Trans i18nKey='helpers.assessment_data'>Upload the assessment data file, stored on your computer or
+                    on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”,
+                    write the instructions in the related space. To see File Standards and Naming Conventions  click
+                    <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                </FormHelperText>
+              </FormControl>
 
-        <FormGroup>
-          <Label for="meeting_minutes">Meeting minute(s)</Label>
-          <HRInfoAsyncSelect type="documents" onChange={(s) => this.handleSelectChange('meeting_minutes', s)} value={this.state.doc.meeting_minutes} />
-          <FormText color="muted">
-            Add the meeting minutes of the event as a document first, and then reference this document from here.
-          </FormText>
-        </FormGroup>
+              <div className="more-info-button">
+                { !this.state.collapseSecondary &&
+                <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("secondary")}>
+                  <i className = "icon-plus" /> &nbsp; {t('add_more')}
+                </Button>
+                }
+                { this.state.collapseSecondary &&
+                <Button color="secondary" variant="contained" onClick={() => this.toggleCollapse("secondary")}>
+                  <i className = "icon-cancel" /> &nbsp; {t('hide_information')}
+                </Button>
+                }
+              </div>
 
-        <FormGroup>
-          <Label for="related_content">Related Content</Label>
-          <RelatedContent onChange={(s) => this.handleSelectChange('related_content', s)} value={this.state.doc.related_content} />
-          <FormText color="muted">
-            Add links to content that is related to the event you are creating by indicating the title of the content and its url. When using the Search function make sure to search by content title.
-          </FormText>
-        </FormGroup>
+              <Collapse in={this.state.collapseSecondary}>
+                {/* Theme(s) */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('themes')}</FormLabel>
+                  <HRInfoSelect type     = "themes"
+                                isMulti  = {true}
+                                onChange = {(s) => this.props.handleSelectChange('themes', s)}
+                                value    = {this.props.doc.themes}/>
+                  <FormHelperText id = "themes-text">
+                    <Trans i18nKey={label + '.helpers.themes'}>Click on the field and select all relevant themes.
+                      Choose only themes the document substantively refers to.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
-        {this.state.status !== 'submitting' &&
+                {/* Disasters */}
+                <FormControl fullWidth margin="normal">
+                  <FormLabel>{t('disasters')}</FormLabel>
+                  <HRInfoSelect type     = "disasters"
+                                spaces   = {this.props.doc.spaces}
+                                isMulti  = {true}
+                                onChange = {(s) => this.props.handleSelectChange('disasters', s)}
+                                value    = {this.props.doc.disasters} />
+                  <FormHelperText id = "disasters-text">
+                    <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or
+                      emergency the assessment refers to.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Level of Representation */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('geographic_level')}</FormLabel>
+                  <HRInfoSelect type     = "geographic_level"
+                                onChange = {(s) => this.props.handleSelectChange('geographic_level', s)}
+                                options  = {this.state.geographic_levels}
+                                value    = {this.props.doc.geographic_level}/>
+                  <FormHelperText id = "geographic_level-text">
+                    <Trans i18nKey={label + '.helpers.geographic_level'}>Select at what geographical level the
+                      assessment is (has been) conducted.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Unit(s) of Measurement */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('unit_measurement')}</FormLabel>
+                  <HRInfoSelect type     = "measurement_units"
+                                onChange = {(s) => this.props.handleSelectChange('unit_measurement', s)}
+                                options  = {this.state.unit_measurements}
+                                value    = {this.props.doc.unit_measurement}
+                                isMulti  = {true}/>
+                  <FormHelperText id = "unit_measurement-text">
+                    <Trans i18nKey={label + '.helpers.unit_measurement'}>Click on the field and select the unit(s) of
+                      measurement used for the assessment.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Collection Method(s) */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('collection_method')}</FormLabel>
+                  <HRInfoSelect type     = "collection_method"
+                                onChange = {(s) => this.props.handleSelectChange('collection_method', s)}
+                                options  = {this.state.collection_methods}
+                                value    = {this.props.doc.collection_method}
+                                isMulti  = {true}/>
+                  <FormHelperText id = "collection_method-text">
+                    <Trans i18nKey={label + '.helpers.collection_method'}>Click on the field and select the collection
+                      method(s) used to gather information during the assessment.</Trans>
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Contact(s) */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('contacts')}</FormLabel>
+                  <HidContacts isMulti={true}
+                               id="contacts"
+                               onChange={(s) => this.props.handleSelectChange('contacts', s)}
+                               value={this.props.doc.contacts}/>
+                  <FormHelperText id = "contacts-text">
+                    <Trans i18nKey={label + '.helpers.contacts'}>Indicate the person(s) to contact for information
+                      regarding the event. To show up in the list, the person must have a HumanitarianID profile.</Trans>
+                  </FormHelperText>
+                </FormControl>
+              </Collapse>
+  					</Grid>
+  				</Grid>
+  			</Grid>
+
+        <Grid item className="submission">
+        {
+          this.props.status !== 'submitting' &&
           <span>
-            <Button color="primary">Publish</Button> &nbsp;
-            <Button color="secondary" onClick={(evt) => this.handleSubmit(evt, 1)}>Save as Draft</Button> &nbsp;
+            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
+              &nbsp;
+            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
+              &nbsp;
           </span>
         }
-        {(this.state.status === 'submitting' || this.state.status === 'deleting') &&
-          <FontAwesomeIcon icon={faSpinner} pulse fixedWidth />
+        {
+          (this.props.status === 'submitting' || this.props.status === 'deleting') &&
+          <CircularProgress />
         }
-        {(this.props.match.params.id && this.state.status !== 'deleting') &&
-          <Button color="danger" onClick={this.handleDelete}>Delete</Button>
+        {
+          (this.props.match.params.id && this.props.status !== 'deleting') &&
+          <span>
+            <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
+          </span>
         }
-      </Form>
-    );*/
+        </Grid>
+        <Snackbar anchorOrigin={{
+            vertical  : 'bottom',
+            horizontal: 'left'
+          }}
+          open             = {this.props.status === 'was-validated' && this.state.wasSubmitted}
+          autoHideDuration = {6000}
+          onClose          = {this.hideAlert}
+          ContentProps     = {{
+            'aria-describedby' : 'message-id'
+          }}
+          message={<Typography id ="message-id" color="error">{t('form_incomplete')}</Typography>}
+          action={[
+            <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
+            {t('close')}
+            </Button>
+          ]}
+        />
+      </Grid>
+    );
   }
 }
 
-export default AssessmentForm;
+export default translate('forms')(AssessmentForm);

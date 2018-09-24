@@ -1,17 +1,8 @@
 import React      from 'react';
-import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 //Components
 import HRInfoSelect          from '../components/HRInfoSelect';
-import HRInfoLocations       from '../components/HRInfoLocations';
-import Address               from '../components/Address';
-import HidContacts           from '../components/HidContacts';
-import HRInfoAsyncSelect     from '../components/HRInfoAsyncSelect';
-import RelatedContent        from '../components/RelatedContent';
-import LanguageSelect        from '../components/LanguageSelect';
-import EventCategorySelect   from '../components/EventCategorySelect';
-import EventDate             from '../components/EventDate';
 
 //Material plugin
 import FormHelperText   from '@material-ui/core/FormHelperText';
@@ -20,8 +11,6 @@ import FormLabel        from '@material-ui/core/FormLabel';
 import TextField        from '@material-ui/core/TextField';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Collapse         from '@material-ui/core/Collapse';
-import Card             from '@material-ui/core/Card';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
@@ -81,21 +70,6 @@ class OrganizationForm extends React.Component {
                     value    = {this.props.doc.type || ''}/>
                   <FormHelperText id="type-text">
                     From the list, select the type of {this.props.label} you are creating.
-                  </FormHelperText>
-                </FormControl>
-
-                {/* Description */}
-                <FormControl fullWidth margin="normal">
-                  <FormLabel>Description</FormLabel>
-                  <Card className         = "card-container">
-                    <Editor editorState   = {this.props.editorState}
-                      editorClassName     = "editor-content"
-                      toolbarClassName    = "editor-toolbar"
-                      onEditorStateChange = {this.props.onEditorStateChange}
-                      />
-                  </Card>
-                  <FormHelperText id = "body-text">
-                    Include here the description of the {this.props.label + ' '}.
                   </FormHelperText>
                 </FormControl>
 

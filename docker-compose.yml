@@ -1,0 +1,12 @@
+version: '2'
+services:
+
+    devapp:
+        image: hrinfo
+        build: .
+        ports:
+            - '3630:3000'
+        volumes:
+            - './:/usr/dockers/devapp/'
+            - '/usr/src.old/app/node_modules'
+        entrypoint: Docker/docker-entrypoint.sh

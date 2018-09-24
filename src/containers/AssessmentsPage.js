@@ -14,8 +14,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import ViewModule from '@material-ui/icons/ViewModule';
 import ViewList from '@material-ui/icons/ViewList';
 import Moment from 'moment';
@@ -62,7 +60,7 @@ class AssessmentsPage extends React.Component {
   render() {
     const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page, toggleDrawer, drawerState, contentType, spaceType, filters, removeFilter} = this.props;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
-    const { anchorEl, openMenuId, view } = this.state;
+    const { view } = this.state;
 
     return (
       <div>

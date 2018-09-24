@@ -38,7 +38,7 @@ export default ({ childProps }) =>
     <UnauthenticatedRoute path="/" exact component={Login} props={childProps} />
 
 {/* General */}
-    <AuthenticatedRoute path="/assessments/new"     exact component={AssessmentForm}    props={childProps} />
+    <AuthenticatedRoute path="/assessments/new"     exact component={withForm(AssessmentForm, 'assessments', 'assessment')}    props={childProps} />
     <AuthenticatedRoute path="/home"                exact component={Home}              props={childProps} />
     <AuthenticatedRoute path="/admin"               exact component={Admin}             props={childProps} />
     <AuthenticatedRoute path="/admin/contributions" exact component={ContributionsPage} props={childProps}  />
