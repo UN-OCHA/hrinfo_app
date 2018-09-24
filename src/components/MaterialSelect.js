@@ -65,6 +65,8 @@ function SelectWrapped(props) {
   	  pageSize={2}
   	  noOptionsMessage={() => <Typography>{'No results found'}</Typography>}
       styles={customStyles}
+      className=""
+      classNamePrefix=""
       isClearable={true}
   	  isMulti={props.isMulti}
   	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}

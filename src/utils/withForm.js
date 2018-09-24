@@ -148,6 +148,19 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.date)) {
           isValid = true;
         }
+        if (hrinfoType === 'assessments' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.status) &&
+          this.isValid(doc.bundles) &&
+          this.isValid(doc.date) &&
+          this.isValid(doc.organizations) &&
+          this.isValid(doc.locations) &&
+          this.isValid(doc.population_types) &&
+          this.isValid(doc.report) &&
+          this.isValid(doc.data) &&
+          this.isValid(doc.language)) {
+          isValid = true;
+        }
       }
       return isValid;
     }
@@ -215,17 +228,17 @@ const withForm = function withForm(Component, hrinfoType, label) {
           if (!Array.isArray(body.date)) {
             body.date = [body.date];
           }
-          if (body.date[0] && body.date[0].value) {
-            body.date[0].value = moment(body.date[0].value).format('YYYY-MM-DD HH:mm:ss');
+          if (body.date && body.date.value) {
+            body.date.value = moment(body.date.value).format('YYYY-MM-DD HH:mm:ss');
           }
-          if (body.date[0] && body.date[0].value2) {
-            body.date[0].value2 = moment(body.date[0].value2).format('YYYY-MM-DD HH:mm:ss');
+          if (body.date && body.date.value2) {
+            body.date.value2 = moment(body.date.value2).format('YYYY-MM-DD HH:mm:ss');
           }
-          if (body.date[0] && body.date[0].timezone_db) {
-            body.date[0].timezone_db = body.date[0].timezone_db.value;
+          if (body.date && body.date.timezone_db) {
+            body.date.timezone_db = body.date.timezone_db.value;
           }
-          if (body.date[0] && body.date[0].timezone) {
-            body.date[0].timezone = body.date[0].timezone.value;
+          if (body.date && body.date.timezone) {
+            body.date.timezone = body.date.timezone.value;
           }
           if (body.contacts) {
             body.contacts = body.contacts.map(function (c) {
@@ -243,6 +256,92 @@ const withForm = function withForm(Component, hrinfoType, label) {
             });
           }
         }
+        if (hrinfoType === 'assessments') {
+          let date = {};
+          if (body.date && body.date.value_from) {
+            date.from = moment(body.date.value_from).format('YYYY-MM-DD HH:mm:ss');
+          }
+          if (body.date && body.date.value_to) {
+            if (body.date.value_to === (new Date(0, 0, 0))) {
+              date.to = undefined;
+            }
+            else {
+              date.to = moment(body.date.value_to).format('YYYY-MM-DD HH:mm:ss');
+            }
+          }
+          if (body.date && body.date.timezone) {
+            date.timezone = body.date.timezone.value;
+          }
+          if (body.date && body.date.rrule) {
+            body.frequency = body.date.rrule.split(";")[0].split("=")[1];
+          }
+          body.date = date;
+          if (body.unit_measurement) {
+            let unit_measurement = [];
+            body.unit_measurement.forEach((um) => {
+              unit_measurement.push(um.label);
+            });
+            body.unit_measurement = unit_measurement;
+          }
+          if (body.collection_method) {
+            let collection_method = [];
+            body.collection_method.forEach((cm) => {
+              collection_method.push(cm.label);
+            });
+            body.collection_method = collection_method;
+          }
+          if (body.geographic_level) {
+            body.geographic_level = body.geographic_level.label;
+          }
+          if (body.status) {
+            body.status = body.status.label;
+          }
+          if (body.report && body.report.accessibility[0]) {
+            body.report.accessibility = body.report.accessibility[0].label;
+            if (body.report.instructions[0]) {
+              body.report.instructions = body.report.instructions[0];
+            }
+            else {
+              delete body.report.instructions;
+            }
+            if (body.report.url[0]) {
+              body.report.url = body.report.url[0];
+            }
+            else {
+              delete body.report.url;
+            }
+          }
+          if (body.data && body.data.accessibility[0]) {
+            body.data.accessibility = body.data.accessibility[0].label;
+            if (body.data.instructions[0]) {
+              body.data.instructions = body.data.instructions[0];
+            }
+            else {
+              delete body.data.instructions;
+            }
+            if (body.data.url[0]) {
+              body.data.url = body.data.url[0];
+            }
+            else {
+              delete body.data.url;
+            }
+          }
+          if (body.questionnaire && body.questionnaire.accessibility[0]) {
+            body.questionnaire.accessibility = body.questionnaire.accessibility[0].label;
+            if (body.questionnaire.instructions[0]) {
+              body.questionnaire.instructions = body.questionnaire.instructions[0];
+            }
+            else {
+              delete body.questionnaire.instructions;
+            }
+            if (body.questionnaire.url[0]) {
+              body.questionnaire.url = body.questionnaire.url[0];
+            }
+            else {
+              delete body.questionnaire.url;
+            }
+          }
+        }
         body.operation = [];
         body.space     = [];
         body.spaces.forEach(function (sp) {
@@ -255,7 +354,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
         });
         delete body.spaces;
         delete body.hasOperation;
-        const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
+        const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes', 'participating_organizations', 'population_types'];
         selectFields.forEach(function (field) {
           if (body[field]) {
             for (let i = 0; i < body[field].length; i++) {
@@ -277,7 +376,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
           body.locations = locations;
         }
       }
-
       this.hrinfoAPI
         .save(hrinfoType, body)
         .then(doc => {
@@ -337,6 +435,10 @@ const withForm = function withForm(Component, hrinfoType, label) {
         state.doc = doc;
         this.setState(state);
       }
+    }
+
+    componentWillUnmount() {
+      this.setState({});
     }
 
     render () {

@@ -7,8 +7,7 @@ class HRInfoLocation extends React.Component {
     super(props);
     this.state = {
       items: [],
-      val: {},
-      status: 'initial'
+      val: {}
     };
     this.hrinfoAPI = new HRInfoAPI();
     this.getOptions = this.getOptions.bind(this);
@@ -52,40 +51,44 @@ class HRInfoLocation extends React.Component {
     const that = this;
     if (prevProps.parent !== this.props.parent) {
       this.setState({
-        items: []
+        items: [],
+        val: ""
       });
       this.getOptions();
     }
-    if (this.props.value && typeof this.props.value === 'string' && this.state.status === 'initial') {
+    if (this.props.value && typeof this.props.value === 'string' && this.state.val !== this.props.value) {
       if (this.state.items.length) {
         this.state.items.forEach(function (item) {
           if (item.pcode === that.props.value) {
             that.setState({
-              val: item,
-              status: 'ready'
+              val: item
             });
           }
         });
       }
     }
-    if (this.props.value && typeof this.props.value === 'object' && this.state.status === 'initial') {
+    if (this.props.value && typeof this.props.value === 'object' && this.state.val !== this.props.value) {
       this.setState({
-        val: this.props.value,
-        status: 'ready'
+        val: this.props.value
       });
     }
   }
 
   render() {
-    return (
+    if (this.state.items.length > 0) {
+      return (
         <MaterialSelect
           id="locations"
           name="locations"
           onChange={this.handleChange}
           options={this.state.items}
           value={this.state.val}
-          className={this.props.className} />
-    );
+          className={this.props.className}/>
+      );
+    }
+    else {
+      return ('');
+    }
   }
 }
 

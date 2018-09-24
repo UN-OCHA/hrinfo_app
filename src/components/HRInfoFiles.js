@@ -251,26 +251,26 @@ class HRInfoFiles extends React.Component {
 			</CardContent>
 			<CardActions>
 				{this.state.files[number] === '' ?
-                	<span className="file-container-actions">
+          <span className="file-container-actions">
 						<input type="file"
 							id={'files_' + number }
 							name={'files_' + number }
             				className="none"
 							onChange={ (e) => this.handleChange(number, 'file', e.target.files) } />
-	                	<label htmlFor={'files_' + number}>
-	                  		<Button component="span" color="primary" variant="outlined" size="small">
-	                    		{t('files.from_storage')}
-	                  		</Button>
-	                	</label>
-	                  	<DropboxChooser
-		                    appKey='e000wzkrc14aj26'
-		                    success={files => this.handleChange(number, 'file', files)}
-		                    multiselect={false}
-		                    extensions={['.pdf']}>
-		                    <Button color="primary" variant="outlined" size="small">{t('files.from_dropbox')}</Button>
-	                	</DropboxChooser>
-              		</span> : ''
-              	}
+            <label htmlFor={'files_' + number}>
+              <Button component="span" color="primary" variant="outlined" size="small">
+                {t('files.from_storage')}
+              </Button>
+            </label>
+            <DropboxChooser
+              appKey='e000wzkrc14aj26'
+              success={files => this.handleChange(number, 'file', files)}
+              multiselect={false}
+              extensions={['.pdf']}>
+              <Button color="primary" variant="outlined" size="small">{t('files.from_dropbox')}</Button>
+            </DropboxChooser>
+          </span> : ''
+        }
 				{this.state.files[number] === 'uploading' ?
 					<CircularProgress/> : ''
 				}
@@ -410,8 +410,8 @@ class HRInfoFiles extends React.Component {
         <div className={this.props.className}>
           {rows}
           <Button variant="outlined" onClick={this.onAddBtnClick}>
-			  <i className="icon-document" /> &nbsp; {t('add_another')}
-		  </Button>
+			      <i className="icon-document" /> &nbsp; {t('add_another')}
+		      </Button>
         </div>
         );
     }
