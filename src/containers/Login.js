@@ -2,6 +2,7 @@ import React from 'react';
 import HRInfoAPI from '../api/HRInfoAPI';
 import HidAPI from '../api/HidAPI';
 import { translate, Trans } from 'react-i18next';
+import qs from 'query-string';
 
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -49,6 +50,7 @@ class Login extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        const qArgs = qs.parse(this.props.location.search);
         const that = this;
         this.setState({status: 'submitting'});
         let tokenData = {};
@@ -67,7 +69,12 @@ class Login extends React.Component {
                 spaces: data.spaces
             };
             this.props.userHasAuthenticated(true, tokenData.user, tokenData.token);
-            this.props.history.push('/home');
+            if (qArgs.redirect) {
+              this.props.history.push(qArgs.redirect);
+            }
+            else {
+              this.props.history.push('/home');
+            }
         }).catch(err => {
             this.setState({status: 'initial'});
             this.props.setAlert('danger', 'Could not log you in. Please check your email and password.');

@@ -66,7 +66,7 @@ class HidAPI {
       email: email,
       password: password
     };
-    body.exp = Math.floor(Date.now() / 1000) + 3600;
+    body.exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
     return fetch('https://auth.humanitarian.id/api/v2/jsonwebtoken', {
       method: 'POST',
       body: JSON.stringify(body),
