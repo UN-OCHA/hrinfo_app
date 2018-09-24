@@ -75,21 +75,6 @@ class OrganizationForm extends React.Component {
                   </FormHelperText>
                 </FormControl>
 
-                {/* Description */}
-                <FormControl fullWidth margin="normal">
-                  <FormLabel>Description</FormLabel>
-                  <Card className         = "card-container">
-                    <Editor editorState   = {this.props.editorState}
-                      editorClassName     = "editor-content"
-                      toolbarClassName    = "editor-toolbar"
-                      onEditorStateChange = {this.props.onEditorStateChange}
-                      />
-                  </Card>
-                  <FormHelperText id = "body-text">
-                    Include here the description of the {this.props.label + ' '}.
-                  </FormHelperText>
-                </FormControl>
-
               </Grid>
 
               {/* RIGHT COLUMN */}
