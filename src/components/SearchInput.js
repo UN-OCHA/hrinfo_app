@@ -35,7 +35,6 @@ class Option extends React.Component {
 
 	render() {
   	const { children, isFocused, isSelected, onFocus, classes, data } = this.props;
-    let isHover = false;
 
   	return (
     		<MenuItem

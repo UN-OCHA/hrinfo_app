@@ -8,15 +8,15 @@ import { translate, Trans } from 'react-i18next';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 // Components
-import HRInfoSelect       from '../components/HRInfoSelect';
-import HRInfoLocations    from '../components/HRInfoLocations';
-import HRInfoAsyncSelect  from '../components/HRInfoAsyncSelect';
-import HidContacts        from '../components/HidContacts';
-import EventDate          from '../components/EventDate';
-import AssessmentStatus from "../components/AssessmentStatus";
+import HRInfoSelect             from '../components/HRInfoSelect';
+import HRInfoLocations          from '../components/HRInfoLocations';
+import HRInfoAsyncSelect        from '../components/HRInfoAsyncSelect';
+import HidContacts              from '../components/HidContacts';
+import EventDate                from '../components/EventDate';
+import AssessmentStatus         from "../components/AssessmentStatus";
 import HRInfoFilesAccessibility from "../components/HRInfoFilesAccessibility";
-import LanguageSelect     from '../components/LanguageSelect';
-import RelatedContent     from '../components/RelatedContent';
+import LanguageSelect           from '../components/LanguageSelect';
+import RelatedContent           from '../components/RelatedContent';
 
 // Material plugin
 import FormHelperText   from '@material-ui/core/FormHelperText';
@@ -28,7 +28,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
-import Collapse from "@material-ui/core/Collapse/Collapse";
+import Collapse         from "@material-ui/core/Collapse/Collapse";
 
 class AssessmentForm extends React.Component {
   constructor(props) {
