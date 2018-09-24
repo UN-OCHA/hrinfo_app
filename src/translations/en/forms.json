@@ -157,6 +157,8 @@
     "phones": {
       "phones": "Phone(s)",
       "type": "Type",
+      "dialling_code": "Dialling code",
+      "number": "Number",
       "types": {
         "work": "Work",
         "home": "Home",

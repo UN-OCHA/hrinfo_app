@@ -52,25 +52,21 @@ class Phones extends React.Component {
                           value={this.state.type[number]} />
         </CardContent>
         <CardContent className="file-container">
-          <Typography>
-            {t('files.accessibilities.instructions')}
-          </Typography>
-          <TextField type      = "text"
-                     name      = "instructions"
-                     id        = "instructions"
-                     value     = {this.state.instructions[number]}
-                     onChange  = { (s) => this.handleChange(number, 'instructions', s)}/>
+          <Typography>{t('phones.dialling_code')}</Typography>
+          <MaterialSelect options={this.dialling_codes}
+                          name={'accessibility' + number}
+                          onChange={ (s) => this.handleChange(number, 'accessibility', s)}
+                          value={this.state.type[number]} />
         </CardContent>
-        {/*{this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.available') ?*/}
-          {/*<CardContent className="file-container-language">*/}
-            {/*<Typography>{t('url')}</Typography>*/}
-            {/*<TextField type      = "text"*/}
-                       {/*name      = "url"*/}
-                       {/*id        = "url"*/}
-                       {/*fullWidth = {true}*/}
-                       {/*value     = {this.state.url[number]}*/}
-                       {/*onChange  = { (s) => this.handleChange(number, 'url', s)}/>*/}
-          {/*</CardContent> : ''*/}
+        <CardContent className="file-container">
+          <Typography>{t('phones.number')}</Typography>
+          <TextField type      = "text"
+                     name      = "url"
+                     id        = "url"
+                     fullWidth = {true}
+                     value     = {this.state.url[number]}
+                     onChange  = { (s) => this.handleChange(number, 'url', s)}/>
+        </CardContent>
         {/*}*/}
         {/*<CardActions className="file-container-language">*/}
           {/*{this.state.accessibility[number] && this.state.accessibility[number].value === t('files.accessibilities.available') ?*/}

@@ -20,7 +20,6 @@ class Home extends React.Component {
             <li><Link to="/organizations/new">Add a new organization</Link></li>
             <li><Link to="/assessment/new">Add a new assessment</Link></li>
             <li><Link to="/operations/offices/new">Add a new office</Link></li>
-            <li><Link to="/assessments/new">Add a new assessment</Link></li>
           </ul>
         </div>
       );
