@@ -65,8 +65,8 @@ RUN cat /proc/sys/fs/inotify/max_user_watches
 
 USER $USER
 
-RUN git config --global user.email "axel.reliefapps@gmail.com"
-RUN git config --global user.name "axel.reliefapps"
+# RUN git config --global user.email "axel.reliefapps@gmail.com"
+# RUN git config --global user.name "axel.reliefapps"
 
 RUN npm -g config set user $USER
 RUN ls -la
