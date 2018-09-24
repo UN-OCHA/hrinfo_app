@@ -67,6 +67,7 @@ class AssessmentForm extends React.Component {
       status             : '',
       collapseMain       : false,
       collapseSecondary  : false,
+      wasSubmitted       : false,
     };
 
     this.hrinfoAPI      = new HRInfoAPI();
@@ -118,6 +119,10 @@ class AssessmentForm extends React.Component {
     else if (collapse === "main") {
       this.setState({collapseMain: !this.state.collapseMain});
     }
+  }
+
+  submit() {
+    this.setState({ wasSubmitted: true });
   }
 
   render() {
@@ -524,9 +529,9 @@ class AssessmentForm extends React.Component {
         {
           this.props.status !== 'submitting' &&
           <span>
-            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt);}}>{t('publish')}</Button>
+            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
               &nbsp;
-            {/*<Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>*/}
+            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
               &nbsp;
           </span>
         }
