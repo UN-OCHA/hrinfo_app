@@ -1,10 +1,16 @@
 import React from 'react';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
+import { translate, Trans } from 'react-i18next';
+
+import HRInfoAPI from '../api/HRInfoAPI';
 
 //Components
 import LanguageSelect     from '../components/LanguageSelect';
 import Address            from '../components/Address';
 import HRInfoLocations    from '../components/HRInfoLocations';
 import HRInfoAsyncSelect  from '../components/HRInfoAsyncSelect';
+import HRInfoSelect       from '../components/HRInfoSelect';
+import Phones             from '../components/Phones';
 //Material Components
 import FormHelperText   from '@material-ui/core/FormHelperText';
 import FormControl      from '@material-ui/core/FormControl';
@@ -21,18 +27,82 @@ import Checkbox         from '@material-ui/core/Checkbox';
 
 
 class OfficesForm extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        editorState: EditorState.createEmpty(),
+        status             : '',
+      };
+
+      this.hrinfoAPI      = new HRInfoAPI();
+    }
+
+  async componentDidMount() {
+    if (this.props.match.params.id) {
+      const doc = await this.hrinfoAPI.getItem('offices', this.props.match.params.id);
+      doc.spaces = [];
+      doc.operation.forEach(function (op) {
+        if (op) {
+          doc.hasOperation = true;
+          op.type = "operations";
+          doc.spaces.push(op);
+        }
+      });
+      doc.space.forEach(function (sp) {
+        if (sp) {
+          sp.type = "spaces";
+          doc.spaces.push(sp);
+        }
+      });
+      this.state.languages.forEach(function (lang) {
+        if (doc.language === lang.value) {
+          doc.language = lang;
+        }
+      });
+      let state = {
+        doc: doc
+      };
+      if (doc['body-html']) {
+        const blocksFromHTML = convertFromHTML(doc['body-html']);
+        const contentState = ContentState.createFromBlockArray(
+          blocksFromHTML.contentBlocks,
+          blocksFromHTML.entityMap
+        );
+        state.editorState = EditorState.createWithContent(contentState);
+      }
+      this.setState(state);
+    }
+  }
+
+  // Checkbox
+  setCheckbox (event) {
+    const target  = event.target;
+    const value   = target.checked;
+    const name    = target.name;
+    let newState  = {};
+
+    newState[name] = value;
+
+    if (target.name === 'coordinationHub' && value) {
+      newState.val = this.state.val;
+    }
+    this.setState(newState);
+  }
 
     render() {
+      const { t, label } = this.props;
+
       return (
         <Grid container direction="column" alignItems="center">
-          <Typography color="textSecondary" gutterBottom variant="headline">Create {this.props.doc.label}</Typography>
+          <Typography color="textSecondary" gutterBottom variant="headline">{t('offices.create')}</Typography>
           <Grid item>
             <Grid container justify="space-around">
               {/* FIRST COLUMN */}
               <Grid item md={6} xs={11}>
                 {/* Title */}
                 <FormControl required fullWidth margin="normal">
-                  <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
+                  <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
                   <TextField
                     type     = "text"
                     name     = "label"
@@ -40,55 +110,74 @@ class OfficesForm extends React.Component {
                     value    = {this.props.doc.label}
                     onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "label-text">
-                    Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
-                    <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                    <Trans i18nKey={label + '.helpers.title'}>
+                      Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
+                      <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                    </Trans>
                   </FormHelperText>
                 </FormControl>
 
                 {/* Location */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>{t('location')}</FormLabel>
                   <HRInfoLocations
                     onChange = {(s) => this.props.handleSelectChange('location', s)}
                     value    = {this.props.doc.location}
                     id       = "location"/>
                   <FormHelperText id="location-text">
-                    Select from the menu the country(ies) the document is about
-                    and indicate more specific locations by selecting multiple layers (region, province, town).
+                    <Trans i18nKey={label + '.helpers.location'}>
+                      Select from the menu the country where the office is located
+                      and indicate more specific locations by selecting multiple layers (region, province, town).
+                    </Trans>
                   </FormHelperText>
                 </FormControl>
 
                 {/* Address */}
                 <FormControl required fullWidth margin="normal">
-                  <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>Address</FormLabel>
+                  <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>{t('address')}</FormLabel>
                   <Address
                     onChange={(s) => this.props.handleSelectChange('address', s)}
                     value={this.props.doc.address} />
                   <FormHelperText id="address-text">
-                    Indicate the address of the office.
+                    <Trans i18nKey={label + '.helpers.address'}>
+                      Indicate the address of the office.
+                    </Trans>
                   </FormHelperText>
                 </FormControl>
 
-                {/* Webspaces */}
+                {/* Operation(s)/Webspace(s) */}
+                <FormControl required fullWidth margin="normal">
+                  <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
+                  <HRInfoSelect type    = "operations"
+                                isMulti = {true}
+                                onChange={(s) => this.props.handleSelectChange('spaces', s)}
+                                value   = {this.props.doc.spaces}/>
+                  <FormHelperText id="spaces-text">
+                    <Trans i18nKey={label + '.helpers.spaces'}>Click on the field and select where to publish the office
+                      (operation, regional site or thematic site).</Trans>
+                  </FormHelperText>
+                </FormControl>
               </Grid>
 
               {/* SECOND COLUMN */}
               <Grid item md={3} xs={11}>
                 {/* Language */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Language</FormLabel>
+                  <FormLabel>{t('language')}</FormLabel>
                   <LanguageSelect
                     value     = {this.props.doc.language}
                     onChange  = {(s) => this.props.handleSelectChange('language', s)}
                     className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
                   <FormHelperText id="language-text">
-                    Select the language of the document.
+                    <Trans i18nKey={label + '.helpers.language'}>
+                      Select the language of the office.
+                    </Trans>
                   </FormHelperText>
                 </FormControl>
 
                 {/* Email */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('email')}</FormLabel>
                   <TextField
                     type     = "email"
                     name     = "email"
@@ -96,25 +185,51 @@ class OfficesForm extends React.Component {
                     value    = {this.props.doc.email || ""}
                     onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "email-text">
-                    Type in the email.
+                    <Trans i18nKey={label + '.helpers.email'}>
+                      Type in the email.
+                    </Trans>
                   </FormHelperText>
                 </FormControl>
 
                 {/* Phones */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('phones.phones')}</FormLabel>
+                  <Phones onChange={(s) => this.props.handleSelectChange('phones', s)}
+                                            onInputChange={this.props.handleInputChange}
+                                            value={this.props.doc.phones} />
+                  <FormHelperText id = "report-text">
+                    <Trans i18nKey='helpers.phones'>Phone numbers.</Trans>
+                  </FormHelperText>
+                </FormControl>
 
                 {/* Organizations */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Organization(s)</FormLabel>
+                  <FormLabel>{t('organizations')}</FormLabel>
                   <HRInfoAsyncSelect
                     type     = "organizations"
                     onChange = {(s) => this.props.handleSelectChange('organizations', s)}
                     value    = {this.props.doc.organizations}
                     isMulti={true} />
                   <FormHelperText id="organizations-text">
-                    Type in and select the organization(s) of the {this.props.label}.
+                    <Trans i18nKey={label + '.helpers.organizations'}>
+                      Type in and select the organization(s) of the office.
+                    </Trans>
                   </FormHelperText>
                 </FormControl>
 
+                {/* Coordination Hub */}
+                <FormControl fullWidth margin="normal">
+                  <FormControlLabel
+                  control = {
+                    <Checkbox name     = "coordinationHub"
+                              color    = "primary"
+                              onChange = {this.props.handleInputChange}
+                              checked  = {this.state.coordinationHub}
+                    />
+                  }
+                  label   = {t('coordination')}
+                  />
+                </FormControl>
     					</Grid>
     				</Grid>
     			</Grid>
@@ -161,4 +276,4 @@ class OfficesForm extends React.Component {
     }
 }
 
-export default OfficesForm;
+export default translate('forms')(OfficesForm);
