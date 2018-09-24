@@ -150,9 +150,6 @@ class AssessmentForm extends React.Component {
                     Try not to use abbreviations. To see Standards and Naming Conventions click
                   <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
                 </FormHelperText>
-                {/*<div className="invalid-feedback">*/}
-                  {/*Please enter the assessment title*/}
-                {/*</div>*/}
               </FormControl>
 
               {/* Dates */}
@@ -329,9 +326,6 @@ class AssessmentForm extends React.Component {
 
             {/* SECOND COLUMN */}
             <Grid item md={3} xs={11}>
-              {/*<div className="invalid-feedback">*/}
-              {/*Please select a language*/}
-              {/*</div>*/}
               {/* Languages */}
               <FormControl required fullWidth margin="normal">
                 <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>
@@ -354,9 +348,6 @@ class AssessmentForm extends React.Component {
                   <Trans i18nKey={label + '.helpers.status'}>Indicate the phase of the assessment.
                     Please remember to update this field as phases move on.</Trans>
                 </FormHelperText>
-                {/*<div className="invalid-feedback">*/}
-                  {/*You must select an assessment status*/}
-                {/*</div>*/}
               </FormControl>
 
               {/* Operation(s)/Webspace(s) */}
