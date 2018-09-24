@@ -35,7 +35,7 @@ class Option extends React.Component {
 
 	render() {
   	const { children, isFocused, isSelected, onFocus, classes, data } = this.props;
-    // let isHover = false;
+    let isHover = false;
 
   	return (
     		<MenuItem
@@ -101,16 +101,6 @@ function SelectWrapped(props) {
 
 const ITEM_HEIGHT = 48;
 
-// const styles = theme => ({
-//   root: {
-//     flexGrow: 1,
-//     height: 200
-//   },
-//   chip: {
-//     margin: theme.spacing.unit / 4
-//   }
-// });
-
 const customStyles = {
   control: () => ({
     display: "flex",
@@ -155,7 +145,6 @@ class SearchInput extends React.Component {
 
   getOptions (input, callback) {
     const hrinfoAPI = new HRInfoAPI();
-    // const that = this;
     let params = {};
     params['filter[label][value]'] = input;
     params['filter[label][operator]'] = 'CONTAINS';
