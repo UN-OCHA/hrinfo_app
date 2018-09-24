@@ -300,7 +300,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
       if (this.props.match.params.id) {
         const doc = await this.hrinfoAPI.getItem(hrinfoType, this.props.match.params.id);
         let state = {};
-        if (hrinfoType !== 'operations') {
+        if (hrinfoType !== 'operations' && hrinfoType !== 'organizations') {
           doc.spaces = [];
           doc.operation.forEach(function (op) {
             if (op) {
