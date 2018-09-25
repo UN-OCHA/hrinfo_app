@@ -82,5 +82,22 @@
       "address_2": "Address 2",
       "postal_code": "Postal Code",
       "city": "City"
+    },
+    "assessments": {
+      "status": {
+        "planned": "Planned",
+        "ongoing": "Ongoing",
+        "draft": "Draft / Preliminary Results",
+        "field_work": "Field work completed",
+        "report": "Report completed"
+      }
+    },
+    "events": {
+      "category": {
+        "meetings": "Meetings",
+        "trainings": "Trainings",
+        "workshops": "Workshops",
+        "conferences": "Conferences"
+      }
     }
 }

@@ -130,8 +130,6 @@ class OrganizationForm extends React.Component {
               <span>
                 <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
                 &nbsp;
-                <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>Save as Draft</Button>
-                &nbsp;
               </span>
             }
             {
