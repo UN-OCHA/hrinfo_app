@@ -38,6 +38,9 @@
     "meeting_minutes": "Durée réunion",
     "date": "Date",
     "url": "URL",
+    "address": "Adresse",
+    "location": "Lieu",
+    "email": "Courriel",
     "helpers": {
         "files": "Télécharger le fichier à publier et spécifier sa langue. Il est préférable de publier un fichier par enregistrement, mais vous pouvez en ajouter si nécessaire. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>."
     },
@@ -64,7 +67,7 @@
         "helpers": {
             "title": "Taper le titre original de l'évaluation. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1>ici</ 1>.",
             "date": "Indiquer les dates de début et de fin de l'évaluation.",
-            "spaces": "Cliquer sur le champ et sélectionner ou publier l'évaluation (l'operation, le site regional ou thematique etc).",
+            "spaces": "Cliquer sur le champ et sélectionner où publier l'évaluation (l'operation, le site regional ou thematique etc).",
             "status": "Indiquer la phase de l'évaluation. Ne pas oublier de mettre à jour ce champ quand les phases avancent.",
             "leading_organizations": "Taper et sélectionner la ou les organisations menant les évaluations.",
             "participating_organizations": "Taper et sélectionner la ou les organisations faisant part (mais ne menant pas) les évaluations.",
@@ -109,6 +112,21 @@
         },
         "create": "Créer une carte/infographique"
     },
+    "offices": {
+      "create": "Créer bureau",
+      "helpers": {
+        "title": "Taper le titre original du bureau. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+        "language": "Sélectionner la langue du bureau.",
+        "location": "Sélectionner à partir du menu le pays où le bureau est situé et indiquer un lieu plus précis en sélectionnant plusieurs niveaux (région, province, ville).",
+        "address": "Indiquer l'adresse du bureau",
+        "email": "Saisir le courriel",
+        "organizations": "Saisir et sélectionner les source(s) du bureau.",
+        "spaces": "Cliquer sur le champ et sélectionner où publier le bureau (l'operation, le site regional ou thematique etc).",
+        "phones": "Saisir les numéros de téléphone du bureau.",
+        "is_coordination_hub": "Ce bureau est un bureau de coordination.",
+        "is_not_coordination_hub": "Ce bureau n'est pas un bureau de coordination."
+      }
+    },
     "files": {
         "files": "Fichier(s)",
         "assessment_report": "Rapport d’évaluation",
@@ -136,5 +154,17 @@
             "url": "Entrez l'URL du contenu lié"
         },
         "related_content": "Contenu lié"
+    },
+    "phones": {
+      "phones": "Téléphone(s)",
+      "type": "Type",
+      "dialling_code": "Indicatif",
+      "number": "Numéro",
+      "types": {
+        "work": "Travail",
+        "home": "Maison",
+        "mobile": "Mobile",
+        "fax": "Fax"
+      }
     }
 }

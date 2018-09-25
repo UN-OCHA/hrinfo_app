@@ -161,6 +161,11 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.language)) {
           isValid = true;
         }
+        if (hrinfoType === 'offices' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.address)) {
+          isValid = true;
+        }
       }
       return isValid;
     }
@@ -342,6 +347,11 @@ const withForm = function withForm(Component, hrinfoType, label) {
             }
           }
         }
+        if (hrinfoType === 'offices') {
+          if (body.address && body.address.country) {
+            body.address.country = body.address.country.pcode;
+          }
+        }
         body.operation = [];
         body.space     = [];
         body.spaces.forEach(function (sp) {
@@ -376,22 +386,23 @@ const withForm = function withForm(Component, hrinfoType, label) {
           body.locations = locations;
         }
       }
-      this.hrinfoAPI
-        .save(hrinfoType, body)
-        .then(doc => {
-          if (hrinfoType === 'documents' || hrinfoType === 'infographics') {
-            return this.postFieldCollections(doc.id, field_collections);
-          }
-          else {
-            return doc.id;
-          }
-        })
-        .then(docid => {
-          this.props.history.push('/' + hrinfoType + '/' + docid);
-        })
-        .catch(err => {
-          this.props.setAlert('danger', 'There was an error uploading your ' + label);
-        });
+      console.log('-------------------', body);
+      // this.hrinfoAPI
+      //   .save(hrinfoType, body)
+      //   .then(doc => {
+      //     if (hrinfoType === 'documents' || hrinfoType === 'infographics') {
+      //       return this.postFieldCollections(doc.id, field_collections);
+      //     }
+      //     else {
+      //       return doc.id;
+      //     }
+      //   })
+      //   .then(docid => {
+      //     this.props.history.push('/' + hrinfoType + '/' + docid);
+      //   })
+      //   .catch(err => {
+      //     this.props.setAlert('danger', 'There was an error uploading your ' + label);
+      //   });
     }
 
     async componentDidMount() {

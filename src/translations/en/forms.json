@@ -39,7 +39,6 @@
     "date": "Date",
     "url": "URL",
     "address": "Address",
-    "coordination": "Is a coordination hub ?",
     "location": "Location",
     "email": "Email",
     "helpers": {
@@ -123,7 +122,9 @@
           "email": "Type in the email",
           "organizations": "Type in and select the source(s) of the office.",
           "spaces": "Click on the field and select where to publish the office (operation, regional site or thematic site).",
-          "phones": "Type in the phones of the office."
+          "phones": "Type in the phones of the office.",
+          "is_coordination_hub": "This office is a coordination hub.",
+          "is_not_coordination_hub": "This office is not a coordination hub."
         }
     },
     "files": {

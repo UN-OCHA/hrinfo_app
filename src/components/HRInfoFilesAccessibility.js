@@ -181,7 +181,6 @@ class HRInfoFilesAccessibility extends React.Component {
 
   componentDidUpdate() {
     if (this.props.value && this.state.status === '') {
-      const that = this;
       let state = {
         inputNumber: 0,
         url: '',

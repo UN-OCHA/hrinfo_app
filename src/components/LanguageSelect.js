@@ -41,7 +41,11 @@ class LanguageSelect extends React.Component {
           options={this.state.options}
           value={this.getValue(this.props.value)}
           className={this.props.className}
-          getOptionValue={() => {return this.props.value.value}} />
+          getOptionValue={() => {
+            if(this.props.value)
+              return this.props.value.value;
+            else
+              return ''}} />
     );
   }
 }

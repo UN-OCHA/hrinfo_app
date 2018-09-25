@@ -18,12 +18,14 @@ import FormLabel        from '@material-ui/core/FormLabel';
 import TextField        from '@material-ui/core/TextField';
 import Button           from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Card             from '@material-ui/core/Card';
 import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox         from '@material-ui/core/Checkbox';
+import Card from "@material-ui/core/Card/Card";
+import CardContent from "@material-ui/core/CardContent/CardContent";
+import Switch from "@material-ui/core/Switch/Switch";
 
 
 class OfficesForm extends React.Component {
@@ -33,6 +35,7 @@ class OfficesForm extends React.Component {
       this.state = {
         editorState: EditorState.createEmpty(),
         status             : '',
+        languages          : null
       };
 
       this.hrinfoAPI      = new HRInfoAPI();
@@ -49,17 +52,9 @@ class OfficesForm extends React.Component {
           doc.spaces.push(op);
         }
       });
-      doc.space.forEach(function (sp) {
-        if (sp) {
-          sp.type = "spaces";
-          doc.spaces.push(sp);
-        }
-      });
-      this.state.languages.forEach(function (lang) {
-        if (doc.language === lang.value) {
-          doc.language = lang;
-        }
-      });
+      if (doc.language === undefined) {
+        doc.language = null;
+      }
       let state = {
         doc: doc
       };
@@ -72,22 +67,12 @@ class OfficesForm extends React.Component {
         state.editorState = EditorState.createWithContent(contentState);
       }
       this.setState(state);
+      console.log("STAAAAAAAAAAAAAAAAAAAAAATE", this.state);
     }
   }
 
-  // Checkbox
-  setCheckbox (event) {
-    const target  = event.target;
-    const value   = target.checked;
-    const name    = target.name;
-    let newState  = {};
-
-    newState[name] = value;
-
-    if (target.name === 'coordinationHub' && value) {
-      newState.val = this.state.val;
-    }
-    this.setState(newState);
+  submit() {
+    this.setState({ wasSubmitted: true });
   }
 
     render() {
@@ -195,8 +180,8 @@ class OfficesForm extends React.Component {
                 <FormControl fullWidth margin = "normal">
                   <FormLabel>{t('phones.phones')}</FormLabel>
                   <Phones onChange={(s) => this.props.handleSelectChange('phones', s)}
-                                            onInputChange={this.props.handleInputChange}
-                                            value={this.props.doc.phones} />
+                          onInputChange={this.props.handleInputChange}
+                          value={this.props.doc.phones} />
                   <FormHelperText id = "report-text">
                     <Trans i18nKey='helpers.phones'>Phone numbers.</Trans>
                   </FormHelperText>
@@ -219,16 +204,21 @@ class OfficesForm extends React.Component {
 
                 {/* Coordination Hub */}
                 <FormControl fullWidth margin="normal">
-                  <FormControlLabel
-                  control = {
-                    <Checkbox name     = "coordinationHub"
-                              color    = "primary"
-                              onChange = {this.props.handleInputChange}
-                              checked  = {this.state.coordinationHub}
-                    />
-                  }
-                  label   = {t('coordination')}
-                  />
+                  <FormLabel focused={false}>{t('coordination_hubs')}</FormLabel>
+                  <Card className="card-container">
+                    <CardContent className="card-content">
+                      <FormControlLabel
+                      control = {
+                        <Switch name     = "coordination_hub"
+                                color    = "primary"
+                                onChange = {this.props.handleInputChange}
+                                checked  = {this.props.doc.coordination_hub}
+                        />
+                      }
+                      label   = {this.props.doc.coordination_hub ? t('offices.helpers.is_coordination_hub') : t('offices.helpers.is_not_coordination_hub')}
+                      />
+                    </CardContent>
+                  </Card>
                 </FormControl>
     					</Grid>
     				</Grid>
