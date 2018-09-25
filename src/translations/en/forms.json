@@ -75,5 +75,12 @@
         "title": "Type in the title of the related content.",
         "url": "Type in the URL of the related content"
       }
+    },
+    "address": {
+      "country": "Country",
+      "address_1": "Address 1",
+      "address_2": "Address 2",
+      "postal_code": "Postal Code",
+      "city": "City"
     }
 }
