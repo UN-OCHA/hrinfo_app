@@ -119,9 +119,8 @@ const withForm = function withForm(Component, hrinfoType, label) {
     validateForm () {
       const doc = this.state.doc;
       let isValid = false;
-      if (this.isValid(doc.language) &&
-        this.isValid(doc.label)) {
-        if (hrinfoType === 'operations') {
+      if (this.isValid(doc.label)) {
+        if (hrinfoType === 'operations' | hrinfoType === 'organizations') {
           isValid = true;
         }
         if (hrinfoType === 'documents' &&
@@ -182,7 +181,9 @@ const withForm = function withForm(Component, hrinfoType, label) {
       let field_collections = [];
       let body = JSON.stringify(this.state.doc);
       body = JSON.parse(body);
-      body.published = isDraft ? 0 : 1;
+      if (hrinfoType !== 'organizations') {
+        body.published = isDraft ? 0 : 1;
+      }
       if (hrinfoType !== 'operations') {
         if (hrinfoType === 'infographics' || hrinfoType === 'documents') {
           body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
@@ -243,18 +244,23 @@ const withForm = function withForm(Component, hrinfoType, label) {
             });
           }
         }
-        body.operation = [];
-        body.space     = [];
-        body.spaces.forEach(function (sp) {
-          if (sp.type === 'operations') {
-            body.operation.push(sp.id);
-          }
-          else {
-            body.space.push(sp.id);
-          }
-        });
-        delete body.spaces;
-        delete body.hasOperation;
+        if (hrinfoType === 'organizations') {
+          body.type = body.type.id;
+        }
+        if (hrinfoType !== 'organizations') {
+          body.operation = [];
+          body.space     = [];
+          body.spaces.forEach(function (sp) {
+            if (sp.type === 'operations') {
+              body.operation.push(sp.id);
+            }
+            else {
+              body.space.push(sp.id);
+            }
+          });
+          delete body.spaces;
+          delete body.hasOperation;
+        }
         const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
         selectFields.forEach(function (field) {
           if (body[field]) {
