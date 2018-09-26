@@ -21,6 +21,18 @@
     "add_more": "Add More Information",
     "hide_information": "Hide Optional Information",
     "add_another": "Add Another",
+    "languages": {
+      "en": "English",
+      "fr": "French",
+      "es" : "Spanish"
+    },
+    "edit": "Edit",
+    "type": "Type",
+    "social_media": "Social media",
+    "website": "Website",
+    "email": "Email",
+    "operation": "Operation",
+    "date": "Date",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -93,11 +105,60 @@
       }
     },
     "events": {
+      "create": "Create event",
+      "venue": "Venue",
+      "contacts": "Contact(s)",
+      "agendas": "Agenda(s)",
+      "meeting_minutes": "Meeting Minute(s)",
       "category": {
+        "title": "Event Category",
         "meetings": "Meetings",
         "trainings": "Trainings",
         "workshops": "Workshops",
         "conferences": "Conferences"
+      },
+      "helpers": {
+        "title": "Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+        "offices": "Click on the field and select the coordination hub(s) the document refers to (if any).",
+        "disasters": "Click on the field and select the disaster(s) or emergency the document refers to.",
+        "bundles": "Indicate the cluster(s)/sector(s) the document refers to.",
+        "category": "From the list, select the kind of event you are creating.",
+        "date": "Indicate the date of the event.",
+        "description": "Try to always include here the text (in full or part of it) of the event (example: use the introduction or the executive summary).",
+        "address": "Indicate here where the event takes place.",
+        "language": "Select the language of the event.",
+        "spaces": "Click on the field and select where to publish the event (operation, regional site or thematic site).",
+        "organizations": "Type in and select the source(s) of the event.",
+        "contacts": "Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.",
+        "agendas": "Add the agenda of the event as a document first, and then reference this document from here.",
+        "meeting_minutes": "Add the meeting minutes of the event as a document first, and then reference this document from here.",
+        "locations": "Select from the menu the country(ies) the event is about and indicate more specific locations by selecting multiple layers (region, province, town).",
+        "themes": "Click on the field and select all relevant themes. Choose only themes the event substantively refers to.",
+        "related_content": "Add links to content that is related to the event you are publishing (example: language versions of the same event, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+      }
+    },
+    "bundles": {
+      "create": "Create group",
+      "parent_cluster": "Parent Cluster",
+      "hid_access": {
+        "title": "HID Access",
+        "do_not_create": "Do not create a list",
+        "open": "Open",
+        "closed": "Closed"
+      },
+      "global_cluster": "Global Cluster",
+      "lead_agencies": "Lead Agencies",
+      "activation_document": "Activation document",
+      "partners": "Partners",
+      "participation": "Participation",
+      "ngo_participation": "NGO Participation",
+      "government_participation": "Government Participation",
+      "inter_cluster": "Inter cluster",
+      "helpers": {
+        "title": "Type the original title of the group. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+        "type": "From the list, select the type of group you are creating.",
+        "hid_access": "Select 'Open' if you want HID users to add themselves to this group. Select 'Closed' if you want only HID managers to be allowed to add HID users to this group.",
+        "body": "Try to always include here the text (in full or part of it) of the group (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing."
       }
     }
 }

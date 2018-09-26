@@ -1,4 +1,5 @@
 import React      from 'react';
+import { translate, Trans } from 'react-i18next';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -55,18 +56,18 @@ class EventForm extends React.Component {
   }
 
   render() {
+    const { t, i18n } = this.props;
     const offices = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>Coordination hub(s)</FormLabel>
+        <FormLabel>{t('coordination_hubs')}</FormLabel>
         <HRInfoSelect type     = "offices"
                       spaces   = {this.props.doc.spaces}
                       isMulti  = {true}
                       onChange = {(s) => this.props.handleSelectChange('offices', s)}
                       value    = {this.props.doc.offices}/>
         <FormHelperText id = "offices-text">
-          Click on the field and select the coordination hub(s) the {this.props.typeLabel + ' '}
-          refers to (if any).
+          {t('events.helpers.offices')}
         </FormHelperText>
       </FormControl>
     )
@@ -75,16 +76,14 @@ class EventForm extends React.Component {
     const disasters = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>Disaster(s) / Emergency</FormLabel>
+        <FormLabel>{t('disasters')}</FormLabel>
         <HRInfoSelect type      = "disasters"
                       spaces    = {this.props.doc.spaces}
                       isMulti   = {true}
                       onChange  = {(s) => this.props.handleSelectChange('disasters', s)}
                       value     = {this.props.doc.disasters}/>
         <FormHelperText id="disasters-text">
-            Click on the field and select the disaster(s) or emergency the {this.props.typeLabel + ' '}
-            refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See
-            <a href="http://glidenumer.net/?ref=hrinfo"> glidenumber.net</a>.
+            {t('events.helpers.disasters')}
         </FormHelperText>
       </FormControl>
     )
@@ -93,66 +92,70 @@ class EventForm extends React.Component {
     const bundles = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel> Cluster(s)/Sector(s) </FormLabel>
+        <FormLabel>{t('bundles')}</FormLabel>
         <HRInfoSelect type     =  "bundles"
                       spaces   =  {this.props.doc.spaces}
                       isMulti  =  {true}
                       onChange =  {(s) => this.props.handleSelectChange('bundles', s)}
                       value    =  {this.props.doc.bundles}/>
         <FormHelperText id="bundles-text">
-          Indicate the cluster(s)/sector(s) the {this.props.label + ' '}
-          refers to.
+          {t('events.helpers.bundles')}
         </FormHelperText>
       </FormControl>
     )
     : '';
 
+    let title = t('events.create') + ' [' + t('languages.' + i18n.language) + ']';
+    if (this.props.doc.id) {
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+    }
+
     return (
       <Grid container direction = "column" alignItems = "center">
-      <Typography color = "textSecondary" gutterBottom variant = "headline">Create {this.props.label}</Typography>
+      <Typography color = "textSecondary" gutterBottom variant = "headline">{title}</Typography>
       <Grid item>
         <Grid container justify = "space-around">
           <Grid item md ={6} xs ={11}>
 
           {/* Title */}
             <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
               <TextField type     = "text"
                          name     = "label"
                          id       = "label"
                          value    = {this.props.doc.label}
                          onChange = {this.props.handleInputChange}/>
               <FormHelperText id = "label-text">
-                Type the original title of the {this.props.label + ' '}. Try not to use abbreviations. To see Standards and Naming Conventions click
-                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                <Trans i18nKey='events.helpers.title'>Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click
+                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
 
          {/* Event Category */}
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.category)}>Event Category</FormLabel>
+              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.category)}>{t('events.category.title')}</FormLabel>
               <EventCategorySelect value     = {this.props.doc.category}
                                    onChange  = {(s) => this.props.handleSelectChange('category', s)}
                                    className = {this.props.isValid(this.props.doc.category) ? 'is-valid' : 'is-invalid'}/>
               <FormHelperText id="language-text">
-                  From the list, select the kind of {this.props.label} you are creating. .
+                  {t('events.helpers.category')}
               </FormHelperText>
             </FormControl>
 
         {/* Dates */}
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>Date</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>{('date')}</FormLabel>
               <EventDate value    = {this.props.doc.date}
                          onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                          required />
               <FormHelperText>
-                Indicate the date of the {this.props.label}.
+                {t('events.helpers.date')}
               </FormHelperText>
             </FormControl>
 
          {/* Event Description */}
             <FormControl fullWidth margin = "normal">
-              <FormLabel>Event description</FormLabel>
+              <FormLabel>{t('description')}</FormLabel>
               <Card className = "card-container">
                 <Editor editorState         = {this.props.editorState}
                         editorClassName     = "editor-content"
@@ -160,17 +163,16 @@ class EventForm extends React.Component {
                         onEditorStateChange = {this.props.onEditorStateChange}/>
               </Card>
               <FormHelperText id = "body-text">
-                Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
-                (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+                {t('events.helpers.description')}
               </FormHelperText>
             </FormControl>
 
         {/* Address */}
             <FormControl fullWidth margin = "normal">
-              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>Venue</FormLabel>
+              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>{t('events.venue')}</FormLabel>
               <Address onChange={(s) => this.props.handleSelectChange('address', s)} value={this.props.doc.address} />
               <FormHelperText id = "address-text">
-                Indicate here where the {this.props.label} takes place.
+                {t('events.helpers.address')}
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -178,72 +180,71 @@ class EventForm extends React.Component {
           <Grid item md={3} xs={11}>
        {/* Language */}
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>Language</FormLabel>
+              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>
               <LanguageSelect value     = {this.props.doc.language}
                               onChange  = {(s) => this.props.handleSelectChange('language', s)}
                               className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
               <FormHelperText id="language-text">
-                Select the language of the {this.props.label}.
+                {t('events.helpers.language')}
               </FormHelperText>
             </FormControl>
 
         {/* Operation(s) / Webspace(s) */}
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>Operation(s) / Webspace(s)</FormLabel>
+              <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
               <HRInfoSelect type    = "spaces"
                             isMulti = {true} onChange={(s) => this.props.handleSelectChange('spaces', s)}
                             value   = {this.props.doc.spaces}/>
               <FormHelperText>
-                Click on the field and select where to publish the {this.props.label + ' '}
-                (operation, regional site or thematic site).
+                {t('events.helpers.spaces')}
               </FormHelperText>
             </FormControl>
 
         {/* Organizations */}
             <FormControl fullWidth margin="normal">
-              <FormLabel>Organization(s)</FormLabel>
+              <FormLabel>{t('organizations')})</FormLabel>
               <HRInfoAsyncSelect type     = "organizations"
                                  onChange = {(s) => this.props.handleSelectChange('organizations', s)}
                                  value    = {this.props.doc.organizations}
                                   isMulti={true} />
               <FormHelperText id="organizations-text">
-                Type in and select the source(s) of the {this.props.label}.
+                {t('events.helpers.organizations')}
               </FormHelperText>
             </FormControl>
 
         {/* Contacts */}
             <FormControl fullWidth margin="normal">
-              <FormLabel>Contact(s)</FormLabel>
+              <FormLabel>{t('events.contacts')}</FormLabel>
               <HidContacts isMulti={true}
                            id="contacts"
                            onChange={(s) => this.props.handleSelectChange('contacts', s)}
                            value={this.props.doc.contacts} />
               <FormHelperText>
-                Indicate the person(s) to contact for information regarding the {this.props.label}. To show up in the list, the person must have a HumanitarianID profile.
+                {t('events.helpers.contacts')}
               </FormHelperText>
             </FormControl>
 
         {/* Agenda(s) */}
             <FormControl fullWidth margin="normal">
-              <FormLabel>Agenda(s)</FormLabel>
+              <FormLabel>{t('events.agendas')}</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('agenda', s)}
                                  value    = {this.props.doc.agenda}
                                   isMulti={true} />
               <FormHelperText>
-                Add the agenda of the {this.props.label} as a document first, and then reference this document from here.
+                {t('events.helpers.agendas')}
               </FormHelperText>
             </FormControl>
 
         {/* Meeting minute(s) */}
             <FormControl fullWidth margin="normal">
-              <FormLabel>Meeting minute(s)</FormLabel>
+              <FormLabel>{t('events.meeting_minutes')}</FormLabel>
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}
                                  value    = {this.props.doc.meeting_minutes}
                                   isMulti = {true} />
               <FormHelperText>
-                Add the meeting minutes of the {this.props.label} as a document first, and then reference this document from here.
+                {t('events.helpers.meeting_minutes')}
               </FormHelperText>
             </FormControl>
 
@@ -255,12 +256,12 @@ class EventForm extends React.Component {
               <div className="more-info-button">
                 { !this.state.collapse &&
                   <Button color="secondary" variant="contained" onClick={this.toggle}>
-                    <i className = "icon-plus" /> &nbsp; Add More Information
+                    <i className = "icon-plus" /> &nbsp; {t('add_more')}
                   </Button>
                 }
                 { this.state.collapse &&
                   <Button color="secondary" variant="contained" onClick={this.toggle}>
-                    <i className = "icon-cancel" /> &nbsp; Hide Optional Information
+                    <i className = "icon-cancel" /> &nbsp; {t('hide_information')}
                   </Button>
                 }
               </div>
@@ -268,40 +269,37 @@ class EventForm extends React.Component {
               <Collapse in={this.state.collapse}>
             {/* Locations */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Location(s)</FormLabel>
+                  <FormLabel>{t('locations')}</FormLabel>
                   <HRInfoLocations onChange = {(s) => this.props.handleSelectChange('locations', s)}
                                    value    = {this.props.doc.locations}
                                    isMulti  = "isMulti"
                                    id       = "locations"/>
                   <FormHelperText id="locations-text">
-                    Select from the menu the country(ies) the {this.props.label + ' '}
-                    is about and indicate more specific locations by selecting multiple layers (region, province, town).
+                    {t('events.helpers.locations')}
                   </FormHelperText>
                 </FormControl>
 
             {/* Themes */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Theme(s)</FormLabel>
+                  <FormLabel>{t('themes')}</FormLabel>
                   <HRInfoSelect type      = "themes"
                                 isMulti   = {true}
                                 onChange  = {(s) => this.props.handleSelectChange('themes', s)}
                                 value     = {this.props.doc.themes}
                                 id        = "themes"/>
                   <FormHelperText id="themes-text">
-                    Click on the field and select all relevant themes. Choose only themes the {this.props.label + ' '}
-                    substantively refers to.
+                    {t('events.helpers.themes')}
                   </FormHelperText>
                 </FormControl>
 
             {/* Related Content */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Related Content</FormLabel>
+                  <FormLabel>{t('related_content.related_content')}</FormLabel>
                   <RelatedContent onChange  = {(s) => this.props.handleSelectChange('related_content', s)}
                                   value     = {this.props.doc.related_content}
                                   id        = "related_content"/>
                   <FormHelperText id="related_content-text">
-                    Add links to content that is related to the {this.props.label + ' '}
-                    you are publishing (example: language versions of the same {this.props.label}, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.
+                    {t('events.helpers.related_content')}
                   </FormHelperText>
                 </FormControl>
               </Collapse>
@@ -313,9 +311,9 @@ class EventForm extends React.Component {
         {
           this.props.status !== 'submitting' &&
           <span>
-            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
+            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
               &nbsp;
-            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>Save as Draft</Button>
+            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
               &nbsp;
           </span>
         }
@@ -324,7 +322,7 @@ class EventForm extends React.Component {
         }
         {(this.props.match.params.id && this.props.status !== 'deleting') &&
           <span>
-            <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
+            <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
           </span>
         }
         </Grid>
@@ -338,10 +336,10 @@ class EventForm extends React.Component {
           ContentProps     = {{
             'aria-describedby' : 'message-id'
           }}
-          message  = {<Typography id ="message-id" color="error">The form is incomplete and could not be submitted.</Typography>}
+          message  = {<Typography id ="message-id" color="error">{t('form_incomplete')}</Typography>}
           action   = {[
             <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
-            CLOSE
+            {t('close')}
             </Button>
           ]}
         />
@@ -349,4 +347,4 @@ class EventForm extends React.Component {
   }
 }
 
-export default EventForm;
+export default translate('forms')(EventForm);

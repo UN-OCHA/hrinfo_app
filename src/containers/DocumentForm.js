@@ -59,7 +59,7 @@ class DocumentForm extends React.Component {
   }
 
   render() {
-    const { t, label } = this.props;
+    const { t, label, i18n } = this.props;
     const offices = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
@@ -113,9 +113,14 @@ class DocumentForm extends React.Component {
     )
     : '';
 
+    let title = t(label + '.create') + ' [' + t('languages.' + i18n.language) + ']';
+    if (this.props.doc.id) {
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+    }
+
     return (
       <Grid container direction = "column" alignItems="center">
-      <Typography color = "textSecondary" gutterBottom variant = "headline">{t(label + '.create')}</Typography>
+      <Typography color = "textSecondary" gutterBottom variant = "headline">{title}</Typography>
       <Grid item>
         <Grid container justify = "space-around">
           <Grid item md ={6} xs ={11}>
