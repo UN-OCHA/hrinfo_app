@@ -12,24 +12,6 @@ class LanguageSelect extends React.Component {
         { value: 'ru', label: 'Russian' }
       ],
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.getValue = this.getValue.bind(this);
-  }
-
-  getValue (val) {
-    let out = {};
-    this.state.options.forEach(function (option) {
-      if (option.value === val) {
-        out = option;
-      }
-    });
-    return out;
-  }
-
-  handleChange (selectedOption) {
-    if (this.props.onChange) {
-      this.props.onChange(selectedOption ? selectedOption.value : selectedOption);
-    }
   }
 
   render() {
@@ -37,15 +19,13 @@ class LanguageSelect extends React.Component {
         <MaterialSelect
           id="language"
           name="language"
-          onChange={this.handleChange}
+          onChange={this.props.onChange}
           options={this.state.options}
-          value={this.getValue(this.props.value)}
+          value={this.props.value}
           className={this.props.className}
-          getOptionValue={() => {
-            if(this.props.value)
-              return this.props.value.value;
-            else
-              return ''}} />
+          getOptionValue={(option) => {return option.value}}
+          getOptionLabel={(option) => {return option.label}}
+        />
     );
   }
 }

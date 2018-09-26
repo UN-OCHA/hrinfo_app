@@ -38,14 +38,14 @@ export default ({ childProps }) =>
     <UnauthenticatedRoute path="/" exact component={Login} props={childProps} />
 
 {/* General */}
-    <AuthenticatedRoute path="/assessments/new"     exact component={withForm(AssessmentForm, 'assessments', 'assessment')}    props={childProps} />
+    <AuthenticatedRoute path="/assessments/new"          exact component={withForm(AssessmentForm, 'assessments', 'assessment')}    props={childProps} />
     <AuthenticatedRoute path="/assessments/:id/edit"     exact component={withForm(AssessmentForm, 'assessments', 'assessment')}    props={childProps} />
-    <AuthenticatedRoute path="/home"                exact component={Home}              props={childProps} />
-    <AuthenticatedRoute path="/admin"               exact component={Admin}             props={childProps} />
-    <AuthenticatedRoute path="/admin/contributions" exact component={ContributionsPage} props={childProps}  />
-    <AuthenticatedRoute path="/admin/contributors"  exact component={ContributorsPage}  props={childProps}  />
-    <AuthenticatedRoute path="/users/:id"           exact component={User}              props={childProps} />
-    <AuthenticatedRoute path="/search/:q"           exact component={SearchPage}        props={childProps} />
+    <AuthenticatedRoute path="/home"                     exact component={Home}              props={childProps} />
+    <AuthenticatedRoute path="/admin"                    exact component={Admin}             props={childProps} />
+    <AuthenticatedRoute path="/admin/contributions"      exact component={ContributionsPage} props={childProps}  />
+    <AuthenticatedRoute path="/admin/contributors"       exact component={ContributorsPage}  props={childProps}  />
+    <AuthenticatedRoute path="/users/:id"                exact component={User}              props={childProps} />
+    <AuthenticatedRoute path="/search/:q"                exact component={SearchPage}        props={childProps} />
 
 {/* Documents */}
     <AuthenticatedRoute path="/documents/new"      exact component={withForm(DocumentForm, 'documents', 'document')} props={childProps} />

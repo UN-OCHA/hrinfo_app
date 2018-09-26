@@ -284,14 +284,14 @@ const withForm = function withForm(Component, hrinfoType, label) {
           if (body.unit_measurement) {
             let unit_measurement = [];
             body.unit_measurement.forEach((um) => {
-              unit_measurement.push(um.label);
+              unit_measurement.push(um.label.toLowerCase());
             });
             body.unit_measurement = unit_measurement;
           }
           if (body.collection_method) {
             let collection_method = [];
             body.collection_method.forEach((cm) => {
-              collection_method.push(cm.label);
+              collection_method.push(cm.label.toLowerCase());
             });
             body.collection_method = collection_method;
           }
@@ -418,6 +418,44 @@ const withForm = function withForm(Component, hrinfoType, label) {
               doc.spaces.push(op);
             }
           });
+          if (doc.status) {
+            doc.status = {
+              label: doc.status,
+              value: doc.status
+            };
+          }
+          if (doc.date && doc.date.from) {
+            doc.date.value_from = doc.date.from;
+            delete doc.date.from;
+          }
+          if (doc.date && doc.date.to) {
+            doc.date.value_to = doc.date.to;
+            delete doc.date.to;
+          }
+          if (doc.collection_method) {
+            let collection_method_fetched = [];
+            doc.collection_method.forEach((cm) => {
+              if (cm) {
+                collection_method_fetched.push({
+                  value: cm[0].toUpperCase() + cm.slice(1),
+                  label: cm[0].toUpperCase() + cm.slice(1)
+                });
+              }
+            });
+            doc.collection_method = collection_method_fetched;
+          }
+          if (doc.unit_measurement) {
+            let unit_measurement_fetched = [];
+            doc.unit_measurement.forEach((um) => {
+              if (um) {
+                unit_measurement_fetched.push({
+                  value: um[0].toUpperCase() + um.slice(1),
+                  label: um[0].toUpperCase() + um.slice(1)
+                });
+              }
+            });
+            doc.unit_measurement = unit_measurement_fetched;
+          }
           if (doc.space) {
             doc.space.forEach(function (sp) {
               if (sp) {
@@ -425,6 +463,19 @@ const withForm = function withForm(Component, hrinfoType, label) {
                 doc.spaces.push(sp);
               }
             });
+          }
+          if (!doc.language) {
+            doc.language = {
+              value: '',
+              label: ''
+            }
+          }
+          if (doc.locations) {
+            let locations_fetched = [];
+            for (let i = 0; i < doc.locations.length ; i++) {
+              locations_fetched.push(await this.hrinfoAPI.getItem("locations", doc.locations[i].id));
+            }
+            doc.locations = locations_fetched;
           }
           if (doc['body-html']) {
             const blocksFromHTML = convertFromHTML(doc['body-html']);

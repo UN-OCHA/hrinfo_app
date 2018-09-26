@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
+import MaterialAsyncSelect from "./MaterialAsyncSelect";
 
 class HRInfoSelect extends React.Component {
   state = {
@@ -136,7 +137,9 @@ class HRInfoSelect extends React.Component {
           name={this.props.type}
           onChange={this.props.onChange}
           options={this.state.items}
-          value={this.props.value} />
+          value={this.props.value}
+          getOptionLabel={(option) => {return option.label ? option.label : option}}
+          getOptionValue={(option) => {return option.value ? option.value : option.id}} />
     );
   }
 }

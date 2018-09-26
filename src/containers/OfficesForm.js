@@ -67,7 +67,6 @@ class OfficesForm extends React.Component {
         state.editorState = EditorState.createWithContent(contentState);
       }
       this.setState(state);
-      console.log("STAAAAAAAAAAAAAAAAAAAAAATE", this.state);
     }
   }
 
