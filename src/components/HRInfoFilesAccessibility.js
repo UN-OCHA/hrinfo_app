@@ -26,7 +26,7 @@ class HRInfoFilesAccessibility extends React.Component {
       {value: t('files.accessibilities.not_applicable'), label: t('files.accessibilities.not_applicable') },
     ];
     this.state = {
-      inputNumber: 0,
+      inputNumber: 1,
       collections: [''],
       files: [''],
       accessibility: [{}],
