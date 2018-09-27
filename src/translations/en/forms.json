@@ -33,6 +33,12 @@
     "email": "Email",
     "operation": "Operation",
     "date": "Date",
+    "region": "Region",
+    "status": "Status",
+    "launch_date": "Launch date",
+    "cluster_configuration": "Cluster configuration",
+    "managed_by": "Managed by",
+    "focal_points": "Focal points",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -159,6 +165,15 @@
         "type": "From the list, select the type of group you are creating.",
         "hid_access": "Select 'Open' if you want HID users to add themselves to this group. Select 'Closed' if you want only HID managers to be allowed to add HID users to this group.",
         "body": "Try to always include here the text (in full or part of it) of the group (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing."
+      }
+    },
+    "operations": {
+      "create": "Create Operation",
+      "secure_hid": "Secure Humanitarian ID contact list ?",
+      "helpers": {
+        "title": "Please enter the operation title.",
+        "language": "Please select a language.",
+        "type": "Please select the type of the operation"
       }
     }
 }
