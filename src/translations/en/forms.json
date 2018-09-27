@@ -3,6 +3,7 @@
     "disasters": "Disaster(s) / Emergency",
     "bundles": "Cluster(s)/Sector(s)",
     "title": "Title",
+    "name": "Name",
     "description": "Description or Summary of Content",
     "language": "Language",
     "spaces": "Operation(s) / Webspace(s)",
@@ -39,6 +40,8 @@
     "cluster_configuration": "Cluster configuration",
     "managed_by": "Managed by",
     "focal_points": "Focal points",
+    "acronym": "Acronym",
+    "fts_id": "FTS ID",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -179,6 +182,13 @@
         "title": "Please enter the operation title.",
         "language": "Please select a language.",
         "type": "Please select the type of the operation"
+      }
+    },
+    "form_organizations": {
+      "create": "Create organization",
+      "helpers": {
+        "name": "Type the original title of the organization. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+        "type": "From the list, select the type of organization you are creating."
       }
     }
 }

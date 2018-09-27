@@ -1,4 +1,5 @@
 import React      from 'react';
+import { translate, Trans } from 'react-i18next';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -49,9 +50,14 @@ class OrganizationForm extends React.Component {
   }
 
   render() {
+    const {t, i18n} = this.props;
+    let title = t('form_organizations.create') + ' [' + t('languages.' + i18n.language) + ']';
+    if (this.props.doc.id) {
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+    }
     return(
       <Grid container direction="column" alignItems="center">
-        <Typography color="textSecondary" gutterBottom variant="headline">Create {this.props.label}</Typography>
+        <Typography color="textSecondary" gutterBottom variant="headline">{title}</Typography>
         <Grid item>
           <Grid container justify="space-around">
 
@@ -60,27 +66,27 @@ class OrganizationForm extends React.Component {
 
               {/* Name */}
               <FormControl required fullWidth margin="normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Name</FormLabel>
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('name')}</FormLabel>
                 <TextField type = "text"
                   name     = "label"
                   id       = "label"
                   value    = {this.props.doc.label || ''}
                   onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "label-text">
-                  Type the original name of the {this.props.label + ' '}. Try not to use abbreviations. To see Standards and Naming Conventions click
-                  <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                  <Trans i18nKey={'form_organizations.helpers.name'}>Type the original name of the organization. Try not to use abbreviations. To see Standards and Naming Conventions click
+                  <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
                   </FormHelperText>
                 </FormControl>
 
                 {/* Type */}
                 <FormControl required fullWidth margin="normal">
-                  <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.type)}>Type</FormLabel>
+                  <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.type)}>{t('type')}</FormLabel>
                   <HRInfoSelect type = "organization_types"
                     isMulti  = {false}
                     onChange = {(s) => this.props.handleSelectChange('type', s)}
                     value    = {this.props.doc.type || ''}/>
                   <FormHelperText id="type-text">
-                    From the list, select the type of {this.props.label} you are creating.
+                    {t('form_organizations.helpers.type')}
                   </FormHelperText>
                 </FormControl>
 
@@ -91,7 +97,7 @@ class OrganizationForm extends React.Component {
 
                 {/* Acronym */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Acronym</FormLabel>
+                  <FormLabel>{t('acronym')}</FormLabel>
                   <TextField type     = "text"
                              name     = "acronym"
                              id       = "acronym"
@@ -101,7 +107,7 @@ class OrganizationForm extends React.Component {
 
                 {/* Website */}
                 <FormControl fullWidth margin="normal">
-                  <FormLabel>Website</FormLabel>
+                  <FormLabel>{t('website')}</FormLabel>
                   <TextField type     = "url"
                              name     = "homepage"
                              id       = "homepage"
@@ -111,7 +117,7 @@ class OrganizationForm extends React.Component {
 
                 {/* FTS ID */}
                 <FormControl fullWidth margin = "normal">
-                  <FormLabel>FTS ID</FormLabel>
+                  <FormLabel>{t('fts_id')}</FormLabel>
                   <TextField type     = "number"
                              name     = "fts_id"
                              id       = "fts_id"
@@ -128,7 +134,7 @@ class OrganizationForm extends React.Component {
             {
               this.props.status !== 'submitting' &&
               <span>
-                <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
+                <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
                 &nbsp;
               </span>
             }
@@ -139,7 +145,7 @@ class OrganizationForm extends React.Component {
             {
               (this.props.match.params.id && this.props.status !== 'deleting') &&
               <span>
-                <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
+                <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
               </span>
             }
           </Grid>
@@ -153,9 +159,9 @@ class OrganizationForm extends React.Component {
                     ContentProps     = {{
                                          'aria-describedby' : 'message-id'
                                        }}
-                    message          = {<Typography id ="message-id" color="error">The form is incomplete and could not be submitted.</Typography>}
+                    message          = {<Typography id ="message-id" color="error">{t('form_incomplete')}</Typography>}
                     action           = {[
-                                         <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>CLOSE</Button>
+                                         <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>{t('close')}</Button>
                                        ]}
             />
         </Grid>
@@ -163,4 +169,4 @@ class OrganizationForm extends React.Component {
   }
 }
 
-export default OrganizationForm;
+export default translate('forms')(OrganizationForm);
