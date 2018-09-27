@@ -170,6 +170,11 @@
     "operations": {
       "create": "Create Operation",
       "secure_hid": "Secure Humanitarian ID contact list ?",
+      "status": {
+        "active": "Active",
+        "archived": "Archived",
+        "inactive": "Inactive"
+      },
       "helpers": {
         "title": "Please enter the operation title.",
         "language": "Please select a language.",

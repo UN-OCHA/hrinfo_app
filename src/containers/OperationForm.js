@@ -28,20 +28,22 @@ class OperationForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const {t} = this.props;
+
     this.state = {
       operationTypes: [
-        { value: 'country', label: 'Country'},
-        { value: 'region', label: 'Region'}
+        { value: 'country', label: t('address.country')},
+        { value: 'region', label: t('region')}
       ],
       statuses: [
-        { value: 'active', label: 'Active'},
-        { value: 'archived', label: 'Archived' },
-        { value: 'inactive', label: 'Inactive' }
+        { value: 'active', label: t('operations.status.active')},
+        { value: 'archived', label: t('operations.status.archived') },
+        { value: 'inactive', label: t('operations.status.inactive') }
       ],
       hidAccesses: [
-        { value: 'open', label: 'Open' },
-        { value: 'closed', label: 'Closed' },
-        { value: 'inactive', label: 'Inactive'}
+        { value: 'open', label: t('bundles.hid_access.open') },
+        { value: 'closed', label: t('bundles.hid_access.closed') },
+        { value: 'inactive', label: t('operations.status.inactive')}
       ],
     };
   }
@@ -67,7 +69,7 @@ class OperationForm extends React.Component {
                            value    = {this.props.doc.label}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "label-text">
-                  Please enter the operation title.
+                  {t('operations.helpers.title')}
                 </FormHelperText>
               </FormControl>
 
@@ -79,7 +81,7 @@ class OperationForm extends React.Component {
                                  onChange  = {(s) => this.props.handleSelectChange('language', s)}
                                  className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
                  <FormHelperText id="language-text">
-                   Please select a language.
+                   {t('operations.helpers.language')}
                  </FormHelperText>
                </FormControl>
 
@@ -92,8 +94,8 @@ class OperationForm extends React.Component {
                               value     = {this.props.doc.type}
                               onChange  = {(s) => this.props.handleSelectChange('type', s)}
                               className = {this.props.isValid(this.props.doc.type) ? 'is-valid' : 'is-invalid'}/>
-                            <FormHelperText id="label-type">
-                  You must select an operation type.
+                <FormHelperText id="label-type">
+                  {t('operations.helpers.type')}
                 </FormHelperText>
               </FormControl>
 
