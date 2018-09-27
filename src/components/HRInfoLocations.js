@@ -104,7 +104,8 @@ class HRInfoLocations extends React.Component {
       .then(function (data) {
         let promises = [];
         data.parents.forEach(function (parent) {
-          promises.push(that.hrinfoAPI.getItem('locations', parent));
+          // We're getting the id from the url stored in the parent array
+          promises.push(that.hrinfoAPI.getItem('locations', parent.split("/", 8)[7]));
         });
         return Promise.all(promises);
       });
