@@ -273,7 +273,7 @@ class Phones extends React.Component {
     ],
     this.state = {
       inputNumber: 1,
-      status: '',
+      status: 'initial',
       types: [''],
       dialling_codes: [''],
       numbers: ['']
@@ -332,7 +332,7 @@ class Phones extends React.Component {
   }
 
   handleChange(number, type, v) {
-    if (this.state.status === '') {
+    if (this.state.status === 'initial') {
       this.setState({
         status: 'ready'
       });
@@ -405,17 +405,28 @@ class Phones extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.value && this.state.status === '') {
+    if (this.props.value && this.state.status === 'initial') {
       let state = {
         inputNumber: 0,
-        types: [''],
-        dialling_codes: [''],
-        numbers: [''],
+        types: [],
+        dialling_codes: [],
+        numbers: [],
         status: 'updated'
       };
-      state.types = this.state.types;
-      state.dialling_codes = this.state.dialling_codes;
-      state.numbers = this.state.numbers;
+      this.props.value.forEach((phone) => {
+        state.types.push(phone.numbertype);
+        state.numbers.push(phone.number);
+        Object.values(this.dialling_codes).forEach((dc) => {
+          if (dc.value === phone.countrycode){
+            state.dialling_codes.push(dc);
+            return;
+          }
+        });
+        if (state.dialling_codes[state.inputNumber] === undefined) {
+          state.dialling_codes.push(phone.countrycode);
+        }
+        state.inputNumber++;
+      });
       this.changeState(state);
     }
   }

@@ -63,7 +63,8 @@
         "create": "Créer un document"
     },
     "assessment": {
-        "create": "Créer un assessment",
+        "create": "Créer un évaluation",
+        "edit": "Éditer évaluation",
         "helpers": {
             "title": "Taper le titre original de l'évaluation. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1>ici</ 1>.",
             "date": "Indiquer les dates de début et de fin de l'évaluation.",
@@ -114,6 +115,7 @@
     },
     "offices": {
       "create": "Créer bureau",
+      "edit": "Éditer bureau",
       "helpers": {
         "title": "Taper le titre original du bureau. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
         "language": "Sélectionner la langue du bureau.",

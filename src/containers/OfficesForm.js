@@ -11,6 +11,7 @@ import HRInfoLocations    from '../components/HRInfoLocations';
 import HRInfoAsyncSelect  from '../components/HRInfoAsyncSelect';
 import HRInfoSelect       from '../components/HRInfoSelect';
 import Phones             from '../components/Phones';
+
 //Material Components
 import FormHelperText   from '@material-ui/core/FormHelperText';
 import FormControl      from '@material-ui/core/FormControl';
@@ -22,10 +23,9 @@ import Grid             from '@material-ui/core/Grid';
 import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox         from '@material-ui/core/Checkbox';
-import Card from "@material-ui/core/Card/Card";
-import CardContent from "@material-ui/core/CardContent/CardContent";
-import Switch from "@material-ui/core/Switch/Switch";
+import Card             from "@material-ui/core/Card/Card";
+import CardContent      from "@material-ui/core/CardContent/CardContent";
+import Switch           from "@material-ui/core/Switch/Switch";
 
 
 class OfficesForm extends React.Component {

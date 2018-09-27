@@ -64,6 +64,7 @@
     },
     "assessment": {
         "create": "Create assessment",
+        "edit": "Edit assessment",
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
             "date": "Indicate the start/end dates of the assessment.",
@@ -114,6 +115,7 @@
     },
     "offices": {
         "create": "Create office",
+        "edit": "Edit office",
         "helpers": {
           "title": "Type the original title of the office. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
           "language": "Select the language of the office.",
