@@ -126,11 +126,9 @@ class HRInfoAPI {
         }
       })
       .then(results => {
-        console.log("129", results);
         return results.json();
       })
       .then(data => {
-        console.log("133", data);
         return data.data[0];
       });
   }
