@@ -43,7 +43,6 @@
     "acronym": "Acronym",
     "fts_id": "FTS ID",
     "url": "URL",
-    "address": "Address",
     "location": "Location",
     "leading_organizations": "Leading Organizations",
     "participating_organizations": "Participating Organizations",
@@ -208,6 +207,7 @@
       }
     },
     "address": {
+      "address": "Address",
       "country": "Country",
       "address_1": "Address 1",
       "address_2": "Address 2",
