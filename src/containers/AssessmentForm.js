@@ -98,7 +98,7 @@ class AssessmentForm extends React.Component {
         <FormLabel>{t('disasters')}</FormLabel>
         <HRInfoSelect
           type      = "disasters"
-          spaces    = {this.props.doc.operation}
+          spaces    = {this.props.doc.spaces}
           isMulti   = {true}
           onChange  = {(s) => this.props.handleSelectChange('disasters', s)}
           value     = {this.props.doc.disasters}/>
@@ -117,7 +117,7 @@ class AssessmentForm extends React.Component {
         <FormLabel>{t('groups')}</FormLabel>
         <HRInfoSelect
           type     =  "bundles"
-          spaces   =  {this.props.doc.operation}
+          spaces   =  {this.props.doc.spaces}
           isMulti =  {true}
           onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
           value =  {this.props.doc.bundles}/>
@@ -345,10 +345,10 @@ class AssessmentForm extends React.Component {
 
               {/* Operation(s)/Webspace(s) */}
               <FormControl required fullWidth margin="normal">
-                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>{t('spaces')}</FormLabel>
+                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
                 <HRInfoSelect type    = "operations"
                               isMulti = {true}
-                              onChange={(s) => this.props.handleSelectChange('operation', s)}
+                              onChange={(s) => this.props.handleSelectChange('spaces', s)}
                               value   = {this.props.doc.spaces}/>
                 <FormHelperText>
                   {t('assessment.helpers.spaces')}

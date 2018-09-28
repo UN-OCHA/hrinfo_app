@@ -55,7 +55,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
       if (hrinfoType !== 'operations') {
         let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
-        if (name === 'spaces' || name === 'operation') {
+        if (name === 'spaces') {
           doc[name].forEach(function (val) {
             if (val.type === 'operations') {
               hasOperation = true;
@@ -353,16 +353,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
             body.address.country = body.address.country.pcode;
           }
         }
-        body.operation = [];
-        body.space     = [];
-        body.spaces.forEach(function (sp) {
-          if (sp.type === 'operations') {
-            body.operation.push(sp.id);
-          }
-          else {
-            body.space.push(sp.id);
-          }
-        });
         if (hrinfoType === 'organizations') {
           body.type = body.type.id;
         }
@@ -379,6 +369,12 @@ const withForm = function withForm(Component, hrinfoType, label) {
           });
           delete body.spaces;
           delete body.hasOperation;
+          if (body.space.length === 0) {
+            delete body.space;
+          }
+          if (body.operation.length === 0) {
+            delete body.operation;
+          }
         }
         const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
         selectFields.forEach(function (field) {
