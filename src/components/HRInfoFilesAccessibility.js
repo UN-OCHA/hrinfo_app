@@ -54,8 +54,8 @@ class HRInfoFilesAccessibility extends React.Component {
           }
           title={
             typeof this.state.files[number] === 'object' ?
-              <a href={this.state.files[number].uri} target="__blank" className="file-name">{this.state.files[number].label}</a> : t('files.new_file')
-          }
+              <a href={this.state.files[number].uri} target="__blank">{this.state.files[number].label}</a> : t('files.new_file')}
+          className="file-name"
         />
         <CardContent className="file-container-language">
           <Typography>{t('files.accessibility')}</Typography>
@@ -172,7 +172,6 @@ class HRInfoFilesAccessibility extends React.Component {
       this.props.onChange({
         files: newState.files ? newState.files : this.state.files,
         accessibility: newState.accessibility ? newState.accessibility : this.state.accessibility,
-        collections: newState.collections ? newState.collections : this.state.collections,
         instructions: newState.instructions ? newState.instructions : this.state.instructions,
         url: newState.url ? newState.url : this.state.url
       });
@@ -181,23 +180,56 @@ class HRInfoFilesAccessibility extends React.Component {
 
   componentDidUpdate() {
     if (this.props.value && this.state.status === '') {
-      const that = this;
       let state = {
         inputNumber: 0,
-        url: '',
+        accessibility: [{}],
+        url: [''],
         files: [],
-        instructions: '',
+        instructions: [''],
         status: 'updated'
       };
-      this.props.value.forEach(function (fc) {
-        fc.fid = fc.file.fid;
-        fc.uri = fc.file.url;
-        fc.label = fc.file.filename;
-        state.files.push(fc);
+      if (this.props.value.accessibility instanceof Array) {
+        this.props.value.accessibility.forEach((access) => {
+          state.accessibility.push({
+            value: access,
+            label: access
+          });
+          state.inputNumber++;
+        });
+        if (this.props.value.url instanceof Array) {
+          this.props.value.url.forEach((access) => {
+            state.url.push(access);
+          });
+        }
+        if (this.props.value.instructions instanceof Array) {
+          this.props.value.instructions.forEach((access) => {
+            state.instructions.push(access);
+          });
+        }
+        if (this.props.value.file instanceof Array) {
+          this.props.value.file.forEach((access) => {
+            access.label = access.filename;
+            state.files.push(access);
+          });
+        }
+      }
+      else if (this.props.value.accessibility) {
+        state.accessibility = [{
+          value: this.props.value.accessibility,
+          label: this.props.value.accessibility
+        }];
+        if (this.props.value.url) {
+          state.url = [this.props.value.url];
+        }
+        if (this.props.value.instructions) {
+          state.instructions = [this.props.value.instructions];
+        }
+        if (this.props.value.file) {
+          this.props.value.file.label = this.props.value.file.filename;
+          state.files = [this.props.value.file];
+        }
         state.inputNumber++;
-      });
-      state.url = this.state.url;
-      state.instructions = this.state.instructions;
+      }
       this.changeState(state);
     }
   }

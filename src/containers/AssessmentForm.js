@@ -1,7 +1,5 @@
 import React from 'react';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-// import { Editor } from 'react-draft-wysiwyg';
-// import {stateToHTML} from 'draft-js-export-html';
+import { EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { translate, Trans } from 'react-i18next';
 
@@ -65,6 +63,7 @@ class AssessmentForm extends React.Component {
         { value: 'Village', label: 'Village'}
       ],
       status             : '',
+      doc                : {},
       collapseMain       : false,
       collapseSecondary  : false,
       wasSubmitted       : false,
@@ -73,43 +72,6 @@ class AssessmentForm extends React.Component {
     this.hrinfoAPI      = new HRInfoAPI();
 
     this.toggleCollapse = this.toggleCollapse.bind(this);
-  }
-
-  async componentDidMount() {
-    if (this.props.match.params.id) {
-      const doc = await this.hrinfoAPI.getItem('assessments', this.props.match.params.id);
-      doc.spaces = [];
-      doc.operation.forEach(function (op) {
-        if (op) {
-          doc.hasOperation = true;
-          op.type = "operations";
-          doc.spaces.push(op);
-        }
-      });
-      doc.space.forEach(function (sp) {
-        if (sp) {
-          sp.type = "spaces";
-          doc.spaces.push(sp);
-        }
-      });
-      this.state.languages.forEach(function (lang) {
-        if (doc.language === lang.value) {
-          doc.language = lang;
-        }
-      });
-      let state = {
-        doc: doc
-      };
-      if (doc['body-html']) {
-        const blocksFromHTML = convertFromHTML(doc['body-html']);
-        const contentState = ContentState.createFromBlockArray(
-          blocksFromHTML.contentBlocks,
-          blocksFromHTML.entityMap
-        );
-        state.editorState = EditorState.createWithContent(contentState);
-      }
-      this.setState(state);
-    }
   }
 
   toggleCollapse(collapse) {
@@ -331,7 +293,8 @@ class AssessmentForm extends React.Component {
                 <FormLabel focused error  = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.language)}>{t('language')}</FormLabel>
                 <LanguageSelect value     = {this.props.doc.language}
                                 onChange  = {(s) => this.props.handleSelectChange('language', s)}
-                                className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
+                                className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}
+                                classNamePrefix = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
                 <FormHelperText id="language-text">
                   <Trans i18nKey={label + '.helpers.language'}>Select the language of the document.</Trans>
                 </FormHelperText>

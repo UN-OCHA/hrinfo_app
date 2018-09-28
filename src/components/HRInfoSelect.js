@@ -43,12 +43,12 @@ class HRInfoSelect extends React.Component {
           });
         }
         else {
-          let user = JSON.parse(localStorage.getItem('hid-user'));
-          if ((type === 'spaces' || type === 'operations' || type === 'bundles') && user.hrinfo.roles.indexOf('administrator') === -1) {
+          //let user = JSON.parse(localStorage.getItem('hid-user'));
+          if ((type === 'spaces' || type === 'operations' || type === 'bundles') ){//&& user.hrinfo.roles.indexOf('administrator') === -1) {
             elts.forEach(function (elt) {
-              if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
+              //if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
                 pushed.push(elt);
-              }
+              //}
             });
           }
           else {
@@ -136,7 +136,9 @@ class HRInfoSelect extends React.Component {
           name={this.props.type}
           onChange={this.props.onChange}
           options={this.state.items}
-          value={this.props.value} />
+          value={this.props.value}
+          getOptionLabel={(option) => {return option.label ? option.label : option}}
+          getOptionValue={(option) => {return option.value ? option.value : option.id}} />
     );
   }
 }

@@ -7,7 +7,8 @@ class HRInfoLocation extends React.Component {
     super(props);
     this.state = {
       items: [],
-      val: {}
+      val: {},
+      status: 'initial'
     };
     this.hrinfoAPI = new HRInfoAPI();
     this.getOptions = this.getOptions.bind(this);
@@ -56,12 +57,13 @@ class HRInfoLocation extends React.Component {
       });
       this.getOptions();
     }
-    if (this.props.value && typeof this.props.value === 'string' && this.state.val !== this.props.value) {
+    if (this.props.value && typeof this.props.value === 'string' && this.state.status === 'initial') {
       if (this.state.items.length) {
         this.state.items.forEach(function (item) {
           if (item.pcode === that.props.value) {
             that.setState({
-              val: item
+              val: item,
+              status: 'ready'
             });
           }
         });
@@ -69,7 +71,8 @@ class HRInfoLocation extends React.Component {
     }
     if (this.props.value && typeof this.props.value === 'object' && this.state.val !== this.props.value) {
       this.setState({
-        val: this.props.value
+        val: this.props.value,
+        status: 'ready'
       });
     }
   }
