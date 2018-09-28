@@ -1,7 +1,6 @@
 import React from 'react';
 import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
-import MaterialAsyncSelect from "./MaterialAsyncSelect";
 
 class HRInfoSelect extends React.Component {
   state = {

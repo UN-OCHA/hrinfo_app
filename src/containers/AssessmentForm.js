@@ -1,7 +1,5 @@
 import React from 'react';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-// import { Editor } from 'react-draft-wysiwyg';
-// import {stateToHTML} from 'draft-js-export-html';
+import { EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { translate, Trans } from 'react-i18next';
 

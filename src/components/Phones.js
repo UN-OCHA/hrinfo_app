@@ -20,7 +20,7 @@ class Phones extends React.Component {
       {value: t('phones.types.work'), label: t('phones.types.work') },
       {value: t('phones.types.home'), label: t('phones.types.home') },
       {value: t('phones.types.mobile'), label: t('phones.types.mobile') },
-      {value: t('phones.types.fax'), label: t('phones.types.fax') },
+      {value: t('phones.types.fax'), label: t('phones.types.fax') }
     ];
     this.dialling_codes = [
       {label : 'Afghanistan (+93)',	value : 'AF'},
@@ -270,7 +270,7 @@ class Phones extends React.Component {
       {label : 'Yemen (+967)',	value : 'YE'},
       {label : 'Zambia (+260)',	value : 'ZM'},
       {label : 'Zimbabwe (+263)',	value : 'ZW'}
-    ],
+    ];
     this.state = {
       inputNumber: 1,
       status: 'initial',
