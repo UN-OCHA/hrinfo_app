@@ -42,6 +42,9 @@
     "focal_points": "Focal points",
     "acronym": "Acronym",
     "fts_id": "FTS ID",
+    "url": "URL",
+    "address": "Address",
+    "location": "Location",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -65,6 +68,7 @@
     },
     "assessment": {
         "create": "Create assessment",
+        "edit": "Edit assessment",
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
             "date": "Indicate the start/end dates of the assessment.",
@@ -111,6 +115,22 @@
             "locations": "Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town).",
             "themes": "Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.",
             "related_content": "Add links to content that is related to the map/infographicc you are publishing (example: language versions of the same infographic, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+        }
+    },
+    "offices": {
+        "create": "Create office",
+        "edit": "Edit office",
+        "helpers": {
+          "title": "Type the original title of the office. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
+          "language": "Select the language of the office.",
+          "location": "Select from the menu the country where the office is located and indicate more specific locations by selecting multiple layers (region, province, town).",
+          "address": "Indicate the address of the office",
+          "email": "Type in the email",
+          "organizations": "Type in and select the source(s) of the office.",
+          "spaces": "Click on the field and select where to publish the office (operation, regional site or thematic site).",
+          "phones": "Type in the phones of the office.",
+          "is_coordination_hub": "This office is a coordination hub.",
+          "is_not_coordination_hub": "This office is not a coordination hub."
         }
     },
     "files": {
@@ -233,6 +253,18 @@
       "helpers": {
         "name": "Type the original title of the organization. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
         "type": "From the list, select the type of organization you are creating."
+      }
+    },
+    "phones": {
+      "phones": "Phone(s)",
+      "type": "Type",
+      "dialling_code": "Dialling code",
+      "number": "Number",
+      "types": {
+        "work": "Work",
+        "home": "Home",
+        "mobile": "Mobile",
+        "fax": "Fax"
       }
     }
 }

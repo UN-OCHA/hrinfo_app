@@ -50,6 +50,8 @@ class HRInfoAsyncSelect extends React.Component {
         onChange={this.props.onChange}
         value={this.props.value}
         className={this.props.className}
+        getOptionLabel={(option) => {return option.label}}
+        getOptionValue={(option) => {return option.id}}
         />
     );
   }
