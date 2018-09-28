@@ -203,7 +203,7 @@ class OfficesForm extends React.Component {
                         <Switch name     = "coordination_hub"
                                 color    = "primary"
                                 onChange = {this.props.handleInputChange}
-                                checked  = {this.props.doc.coordination_hub}
+                                checked  = {this.props.doc.coordination_hub ? true : false}
                         />
                       }
                       label   = {this.props.doc.coordination_hub ? t('offices.helpers.is_coordination_hub') : t('offices.helpers.is_not_coordination_hub')}
