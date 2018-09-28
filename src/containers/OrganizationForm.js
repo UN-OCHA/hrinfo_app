@@ -1,7 +1,5 @@
 import React      from 'react';
 import { translate, Trans } from 'react-i18next';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 //Components
 import HRInfoSelect          from '../components/HRInfoSelect';

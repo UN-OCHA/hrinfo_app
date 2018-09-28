@@ -144,7 +144,7 @@ class EventForm extends React.Component {
 
         {/* Dates */}
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>{('date')}</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>{t('date')}</FormLabel>
               <EventDate value    = {this.props.doc.date}
                          onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                          required />
