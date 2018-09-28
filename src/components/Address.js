@@ -1,4 +1,5 @@
 import React          from 'react';
+import { translate} from 'react-i18next';
 import HRInfoLocation from './HRInfoLocation';
 
 import FormControl      from '@material-ui/core/FormControl';
@@ -55,12 +56,13 @@ class Address extends React.Component {
     }
 
     render () {
+      const { t } = this.props;
       return (
         <Card  className="card-container">
 
         {/* Country */}
           <CardContent className="address-container-select">
-            <Typography>Country</Typography>
+            <Typography>{t('address.country')}</Typography>
             <FormControl className="address-container-text">
                <HRInfoLocation id = "country"
                                level    = "0"
@@ -71,7 +73,7 @@ class Address extends React.Component {
 
         {/* Address 1 */}
           <CardContent className="address-container-select">
-            <Typography> Address 1 </Typography>
+            <Typography>{t('address.address_1')}</Typography>
             <FormControl className="address-container-text">
             <TextField type     = "text"
                        name     = "thoroughfare"
@@ -82,7 +84,7 @@ class Address extends React.Component {
 
         {/* Address 2 */}
           <CardContent className="address-container-select">
-            <Typography> Address 2 </Typography>
+            <Typography>{t('address.address_2')}</Typography>
             <FormControl className="address-container-text">
             <TextField      type     = "text"
                             name     = "premise"
@@ -93,7 +95,7 @@ class Address extends React.Component {
 
         {/* Postal Code */}
           <CardContent className="address-container-select">
-            <Typography> Postal Code </Typography>
+            <Typography>{t('address.postal_code')}</Typography>
             <FormControl className="address-container-text">
             <TextField      type     = "text"
                             name     = "postal_code"
@@ -104,7 +106,7 @@ class Address extends React.Component {
 
         {/* City */}
           <CardContent className="address-container-select">
-            <Typography>City</Typography>
+            <Typography>{t('address.city')}</Typography>
             <FormControl className="address-container-text">
             <TextField      type     = "text"
                             name     = "locality"
@@ -117,4 +119,4 @@ class Address extends React.Component {
     }
 }
 
-export default Address;
+export default translate('forms')(Address);

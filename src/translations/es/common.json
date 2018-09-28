@@ -1,0 +1,16 @@
+{
+  "app": {
+    "search_placeholder": "Buscar o ir a..."
+  },
+  "login":{
+    "email": "Correo",
+    "password": "Contrasena",
+    "email_helper": "Su correo Humanitarian ID",
+    "password_helper": "Su contrasena Humanitarian ID",
+    "button": "Conectarse"
+  },
+  "home": {
+    "welcome": "Bienvenido <1>{{name}}</1>, esta conectado",
+    "what_do": "Que quiere hacer ?"
+  }
+}

@@ -12,6 +12,19 @@ import SelectWidget from '../components/SelectWidget';
 
 import 'react-dazzle/lib/style/style.css';
 
+const CustomFrame = ({title, editable, children, onRemove, onEdit }) => {
+  return (
+      <div className="defaultWidgetFrame">
+        <div className="defaultWidgetFrameHeader">
+            <span className="title">{title}</span>
+            {editable &&<a className="remove" onClick={() => {onRemove();}} ><i className="icon-trash" /></a>}
+            {editable &&<a className="remove" onClick={() => {onEdit();}} ><i className="icon-edit" /></a>}
+        </div>
+        {children}
+    </div>
+  );
+};
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -50,6 +63,7 @@ class SpacePage extends React.Component {
     tempLayout: null,
     rowIndex: null,
     columnIndex: null,
+    editedWidget: null,
   };
 
   /**
@@ -58,6 +72,16 @@ class SpacePage extends React.Component {
   onRemove = (layout) => {
     this.setState({
       layout: layout,
+    });
+  }
+
+  onEdit = (widgetKey) => {
+    const editedWidget = {
+      widget: this.state.widgets[widgetKey],
+      key: widgetKey
+    };
+    this.setState({
+      editedWidget: editedWidget
     });
   }
 
@@ -75,7 +99,8 @@ class SpacePage extends React.Component {
       isModalOpen: true,
       tempLayout: layout,
       rowIndex: rowIndex,
-      columnIndex: columnIndex
+      columnIndex: columnIndex,
+      editedWidget: null
     });
   }
 
@@ -103,10 +128,20 @@ class SpacePage extends React.Component {
     widgets[name] = widget;
     this.setState({
       widgets: widgets,
+      editedWidget: null
     }, () => {
       that.setState({
         layout: addWidget(this.state.tempLayout, this.state.rowIndex, this.state.columnIndex, name)
       });
+    });
+  }
+
+  /**
+   * Closes a widget without setting layout
+   */
+  onWidgetClose = () => {
+    this.setState({
+      editedWidget: null
     });
   }
 
@@ -126,12 +161,14 @@ class SpacePage extends React.Component {
           </Typography>
           <div className="container">
             <Dashboard
+              frameComponent={CustomFrame}
               widgets={this.state.widgets}
               layout={this.state.layout}
               editable={this.state.isEditable}
               onAdd={this.onAdd}
               onRemove={this.onRemove}
               onMove={this.onMove}
+              onEdit={this.onEdit}
               className='container' />
           </div>
           {this.state.isEditable ?
@@ -141,7 +178,9 @@ class SpacePage extends React.Component {
               columnIndex={this.state.columnIndex}
               isModalOpen={this.state.isModalOpen}
               onRequestClose={this.handleClose}
-              onWidgetSelect={this.handleWidgetSelection} /> : ''}
+              onWidgetSelect={this.handleWidgetSelection}
+              editedWidget={this.state.editedWidget}
+              onWidgetClose={this.onWidgetClose} /> : ''}
       </Paper>);
     }
     else {

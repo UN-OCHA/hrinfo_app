@@ -9,6 +9,8 @@ import common_en from "./translations/en/common.json";
 import forms_en from "./translations/en/forms.json";
 import common_fr from "./translations/fr/common.json";
 import forms_fr from "./translations/fr/forms.json";
+import common_es from "./translations/es/common.json";
+import forms_es from "./translations/es/forms.json";
 import './index.css';
 import './images/unocha-icons.css';
 import registerServiceWorker from './utils/registerServiceWorker';
@@ -38,11 +40,14 @@ i18next.init({
     fr: {
       common: common_fr,
       forms: forms_fr
+    },
+    es: {
+      common: common_es,
+      forms: forms_es
     }
   }
 });
 
-//ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render(
 	<MuiThemeProvider theme={theme}>
 		<Router>

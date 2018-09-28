@@ -279,8 +279,6 @@ const withSpace = function withSpace(Component, options) {
                 let index = 0;
                 const name = key.substring(0, key.lastIndexOf('_'));
                 const direction = key.substring(key.lastIndexOf('_') + 1);
-                console.log(name);
-                console.log(direction);
                 if (direction === 'after') {
                   params['filter[' + name + '][value][0]'] = filters[key].toISOString();
                   params['filter[' + name + '][operator][0]'] = '>';

@@ -149,7 +149,7 @@ class OchaProductsSettings extends React.Component {
               Cancel
             </Button>
             <Button onClick={(evt) => {this.props.handleSubmit()}} color="primary">
-              Add Widget
+              Save
             </Button>
           </DialogActions>
       </Dialog>

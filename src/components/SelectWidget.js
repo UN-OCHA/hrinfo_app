@@ -53,9 +53,13 @@ class SelectWidget extends React.Component {
    */
   handleWidgetSelection = () => {
     const {widgetName, widgetSettings} = this.state.addWidgetOptions;
-    const randomName = widgetName + '-' + Math.random().toString(36).substring(7);
+    let randomName = widgetName + '-' + Math.random().toString(36).substring(7);
+    if (this.props.editedWidget) {
+      randomName = this.props.editedWidget.key;
+    }
 
-    this.closeSettings(widgetName);
+    let isSettingsOpen = this.state.isSettingsOpen;
+    isSettingsOpen[widgetName] = false;
 
     const widget = {
       type: this.state.widgetTypes[widgetName],
@@ -63,6 +67,12 @@ class SelectWidget extends React.Component {
       props: widgetSettings
     };
     this.props.onWidgetSelect(randomName, widget);
+    this.setState({
+      addWidgetOptions: {
+        widgetSettings: {}
+      },
+      isSettingsOpen
+    });
   }
 
   addWidgetSetting = (key, value) => {
@@ -82,6 +92,9 @@ class SelectWidget extends React.Component {
     let addWidgetOptions = this.state.addWidgetOptions;
     addWidgetOptions.widgetName = widgetName;
     addWidgetOptions.widgetSettings = {};
+    if (this.props.editedWidget) {
+      addWidgetOptions.widgetSettings = this.props.editedWidget.widget.props;
+    }
     let isSettingsOpen = this.state.isSettingsOpen;
     isSettingsOpen[widgetName] = true;
     this.props.onRequestClose();
@@ -97,6 +110,16 @@ class SelectWidget extends React.Component {
     this.setState({
       isSettingsOpen
     });
+    this.props.onWidgetClose();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(this.props.editedWidget);
+    if (prevProps.editedWidget === null && this.props.editedWidget) {
+      const names = this.props.editedWidget.key.split('-');
+      console.log(names[0]);
+      this.openSettings(names[0]);
+    }
   }
 
   render() {
@@ -151,7 +174,6 @@ class SelectWidget extends React.Component {
           handleClose={() => {this.closeSettings('DynamicContent')}}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <OchaProductsSettings
@@ -159,7 +181,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('OchaProducts') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <StaticContentSettings
@@ -167,7 +188,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('StaticContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <FreeTextSettings
@@ -175,7 +195,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('FreeText') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <HidContactsWidgetSettings
@@ -183,7 +202,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('HidContactsWidget') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <ReliefwebDynamicContentSettings
@@ -191,7 +209,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('ReliefwebDynamicContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <ReliefwebStaticContentSettings
@@ -199,7 +216,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('ReliefwebStaticContent') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <StaticMenuSettings
@@ -207,7 +223,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('StaticMenu') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
         <FTSSettings
@@ -215,7 +230,6 @@ class SelectWidget extends React.Component {
           handleClose={() => { this.closeSettings('FTSWidget') }}
           handleSubmit={this.handleWidgetSelection}
           addWidgetSetting={this.addWidgetSetting}
-          title=''
           {...this.state.addWidgetOptions.widgetSettings}
         />
       </div>

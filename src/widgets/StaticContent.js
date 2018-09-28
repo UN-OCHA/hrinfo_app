@@ -62,7 +62,7 @@ class StaticContentSettings extends React.Component {
     return (
       <FormControl key={number} fullWidth margin="normal">
         <FormLabel>Content</FormLabel>
-        <HRInfoAsyncSelect type={this.props.content.value} onChange={this.addItem} value={this.state.items[number]} fields='id,label,files,date' />
+        <HRInfoAsyncSelect type={this.props.content.value} onChange={(item) => {this.addItem(number, item)}} value={this.state.items[number]} fields='id,label,files,date' />
       </FormControl>
     );
   }
@@ -73,9 +73,9 @@ class StaticContentSettings extends React.Component {
     });
   }
 
-  addItem = (item) => {
+  addItem = (number, item) => {
     let items = this.state.items;
-    items.push(item);
+    items[number] = item;
     this.setState({
       items: items
     });
@@ -124,7 +124,7 @@ class StaticContentSettings extends React.Component {
               Cancel
             </Button>
             <Button onClick={(evt) => {this.props.handleSubmit()}} color="primary">
-              Add Widget
+              Save
             </Button>
           </DialogActions>
       </Dialog>

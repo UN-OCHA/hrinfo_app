@@ -1,15 +1,18 @@
 import React from 'react';
+import { translate} from 'react-i18next';
 import MaterialSelect from './MaterialSelect';
 
 class AssessmentStatus extends React.Component {
 
+  t = this.props.t;
+
   state = {
     options: [
-      { value: 'Planned', label: 'Planned'},
-      { value: 'Ongoing', label: 'Ongoing' },
-      { value: 'Draft', label: 'Draft / Preliminary Results'},
-      { value: 'Field work completed', label: 'Field work completed'},
-      { value: 'Report completed', label: 'Report completed'}
+      { value: 'Planned', label: this.t('assessment.status.planned')},
+      { value: 'Ongoing', label: this.t('assessment.status.ongoing') },
+      { value: 'Draft', label: this.t('assessment.status.draft')},
+      { value: 'Field work completed', label: this.t('assessment.status.field_work')},
+      { value: 'Report completed', label: this.t('assessment.status.report')}
     ]
   };
 
@@ -26,4 +29,4 @@ class AssessmentStatus extends React.Component {
   }
 }
 
-export default AssessmentStatus;
+export default translate('forms')(AssessmentStatus);

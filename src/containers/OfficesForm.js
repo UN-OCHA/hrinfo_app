@@ -75,11 +75,15 @@ class OfficesForm extends React.Component {
   }
 
     render() {
-      const { t, label } = this.props;
+      const { t, i18n } = this.props;
+      let title = t('offices.create') + ' [' + t('languages.' + i18n.language) + ']';
+      if (this.props.doc.id) {
+        title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+      }
 
       return (
         <Grid container direction="column" alignItems="center">
-          <Typography color="textSecondary" gutterBottom variant="headline">{t('offices.create')}</Typography>
+          <Typography color="textSecondary" gutterBottom variant="headline">{title}</Typography>
           <Grid item>
             <Grid container justify="space-around">
               {/* FIRST COLUMN */}
@@ -94,7 +98,7 @@ class OfficesForm extends React.Component {
                     value    = {this.props.doc.label}
                     onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "label-text">
-                    <Trans i18nKey={label + '.helpers.title'}>
+                    <Trans i18nKey='offices.helpers.title'>
                       Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
                       <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
                     </Trans>
@@ -109,23 +113,18 @@ class OfficesForm extends React.Component {
                     value    = {this.props.doc.location}
                     id       = "location"/>
                   <FormHelperText id="location-text">
-                    <Trans i18nKey={label + '.helpers.location'}>
-                      Select from the menu the country where the office is located
-                      and indicate more specific locations by selecting multiple layers (region, province, town).
-                    </Trans>
+                    {t('offices.helpers.location')}
                   </FormHelperText>
                 </FormControl>
 
                 {/* Address */}
                 <FormControl required fullWidth margin="normal">
-                  <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>{t('address')}</FormLabel>
+                  <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.address)}>{t('address.address')}</FormLabel>
                   <Address
                     onChange={(s) => this.props.handleSelectChange('address', s)}
                     value={this.props.doc.address} />
                   <FormHelperText id="address-text">
-                    <Trans i18nKey={label + '.helpers.address'}>
-                      Indicate the address of the office.
-                    </Trans>
+                    {t('offices.helpers.address')}
                   </FormHelperText>
                 </FormControl>
 
@@ -137,8 +136,7 @@ class OfficesForm extends React.Component {
                                 onChange={(s) => this.props.handleSelectChange('spaces', s)}
                                 value   = {this.props.doc.spaces}/>
                   <FormHelperText id="spaces-text">
-                    <Trans i18nKey={label + '.helpers.spaces'}>Click on the field and select where to publish the office
-                      (operation, regional site or thematic site).</Trans>
+                    {t('offices.helpers.spaces')}
                   </FormHelperText>
                 </FormControl>
               </Grid>
@@ -153,9 +151,7 @@ class OfficesForm extends React.Component {
                     onChange  = {(s) => this.props.handleSelectChange('language', s)}
                     className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
                   <FormHelperText id="language-text">
-                    <Trans i18nKey={label + '.helpers.language'}>
-                      Select the language of the office.
-                    </Trans>
+                    {t('offices.helpers.language')}
                   </FormHelperText>
                 </FormControl>
 
@@ -169,9 +165,7 @@ class OfficesForm extends React.Component {
                     value    = {this.props.doc.email || ""}
                     onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "email-text">
-                    <Trans i18nKey={label + '.helpers.email'}>
-                      Type in the email.
-                    </Trans>
+                    {t('offices.helpers.email')}
                   </FormHelperText>
                 </FormControl>
 
@@ -182,7 +176,7 @@ class OfficesForm extends React.Component {
                           onInputChange={this.props.handleInputChange}
                           value={this.props.doc.phones} />
                   <FormHelperText id = "report-text">
-                    <Trans i18nKey='helpers.phones'>Phone numbers.</Trans>
+                    {t('offices.helpers.phones')}
                   </FormHelperText>
                 </FormControl>
 
@@ -195,9 +189,7 @@ class OfficesForm extends React.Component {
                     value    = {this.props.doc.organizations}
                     isMulti={true} />
                   <FormHelperText id="organizations-text">
-                    <Trans i18nKey={label + '.helpers.organizations'}>
-                      Type in and select the organization(s) of the office.
-                    </Trans>
+                    {t('offices.helpers.organizations')}
                   </FormHelperText>
                 </FormControl>
 
@@ -211,7 +203,7 @@ class OfficesForm extends React.Component {
                         <Switch name     = "coordination_hub"
                                 color    = "primary"
                                 onChange = {this.props.handleInputChange}
-                                checked  = {this.props.doc.coordination_hub}
+                                checked  = {this.props.doc.coordination_hub ? true : false}
                         />
                       }
                       label   = {this.props.doc.coordination_hub ? t('offices.helpers.is_coordination_hub') : t('offices.helpers.is_not_coordination_hub')}
@@ -227,9 +219,9 @@ class OfficesForm extends React.Component {
             {
               this.props.status !== 'submitting' &&
               <span>
-                <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
+                <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
                   &nbsp;
-                <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>Save as draft</Button>
+                <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
                   &nbsp;
               </span>
             }
@@ -238,7 +230,7 @@ class OfficesForm extends React.Component {
             }
             {(this.props.match.params.id && this.props.status !== 'deleting') &&
               <span>
-              <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
+              <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
               </span>
             }
           </Grid>
@@ -253,10 +245,10 @@ class OfficesForm extends React.Component {
             ContentProps     = {{
               'aria-describedby' : 'message-id'
             }}
-            message={<Typography id ="message-id" color="error">The form is incomplete.</Typography>}
+            message={<Typography id ="message-id" color="error">[{t('form_incomplete')}]</Typography>}
             action={[
               <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
-                Close
+                {t('close')}
               </Button>
             ]}
           />

@@ -63,7 +63,7 @@ class ReliefwebStaticContentSettings extends React.Component {
         <FormLabel>Document</FormLabel>
         <MaterialAsyncSelect
           loadOptions={this.getOptions}
-          onChange={this.addItem}
+          onChange={(item) => {this.addItem(number, item)}}
           value={this.state.items[number]}
           getOptionLabel={(option) => {return option.fields.title}}
           />
@@ -77,9 +77,9 @@ class ReliefwebStaticContentSettings extends React.Component {
     });
   }
 
-  addItem = (item) => {
+  addItem = (number, item) => {
     let items = this.state.items;
-    items.push(item);
+    items[number] = item;
     this.setState({
       items: items
     });
@@ -121,7 +121,7 @@ class ReliefwebStaticContentSettings extends React.Component {
               Cancel
             </Button>
             <Button onClick={(evt) => {this.props.handleSubmit()}} color="primary">
-              Add Widget
+              Save
             </Button>
           </DialogActions>
       </Dialog>
