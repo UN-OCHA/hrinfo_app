@@ -32,35 +32,37 @@ class AssessmentForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const {t} = props;
+
     this.state = {
       editorState: EditorState.createEmpty(),
       collection_methods : [
-        { value: 'Structured Interview', label: 'Structured Interview'},
-        { value: 'Unstructured Interview', label: 'Unstructured Interview'},
-        { value: 'Key Informant Interview', label: 'Key Informant Interview'},
-        { value: 'Focus group discussion', label: 'Focus group discussion'},
-        { value: 'Observation', label: 'Observation'},
-        { value: 'Baseline data analysis', label: 'Baseline data analysis'},
-        { value: 'Field Interview', label: 'Field Interview'},
-        { value: 'Email / Mail Interview', label: 'Email / Mail Interview'},
-        { value: 'Mixed', label: 'Mixed'},
-        { value: 'Other', label: 'Other'}
+        { value: 'Structured Interview', label: t('assessment.collection_methods.structured')},
+        { value: 'Unstructured Interview', label: t('assessment.collection_methods.unstructured')},
+        { value: 'Key Informant Interview', label: t('assessment.collection_methods.key_informant')},
+        { value: 'Focus group discussion', label: t('assessment.collection_methods.focus_group')},
+        { value: 'Observation', label: t('assessment.collection_methods.observation')},
+        { value: 'Baseline data analysis', label: t('assessment.collection_methods.baseline_data')},
+        { value: 'Field Interview', label: t('assessment.collection_methods.field_interview')},
+        { value: 'Email / Mail Interview', label: t('assessment.collection_methods.email_interview')},
+        { value: 'Mixed', label: t('assessment.collection_methods.mixed')},
+        { value: 'Other', label: t('assessment.collection_methods.other')}
       ],
       unit_measurements  : [
-        { value: 'Community', label: 'Community'},
-        { value: 'Settlements', label: 'Settlements'},
-        { value: 'Households', label: 'Households'},
-        { value: 'Individuals', label: 'Individuals'},
+        { value: 'Community', label: t('assessment.unit_measurements.community')},
+        { value: 'Settlements', label: t('assessment.unit_measurements.settlements')},
+        { value: 'Households', label: t('assessment.unit_measurements.households')},
+        { value: 'Individuals', label: t('assessment.unit_measurements.individuals')},
       ],
       geographic_levels  : [
-        { value: 'District', label: 'District'},
-        { value: 'National', label: 'National'},
-        { value: 'Non-representative', label: 'Non-representative'},
-        { value: 'Other', label: 'Other'},
-        { value: 'Province', label: 'Province'},
-        { value: 'Regional', label: 'Regional'},
-        { value: 'Sub-district', label: 'Sub-district'},
-        { value: 'Village', label: 'Village'}
+        { value: 'District', label: t('assessment.geographic_levels.district')},
+        { value: 'National', label: t('assessment.geographic_levels.national')},
+        { value: 'Non-representative', label: t('assessment.geographic_levels.non_representative')},
+        { value: 'Other', label: t('assessment.geographic_levels.other')},
+        { value: 'Province', label: t('assessment.geographic_levels.province')},
+        { value: 'Regional', label: t('assessment.geographic_levels.regional')},
+        { value: 'Sub-district', label: t('assessment.geographic_levels.subdistrict')},
+        { value: 'Village', label: t('assessment.geographic_levels.village')}
       ],
       status             : '',
       doc                : {},
@@ -88,12 +90,16 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { t, label } = this.props;
-    // const { editorState } = this.state;
+    const { t, i18n } = this.props;
+
+    let title = t('assessment.create') + ' [' + t('languages.' + i18n.language) + ']';
+    if (this.props.doc.id) {
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+    }
 
     return (
       <Grid container direction="column" alignItems="center">
-        <Typography color="textSecondary" gutterBottom variant = "headline">{t(label + '.create')}</Typography>
+        <Typography color="textSecondary" gutterBottom variant = "headline">{title}</Typography>
         <Grid item>
           <Grid container justify="space-around">
 
@@ -108,7 +114,7 @@ class AssessmentForm extends React.Component {
                            value    = {this.props.doc.label || ''}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "label-text">
-                  <Trans i18nKey={label + '.helpers.title'}>Type the original title of the assessment.
+                  <Trans i18nKey={'assessment.helpers.title'}>Type the original title of the assessment.
                     Try not to use abbreviations. To see Standards and Naming Conventions click
                   <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
                 </FormHelperText>
@@ -121,7 +127,7 @@ class AssessmentForm extends React.Component {
                            onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                            required />
                 <FormHelperText>
-                  <Trans i18nKey={label + '.helpers.date'}>Indicate the start/end dates of the assessment.</Trans>
+                  {t('assessment.helpers.date')}
                 </FormHelperText>
               </FormControl>
 
@@ -136,8 +142,7 @@ class AssessmentForm extends React.Component {
                                    isMulti         = {true}
                 />
                 <FormHelperText id = "organizations-text">
-                  <Trans i18nKey={label + '.helpers.leading_organizations'}>Type in and select from the list the organization(s)
-                    conducting the assessment.</Trans>
+                  {t('assessment.helpers.leading_organizations')}
                 </FormHelperText>
               </FormControl>
 
@@ -152,9 +157,7 @@ class AssessmentForm extends React.Component {
                                    isMulti         = {true}
                 />
                 <FormHelperText id = "participating_organizations-text">
-                  <Trans i18nKey={label + '.helpers.participating_organizations'}>Type in and select from the list
-                    the organization(s) taking part into (but not leading) the assessment.
-                    To indicate multiple organizations add a comma after each entry.</Trans>
+                  {t('assessment.helpers.participating_organizations')}
                 </FormHelperText>
               </FormControl>
 
@@ -165,8 +168,7 @@ class AssessmentForm extends React.Component {
                                  onChange = {(s) => this.props.handleSelectChange('locations', s)}
                                  value    = {this.props.doc.locations}/>
                 <FormHelperText id = "locations-text">
-                  <Trans i18nKey={label + '.helpers.locations'}>Select from the menu the country(ies) the assessment is
-                    about and indicate more specific locations by selecting multiple layers (region, province, town). </Trans>
+                  {t('assessment.helpers.locations')}
                 </FormHelperText>
               </FormControl>
 
@@ -179,8 +181,7 @@ class AssessmentForm extends React.Component {
                            value    = {this.props.doc.other_location || ''}
                            onChange = {this.props.handleInputChange}/>
                 <FormHelperText id = "other_location-text">
-                  <Trans i18nKey={label + '.helpers.other_location'}>You can specify here a location not available
-                    in the Location(s) field list.</Trans>
+                  {t('assessment.helpers.other_location')}
                 </FormHelperText>
               </FormControl>
 
@@ -192,8 +193,7 @@ class AssessmentForm extends React.Component {
                               onChange = {(s) => this.props.handleSelectChange('population_types', s)}
                               value    = {this.props.doc.population_types}/>
                 <FormHelperText id = "population_types-text">
-                  <Trans i18nKey={label + '.helpers.population_types'}>Click on the field and select the segment(s) of
-                    the population targeted by the assessment. You can select multiple population types. </Trans>
+                  {t('assessment.helpers.population_types')}
                 </FormHelperText>
               </FormControl>
 
@@ -222,8 +222,7 @@ class AssessmentForm extends React.Component {
                              value    = {this.props.doc.subject}
                              onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "subject-text">
-                    <Trans i18nKey={label + '.helpers.subject'}>Insert a brief description of the topic of the
-                      assessment and what its goals are.</Trans>
+                    {t('assessment.helpers.subject')}
                   </FormHelperText>
                 </FormControl>
 
@@ -238,8 +237,7 @@ class AssessmentForm extends React.Component {
                              value    = {this.props.doc.methodology}
                              onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "methodology-text">
-                    <Trans i18nKey={label + '.helpers.methodology'}>Insert a brief description of the procedures and the
-                      techniques used to collect, store and analyse the data.</Trans>
+                    {t('assessment.helpers.methodology')}
                   </FormHelperText>
                 </FormControl>
 
@@ -254,7 +252,7 @@ class AssessmentForm extends React.Component {
                              value    = {this.props.doc.key_findings}
                              onChange = {this.props.handleInputChange}/>
                   <FormHelperText id = "key_findings-text">
-                    <Trans i18nKey={label + '.helpers.key_findings'}>Insert a brief summary of the assessment’s results.</Trans>
+                    {t('assessment.helpers.key_findings')}
                   </FormHelperText>
                 </FormControl>
 
@@ -267,8 +265,7 @@ class AssessmentForm extends React.Component {
                              onChange = {this.props.handleInputChange}
                              value    = {this.props.doc.sample_size || ''}/>
                   <FormHelperText id = "sample_size-text">
-                    <Trans i18nKey={label + '.helpers.sample_size'}>Indicate the number of
-                      communities/households/individuals surveyed during the assessment.</Trans>
+                    {t('assessment.helpers.sample_size')}
                   </FormHelperText>
                 </FormControl>
 
@@ -278,9 +275,7 @@ class AssessmentForm extends React.Component {
                 <RelatedContent onChange = {(s) => this.props.handleSelectChange('related_content', s)}
                                 value    = {this.props.doc.related_content}/>
                 <FormHelperText id = "agendas-text">
-                  <Trans i18nKey={label + '.helpers.related_content'}>Add links to content that is related to the event
-                    you are creating by indicating the title of the content and its url. When using the Search function
-                    make sure to search by content title.</Trans>
+                  {t('assessment.helpers.related_content')}
                 </FormHelperText>
               </FormControl>
               </Collapse>
@@ -296,7 +291,7 @@ class AssessmentForm extends React.Component {
                                 className = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}
                                 classNamePrefix = {this.props.isValid(this.props.doc.language) ? 'is-valid' : 'is-invalid'}/>
                 <FormHelperText id="language-text">
-                  <Trans i18nKey={label + '.helpers.language'}>Select the language of the document.</Trans>
+                  {t('assessment.helpers.language')}
                 </FormHelperText>
               </FormControl>
 
@@ -308,8 +303,7 @@ class AssessmentForm extends React.Component {
                                   className = {this.props.isValid(this.props.doc.status) ? 'is-valid' : 'is-invalid'}
                                   classNamePrefix = {this.props.isValid(this.props.doc.status) ? 'is-valid' : 'is-invalid'}/>
                 <FormHelperText id = "status-text">
-                  <Trans i18nKey={label + '.helpers.status'}>Indicate the phase of the assessment.
-                    Please remember to update this field as phases move on.</Trans>
+                  {t('assessment.helpers.status')}
                 </FormHelperText>
               </FormControl>
 
@@ -321,20 +315,19 @@ class AssessmentForm extends React.Component {
                               onChange={(s) => this.props.handleSelectChange('spaces', s)}
                               value   = {this.props.doc.spaces}/>
                 <FormHelperText>
-                  <Trans i18nKey={label + '.helpers.spaces'}>Click on the field and select where to publish the assessment
-                    (operation, regional site or thematic site).</Trans>
+                  {t('assessment.helpers.spaces')}
                 </FormHelperText>
               </FormControl>
 
               {/* Bundles (Cluster(s)/Sector(s)) */}
               <FormControl required fullWidth margin="normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>{t('bundles')}</FormLabel>
+                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>{t('groups')}</FormLabel>
                 <HRInfoSelect type="bundles"
                               isMulti={true}
                               onChange={(s) => this.props.handleSelectChange('bundles', s)}
                               value={this.props.doc.bundles} />
                 <FormHelperText id = "bundles-text">
-                  <Trans i18nKey={label + '.helpers.bundles'}>Indicate the cluster(s)/sector(s) the assessment refers to.</Trans>
+                  {t('assessment.helpers.bundles')}
                 </FormHelperText>
               </FormControl>
 
@@ -345,7 +338,7 @@ class AssessmentForm extends React.Component {
                                           onInputChange={this.props.handleInputChange}
                                           value={this.props.doc.report} />
                 <FormHelperText id = "report-text">
-                  <Trans i18nKey='helpers.assessment_report'>Upload the assessment report file, stored on your computer
+                  <Trans i18nKey='assessment.helpers.assessment_report'>Upload the assessment report file, stored on your computer
                     or on your Dropbox account, and indicate its level of accessibility. If the file is
                     “Available on request”, write the instructions in the related space.
                     To see File Standards and Naming Conventions click
@@ -359,7 +352,7 @@ class AssessmentForm extends React.Component {
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('questionnaire', s)}
                                           value={this.props.doc.questionnaire} />
                 <FormHelperText id = "questionnaire-text">
-                  <Trans i18nKey='helpers.assessment_questionnaire'>Upload the assessment questionnaire file, stored on
+                  <Trans i18nKey='assessment.helpers.assessment_questionnaire'>Upload the assessment questionnaire file, stored on
                     your computer or on your Dropbox account, and indicate its level of accessibility.
                     If the file is “Available on request”, write the instructions in the related space.
                     To see File Standards and Naming Conventions click
@@ -373,7 +366,7 @@ class AssessmentForm extends React.Component {
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('data', s)}
                                           value={this.props.doc.data} />
                 <FormHelperText id = "data-text">
-                  <Trans i18nKey='helpers.assessment_data'>Upload the assessment data file, stored on your computer or
+                  <Trans i18nKey='assessment.helpers.assessment_data'>Upload the assessment data file, stored on your computer or
                     on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”,
                     write the instructions in the related space. To see File Standards and Naming Conventions  click
                     <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
@@ -402,8 +395,7 @@ class AssessmentForm extends React.Component {
                                 onChange = {(s) => this.props.handleSelectChange('themes', s)}
                                 value    = {this.props.doc.themes}/>
                   <FormHelperText id = "themes-text">
-                    <Trans i18nKey={label + '.helpers.themes'}>Click on the field and select all relevant themes.
-                      Choose only themes the document substantively refers to.</Trans>
+                    {t('assessment.helpers.themes')}
                   </FormHelperText>
                 </FormControl>
 
@@ -416,8 +408,7 @@ class AssessmentForm extends React.Component {
                                 onChange = {(s) => this.props.handleSelectChange('disasters', s)}
                                 value    = {this.props.doc.disasters} />
                   <FormHelperText id = "disasters-text">
-                    <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or
-                      emergency the assessment refers to.</Trans>
+                    {t('assessment.helpers.disasters')}
                   </FormHelperText>
                 </FormControl>
 
@@ -429,8 +420,7 @@ class AssessmentForm extends React.Component {
                                 options  = {this.state.geographic_levels}
                                 value    = {this.props.doc.geographic_level}/>
                   <FormHelperText id = "geographic_level-text">
-                    <Trans i18nKey={label + '.helpers.geographic_level'}>Select at what geographical level the
-                      assessment is (has been) conducted.</Trans>
+                    {t('assessment.helpers.geographic_level')}
                   </FormHelperText>
                 </FormControl>
 
@@ -443,8 +433,7 @@ class AssessmentForm extends React.Component {
                                 value    = {this.props.doc.unit_measurement}
                                 isMulti  = {true}/>
                   <FormHelperText id = "unit_measurement-text">
-                    <Trans i18nKey={label + '.helpers.unit_measurement'}>Click on the field and select the unit(s) of
-                      measurement used for the assessment.</Trans>
+                    {t('assessment.helpers.unit_measurement')}
                   </FormHelperText>
                 </FormControl>
 
@@ -457,8 +446,7 @@ class AssessmentForm extends React.Component {
                                 value    = {this.props.doc.collection_method}
                                 isMulti  = {true}/>
                   <FormHelperText id = "collection_method-text">
-                    <Trans i18nKey={label + '.helpers.collection_method'}>Click on the field and select the collection
-                      method(s) used to gather information during the assessment.</Trans>
+                    {t('assessment.helpers.collection_method')}
                   </FormHelperText>
                 </FormControl>
 
@@ -470,8 +458,7 @@ class AssessmentForm extends React.Component {
                                onChange={(s) => this.props.handleSelectChange('contacts', s)}
                                value={this.props.doc.contacts}/>
                   <FormHelperText id = "contacts-text">
-                    <Trans i18nKey={label + '.helpers.contacts'}>Indicate the person(s) to contact for information
-                      regarding the event. To show up in the list, the person must have a HumanitarianID profile.</Trans>
+                    {t('assessment.helpers.contacts')}
                   </FormHelperText>
                 </FormControl>
               </Collapse>

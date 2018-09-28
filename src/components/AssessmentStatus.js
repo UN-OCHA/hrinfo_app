@@ -8,11 +8,11 @@ class AssessmentStatus extends React.Component {
 
   state = {
     options: [
-      { value: 'Planned', label: this.t('assessments.status.planned')},
-      { value: 'Ongoing', label: this.t('assessments.status.ongoing') },
-      { value: 'Draft', label: this.t('assessments.status.draft')},
-      { value: 'Field work completed', label: this.t('assessments.status.field_work')},
-      { value: 'Report completed', label: this.t('assessments.status.report')}
+      { value: 'Planned', label: this.t('assessment.status.planned')},
+      { value: 'Ongoing', label: this.t('assessment.status.ongoing') },
+      { value: 'Draft', label: this.t('assessment.status.draft')},
+      { value: 'Field work completed', label: this.t('assessment.status.field_work')},
+      { value: 'Report completed', label: this.t('assessment.status.report')}
     ]
   };
 

@@ -99,7 +99,7 @@ class DocumentForm extends React.Component {
     const bundles = this.props.doc.hasOperation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>{t('bundles')}</FormLabel>
+        <FormLabel>{t('groups')}</FormLabel>
         <HRInfoSelect
           type     =  "bundles"
           spaces   =  {this.props.doc.spaces}

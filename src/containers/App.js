@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';
 import {withRouter, NavLink} from "react-router-dom";
-import { translate, Trans } from 'react-i18next';
+import { translate } from 'react-i18next';
 // Material Components
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,7 +26,6 @@ import Hidden from '@material-ui/core/Hidden';
 import './App.css';
 
 import Routes from '../utils/Routes';
-import SearchPage from './SearchPage';
 import IconLogo from '../components/IconLogo';
 import SpaceMenu from '../components/SpaceMenu';
 import Breadcrumb from '../components/Breadcrumb';

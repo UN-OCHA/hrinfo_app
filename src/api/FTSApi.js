@@ -1,6 +1,4 @@
 
-let instance = null;
-
 class FTSApi {
 
   getFlow(params) {

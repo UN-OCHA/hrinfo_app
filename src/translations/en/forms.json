@@ -1,7 +1,7 @@
 {
     "coordination_hubs": "Coordination hub(s)",
     "disasters": "Disaster(s)/Emergency",
-    "bundles": "Cluster(s)/Sector(s)",
+    "groups": "Cluster(s)/Sector(s)",
     "title": "Title",
     "name": "Name",
     "description": "Description or Summary of Content",
@@ -45,6 +45,18 @@
     "url": "URL",
     "address": "Address",
     "location": "Location",
+    "leading_organizations": "Leading Organizations",
+    "participating_organizations": "Participating Organizations",
+    "other_location": "Other Location",
+    "population_types": "Population types",
+    "subject": "Subject",
+    "methodology": "Methodology",
+    "key_findings": "Key findings",
+    "sample_size": "Sample size",
+    "geographic_level": "Geographic level",
+    "unit_measurement": "Unit of measurement",
+    "collection_method": "Collection method",
+    "contacts": "Contacts",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
@@ -68,7 +80,41 @@
     },
     "assessment": {
         "create": "Create assessment",
-        "edit": "Edit assessment",
+        "status": {
+          "planned": "Planned",
+          "ongoing": "Ongoing",
+          "draft": "Draft / Preliminary Results",
+          "field_work": "Field work completed",
+          "report": "Report completed"
+        },
+        "collection_methods": {
+          "structured": "Structured Interview",
+          "unstructured": "Unstructured Interview",
+          "key_informant": "Key Informant Interview",
+          "focus_group": "Focus group discussion",
+          "observation": "Observation",
+          "baseline_data": "Baseline data analysis",
+          "field_interview": "Field Interview",
+          "email_interview": "Email / Mail Interview",
+          "mixed": "Mixed",
+          "other": "Other"
+        },
+        "unit_measurements": {
+          "community": "Community",
+          "settlements": "Settlements",
+          "individuals": "Individuals",
+          "households": "Households"
+        },
+        "geographic_levels": {
+          "district": "District",
+          "national": "National",
+          "non_representative": "Non-representative",
+          "other": "Other",
+          "province": "Province",
+          "regional": "Regional",
+          "subdistrict": "Sub-district",
+          "village": "Village"
+        },
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
             "date": "Indicate the start/end dates of the assessment.",

@@ -1,7 +1,7 @@
 import React from 'react';
 import HRInfoAPI from '../api/HRInfoAPI';
 import HidAPI from '../api/HidAPI';
-import { translate, Trans } from 'react-i18next';
+import { translate } from 'react-i18next';
 import qs from 'qs';
 
 import IconButton from '@material-ui/core/IconButton';

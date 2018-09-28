@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate, Trans } from 'react-i18next';
+import { translate } from 'react-i18next';
 import HRInfoSelect from '../components/HRInfoSelect';
 import HRInfoLocation from '../components/HRInfoLocation';
 import HRInfoAsyncSelect from '../components/HRInfoAsyncSelect';
