@@ -40,7 +40,7 @@ class RRule extends React.Component {
 
     if (type) {
       /* Regular Expression to check if the type is already in rrule */
-      const regExp = new RegExp("^(.*" + type + "=)([A-Z0-9\-:+]+)(.*)$");
+      const regExp = new RegExp("^(.*" + type + "=)([A-Z0-9-=:+]+)(.*)$");
       /* If YES replace */
       if (regExp.test(rrule)) {
         rrule = rrule.replace(regExp, "$1"+ value +"$3");
@@ -80,7 +80,7 @@ class RRule extends React.Component {
 
   getElementFromRRule(rrule, type = null) {
     if (type) {
-      const regExp = new RegExp("^(.*" + type + "=)([A-Z0-9\-:+]+)(.*)$");
+      const regExp = new RegExp("^(.*" + type + "=)([A-Z0-9-:+]+)(.*)$");
       let match = regExp.exec(rrule);
       if (match) {
         return match[2];

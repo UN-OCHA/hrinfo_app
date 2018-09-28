@@ -25,6 +25,7 @@ class HRInfoSelect extends React.Component {
         let items = this.state.items;
         if (type === 'document_types' || type === 'infographic_types') {
           elts.forEach(function (elt) {
+            elt.value = elt.label;
             if (elt.parent.length === 1) {
               elt.label = elt.parent[0].label + " > " + elt.label;
               pushed.push(elt);
@@ -37,16 +38,17 @@ class HRInfoSelect extends React.Component {
         else if (type === 'bundles' || type === 'offices') {
           elts.forEach(function (elt) {
             elt.label = elt.label + " (" + operationLabel + ")";
+            elt.value = elt.label;
             pushed.push(elt);
           });
         }
         else {
-          let user = JSON.parse(localStorage.getItem('hid-user'));
-          if ((type === 'spaces' || type === 'operations' || type === 'bundles') && user.hrinfo.roles.indexOf('administrator') === -1) {
+          //let user = JSON.parse(localStorage.getItem('hid-user'));
+          if ((type === 'spaces' || type === 'operations' || type === 'bundles') ){//&& user.hrinfo.roles.indexOf('administrator') === -1) {
             elts.forEach(function (elt) {
-              if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
+              //if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && user.hrinfo.spaces[elt.id].indexOf('manager') !== -1) {
                 pushed.push(elt);
-              }
+              //}
             });
           }
           else {
@@ -54,6 +56,7 @@ class HRInfoSelect extends React.Component {
           }
           pushed = pushed.map(function (val) {
             val.type = type;
+            val.value = val.label;
             return val;
           });
         }
@@ -75,24 +78,32 @@ class HRInfoSelect extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.spaces) {
-      const that = this;
-      if (Array.isArray(this.props.spaces)) {
-        this.props.spaces.forEach(function (space) {
-          if (space.type === 'operations') {
-            that.getOptions(that.props.type, space.id, space.label);
-          }
-        });
+    if (this.props.options) {
+      this.setState({
+        items: this.props.options
+      });
+    }
+    else
+    {
+      if (this.props.spaces) {
+        const that = this;
+        if (Array.isArray(this.props.spaces)) {
+          this.props.spaces.forEach(function (space) {
+            if (space.type === 'operations') {
+              that.getOptions(that.props.type, space.id, space.label);
+            }
+          });
+        }
+        else {
+          this.getOptions(this.props.type, this.props.spaces.id, this.props.spaces.label);
+        }
       }
       else {
-        this.getOptions(this.props.type, this.props.spaces.id, this.props.spaces.label);
+        this.getOptions(this.props.type);
       }
-    }
-    else {
-      this.getOptions(this.props.type);
-    }
-    if (this.props.type === 'spaces') {
-      this.getOptions('operations');
+      if (this.props.type === 'spaces') {
+        this.getOptions('operations');
+      }
     }
   }
 
@@ -125,7 +136,9 @@ class HRInfoSelect extends React.Component {
           name={this.props.type}
           onChange={this.props.onChange}
           options={this.state.items}
-          value={this.props.value} />
+          value={this.props.value}
+          getOptionLabel={(option) => {return option.label ? option.label : option}}
+          getOptionValue={(option) => {return option.value ? option.value : option.id}} />
     );
   }
 }

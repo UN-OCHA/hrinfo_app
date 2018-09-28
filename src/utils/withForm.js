@@ -147,6 +147,24 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.date)) {
           isValid = true;
         }
+        if (hrinfoType === 'assessments' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.status) &&
+          this.isValid(doc.bundles) &&
+          this.isValid(doc.date) &&
+          this.isValid(doc.organizations) &&
+          this.isValid(doc.locations) &&
+          this.isValid(doc.population_types) &&
+          this.isValid(doc.report) &&
+          this.isValid(doc.data) &&
+          this.isValid(doc.language)) {
+          isValid = true;
+        }
+        if (hrinfoType === 'offices' &&
+          this.isValid(doc.spaces) &&
+          this.isValid(doc.address)) {
+          isValid = true;
+        }
       }
       return isValid;
     }
@@ -216,17 +234,17 @@ const withForm = function withForm(Component, hrinfoType, label) {
           if (!Array.isArray(body.date)) {
             body.date = [body.date];
           }
-          if (body.date[0] && body.date[0].value) {
-            body.date[0].value = moment(body.date[0].value).format('YYYY-MM-DD HH:mm:ss');
+          if (body.date && body.date.value) {
+            body.date.value = moment(body.date.value).format('YYYY-MM-DD HH:mm:ss');
           }
-          if (body.date[0] && body.date[0].value2) {
-            body.date[0].value2 = moment(body.date[0].value2).format('YYYY-MM-DD HH:mm:ss');
+          if (body.date && body.date.value2) {
+            body.date.value2 = moment(body.date.value2).format('YYYY-MM-DD HH:mm:ss');
           }
-          if (body.date[0] && body.date[0].timezone_db) {
-            body.date[0].timezone_db = body.date[0].timezone_db.value;
+          if (body.date && body.date.timezone_db) {
+            body.date.timezone_db = body.date.timezone_db.value;
           }
-          if (body.date[0] && body.date[0].timezone) {
-            body.date[0].timezone = body.date[0].timezone.value;
+          if (body.date && body.date.timezone) {
+            body.date.timezone = body.date.timezone.value;
           }
           if (body.contacts) {
             body.contacts = body.contacts.map(function (c) {
@@ -244,6 +262,107 @@ const withForm = function withForm(Component, hrinfoType, label) {
             });
           }
         }
+        if (hrinfoType === 'assessments') {
+          let date = {};
+          if (body.date && body.date.value_from) {
+            date.from = moment(body.date.value_from).format('YYYY-MM-DD HH:mm:ss');
+          }
+          if (body.date && body.date.value_to) {
+            if (body.date.value_to === (new Date(0, 0, 0))) {
+              date.to = undefined;
+            }
+            else {
+              date.to = moment(body.date.value_to).format('YYYY-MM-DD HH:mm:ss');
+            }
+          }
+          if (body.date && body.date.timezone) {
+            date.timezone = body.date.timezone.value;
+          }
+          if (body.date && body.date.rrule) {
+            body.frequency = body.date.rrule.split(";")[0].split("=")[1];
+          }
+          body.date = date;
+          if (body.unit_measurement) {
+            let unit_measurement = [];
+            body.unit_measurement.forEach((um) => {
+              unit_measurement.push(um.label.toLowerCase());
+            });
+            body.unit_measurement = unit_measurement;
+          }
+          if (body.collection_method) {
+            let collection_method = [];
+            body.collection_method.forEach((cm) => {
+              collection_method.push(cm.label.toLowerCase());
+            });
+            body.collection_method = collection_method;
+          }
+          if (body.geographic_level) {
+            body.geographic_level = body.geographic_level.label;
+          }
+          if (body.status) {
+            body.status = body.status.label;
+          }
+          if (body.report && body.report.accessibility[0]) {
+            body.report.accessibility = body.report.accessibility[0].label;
+            if (body.report.instructions[0]) {
+              body.report.instructions = body.report.instructions[0];
+            }
+            else {
+              delete body.report.instructions;
+            }
+            if (body.report.url[0]) {
+              body.report.url = body.report.url[0];
+            }
+            else {
+              delete body.report.url;
+            }
+          }
+          if (body.data && body.data.accessibility[0]) {
+            body.data.accessibility = body.data.accessibility[0].label;
+            if (body.data.instructions[0]) {
+              body.data.instructions = body.data.instructions[0];
+            }
+            else {
+              delete body.data.instructions;
+            }
+            if (body.data.url[0]) {
+              body.data.url = body.data.url[0];
+            }
+            else {
+              delete body.data.url;
+            }
+          }
+          if (body.questionnaire && body.questionnaire.accessibility[0]) {
+            body.questionnaire.accessibility = body.questionnaire.accessibility[0].label;
+            if (body.questionnaire.instructions[0]) {
+              body.questionnaire.instructions = body.questionnaire.instructions[0];
+            }
+            else {
+              delete body.questionnaire.instructions;
+            }
+            if (body.questionnaire.url[0]) {
+              body.questionnaire.url = body.questionnaire.url[0];
+            }
+            else {
+              delete body.questionnaire.url;
+            }
+          }
+        }
+        if (hrinfoType === 'offices') {
+          if (body.address && body.address.country) {
+            body.address.country = body.address.country.pcode;
+          }
+        }
+        body.operation = [];
+        body.space     = [];
+        body.spaces.forEach(function (sp) {
+          if (sp.type === 'operations') {
+            body.operation.push(sp.id);
+          }
+          else {
+            body.space.push(sp.id);
+          }
+        });
         if (hrinfoType === 'organizations') {
           body.type = body.type.id;
         }
@@ -283,7 +402,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
           body.locations = locations;
         }
       }
-
       this.hrinfoAPI
         .save(hrinfoType, body)
         .then(doc => {
@@ -315,6 +433,44 @@ const withForm = function withForm(Component, hrinfoType, label) {
               doc.spaces.push(op);
             }
           });
+          if (doc.status) {
+            doc.status = {
+              label: doc.status,
+              value: doc.status
+            };
+          }
+          if (doc.date && doc.date.from) {
+            doc.date.value_from = doc.date.from;
+            delete doc.date.from;
+          }
+          if (doc.date && doc.date.to) {
+            doc.date.value_to = doc.date.to;
+            delete doc.date.to;
+          }
+          if (doc.collection_method) {
+            let collection_method_fetched = [];
+            doc.collection_method.forEach((cm) => {
+              if (cm) {
+                collection_method_fetched.push({
+                  value: cm[0].toUpperCase() + cm.slice(1),
+                  label: cm[0].toUpperCase() + cm.slice(1)
+                });
+              }
+            });
+            doc.collection_method = collection_method_fetched;
+          }
+          if (doc.unit_measurement) {
+            let unit_measurement_fetched = [];
+            doc.unit_measurement.forEach((um) => {
+              if (um) {
+                unit_measurement_fetched.push({
+                  value: um[0].toUpperCase() + um.slice(1),
+                  label: um[0].toUpperCase() + um.slice(1)
+                });
+              }
+            });
+            doc.unit_measurement = unit_measurement_fetched;
+          }
           if (doc.space) {
             doc.space.forEach(function (sp) {
               if (sp) {
@@ -322,6 +478,19 @@ const withForm = function withForm(Component, hrinfoType, label) {
                 doc.spaces.push(sp);
               }
             });
+          }
+          if (!doc.language) {
+            doc.language = {
+              value: '',
+              label: ''
+            }
+          }
+          if (doc.locations) {
+            let locations_fetched = [];
+            for (let i = 0; i < doc.locations.length ; i++) {
+              locations_fetched.push(await this.hrinfoAPI.getItem("locations", doc.locations[i].id));
+            }
+            doc.locations = locations_fetched;
           }
           if (doc['body-html']) {
             const blocksFromHTML = convertFromHTML(doc['body-html']);
@@ -345,6 +514,10 @@ const withForm = function withForm(Component, hrinfoType, label) {
       }
     }
 
+    componentWillUnmount() {
+      this.setState({});
+    }
+
     render () {
       const { editorState } = this.state;
       const newProps = {
@@ -363,6 +536,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
       return <Component {...this.props} {...newProps} />;
     }
   }
-}
+};
 
 export default withForm;

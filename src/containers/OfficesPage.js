@@ -35,7 +35,6 @@ class OfficesPage extends React.Component {
 
     render() {
       const { classes, content } = this.props;
-      console.log(content);
 
       return (
         <div>

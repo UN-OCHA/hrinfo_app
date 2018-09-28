@@ -18,13 +18,13 @@ class AssessmentStatus extends React.Component {
 
   render() {
     return (
-        <MaterialSelect
-          id        = "assessmentStatus"
-          name      = "assessmentStatus"
-          onChange  = {this.props.onChange}
-          options   = {this.state.options}
-          value     = {this.props.value}
-          className = {this.props.className} />
+      <MaterialSelect
+        id        = "assessmentStatus"
+        name      = "assessmentStatus"
+        onChange  = {this.props.onChange}
+        options   = {this.state.options}
+        value     = {this.props.value}
+        className = {this.props.className} />
     );
   }
 }
