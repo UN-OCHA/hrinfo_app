@@ -92,6 +92,42 @@ class AssessmentForm extends React.Component {
   render() {
     const { t, i18n } = this.props;
 
+    const disasters = this.props.doc.hasOperation
+    ? (
+      <FormControl fullWidth margin="normal">
+        <FormLabel>{t('disasters')}</FormLabel>
+        <HRInfoSelect
+          type      = "disasters"
+          spaces    = {this.props.doc.spaces}
+          isMulti   = {true}
+          onChange  = {(s) => this.props.handleSelectChange('disasters', s)}
+          value     = {this.props.doc.disasters}/>
+        <FormHelperText id="disasters-text">
+          <Trans i18nKey='assessment.helpers.disasters'>Click on the field and select the disaster(s) or emergency the document
+          refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See
+          <a href="http://glidenumer.net/?ref=hrinfo"> glidenumber.net</a>.</Trans>
+        </FormHelperText>
+      </FormControl>
+    )
+    : '';
+
+    const bundles = this.props.doc.hasOperation
+    ? (
+      <FormControl fullWidth margin="normal">
+        <FormLabel>{t('groups')}</FormLabel>
+        <HRInfoSelect
+          type     =  "bundles"
+          spaces   =  {this.props.doc.spaces}
+          isMulti =  {true}
+          onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
+          value =  {this.props.doc.bundles}/>
+        <FormHelperText id="bundles-text">
+          {t('assessment.helpers.bundles')}
+        </FormHelperText>
+      </FormControl>
+    )
+    : '';
+
     let title = t('assessment.create') + ' [' + t('languages.' + i18n.language) + ']';
     if (this.props.doc.id) {
       title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
@@ -320,16 +356,7 @@ class AssessmentForm extends React.Component {
               </FormControl>
 
               {/* Bundles (Cluster(s)/Sector(s)) */}
-              <FormControl required fullWidth margin="normal">
-                <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.bundles)}>{t('groups')}</FormLabel>
-                <HRInfoSelect type="bundles"
-                              isMulti={true}
-                              onChange={(s) => this.props.handleSelectChange('bundles', s)}
-                              value={this.props.doc.bundles} />
-                <FormHelperText id = "bundles-text">
-                  {t('assessment.helpers.bundles')}
-                </FormHelperText>
-              </FormControl>
+              {bundles}
 
               {/* Report */}
               <FormControl required fullWidth margin = "normal">
@@ -400,17 +427,7 @@ class AssessmentForm extends React.Component {
                 </FormControl>
 
                 {/* Disasters */}
-                <FormControl fullWidth margin="normal">
-                  <FormLabel>{t('disasters')}</FormLabel>
-                  <HRInfoSelect type     = "disasters"
-                                spaces   = {this.props.doc.spaces}
-                                isMulti  = {true}
-                                onChange = {(s) => this.props.handleSelectChange('disasters', s)}
-                                value    = {this.props.doc.disasters} />
-                  <FormHelperText id = "disasters-text">
-                    {t('assessment.helpers.disasters')}
-                  </FormHelperText>
-                </FormControl>
+                {disasters}
 
                 {/* Level of Representation */}
                 <FormControl fullWidth margin = "normal">
