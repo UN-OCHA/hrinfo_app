@@ -1,6 +1,6 @@
 import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import renderHTML from 'react-render-html';
 import Dialog from '@material-ui/core/Dialog';
@@ -38,13 +38,42 @@ class FreeTextSettings extends React.Component {
     this.props.addWidgetSetting('text', html);
   };
 
+  handleClose = () => {
+    this.setState({
+      editorState: EditorState.createEmpty()
+    });
+    this.props.handleClose();
+  };
+
+  handleSubmit = (evt) => {
+    this.setState({
+      editorState: EditorState.createEmpty()
+    });
+    this.props.handleSubmit();
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    let html = stateToHTML(this.state.editorState.getCurrentContent());
+    let text = this.props.text ? this.props.text : '<p><br></p>';
+    if (text && html !== text) {
+      const blocksFromHTML = convertFromHTML(text);
+      const contentState = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      );
+      this.setState({
+        editorState: EditorState.createWithContent(contentState)
+      });
+    }
+  }
+
   render () {
 
     return (
       <Dialog
         fullScreen
         open={this.props.open}
-        onClose={this.props.handleClose}
+        onClose={this.handleClose}
         >
           <DialogTitle id="scroll-dialog-title">Settings</DialogTitle>
           <DialogContent>
@@ -69,11 +98,11 @@ class FreeTextSettings extends React.Component {
             </FormControl>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.props.handleClose} color="primary">
+            <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={(evt) => {this.props.handleSubmit()}} color="primary">
-              Add Widget
+            <Button onClick={(evt) => {this.handleSubmit()}} color="primary">
+              Save
             </Button>
           </DialogActions>
       </Dialog>

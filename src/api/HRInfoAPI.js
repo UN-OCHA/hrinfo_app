@@ -107,10 +107,10 @@ class HRInfoAPI {
 
   save(type, body) {
     let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/' + type;
+    let url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type;
     if (body.id) {
       httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/api/v1.0/' + type + '/' + body.id;
+      url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type + '/' + body.id;
       delete body.created;
       delete body.changed;
       delete body.url;

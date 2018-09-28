@@ -1,0 +1,79 @@
+{
+    "coordination_hubs": "Centros de coordinación",
+    "disasters": "Desastres / Emergencias",
+    "bundles": "Clusters / Sectores",
+    "title": "Título",
+    "description": "Descripción del contenido",
+    "language": "Idioma",
+    "spaces": "Operaciones / Espacios web",
+    "publication_date": "Fecha de publicación original",
+    "document_type": "Tipo de documento",
+    "map_type": "Tipo de mapa o infografía ",
+    "organizations": "Organización(es)",
+    "locations": "Ubicación",
+    "themes": "Temas",
+    "publish": "Publicar",
+    "save_as_draft": "Guardar como borrador",
+    "delete": "Borrar",
+    "form_incomplete": "El formulario está incompleto y no pudo ser enviado",
+    "close": "Cerrar",
+    "exclude_from_reliefweb": "No compartir con ReliefWeb",
+    "add_more": "Agregar más información",
+    "hide_information": "Ocultar información opcional",
+    "helpers": {
+        "files": "Suba el archivo de su ordenador y especifique el idioma. es mejor publicar un archivo por entrada, aunque también es posible agregar varios por entrada. Para ver los estandares y convenciones sobre el uso de nombres, haga click aquí"
+    },
+    "document": {
+        "helpers": {
+            "title": "Ingrese el título del documento. Intente no utilizar abreviaturas. Para ver los estandares y convenciones sobre el uso de nombres, haga click aquí",
+            "offices": "Seleccione el centro de coordinación al que se hace referencia en el documento",
+            "publication_date": "Indicar la fecha de publicación original del documento",
+            "disasters": "Seleccione el desastre al que se hace referencia en el documento",
+            "bundles": "Indicar los clusters o sectores a los que hace referencia el documento",
+            "description": "Intente siempre incluir aquí el texto (o una parte ) del documento, como por ejemplo la introducción o el resumen ejecutivo. Si no hay texto disponible, utilizar este campo para describir el archivo.",
+            "language": "Seleccionar el idioma del documento",
+            "spaces": "Seleccione aquí en secciones (operación, página regional o temática) quiere que el documento sea publicado",
+            "document_type": "Elija el tipo y subtipo de documento que mejor representa al documento ",
+            "organizations": "Seleccione la fuente del documento",
+            "locations": "Seleccione en el menú los países a los que el documento hace referencia. También indique lugares más específicos, seleccionando capas adicionales ( región, provincia, ciudad)",
+            "themes": "Seleccione los temas a los que el documento hace referencia de modo substantivo",
+            "related_content": "Agregar enlaces a contenido relacionado al documento publicado (por ejemplo, otras versiones del mismo, notas de una reunión, etc. ) indicando el título del contenido y su URL"
+        },
+        "create": "Crear documento"
+    },
+    "infographic": {
+        "helpers": {
+            "title": "Ingrese el título del mapa-infografía. Intente no utilizar abreviaturas. Para ver los estandares y convenciones sobre el uso de nombres, haga click aquí",
+            "offices": "Seleccione el centro de coordinación al que se hace referencia en el mapa/infografía",
+            "publication_date": "Indique la fecha de publicación original del mapa/infografia",
+            "disasters": "Seleccione el desastre al que se hace referencia en el mapa/infografía",
+            "bundles": "Indicar los clusters o sectores a los que hace referencia el mapa/infografia",
+            "description": "Intente siempre incluir aquí el texto (o una parte ) del mapa/infografía, como por ejemplo la introducción o el resumen ejecutivo. Si no hay texto disponible, utilizar este campo para describir el archivo.",
+            "language": "Seleccione el idioma del mapa/infografia",
+            "spaces": "Seleccione aquí en secciones (operación, página regional o temática) quiere que el mapa/infografía sea publicado",
+            "document_type": "Elija el tipo y subtipo de mapa/infografía que mejor representa al documento ",
+            "organizations": "Elija la fuente del mapa/infografía",
+            "locations": "Seleccione en el menú los países a los que el mapa/infografía hace referencia. También indique lugares más específicos, seleccionando capas adicionales ( región, provincia, ciudad)",
+            "themes": "Seleccione los temas a los que el mapa/infografía hace referencia substancialmente",
+            "related_content": "Agregar enlaces a contenido relacionado al mapa/infografía publicado (por ejemplo, otras versiones del mismo, notas de una reunión, etc. ) indicando el título del contenido y su URL"
+        },
+        "create": "Crear Infografía"
+    },
+    "files": {
+        "new_file": "Nuevo archivo",
+        "from_storage": "Desde el ordenador",
+        "from_dropbox": "Desde Dropbox",
+        "language": "Idioma del archivo",
+        "files": "Archivo/s"
+    },
+    "related_content": {
+        "title": "Título",
+        "url": "URL",
+        "helpers": {
+            "title": "Escriba el título del contenido relacioando",
+            "url": "Inserte el enlace al contenido relacionado"
+        },
+        "related_content": "Contenido relacionado"
+    },
+    "add_another": "Agregar otro"
+}

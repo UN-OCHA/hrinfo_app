@@ -1,13 +1,16 @@
 import React from 'react';
+import { translate} from 'react-i18next';
 import MaterialSelect from './MaterialSelect';
 
 class EventCategorySelect extends React.Component {
+  t = this.props.t;
+
   state = {
     options: [
-      { value: '82', label: 'Meetings'},
-      { value: '83', label: 'Trainings'},
-      { value: '84', label: 'Workshops'},
-      { value: '85', label: 'Conferences'}
+      { value: '82', label: this.t('events.category.meetings')},
+      { value: '83', label: this.t('events.category.trainings')},
+      { value: '84', label: this.t('events.category.workshops')},
+      { value: '85', label: this.t('events.category.conferences')}
     ],
   };
 
@@ -40,4 +43,4 @@ class EventCategorySelect extends React.Component {
   }
 }
 
-export default EventCategorySelect;
+export default translate('forms')(EventCategorySelect);

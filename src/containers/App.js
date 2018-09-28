@@ -366,6 +366,7 @@ class App extends Component {
               <Menu id="language-menu" anchorEl={this.state.anchorLanguage} onClose={this.toggleMenuLanguage} open={Boolean(this.state.anchorLanguage)}>
                 <MenuItem key='en' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('en'); }}>EN</MenuItem>
                 <MenuItem key='fr' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('fr'); }}>FR</MenuItem>
+                <MenuItem key='es' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('es'); }}>ES</MenuItem>
               </Menu>
             </div>
 	                    <div>

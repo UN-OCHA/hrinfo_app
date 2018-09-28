@@ -1,4 +1,5 @@
 import React      from 'react';
+import { translate, Trans } from 'react-i18next';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -63,12 +64,12 @@ class ClusterForm extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, t, i18n } = this.props;
 
     const parent_cluster = this.props.doc.operation
     ? (
       <FormControl fullWidth margin="normal">
-        <FormLabel>Parent Cluster</FormLabel>
+        <FormLabel>{t('bundles.parent_cluster')}</FormLabel>
         <HRInfoSelect
             type     = "bundles"
             spaces   = {[this.props.doc.operation]}
@@ -79,9 +80,14 @@ class ClusterForm extends React.Component {
     )
     : '';
 
+    let title = t('bundles.create') + ' [' + t('languages.' + i18n.language) + ']';
+    if (this.props.doc.id) {
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+    }
+
     return (
       <Grid container direction = "column" alignItems = "center">
-      <Typography color = "textSecondary" gutterBottom variant = "headline">Create {this.props.label}</Typography>
+      <Typography color = "textSecondary" gutterBottom variant = "headline">{title}</Typography>
       <Grid item>
         <Grid container justify = "space-around">
 
@@ -90,32 +96,32 @@ class ClusterForm extends React.Component {
 
             {/* Title */}
             <FormControl required fullWidth margin = "normal">
-              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>Title</FormLabel>
+              <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.label)}>{t('title')}</FormLabel>
               <TextField type     = "text"
                          name     = "label"
                          id       = "label"
                          value    = {this.props.doc.label}
                          onChange = {this.props.handleInputChange}/>
               <FormHelperText id = "label-text">
-                Type the original title of the {this.props.label + ' '}. Try not to use abbreviations. To see Standards and Naming Conventions click
-                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.
+                <Trans i18nKey={'bundles.helpers.title'}>Type the original title of the group. Try not to use abbreviations. To see Standards and Naming Conventions click
+                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
 
             {/* Type */}
             <FormControl required fullWidth margin="normal">
-              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.type)}>Type</FormLabel>
+              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.type)}>{t('type')}</FormLabel>
               <ClusterTypeSelect  value     = {this.props.doc.type}
                                   onChange  = {(s) => this.props.handleSelectChange('type', s)}
                                   className = {this.props.isValid(this.props.doc.type) ? 'is-valid' : 'is-invalid'}/>
               <FormHelperText id="type-text">
-                  From the list, select the type of {this.props.label} you are creating.
+                  {t('bundles.helpers.type')}
               </FormHelperText>
             </FormControl>
 
             {/* HID Access */}
             <FormControl required component="fieldset" fullWidth margin="normal">
-              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.hid_access)}>HID Access</FormLabel>
+              <FormLabel focused error = {this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.hid_access)}>{t('bundles.hid_access.title')}</FormLabel>
               <Card className="card-container">
                 <CardContent className="card-content">
                   <RadioGroup
@@ -123,20 +129,20 @@ class ClusterForm extends React.Component {
                     className  = {classes.group}
                     value      = {this.props.doc.hid_access}
                     onChange   = {(s) => this.props.handleSelectChange('hid_access', s)}>
-                    <FormControlLabel value="do_not_create"  control={<Radio color="primary"/>} label="Do not create a list" />
-                    <FormControlLabel value="open"  control={<Radio color="primary"/>} label="Open" />
-                    <FormControlLabel value="closed"  control={<Radio color="primary"/>} label="Closed" />
+                    <FormControlLabel value="do_not_create"  control={<Radio color="primary"/>} label={t('bundles.hid_access.do_not_create')} />
+                    <FormControlLabel value="open"  control={<Radio color="primary"/>} label={t('bundles.hid_access.open')} />
+                    <FormControlLabel value="closed"  control={<Radio color="primary"/>} label={t('bundles.hid_access.closed')} />
                   </RadioGroup>
                 </CardContent>
               </Card>
               <FormHelperText id = "hid_access-text">
-                Select "Open" if you want HID users to add themselves to this cluster/sector. Select "Closed" if you want only HID managers to be allowed to add HID users to this cluster/sector.
+                {t('bundles.helpers.hid_access')}
               </FormHelperText>
             </FormControl>
 
             {/* Body */}
             <FormControl fullWidth margin = "normal">
-               <FormLabel>Body</FormLabel>
+               <FormLabel>{t('description')}</FormLabel>
                <Card className = "card-container">
                  <Editor editorState         = {this.props.editorState}
                          editorClassName     = "editor-content"
@@ -144,15 +150,14 @@ class ClusterForm extends React.Component {
                          onEditorStateChange = {this.props.onEditorStateChange}/>
                </Card>
                <FormHelperText id = "body-text">
-                 Try to always include here the text (in full or part of it) of the {this.props.label + ' '}
-                 (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.
+                {t('bundles.helpers.body')}
                </FormHelperText>
             </FormControl>
 
 
             {/* Social Media */}
             <FormControl fullWidth margin = "normal">
-               <FormLabel htmlFor="social_media">Social media</FormLabel>
+               <FormLabel htmlFor="social_media">{t('social_media')}</FormLabel>
                <SocialMedia onChange={(s) => this.props.handleSelectChange('social_media', s)}
                                value={this.props.doc.social_media}
                                id="social_media"/>
@@ -160,7 +165,7 @@ class ClusterForm extends React.Component {
 
             {/* Website */}
             <FormControl fullWidth margin = "normal">
-               <FormLabel>Website</FormLabel>
+               <FormLabel>{t('website')}</FormLabel>
                <TextField type     = "text"
                           name     = "url"
                           id       = "url"
@@ -170,7 +175,7 @@ class ClusterForm extends React.Component {
 
             {/* Email */}
             <FormControl fullWidth margin = "normal">
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <TextField type     = "text"
                            name     = "email"
                            id       = "email"
@@ -183,7 +188,7 @@ class ClusterForm extends React.Component {
           <Grid item md={3} xs={11}>
             {/* Operation */}
             <FormControl required fullWidth margin="normal">
-               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>Operation</FormLabel>
+               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.operation)}>{t('operation')}</FormLabel>
                <HRInfoSelect type    = "operations"
                                   isMulti = {false}
                                   onChange={(s) => this.props.handleSelectChange('operation', s)}
@@ -192,7 +197,7 @@ class ClusterForm extends React.Component {
 
             {/* Global Cluster */}
             <FormControl fullWidth margin="normal">
-              <FormLabel>Global Cluster</FormLabel>
+              <FormLabel>{t('bundles.global_cluster')}</FormLabel>
               <HRInfoSelect type    = "global_clusters"
                             isMulti = {false}
                             onChange={(s) => this.props.handleSelectChange('global_cluster', s)}
@@ -204,7 +209,7 @@ class ClusterForm extends React.Component {
 
             {/* Lead Agencies */}
             <FormControl fullWidth margin = "normal">
-              <FormLabel>Lead Agencies</FormLabel>
+              <FormLabel>{t('bundles.lead_agencies')}</FormLabel>
               <HRInfoAsyncSelect
                   type     = "organizations"
                   isMulti  = {true}
@@ -214,7 +219,7 @@ class ClusterForm extends React.Component {
 
             {/* Activation document */}
             <FormControl fullWidth margin = "normal">
-              <FormLabel >Activation document</FormLabel>
+              <FormLabel >{t('bundles.activation_document')}</FormLabel>
               <HRInfoAsyncSelect
                     type     = "documents"
                     name     = "activation_document"
@@ -226,7 +231,7 @@ class ClusterForm extends React.Component {
 
             {/* Partners */}
             <FormControl fullWidth margin="normal">
-              <FormLabel>Partners</FormLabel>
+              <FormLabel>{t('bundles.partners')}</FormLabel>
               <HRInfoAsyncSelect type="organizations"
                                  isMulti  = {true}
                                  onChange = {(s) => this.props.handleSelectChange('organizations', s)}
@@ -235,7 +240,7 @@ class ClusterForm extends React.Component {
 
             {/* Participation */}
             <FormControl fullWidth margin="normal">
-              <FormLabel focused={false}>Participation</FormLabel>
+              <FormLabel focused={false}>{t('bundles.participation')}</FormLabel>
               <Card className="card-container">
                 <CardContent className="card-content">
                   <FormControlLabel
@@ -247,7 +252,7 @@ class ClusterForm extends React.Component {
                         color="primary"
                       />
                     }
-                    label="NGO Participation"
+                    label={t('bundles.ngo_participation')}
                   />
                   <FormControlLabel
                     control={
@@ -258,7 +263,7 @@ class ClusterForm extends React.Component {
                         color="primary"
                       />
                     }
-                    label="Government Participation"
+                    label={t('bundles.government_participation')}
                   />
                   <FormControlLabel
                     control={
@@ -269,7 +274,7 @@ class ClusterForm extends React.Component {
                         color="primary"
                       />
                     }
-                    label="Inter Cluster"
+                    label={t('bundles.inter_cluster')}
                   />
                 </CardContent>
               </Card>
@@ -286,9 +291,9 @@ class ClusterForm extends React.Component {
         {
           this.props.status !== 'submitting' &&
           <span>
-            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>Publish</Button>
+            <Button color="primary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt); this.submit()}}>{t('publish')}</Button>
               &nbsp;
-            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>Save as Draft</Button>
+            <Button color="secondary" variant="contained" onClick={(evt) => {this.props.handleSubmit(evt, 1); this.submit()}}>{t('save_as_draft')}</Button>
               &nbsp;
           </span>
         }
@@ -297,7 +302,7 @@ class ClusterForm extends React.Component {
         }
         {(this.props.match.params.id && this.props.status !== 'deleting') &&
           <span>
-            <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>Delete</Button>
+            <Button color="secondary" variant="contained" onClick={this.props.handleDelete}>{t('delete')}</Button>
           </span>
         }
         </Grid>
@@ -311,10 +316,10 @@ class ClusterForm extends React.Component {
           ContentProps     = {{
             'aria-describedby' : 'message-id'
           }}
-          message  = {<Typography id ="message-id" color="error">The form is incomplete and could not be submitted.</Typography>}
+          message  = {<Typography id ="message-id" color="error">{t('form_incomplete')}</Typography>}
           action   = {[
             <Button key="undo" color="secondary" size="small" onClick={this.hideAlert}>
-            CLOSE
+            {t('close')}
             </Button>
           ]}
         />
@@ -326,4 +331,4 @@ ClusterForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ClusterForm);
+export default withStyles(styles)(translate('forms')(ClusterForm));

@@ -42,7 +42,7 @@ class HidContactsWidgetSettings extends React.Component {
     return (
       <FormControl key={number} fullWidth margin="normal">
         <FormLabel>Contact</FormLabel>
-        <HidContacts onChange={this.addItem} value={this.state.items[number]} />
+        <HidContacts onChange={(item) => {this.addItem(number, item)}} value={this.state.items[number]} />
       </FormControl>
     );
   }
@@ -53,9 +53,9 @@ class HidContactsWidgetSettings extends React.Component {
     });
   }
 
-  addItem = (item) => {
+  addItem = (number, item) => {
     let items = this.state.items;
-    items.push(item);
+    items[number] = item;
     this.setState({
       items: items
     });
@@ -95,7 +95,7 @@ class HidContactsWidgetSettings extends React.Component {
               Cancel
             </Button>
             <Button onClick={(evt) => {this.props.handleSubmit()}} color="primary">
-              Add Widget
+              Save
             </Button>
           </DialogActions>
       </Dialog>
