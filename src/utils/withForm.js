@@ -277,9 +277,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
           if (body.date && body.date.timezone) {
             date.timezone = body.date.timezone.value;
           }
-          if (body.date && body.date.rrule) {
-            body.frequency = body.date.rrule.split(";")[0].split("=")[1];
-          }
           body.date = date;
           if (body.unit_measurement) {
             let unit_measurement = [];
@@ -348,7 +345,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
         }
         if (hrinfoType === 'offices') {
-          if (body.address && body.address.country) {
+          if (body.address && body.address.country && typeof body.address.country === 'object') {
             body.address.country = body.address.country.pcode;
           }
         }

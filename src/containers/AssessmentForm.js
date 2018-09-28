@@ -10,7 +10,7 @@ import HRInfoSelect             from '../components/HRInfoSelect';
 import HRInfoLocations          from '../components/HRInfoLocations';
 import HRInfoAsyncSelect        from '../components/HRInfoAsyncSelect';
 import HidContacts              from '../components/HidContacts';
-import EventDate                from '../components/EventDate';
+import SimpleDate                from '../components/SimpleDate';
 import AssessmentStatus         from "../components/AssessmentStatus";
 import HRInfoFilesAccessibility from "../components/HRInfoFilesAccessibility";
 import LanguageSelect           from '../components/LanguageSelect';
@@ -117,7 +117,7 @@ class AssessmentForm extends React.Component {
               {/* Dates */}
               <FormControl required fullWidth margin="normal">
                 <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>{t('date')}</FormLabel>
-                <EventDate value    = {this.props.doc.date}
+                <SimpleDate value    = {this.props.doc.date}
                            onChange = {(val) => {this.props.handleSelectChange('date', val);}}
                            required />
                 <FormHelperText>

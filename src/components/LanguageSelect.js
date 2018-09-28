@@ -21,10 +21,8 @@ class LanguageSelect extends React.Component {
           name="language"
           onChange={this.props.onChange}
           options={this.state.options}
-          value={this.props.value}
+          value={this.props.value && this.props.value.value ? this.props.value : ''}
           className={this.props.className}
-          getOptionValue={(option) => {return option.value}}
-          getOptionLabel={(option) => {return option.label}}
         />
     );
   }

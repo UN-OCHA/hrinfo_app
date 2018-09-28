@@ -17,7 +17,7 @@ class ClusterTypeSelect extends React.Component {
   }
 
   getValue (val) {
-    let out = {};
+    let out = {value: '', label: ''};
     this.state.options.forEach(function (option) {
       if (option.value === val) {
         out = option;

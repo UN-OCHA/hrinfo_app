@@ -76,7 +76,7 @@ class Address extends React.Component {
             <TextField type     = "text"
                        name     = "thoroughfare"
                        onChange = {this.handleChange}
-                       value    = {this.state.val.thoroughfare} />
+                       value    = {this.state.val.thoroughfare || ""} />
             </FormControl>
           </CardContent>
 
@@ -87,7 +87,7 @@ class Address extends React.Component {
             <TextField      type     = "text"
                             name     = "premise"
                             onChange = {this.handleChange}
-                            value    = {this.state.val.premise} />
+                            value    = {this.state.val.premise || ""} />
             </FormControl>
           </CardContent>
 
@@ -98,7 +98,7 @@ class Address extends React.Component {
             <TextField      type     = "text"
                             name     = "postal_code"
                             onChange = {this.handleChange}
-                            value    = {this.state.val.postal_code} />
+                            value    = {this.state.val.postal_code || ""} />
             </FormControl>
           </CardContent>
 
@@ -109,7 +109,7 @@ class Address extends React.Component {
             <TextField      type     = "text"
                             name     = "locality"
                             onChange = {this.handleChange}
-                            value    = {this.state.val.locality} />
+                            value    = {this.state.val.locality || ""} />
             </FormControl>
           </CardContent>
         </Card>
