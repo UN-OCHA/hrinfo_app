@@ -55,8 +55,8 @@ const withForm = function withForm(Component, hrinfoType, label) {
 
       if (hrinfoType !== 'operations') {
         let hasOperation = this.state.doc.hasOperation ? this.state.doc.hasOperation : false;
-        if (name === 'spaces') {
-          doc.spaces.forEach(function (val) {
+        if (name === 'spaces' || name === 'operation') {
+          doc[name].forEach(function (val) {
             if (val.type === 'operations') {
               hasOperation = true;
             }
