@@ -161,7 +161,7 @@ class OperationForm extends React.Component {
                 <TextField type="url"
                            id="url"
                            name="url"
-                           value={this.props.doc.url}
+                           value={this.props.doc.url || ""}
                            onChange={this.props.handleInputChange} />
               </FormControl>
 
@@ -170,7 +170,7 @@ class OperationForm extends React.Component {
                 <TextField type="email"
                            id="email"
                            name="email"
-                           value={this.props.doc.email}
+                           value={this.props.doc.email || ""}
                            onChange={this.props.handleInputChange} />
               </FormControl>
 

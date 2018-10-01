@@ -165,6 +165,12 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.address)) {
           isValid = true;
         }
+        if (hrinfoType === 'bundles' &&
+          this.isValid(doc.type) &&
+          this.isValid(doc.hid_access) &&
+          this.isValid(doc.operation)) {
+          isValid = true;
+        }
       }
       return isValid;
     }
@@ -396,7 +402,11 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
           body.locations = locations;
         }
+        if (body.language.value === '' && body.language.label === '') {
+          delete body.language;
+        }
       }
+      // console.log("----------------------------", body);
       this.hrinfoAPI
         .save(hrinfoType, body)
         .then(doc => {
@@ -435,11 +445,11 @@ const withForm = function withForm(Component, hrinfoType, label) {
             };
           }
           if (doc.date && doc.date.from) {
-            doc.date.value_from = doc.date.from;
+            doc.date.value = doc.date.from;
             delete doc.date.from;
           }
           if (doc.date && doc.date.to) {
-            doc.date.value_to = doc.date.to;
+            doc.date.value2 = doc.date.to;
             delete doc.date.to;
           }
           if (doc.collection_method) {
@@ -494,6 +504,11 @@ const withForm = function withForm(Component, hrinfoType, label) {
               blocksFromHTML.entityMap
             );
             this.state.editorState = EditorState.createWithContent(contentState);
+          }
+          if (doc.disasters) {
+            doc.disasters.forEach((disaster) => {
+              disaster.id = disaster.glide;
+            });
           }
         }
         else {

@@ -42,17 +42,11 @@ class ClusterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapse     : false,
       wasSubmitted : false,
     };
 
-    this.toggle    = this.toggle.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
     this.submit    = this.submit.bind(this);
-  }
-
-  toggle() {
-    this.setState({ collapse: !this.state.collapse });
   }
 
   hideAlert() {
@@ -128,7 +122,7 @@ class ClusterForm extends React.Component {
                     name       = "hid_access"
                     className  = {classes.group}
                     value      = {this.props.doc.hid_access}
-                    onChange   = {(s) => this.props.handleSelectChange('hid_access', s)}>
+                    onChange   = {this.props.handleInputChange}>
                     <FormControlLabel value="do_not_create"  control={<Radio color="primary"/>} label={t('bundles.hid_access.do_not_create')} />
                     <FormControlLabel value="open"  control={<Radio color="primary"/>} label={t('bundles.hid_access.open')} />
                     <FormControlLabel value="closed"  control={<Radio color="primary"/>} label={t('bundles.hid_access.closed')} />
@@ -153,7 +147,6 @@ class ClusterForm extends React.Component {
                 {t('bundles.helpers.body')}
                </FormHelperText>
             </FormControl>
-
 
             {/* Social Media */}
             <FormControl fullWidth margin = "normal">
@@ -279,13 +272,9 @@ class ClusterForm extends React.Component {
                 </CardContent>
               </Card>
             </FormControl>
-
-
-
         </Grid>
       </Grid>
     </Grid>
-
 
         <Grid item className="submission">
         {
