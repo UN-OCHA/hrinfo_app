@@ -189,7 +189,7 @@ class EventDate extends React.Component {
           val.value_from = new Date(val.value_from);
           val.value_to = new Date(val.value_to);
         }
-        else {
+        else if (val.value_to) {
           console.error("There is an issue with the date storage")
         }
       });

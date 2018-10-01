@@ -161,8 +161,18 @@ class SimpleDate extends React.Component {
           val.timezone = {value: timezone, label: timezone};
           val.timezone_db = {value: timezone, label: timezone};
         }
-        val.value_from = new Date(val.value_from);
-        val.value_to = new Date(val.value_to);
+        if (!val.value_from && !val.value_to && val.value && val.value2) {
+          val.value_from = new Date(val.value);
+          val.value_to = new Date(val.value2);
+        }
+        else if (val.value_from && val.value_to)
+        {
+          val.value_from = new Date(val.value_from);
+          val.value_to = new Date(val.value_to);
+        }
+        else if (val.value_to) {
+          console.error("There is an issue with the date storage")
+        }
       });
       let newState = {
         val       : val,
