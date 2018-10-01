@@ -1,4 +1,4 @@
-FROM unocha/nodejs-builder:8.9.4 as BUILDER
+FROM unocha/nodejs-builder:8.11.3 as BUILDER
 
 WORKDIR /src
 
@@ -8,7 +8,7 @@ RUN yarn && \
     yarn build
 
 
-FROM unocha/nginx:1.12.2
+FROM unocha/nginx:1.14
 
 COPY  --from=builder /src/nginx /etc/nginx/conf.d
 COPY  --from=builder /src/build /srv/www/html
