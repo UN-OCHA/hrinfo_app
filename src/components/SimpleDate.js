@@ -2,7 +2,6 @@ import React  from 'react';
 
 import moment                  from 'moment';
 import MaterialSelect          from './MaterialSelect';
-import RRule                   from './RRule';
 import 'moment-timezone';
 
 // Material
@@ -20,29 +19,25 @@ import MomentUtils                    from 'material-ui-pickers/utils/moment-uti
 import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import DatePicker                     from 'material-ui-pickers/DatePicker';
 
-class EventDate extends React.Component {
+class SimpleDate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       items   : [],
       endDate : true,
       allDay  : false,
-      repeats : false,
       val : {
         value_from  : '',
         value_to    : '',
         timezone    : 'UTC',
         offset      : 0,
         offset2     : 0,
-        rrule       : '',
         timezone_db : 'UTC'
       },
-      rrule     : '',
       status    : 'initial',
     };
     this.handleChange = this.handleChange.bind(this);
     this.setCheckbox  = this.setCheckbox.bind(this);
-    this.setRrule     = this.setRrule.bind(this);
     this.setTimezone  = this.setTimezone.bind(this);
     this.getTime      = this.getTime.bind(this);
   }
@@ -80,7 +75,7 @@ class EventDate extends React.Component {
     let value: Date;
     let val = this.state.val;
     if (!event.target) {
-      value  = event.toDate();
+      value = event.toDate();
       // FROM
       if (type === 'from') {
         val.value_from = value;
@@ -105,23 +100,9 @@ class EventDate extends React.Component {
     }
 
     this.setState({
-      val : val,
+      val: val,
       // check if time has changed for all allDay
       allDay: this.isAllDay(val.value_from, val.value_to)
-    });
-
-    if (this.props.onChange) {
-      this.props.onChange(val);
-    }
-  }
-
-  // rrule
-  setRrule (rrule) {
-    let val   = this.state.val;
-    val.rrule = rrule;
-
-    this.setState({
-      val : val
     });
 
     if (this.props.onChange) {
@@ -173,8 +154,8 @@ class EventDate extends React.Component {
 
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
-      let val = this.props.value[0] ? this.props.value[0] : this.props.value;
+    if (this.props.value && this.state.status === 'initial') {
+      let val = this.props.value;
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
@@ -197,7 +178,6 @@ class EventDate extends React.Component {
         val       : val,
         endDate   : this.state.endDate,
         allDay    : this.isAllDay(val.value_from, val.value_to),
-        repeats   : (val.rrule ? true : false),
         status    : 'ready'
       };
       this.setState(newState);
@@ -224,25 +204,25 @@ class EventDate extends React.Component {
                 leftArrowIcon  = {<i className="icon-arrow-left" />}
                 rightArrowIcon = {<i className="icon-arrow-right" />}
                 InputLabelProps={{
-                    shrink: true,
+                  shrink: true,
                 }}
               />
             </MuiPickersUtilsProvider>
             <TextField
-               id             = "time_from"
-               label          = "Time"
-               type           = "time"
-               disabled       = {!this.state.val.value_from}
-               value          = {this.state.val.value_from ? this.getTime(this.state.val.value_from) : ''}
-               onChange       = {(e) => this.handleChange(e, 'from')}
-               InputLabelProps={{
-                   shrink: true,
-               }}
+              id             = "time_from"
+              label          = "Time"
+              type           = "time"
+              disabled       = {!this.state.val.value_from}
+              value          = {this.state.val.value_from ? this.getTime(this.state.val.value_from) : ''}
+              onChange       = {(e) => this.handleChange(e, 'from')}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </FormControl>
 
-      {/* Date 'To'*/}
-        {this.state.endDate === true &&
+          {/* Date 'To'*/}
+          {this.state.endDate === true &&
           <FormControl  margin="normal">
             <FormLabel htmlFor="to">To</FormLabel>
             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -259,26 +239,26 @@ class EventDate extends React.Component {
                 leftArrowIcon  = {<i className="icon-arrow-left" />}
                 rightArrowIcon = {<i className="icon-arrow-right" />}
                 InputLabelProps={{
-                    shrink: true,
+                  shrink: true,
                 }}
-                />
+              />
             </MuiPickersUtilsProvider>
             <TextField
-               id             = "time_to"
-               label          = "Time"
-               type           = "time"
-               disabled       = {!this.state.val.value_to}
-               value          = {this.state.val.value_to ? this.getTime(this.state.val.value_to) : ''}
-               onChange       = {(e) => this.handleChange(e, 'to')}
-               InputLabelProps={{
-                   shrink: true,
-               }}
+              id             = "time_to"
+              label          = "Time"
+              type           = "time"
+              disabled       = {!this.state.val.value_to}
+              value          = {this.state.val.value_to ? this.getTime(this.state.val.value_to) : ''}
+              onChange       = {(e) => this.handleChange(e, 'to')}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </FormControl>
-        }
+          }
         </CardContent>
 
-       {/* 'All day' checkbox & 'Repeat' checkbox */}
+        {/* 'All day' checkbox */}
         <CardContent className = "date-container">
           <FormControlLabel
             control = {
@@ -301,24 +281,7 @@ class EventDate extends React.Component {
             }
             label   = "All day"
           />
-         <FormControlLabel
-            control = {
-              <Checkbox name     = "repeats"
-                        color    = "primary"
-                        onChange = {this.setCheckbox}
-                        checked  = {this.state.repeats}
-              />
-            }
-            label = "Repeat"
-         />
         </CardContent>
-
-        {/* 'Repeat' div hidden */}
-        {this.state.repeats === true &&
-          <CardContent className = "date-container">
-              <RRule onChange={(rrule) => this.setRrule(rrule)} value={this.state.val.rrule}/>
-          </CardContent>
-        }
 
         {/* Timezone */}
         <CardContent >
@@ -332,4 +295,4 @@ class EventDate extends React.Component {
   }
 }
 
-export default EventDate;
+export default SimpleDate;

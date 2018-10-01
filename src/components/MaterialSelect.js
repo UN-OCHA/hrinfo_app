@@ -152,7 +152,7 @@ class MaterialSelect extends React.Component {
 	              id: this.props.id,
 	              simpleValue: true,
 	              options: this.props.options,
-				        value: this.props.value,
+				        value: this.props.value || "",
                 getOptionValue: this.props.getOptionValue,
                 getOptionLabel: this.props.getOptionLabel
 	            },

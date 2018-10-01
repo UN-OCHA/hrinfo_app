@@ -105,9 +105,9 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/groups/:id/assessments"  exact component={AssessmentsPage}   props={childProps} />
 
 {/* Offices */}
-    <AuthenticatedRoute path="/offices/:id"              exact component={SpacePage}          props={childProps} />
     <AuthenticatedRoute path="/offices/new"              exact component={withForm(OfficesForm, 'offices', 'Offices')}        props={childProps} />
     <AuthenticatedRoute path="/offices/:id/edit"         exact component={withForm(OfficesForm, 'offices', 'Offices')}        props={childProps} />
+    <AuthenticatedRoute path="/offices/:id"              exact component={SpacePage}          props={childProps} />
     <AuthenticatedRoute path="/offices/:id/events"       exact component={EventsPage}         props={childProps} />
     <AuthenticatedRoute path="/offices/:id/contacts"     exact component={ContactsPage}       props={childProps} />
     <AuthenticatedRoute path="/offices/:id/documents"    exact component={DocumentsPage}      props={childProps} />
