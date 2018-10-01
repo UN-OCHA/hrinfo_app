@@ -7,7 +7,7 @@ class HRInfoLocation extends React.Component {
     super(props);
     this.state = {
       items: [],
-      val: {},
+      val: "",
       status: 'initial'
     };
     this.hrinfoAPI = new HRInfoAPI();
@@ -86,6 +86,8 @@ class HRInfoLocation extends React.Component {
           onChange={this.handleChange}
           options={this.state.items}
           value={this.state.val}
+          getOptionValue={(option) => {return option.pcode}}
+          getOptionLabel={(option) => {return option.label}}
           className={this.props.className}/>
       );
     }

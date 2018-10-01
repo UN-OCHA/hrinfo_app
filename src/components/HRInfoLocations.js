@@ -20,11 +20,11 @@ class HRInfoLocations extends React.Component {
     };
     this.hrinfoAPI = new HRInfoAPI();
     this.getRow = this.getRow.bind(this);
-    this.onAddBtnClick = this.onAddBtnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.removeLocation = this.removeLocation.bind(this);
+    this.onAddBtnClick = this.onAddBtnClick.bind(this);
     this.getInitialLocations = this.getInitialLocations.bind(this);
     this.getInitialLocation = this.getInitialLocation.bind(this);
-    this.removeLocation = this.removeLocation.bind(this);
   }
 
   getRow (number) {
@@ -49,9 +49,11 @@ class HRInfoLocations extends React.Component {
           {locations3}
         </CardContent>
         <CardActions>
-          <IconButton color="primary" onClick={(e) => this.removeLocation(number)}>
-            <i className="icon-trash" />
-          </IconButton>
+          {this.state.inputNumber > 1 ?
+            <IconButton color="primary" onClick={(e) => this.removeLocation(number)}>
+              <i className="icon-trash" />
+            </IconButton>
+            : ''}
         </CardActions>
       </Card>
     );
@@ -127,6 +129,10 @@ class HRInfoLocations extends React.Component {
       });
       Promise.all(allPromises)
         .then(function () {
+          if (inputNumber === 0) {
+            inputNumber = 1;
+            locations = [{}];
+          }
           that.setState({
             status: 'ready',
             locations: locations,

@@ -120,7 +120,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
       const doc = this.state.doc;
       let isValid = false;
       if (this.isValid(doc.label)) {
-        if (hrinfoType === 'operations' | hrinfoType === 'organizations') {
+        if (hrinfoType === 'operations' || hrinfoType === 'organizations') {
           isValid = true;
         }
         if (hrinfoType === 'documents' &&
@@ -278,9 +278,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
           if (body.date && body.date.timezone) {
             date.timezone = body.date.timezone.value;
           }
-          if (body.date && body.date.rrule) {
-            body.frequency = body.date.rrule.split(";")[0].split("=")[1];
-          }
           body.date = date;
           if (body.unit_measurement) {
             let unit_measurement = [];
@@ -349,7 +346,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
         }
         if (hrinfoType === 'offices') {
-          if (body.address && body.address.country) {
+          if (body.address && body.address.country && typeof body.address.country === 'object') {
             body.address.country = body.address.country.pcode;
           }
         }
@@ -376,7 +373,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
             delete body.operation;
           }
         }
-        const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes'];
+        const selectFields = ['organizations', 'bundles', 'offices', 'disasters', 'themes', 'participating_organizations', 'population_types'];
         selectFields.forEach(function (field) {
           if (body[field]) {
             for (let i = 0; i < body[field].length; i++) {
@@ -386,15 +383,17 @@ const withForm = function withForm(Component, hrinfoType, label) {
         });
         if (body.locations) {
           let locations = [];
-          body.locations.forEach(function (location, index) {
-            let last = 0;
-            for (let j = 0; j < location.length; j++) {
-              if (typeof location[j] === 'object') {
-                last = j;
+          if (Object.keys(body.locations[0]).length > 0) {
+            body.locations.forEach(function (location, index) {
+              let last = 0;
+              for (let j = 0; j < Object.keys(location).length; j++) {
+                if (typeof location[j] === 'object') {
+                  last = j;
+                }
               }
-            }
-            locations.push(parseInt(location[last].id, 10));
-          });
+              locations.push(parseInt(location[last].id, 10));
+            });
+          }
           body.locations = locations;
         }
       }
