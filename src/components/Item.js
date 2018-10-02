@@ -3,6 +3,8 @@ import renderHTML from 'react-render-html';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
+import { translate, Trans } from 'react-i18next';
+
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,10 +12,13 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
+import MenuList from '@material-ui/core/MenuList';
 import ListItem from '@material-ui/core/ListItem';
+import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+
 import moment from 'moment';
 
 const styles = {
@@ -64,6 +69,7 @@ class Item extends React.Component {
     }
 
     renderBadges () {
+      const { t, i18n } = this.props;
       const item = this.props.item;
       const attributes = [
         'operation',
@@ -80,7 +86,15 @@ class Item extends React.Component {
         if (item[a] && Array.isArray(item[a])) {
           for (let i = 0; i < item[a].length; i++) {
             if (item[a][i]) {
-              badges.push(<ListItem key={a + '_' + item[a][i].id}>{item[a][i].label}</ListItem>);
+              badges.push(
+                <ListItem key={a + '_' + item[a][i].id}>
+                  <Typography variant="subheading" color="textSecondary">
+                    {t(a === 'bundles' ? 'groups' : a === 'offices' ? 'coordination_hubs' : a)} :
+                    <Typography>{item[a][i].label}</Typography>
+                  </Typography>
+
+                </ListItem>
+              );
             }
           }
         }
@@ -94,7 +108,19 @@ class Item extends React.Component {
     }
 
     render() {
-      const { classes, item } = this.props;
+      const { classes, item, t, i18n } = this.props;
+      const fileToDownload = [];
+      if (item.files && Array.isArray(item.files)) {
+        for (let i = 0; i < item.files.length; i++) {
+          fileToDownload.push(
+            <MenuItem key={item.files[i].file.fid}>
+              <a href={item.files[i].file.url} target="_blank">
+                {item.files[i].file.filename}
+              </a>
+            </MenuItem>
+          );
+        }
+      }
       let image = '';
       if (item.type === 'users') {
         image = item.picture ? item.picture : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png';
@@ -113,11 +139,24 @@ class Item extends React.Component {
             <div className={classes.details}>
               <CardContent>
                 <Typography gutterBottom variant="headline" component="h2">{item.label ? item.label : item.name}</Typography>
-                {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
+                                                                            {/* Why use item['body-html'} ? this gives me an error */}
+                {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body']) : ''}</Typography> : ''}
               </CardContent>
               <CardActions>
                 {this.props.viewMode === 'search' ? <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
-                {item.type !== 'users' ? <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button> : ''}
+                {item.type !== 'users' ?
+                  <div>
+                    <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>
+                    {fileToDownload.length !== 0 ?
+                      <MenuList>
+                        <MenuItem key={item.files[0].file.fid}>
+                          <a href={item.files[0].file.url} target="_blank">
+                            {item.files[0].file.filename}
+                          </a>
+                        </MenuItem>
+                      </MenuList> : ''}
+                  </div>
+                  : ''}
               </CardActions>
             </div>
             <List>
@@ -175,4 +214,4 @@ Item.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Item);
+export default withStyles(styles)(translate('forms')(Item));
