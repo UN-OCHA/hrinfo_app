@@ -402,7 +402,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
           body.locations = locations;
         }
-        if (body.language.value === '' && body.language.label === '') {
+        if (body.language && body.language.value === '' && body.language.label === '') {
           delete body.language;
         }
       }
