@@ -12,7 +12,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
-import MenuList from '@material-ui/core/MenuList';
+import Menu from '@material-ui/core/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -46,6 +46,9 @@ const styles = {
   gridImage: {
     width: 400,
     height: 280,
+  },
+  buttons: {
+    padding: 10
   }
 };
 
@@ -55,12 +58,26 @@ class Item extends React.Component {
       super(props);
 
       this.state = {
-        filesOpen: false
+        anchorProject : null,
+        filesOpen     : false
       };
 
       this.renderBadges = this.renderBadges.bind(this);
       this.openFiles = this.openFiles.bind(this);
+      this.openFilesMenu              = this.openFilesMenu.bind(this);
+      this.closeFilesMenu             = this.closeFilesMenu.bind(this);
     }
+
+    openFilesMenu = event => {
+      this.setState({
+        anchorProject: event.currentTarget
+      });
+    };
+
+    /** Close Mini Menu **/
+    closeFilesMenu = () => {
+      this.setState({ anchorProject: null });
+    };
 
     openFiles () {
       this.setState({
@@ -72,6 +89,9 @@ class Item extends React.Component {
       const { t, i18n } = this.props;
       const item = this.props.item;
       const attributes = [
+        'document_type',
+        'infographic_type',
+        'publication_date',
         'operation',
         'space',
         'organizations',
@@ -83,23 +103,48 @@ class Item extends React.Component {
       ];
       let badges = [];
       attributes.forEach(function (a) {
+        let values = [];
         if (item[a] && Array.isArray(item[a])) {
           for (let i = 0; i < item[a].length; i++) {
             if (item[a][i]) {
-              badges.push(
-                <ListItem key={a + '_' + item[a][i].id}>
-                  <Typography variant="subheading" color="textSecondary">
-                    {t(a === 'bundles' ? 'groups' : a === 'offices' ? 'coordination_hubs' : a)} :
-                    <Typography>{item[a][i].label}</Typography>
-                  </Typography>
-
-                </ListItem>
+              values.push(
+                <Typography key={a + '_' + item[a][i].id}>{item[a][i].label}</Typography>
               );
             }
           }
+          if (values.length > 0) {
+            badges.push(
+              <ListItem key={a}>
+                <Typography variant="subheading" color="textSecondary">
+                  {t(a === 'bundles' ? 'groups' : a === 'offices' ? 'coordination_hubs' : a)}
+                  {values}
+                </Typography>
+              </ListItem>
+            );
+          }
         }
-        else {
-          if (item[a]) {
+        else if (item[a] && typeof item[a] === 'object') {
+          badges.push(
+            <ListItem key={a}>
+              <Typography variant="subheading" color="textSecondary">
+                {t(a === 'infographic_type' ? 'map_type' : a)}
+                <Typography key={a + '_' + item[a].id}>{item[a].label}</Typography>
+              </Typography>
+            </ListItem>
+          );
+        }
+        else if (item[a]) {
+          if ((new Date(item[a])).toDateString() !== 'Invalid Date') {
+            let date = new Date(item[a]);
+            badges.push(
+              <ListItem key={a}>
+                <Typography variant="subheading" color="textSecondary">
+                  {t(a)}
+                  <Typography key={a}>{date.toUTCString().substring(5, 16)}</Typography>
+                </Typography>
+              </ListItem>);
+          }
+          else {
             badges.push(<ListItem key={a}>{item[a]}</ListItem>);
           }
         }
@@ -109,8 +154,9 @@ class Item extends React.Component {
 
     render() {
       const { classes, item, t, i18n } = this.props;
+      const { anchorProject } = this.state;
       const fileToDownload = [];
-      if (item.files && Array.isArray(item.files)) {
+      if (item.files && Array.isArray(item.files) && item.files[0].file && item.files[0].file.fid) {
         for (let i = 0; i < item.files.length; i++) {
           fileToDownload.push(
             <MenuItem key={item.files[i].file.fid}>
@@ -143,18 +189,32 @@ class Item extends React.Component {
                 {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body']) : ''}</Typography> : ''}
               </CardContent>
               <CardActions>
-                {this.props.viewMode === 'search' ? <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
+                {this.props.viewMode === 'search' ?
+                    <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>
+                      View more
+                    </Button>: '' }&nbsp;
                 {item.type !== 'users' ?
                   <div>
-                    <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>
-                    {fileToDownload.length !== 0 ?
-                      <MenuList>
-                        <MenuItem key={item.files[0].file.fid}>
-                          <a href={item.files[0].file.url} target="_blank">
-                            {item.files[0].file.filename}
-                          </a>
-                        </MenuItem>
-                      </MenuList> : ''}
+                    <div className={classes.buttons}>
+                      <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button>
+                    </div>
+                      {fileToDownload.length !== 0 ?
+                        <div className={classes.buttons}>
+                          <Button aria-owns = {anchorProject ? 'MiniMenuGlobal' : null}
+                                  variant   = "outlined"
+                                  color     = "primary"
+                                  component = "span"
+                                  onClick   = {this.openFilesMenu}>
+                            Download
+                          </Button>
+                          <Menu id       = "MiniMenuGlobal"
+                                anchorEl = {anchorProject}
+                                open     = {Boolean(anchorProject)}
+                                onClose  = {this.closeFilesMenu}
+                          >
+                            {fileToDownload}
+                          </Menu>
+                        </div> : ''}
                   </div>
                   : ''}
               </CardActions>
