@@ -12,7 +12,6 @@ import Checkbox     from '@material-ui/core/Checkbox';
 import Typography   from '@material-ui/core/Typography';
 import Card         from '@material-ui/core/Card';
 import CardContent  from '@material-ui/core/CardContent';
-import TextField    from '@material-ui/core/TextField';
 
 //Material date picker
 import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
@@ -25,7 +24,6 @@ class SimpleDate extends React.Component {
     this.state = {
       items   : [],
       endDate : true,
-      allDay  : false,
       val : {
         value_from  : '',
         value_to    : '',
@@ -39,7 +37,6 @@ class SimpleDate extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.setCheckbox  = this.setCheckbox.bind(this);
     this.setTimezone  = this.setTimezone.bind(this);
-    this.getTime      = this.getTime.bind(this);
   }
 
   // Checkbox
@@ -85,24 +82,9 @@ class SimpleDate extends React.Component {
         val.value_to = value;
       }
     }
-    else {
-      value = event.target.value;
-      // FROM
-      if (type === 'from') {
-        val.value_from.setHours(value.split(":")[0]);
-        val.value_from.setMinutes(value.split(":")[1]);
-      }
-      // TO
-      if (type === 'to') {
-        val.value_to.setHours(value.split(":")[0]);
-        val.value_to.setMinutes(value.split(":")[1]);
-      }
-    }
 
     this.setState({
-      val: val,
-      // check if time has changed for all allDay
-      allDay: this.isAllDay(val.value_from, val.value_to)
+      val: val
     });
 
     if (this.props.onChange) {
@@ -140,18 +122,6 @@ class SimpleDate extends React.Component {
     }
   }
 
-  getTime(date) {
-    let hours   = ("0" + date.getHours()).slice(-2);
-    let minutes = ("0" + date.getMinutes()).slice(-2);
-    return (hours + ":" + minutes);
-  }
-
-  isAllDay(date_from, date_to) {
-    let sum_from = date_from ? date_from.getHours() + date_from.getMinutes() : 0;
-    let sum_to   = date_to ? date_to.getHours() + date_to.getMinutes() : 0;
-    return sum_from + sum_to === 0;
-  }
-
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && this.state.status === 'initial') {
@@ -177,7 +147,6 @@ class SimpleDate extends React.Component {
       let newState = {
         val       : val,
         endDate   : this.state.endDate,
-        allDay    : this.isAllDay(val.value_from, val.value_to),
         status    : 'ready'
       };
       this.setState(newState);
@@ -208,17 +177,6 @@ class SimpleDate extends React.Component {
                 }}
               />
             </MuiPickersUtilsProvider>
-            <TextField
-              id             = "time_from"
-              label          = "Time"
-              type           = "time"
-              disabled       = {!this.state.val.value_from}
-              value          = {this.state.val.value_from ? this.getTime(this.state.val.value_from) : ''}
-              onChange       = {(e) => this.handleChange(e, 'from')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
           </FormControl>
 
           {/* Date 'To'*/}
@@ -243,22 +201,11 @@ class SimpleDate extends React.Component {
                 }}
               />
             </MuiPickersUtilsProvider>
-            <TextField
-              id             = "time_to"
-              label          = "Time"
-              type           = "time"
-              disabled       = {!this.state.val.value_to}
-              value          = {this.state.val.value_to ? this.getTime(this.state.val.value_to) : ''}
-              onChange       = {(e) => this.handleChange(e, 'to')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
           </FormControl>
           }
         </CardContent>
 
-        {/* 'All day' checkbox */}
+        {/* 'End date' checkbox */}
         <CardContent className = "date-container">
           <FormControlLabel
             control = {
@@ -269,17 +216,6 @@ class SimpleDate extends React.Component {
               />
             }
             label   = "End date"
-          />
-          <FormControlLabel
-            control = {
-              <Checkbox name     = "allDay"
-                        color    = "primary"
-                        onChange = {this.setCheckbox}
-                        disabled = {!this.state.val.value_from}
-                        checked  = {this.state.allDay}
-              />
-            }
-            label   = "All day"
           />
         </CardContent>
 
