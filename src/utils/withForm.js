@@ -88,11 +88,11 @@ const withForm = function withForm(Component, hrinfoType, label) {
         this.hrinfoAPI
           .remove(hrinfoType, this.props.match.params.id)
           .then(results => {
+            that.props.history.push('/home');
             that.props.setAlert('success', label + ' deleted successfully');
-            that.props.history.push('/home');
           }).catch(function(err) {
-            that.props.setAlert('danger', 'There was an error deleting your ' + label);
             that.props.history.push('/home');
+            that.props.setAlert('danger', 'There was an error deleting your ' + label);
           });
       }
     }
@@ -154,8 +154,6 @@ const withForm = function withForm(Component, hrinfoType, label) {
           this.isValid(doc.organizations) &&
           this.isValid(doc.locations) &&
           this.isValid(doc.population_types) &&
-          this.isValid(doc.report.accessibility) &&
-          this.isValid(doc.data.accessibility) &&
           this.isValid(doc.language)) {
           isValid = true;
         }
