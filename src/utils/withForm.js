@@ -150,13 +150,12 @@ const withForm = function withForm(Component, hrinfoType, label) {
         if (hrinfoType === 'assessments' &&
           this.isValid(doc.spaces) &&
           this.isValid(doc.status) &&
-          this.isValid(doc.bundles) &&
           this.isValid(doc.date) &&
           this.isValid(doc.organizations) &&
           this.isValid(doc.locations) &&
           this.isValid(doc.population_types) &&
-          this.isValid(doc.report) &&
-          this.isValid(doc.data) &&
+          this.isValid(doc.report.accessibility) &&
+          this.isValid(doc.data.accessibility) &&
           this.isValid(doc.language)) {
           isValid = true;
         }
@@ -319,6 +318,9 @@ const withForm = function withForm(Component, hrinfoType, label) {
             else {
               delete body.report.url;
             }
+            if (body.report.files.length === 0) {
+              delete body.report.files;
+            }
           }
           if (body.data && body.data.accessibility[0]) {
             body.data.accessibility = body.data.accessibility[0].label;
@@ -334,6 +336,9 @@ const withForm = function withForm(Component, hrinfoType, label) {
             else {
               delete body.data.url;
             }
+            if (body.data.files.length === 0) {
+              delete body.data.files;
+            }
           }
           if (body.questionnaire && body.questionnaire.accessibility[0]) {
             body.questionnaire.accessibility = body.questionnaire.accessibility[0].label;
@@ -348,6 +353,9 @@ const withForm = function withForm(Component, hrinfoType, label) {
             }
             else {
               delete body.questionnaire.url;
+            }
+            if (body.questionnaire.files.length === 0) {
+              delete body.questionnaire.files;
             }
           }
         }
@@ -402,7 +410,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
           body.locations = locations;
         }
-        if (body.language.value === '' && body.language.label === '') {
+        if (body.language && body.language.value === '' && body.language.label === '') {
           delete body.language;
         }
       }
