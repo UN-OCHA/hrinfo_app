@@ -231,24 +231,27 @@ const withForm = function withForm(Component, hrinfoType, label) {
         }
         if (hrinfoType === 'events') {
           //body.category = body.category.value;
+
           if (body.address && body.address.country && typeof body.address.country === 'object') {
             body.address.country = body.address.country.pcode;
           }
           if (!Array.isArray(body.date)) {
             body.date = [body.date];
           }
-          if (body.date && body.date.value) {
-            body.date.value = moment(body.date.value).format('YYYY-MM-DD HH:mm:ss');
-          }
-          if (body.date && body.date.value2) {
-            body.date.value2 = moment(body.date.value2).format('YYYY-MM-DD HH:mm:ss');
-          }
-          if (body.date && body.date.timezone_db) {
-            body.date.timezone_db = body.date.timezone_db.value;
-          }
-          if (body.date && body.date.timezone) {
-            body.date.timezone = body.date.timezone.value;
-          }
+          body.date.forEach(function (d) {
+            if (d && d.value) {
+              d.value = moment(d.value).format('YYYY-MM-DD HH:mm:ss');
+            }
+            if (d && d.value2) {
+              d.value2 = moment(d.value2).format('YYYY-MM-DD HH:mm:ss');
+            }
+            if (d && d.timezone_db) {
+              d.timezone_db = d.timezone_db.value;
+            }
+            if (d && d.timezone) {
+              d.timezone = d.timezone.value;
+            }
+          });
           if (body.contacts) {
             body.contacts = body.contacts.map(function (c) {
               return {cid: c.id};
@@ -267,15 +270,15 @@ const withForm = function withForm(Component, hrinfoType, label) {
         }
         if (hrinfoType === 'assessments') {
           let date = {};
-          if (body.date && body.date.value_from) {
-            date.from = moment(body.date.value_from).format('YYYY-MM-DD HH:mm:ss');
+          if (body.date && body.date.value) {
+            date.value = moment(body.date.value).format('YYYY-MM-DD HH:mm:ss');
           }
-          if (body.date && body.date.value_to) {
-            if (body.date.value_to === (new Date(0, 0, 0))) {
-              date.to = undefined;
+          if (body.date && body.date.value2) {
+            if (body.date.value2 === (new Date(0, 0, 0))) {
+              date.value2 = undefined;
             }
             else {
-              date.to = moment(body.date.value_to).format('YYYY-MM-DD HH:mm:ss');
+              date.value2 = moment(body.date.value2).format('YYYY-MM-DD HH:mm:ss');
             }
           }
           if (body.date && body.date.timezone) {

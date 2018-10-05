@@ -29,8 +29,8 @@ class EventDate extends React.Component {
       allDay  : false,
       repeats : false,
       val : {
-        value_from  : '',
-        value_to    : '',
+        value  : '',
+        value2    : '',
         timezone    : 'UTC',
         offset      : 0,
         offset2     : 0,
@@ -58,19 +58,19 @@ class EventDate extends React.Component {
 
     if (target.name === 'allDay' && value) {
       newState.val        = this.state.val;
-      newState.val.value_from.setHours(0);
-      newState.val.value_from.setMinutes(0);
+      newState.val.value.setHours(0);
+      newState.val.value.setMinutes(0);
 
-      newState.val.value_to.setHours(0);
-      newState.val.value_to.setMinutes(0);
+      newState.val.value2.setHours(0);
+      newState.val.value2.setMinutes(0);
     }
     if (target.name === 'endDate' && value) {
       newState.val = this.state.val;
-      newState.val.value_to = newState.val.value_from;
+      newState.val.value2 = newState.val.value;
     }
     else if (target.name === 'endDate' && !value) {
       newState.val = this.state.val;
-      newState.val.value_to = (new Date(0, 0, 0));
+      newState.val.value2 = (new Date(0, 0, 0));
     }
     this.setState(newState);
   }
@@ -83,31 +83,31 @@ class EventDate extends React.Component {
       value  = event.toDate();
       // FROM
       if (type === 'from') {
-        val.value_from = value;
+        val.value = value;
       }
       // TO
       if (type === 'to') {
-        val.value_to = value;
+        val.value2 = value;
       }
     }
     else {
       value = event.target.value;
       // FROM
       if (type === 'from') {
-        val.value_from.setHours(value.split(":")[0]);
-        val.value_from.setMinutes(value.split(":")[1]);
+        val.value.setHours(value.split(":")[0]);
+        val.value.setMinutes(value.split(":")[1]);
       }
       // TO
       if (type === 'to') {
-        val.value_to.setHours(value.split(":")[0]);
-        val.value_to.setMinutes(value.split(":")[1]);
+        val.value2.setHours(value.split(":")[0]);
+        val.value2.setMinutes(value.split(":")[1]);
       }
     }
 
     this.setState({
       val : val,
       // check if time has changed for all allDay
-      allDay: this.isAllDay(val.value_from, val.value_to)
+      allDay: this.isAllDay(val.value, val.value2)
     });
 
     if (this.props.onChange) {
@@ -138,14 +138,14 @@ class EventDate extends React.Component {
     val.timezone_db  = timezone;
     val.timezone     = timezone;
 
-    if (val.value_from) {
-      dateVal = new Date(val.value_from);
+    if (val.value) {
+      dateVal = new Date(val.value);
     }
     val.offset = moment.tz.zone(timezone.value).utcOffset(dateVal.valueOf());
     val.offset = -val.offset * 60;
 
-    if (val.value_to) {
-      date2Val = new Date(val.value_to);
+    if (val.value2) {
+      date2Val = new Date(val.value2);
     }
     val.offset2 = moment.tz.zone(timezone.value).utcOffset(date2Val.valueOf());
     val.offset2 = -val.offset2 * 60;
@@ -180,23 +180,17 @@ class EventDate extends React.Component {
           val.timezone = {value: timezone, label: timezone};
           val.timezone_db = {value: timezone, label: timezone};
         }
-        if (!val.value_from && !val.value_to && val.value && val.value2) {
-          val.value_from = new Date(val.value);
-          val.value_to = new Date(val.value2);
-        }
-        else if (val.value_from && val.value_to)
-        {
-          val.value_from = new Date(val.value_from);
-          val.value_to = new Date(val.value_to);
-        }
-        else if (val.value_to) {
-          console.error("There is an issue with the date storage")
-        }
       });
+      if (val.value && typeof val.value !== 'object') {
+        val.value = new Date(val.value);
+      }
+      if (val.value2 && typeof val.value2 !== 'object') {
+        val.value2 = new Date(val.value2);
+      }
       let newState = {
         val       : val,
         endDate   : this.state.endDate,
-        allDay    : this.isAllDay(val.value_from, val.value_to),
+        allDay    : this.isAllDay(val.value, val.value2),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'
       };
@@ -217,7 +211,7 @@ class EventDate extends React.Component {
                 name           = "from"
                 label          = "Date"
                 format         = "DD/MM/YYYY"
-                value          = {this.state.val.value_from ? this.state.val.value_from : ''}
+                value          = {this.state.val.value ? this.state.val.value : ''}
                 invalidLabel   = ""
                 autoOk
                 onChange       = {(e) => this.handleChange(e, 'from')}
@@ -232,8 +226,8 @@ class EventDate extends React.Component {
                id             = "time_from"
                label          = "Time"
                type           = "time"
-               disabled       = {!this.state.val.value_from}
-               value          = {this.state.val.value_from ? this.getTime(this.state.val.value_from) : ''}
+               disabled       = {!this.state.val.value}
+               value          = {this.state.val.value ? this.getTime(this.state.val.value) : ''}
                onChange       = {(e) => this.handleChange(e, 'from')}
                InputLabelProps={{
                    shrink: true,
@@ -251,8 +245,8 @@ class EventDate extends React.Component {
                 name           = "to"
                 label          = "Date"
                 format         = "DD/MM/YYYY"
-                minDate        = {this.state.val.value_from}
-                value          = {this.state.val.value_to ? this.state.val.value_to : ''}
+                minDate        = {this.state.val.value}
+                value          = {this.state.val.value2 ? this.state.val.value2 : ''}
                 invalidLabel   = ""
                 autoOk
                 onChange       = {(e) => this.handleChange(e, 'to')}
@@ -267,8 +261,8 @@ class EventDate extends React.Component {
                id             = "time_to"
                label          = "Time"
                type           = "time"
-               disabled       = {!this.state.val.value_to}
-               value          = {this.state.val.value_to ? this.getTime(this.state.val.value_to) : ''}
+               disabled       = {!this.state.val.value2}
+               value          = {this.state.val.value2 ? this.getTime(this.state.val.value2) : ''}
                onChange       = {(e) => this.handleChange(e, 'to')}
                InputLabelProps={{
                    shrink: true,
@@ -295,7 +289,7 @@ class EventDate extends React.Component {
               <Checkbox name     = "allDay"
                         color    = "primary"
                         onChange = {this.setCheckbox}
-                        disabled = {!this.state.val.value_from}
+                        disabled = {!this.state.val.value}
                         checked  = {this.state.allDay}
               />
             }
