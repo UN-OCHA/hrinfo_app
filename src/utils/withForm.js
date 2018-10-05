@@ -302,58 +302,49 @@ const withForm = function withForm(Component, hrinfoType, label) {
           if (body.status) {
             body.status = body.status.label;
           }
-          if (body.report && body.report.accessibility[0]) {
-            body.report.accessibility = body.report.accessibility[0].label;
-            if (body.report.instructions[0]) {
-              body.report.instructions = body.report.instructions[0];
+          if (body.report && body.report.accessibility) {
+            body.report.accessibility = body.report.accessibility.label;
+            if (body.report.file && typeof body.report.file === 'object') {
+              body.report.file = body.report.file.id;
             }
             else {
-              delete body.report.instructions;
+              delete body.report.file;
             }
-            if (body.report.url[0]) {
-              body.report.url = body.report.url[0];
-            }
-            else {
+            if (body.report.url.length === 0) {
               delete body.report.url;
             }
-            if (body.report.files.length === 0) {
-              delete body.report.files;
+            if (body.report.instructions.length === 0) {
+              delete body.report.instructions;
             }
           }
-          if (body.data && body.data.accessibility[0]) {
-            body.data.accessibility = body.data.accessibility[0].label;
-            if (body.data.instructions[0]) {
-              body.data.instructions = body.data.instructions[0];
+          if (body.data && body.data.accessibility) {
+            body.data.accessibility = body.data.accessibility.label;
+            if (body.data.file && typeof body.data.file === 'object') {
+              body.data.file = body.data.file.id;
             }
             else {
-              delete body.data.instructions;
+              delete body.data.file;
             }
-            if (body.data.url[0]) {
-              body.data.url = body.data.url[0];
-            }
-            else {
+            if (body.data.url.length === 0) {
               delete body.data.url;
             }
-            if (body.data.files.length === 0) {
-              delete body.data.files;
+            if (body.data.instructions.length === 0) {
+              delete body.data.instructions;
             }
           }
-          if (body.questionnaire && body.questionnaire.accessibility[0]) {
-            body.questionnaire.accessibility = body.questionnaire.accessibility[0].label;
-            if (body.questionnaire.instructions[0]) {
-              body.questionnaire.instructions = body.questionnaire.instructions[0];
+          if (body.questionnaire && body.questionnaire.accessibility) {
+            body.questionnaire.accessibility = body.questionnaire.accessibility.label;
+            if (body.questionnaire.file && typeof body.questionnaire.file === 'object') {
+              body.questionnaire.file = body.questionnaire.file.id;
             }
             else {
-              delete body.questionnaire.instructions;
+              delete body.questionnaire.file;
             }
-            if (body.questionnaire.url[0]) {
-              body.questionnaire.url = body.questionnaire.url[0];
-            }
-            else {
+            if (body.questionnaire.url.length === 0) {
               delete body.questionnaire.url;
             }
-            if (body.questionnaire.files.length === 0) {
-              delete body.questionnaire.files;
+            if (body.questionnaire.instructions.length === 0) {
+              delete body.questionnaire.instructions;
             }
           }
         }
