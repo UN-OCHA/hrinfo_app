@@ -425,7 +425,7 @@ const withForm = function withForm(Component, hrinfoType, label) {
           else {
             this.props.history.push('/' + hrinfoType + '/' + docid);
           }
-          that.props.setAlert('success', 'Saved successfully');
+          this.props.setAlert('success', 'Saved successfully');
         })
         .catch(err => {
           this.props.setAlert('danger', 'There was an error uploading your ' + label);
