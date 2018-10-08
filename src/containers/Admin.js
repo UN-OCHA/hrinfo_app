@@ -3,18 +3,29 @@ import {Link} from 'react-router-dom';
 
 class Admin extends React.Component {
 
-    render() {
-      return (
-        <div>
-          <p>What would you like to do ?</p>
-          <ul>
-            <li><Link to="/documents/new">Add a document</Link></li>
-            <li><Link to="/infographics/new">Add a map/infographic</Link></li>
-            <li><Link to="/events/new">Add a new event</Link></li>
-          </ul>
-        </div>
-      );
-    }
+  render() {
+    const { t } = this.props;
+    const name = this.props.user.name;
+    const isAdmin = this.props.user.hrinfo.roles.indexOf('administrator') === -1 ? false : true;
+    const adminLinks = isAdmin ? <div>
+      <li><Link to="/operations/new">Add a new operation</Link></li>
+      <li><Link to="/groups/new">Add a new cluster</Link></li>
+      <li><Link to="/organizations/new">Add a new organization</Link></li>
+    </div> : '';
+    return (
+      <div>
+        <p>{t('home.what_do')}</p>
+        <ul>
+          <li><Link to="/documents/new">Add a document</Link></li>
+          <li><Link to="/infographics/new">Add a map/infographic</Link></li>
+          <li><Link to="/events/new">Add a new event</Link></li>
+          <li><Link to="/assessments/new">Add a new assessment</Link></li>
+          <li><Link to="/offices/new">Add a new office</Link></li>
+          {adminLinks}
+        </ul>
+      </div>
+    );
+  }
 }
 
 export default Admin;
