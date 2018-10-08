@@ -358,6 +358,8 @@ const withForm = function withForm(Component, hrinfoType, label) {
         }
         if (hrinfoType === 'organizations') {
           body.type = body.type.id;
+          delete body.language;
+          delete body.hasOperation;
         }
         if (hrinfoType !== 'organizations') {
           body.operation = [];
@@ -417,7 +419,13 @@ const withForm = function withForm(Component, hrinfoType, label) {
           }
         })
         .then(docid => {
-          this.props.history.push('/' + hrinfoType + '/' + docid);
+          if (hrinfoType === 'bundles') {
+            this.props.history.push('/groups/' + docid);
+          }
+          else {
+            this.props.history.push('/' + hrinfoType + '/' + docid);
+          }
+          that.props.setAlert('success', 'Saved successfully');
         })
         .catch(err => {
           this.props.setAlert('danger', 'There was an error uploading your ' + label);
