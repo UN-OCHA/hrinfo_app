@@ -1,11 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import { translate } from 'react-i18next';
 
 class Admin extends React.Component {
 
   render() {
     const { t } = this.props;
-    const name = this.props.user.name;
     const isAdmin = this.props.user.hrinfo.roles.indexOf('administrator') === -1 ? false : true;
     const adminLinks = isAdmin ? <div>
       <li><Link to="/operations/new">Add a new operation</Link></li>
@@ -28,4 +28,4 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+export default translate('common')(Admin);
