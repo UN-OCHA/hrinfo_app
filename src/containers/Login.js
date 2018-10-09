@@ -69,8 +69,9 @@ class Login extends React.Component {
                 spaces: data.spaces
             };
             this.props.userHasAuthenticated(true, tokenData.user, tokenData.token);
-            if (qArgs.redirect) {
-              this.props.history.push(qArgs.redirect);
+            if (qArgs.redirect || qArgs['?redirect']) {
+              const redirect = qArgs.redirect ? qArgs.redirect : qArgs['?redirect'];
+              this.props.history.push(redirect);
             }
             else {
               this.props.history.push('/home');
@@ -107,9 +108,9 @@ class Login extends React.Component {
 					<FormHelperText id="password-text">{t('login.password_helper')}</FormHelperText>
 				</FormControl>
 				{ this.state.status === 'initial' &&
-					<Button variant="contained"
+					<Button type="submit"
+            variant="contained"
 						color="primary"
-						onClick={this.handleSubmit}
 						disabled={this.state.email === '' || this.state.password === ''}
 						>{t('login.button')}</Button>
 				}
