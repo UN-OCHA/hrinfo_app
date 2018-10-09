@@ -401,6 +401,9 @@ class App extends Component {
 	                          <MenuItem onClick={this.toggleMenu}>
 	                              <NavLink to={'/admin'} className="link">Admin</NavLink>
 	                          </MenuItem>
+                            <MenuItem onClick={this.toggleMenu}>
+	                              <a href="mailto:info@humanitarianresponse.info" className="link">Feedback</a>
+	                          </MenuItem>
 	                          <Divider/>
 	                          <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
 	                        </Menu>
