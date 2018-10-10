@@ -408,6 +408,9 @@ const withForm = function withForm(Component, hrinfoType, label) {
           delete body.language;
         }
       }
+      if (typeof body['body-html'] !== 'undefined') {
+        delete body['body-html'];
+      }
       this.hrinfoAPI
         .save(hrinfoType, body)
         .then(doc => {
