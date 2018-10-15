@@ -45,7 +45,7 @@ class ItemPage extends React.Component {
     }
 
     render() {
-      if (this.state.doc) {
+      if (this.state.doc && this.state.doc.id) {
         return (
           <Paper>
             <Typography align = "right">
@@ -57,7 +57,7 @@ class ItemPage extends React.Component {
         );
       }
       else {
-        return null;
+        return (<Paper>Not found !</Paper>);
       }
     }
 }

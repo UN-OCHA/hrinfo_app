@@ -42,7 +42,7 @@ class SearchPage extends React.Component {
       params.range = this.state.rowsPerPage;
       params.page = this.state.page + 1;
       return this.hrinfoAPI
-        .get(type, params)
+        .get(type, params, false)
         .then(data => {
           return data;
         }).catch(function(err) {
