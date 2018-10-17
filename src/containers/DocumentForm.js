@@ -90,7 +90,7 @@ class DocumentForm extends React.Component {
         <FormHelperText id="disasters-text">
           <Trans i18nKey={label + '.helpers.disasters'}>Click on the field and select the disaster(s) or emergency the document
           refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See
-          <a href="http://glidenumer.net/?ref=hrinfo"> glidenumber.net</a>.</Trans>
+          <a href="http://glidenumer.net/?ref=hrinfo" target="_blank" rel="noopener noreferrer"> glidenumber.net</a>.</Trans>
         </FormHelperText>
       </FormControl>
     )
@@ -134,7 +134,7 @@ class DocumentForm extends React.Component {
                 onChange = {this.props.handleInputChange}/>
               <FormHelperText id = "label-text">
                 <Trans i18nKey={label + '.helpers.title'}>Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click
-                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="_blank" rel="noopener noreferrer"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
 
@@ -158,7 +158,7 @@ class DocumentForm extends React.Component {
               <FormHelperText id = "files-text">
                 <Trans i18nKey='helpers.files'>Upload the file to publish from your computer, and specify its language. It is best to publish one file per record,
                 however you can add more if needed. To see Standards and Naming Conventions click
-                <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="_blank" rel="noopener noreferrer"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
           </Grid>

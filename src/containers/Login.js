@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 import './Login.css';
 
@@ -84,7 +85,15 @@ class Login extends React.Component {
 
     render() {
       const { t } = this.props;
-        return (
+      const message = (<p>Dear managers and editors, welcome to the new HR.info environment ! <br />
+        Here you find the new content forms developed to improve HR.info performance.
+        After a transition period, these forms will replace the old ones. Your content will be published within your space on the live HR.info. <br />
+        If you have any feedback or suggestions for improvements, send us an email to <a href="mailto:info@humanitarianresponse.info" style={{color: 'white'}}>info@humanitarianresponse.info</a></p>);
+      return (
+      <div>
+        <SnackbarContent
+          aria-describedby="client-snackbar"
+          message={message} />
 			<form className="login-container" onSubmit={this.handleSubmit}>
 				<FormControl required fullWidth margin="normal">
 					<InputLabel htmlFor="email">{t('login.email')}</InputLabel>
@@ -118,6 +127,7 @@ class Login extends React.Component {
 					<CircularProgress/>
 				}
 			</form>
+      </div>
 		);
     }
 }

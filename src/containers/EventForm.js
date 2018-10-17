@@ -127,7 +127,7 @@ class EventForm extends React.Component {
                          onChange = {this.props.handleInputChange}/>
               <FormHelperText id = "label-text">
                 <Trans i18nKey='events.helpers.title'>Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click
-                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA"> here</a>.</Trans>
+                <a href = "https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="_blank" rel="noopener noreferrer"> here</a>.</Trans>
               </FormHelperText>
             </FormControl>
 
