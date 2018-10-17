@@ -184,7 +184,7 @@ class HRInfoAPI {
           'Accept' : 'application/json',
           'Content-Type' : 'application/json'
         },
-        body: JSON.stringify(files)
+        body: JSON.stringify(files[0])
       };
     }
 
