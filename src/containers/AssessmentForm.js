@@ -65,6 +65,13 @@ class AssessmentForm extends React.Component {
         { value: 'Sub-district', label: t('assessment.geographic_levels.subdistrict')},
         { value: 'Village', label: t('assessment.geographic_levels.village')}
       ],
+      frequencies : [
+        { value: 'Weekly', label: t('assessment.frequencies.weekly')},
+        { value: 'Monthly', label: t('assessment.frequencies.monthly')},
+        { value: 'Quarterly', label: t('assessment.frequencies.quarterly')},
+        { value: 'Yearly', label: t('assessment.frequencies.yearly')},
+        { value: 'Other', label: t('assessment.frequencies.other')}
+      ],
       status             : '',
       doc                : {},
       collapseMain       : false,
@@ -439,6 +446,18 @@ class AssessmentForm extends React.Component {
                                 value    = {this.props.doc.geographic_level}/>
                   <FormHelperText id = "geographic_level-text">
                     {t('assessment.helpers.geographic_level')}
+                  </FormHelperText>
+                </FormControl>
+
+                {/* Frequency */}
+                <FormControl fullWidth margin = "normal">
+                  <FormLabel>{t('frequency')}</FormLabel>
+                  <HRInfoSelect type     = "frequency"
+                                onChange = {(s) => this.props.handleSelectChange('frequency', s)}
+                                options  = {this.state.frequencies}
+                                value    = {this.props.doc.frequency}/>
+                  <FormHelperText id = "frequency-text">
+                    {t('assessment.helpers.frequency')}
                   </FormHelperText>
                 </FormControl>
 

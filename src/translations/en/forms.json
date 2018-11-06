@@ -53,6 +53,7 @@
     "key_findings": "Key findings",
     "sample_size": "Sample size",
     "geographic_level": "Geographic level",
+    "frequency": "Frequency",
     "unit_measurement": "Unit of measurement",
     "collection_method": "Collection method",
     "contacts": "Contacts",
@@ -115,6 +116,13 @@
           "subdistrict": "Sub-district",
           "village": "Village"
         },
+        "frequencies": {
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "quarterly": "Quarterly",
+          "yearly": "Yearly",
+          "other": "Other"
+        },
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
             "date": "Indicate the start/end dates of the assessment.",
@@ -142,7 +150,8 @@
             "language": "Select the language of the assessment.",
             "assessment_report": "Upload the assessment report file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>.",
             "assessment_questionnaire": "Upload the assessment questionnaire file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>.",
-            "assessment_data": "Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>."
+            "assessment_data": "Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>.",
+            "frequency": "Indicate the assessment frequency in case it is being repeated over time."
         }
     },
     "infographic": {
