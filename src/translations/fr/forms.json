@@ -1,7 +1,6 @@
 {
     "coordination_hubs": "Bureau(x) de Coordination",
     "disasters": "Catastrophe(s) / Urgence",
-    "bundles": "Cluster(s) / Secteur(s)",
     "title": "Titre",
     "description": "Description ou Résumé du contenu",
     "language": "Langue",
@@ -20,27 +19,6 @@
     "exclude_from_reliefweb": "Ne pas partager avec ReliefWeb",
     "add_more": "Ajouter plus d'informations",
     "hide_information": "Cacher les informations facultatives",
-    "add_another": "Ajouter un(e) autre",
-    "status": "Statut",
-    "leading_organizations": "Agence chef de file",
-    "participating_organizations": "Organisations participantes",
-    "other_location": "Autre lieu",
-    "population_types": "Type(s) de population",
-    "subject": "Sujet/Objectif",
-    "methodology": "Méthodologie",
-    "key_findings": "Résultats Principaux",
-    "collection_method": "Méthode de collecte",
-    "unit_measurement": "Unité(s) de mesure",
-    "sample_size": "Taille de l’échantillon ",
-    "geographic_level": "Niveau de représentation",
-    "contacts": "Contact(s)",
-    "agendas": "Agenda(s)",
-    "meeting_minutes": "Durée réunion",
-    "date": "Date",
-    "url": "URL",
-    "address": "Adresse",
-    "location": "Lieu",
-    "email": "Courriel",
     "helpers": {
         "files": "Télécharger le fichier à publier et spécifier sa langue. Il est préférable de publier un fichier par enregistrement, mais vous pouvez en ajouter si nécessaire. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>."
     },
@@ -48,7 +26,7 @@
         "helpers": {
             "title": "Taper le titre original du document. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
             "offices": "Cliquer sur le champ et sélectionner le(s) bureau(x) de coordination au(x) quel(s) le document fait référence.",
-            "publication_date": "Indiquer la date inital de publication du document.",
+            "publication_date": "Indiquer la date initale de publication du document.",
             "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou l'urgence au(x) quelle(s) le document fait référence.",
             "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) le document fait référence.",
             "description": "Essayer de toujours adjouter ici le texte (en totalité ou en partie) du document (exemple : utiliser l’introduction ou le résumé). Si aucun texte est disponible, ajouter une description du(des) fichier(s) que vous allez publier.",
@@ -62,39 +40,6 @@
         },
         "create": "Créer un document"
     },
-    "assessment": {
-        "create": "Créer un évaluation",
-        "edit": "Éditer évaluation",
-        "helpers": {
-            "title": "Taper le titre original de l'évaluation. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1>ici</ 1>.",
-            "date": "Indiquer les dates de début et de fin de l'évaluation.",
-            "spaces": "Cliquer sur le champ et sélectionner où publier l'évaluation (l'operation, le site regional ou thematique etc).",
-            "status": "Indiquer la phase de l'évaluation. Ne pas oublier de mettre à jour ce champ quand les phases avancent.",
-            "leading_organizations": "Taper et sélectionner la ou les organisations menant les évaluations.",
-            "participating_organizations": "Taper et sélectionner la ou les organisations faisant part (mais ne menant pas) les évaluations.",
-            "locations": "Sélectionner dans le menu le(s) pays concerné(s) ou indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
-            "other_location": "Spécifier ici un lieu qui n'est pas disponible dans la liste des lieux.",
-            "population_types": "Cliquer sur le champ et sélectionner le ou les segment(s) de population ciblés par l'évaluation. Vous pouvez sélectionner plusieurs types de population.",
-            "subject": "Insérer une brève description du sujet de l'évaluation and quels sont ses buts.",
-            "methodology": "Insérer une brève description des procédures et des techniques utilisées pour collecter, stocker et analyser les données.",
-            "key_findings": "Insérer un bref résumé des résultats de l'évaluation.",
-            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) l'évaluation' fait référence.",
-            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisir seulement les themes auxquels l'évaluation' fait une reference substantielle.",
-            "disasters": "Cliquer sur le champ et sélectionner le ou les désastres(s) ou urgences auxquels l'évaluation se réfère.",
-            "collection_method": "Cliquer sur le champ et sélectionner une ou des méthode(s) de collecte utilisés pour collecter des informations durant l'évaluation.",
-            "unit_measurement": "Cliquer sur le champ et sélectionner la ou les unités de mesure utilisés pour l'évaluation.",
-            "sample_size": "Indiquer le nombre de communautés/foyers/individus interrogés durant l'évaluation.",
-            "geographic_level": "Sélectionner le niveau auquel l'évaluation est (a été) réalisé.",
-            "contacts": "Indiquer la ou les personne(s) à contacter pour une information concernant l'évaluation. Pour être affichée dans la liste, la personne doit avoir un profil HumanitarianID.",
-            "agendas": "Ajouter l'agenda de l'évaluation comme un document en premier puis référencer ce document à partir d'ici.",
-            "meeting_minutes": "Ajouter les minutes d'entretien de l'évaluation comme un document en premier puis référencer ce document à partir d'ici.",
-            "related_content": "Ajouter des liens au contenu qui sont se rapportent à l'évaluation en création en indiquant le titre du contentu et son url. L'utilisation de la fonction de recherche sous entend une recherche par titre de contenu.",
-            "language": "Sélectionner la langue de l'évaluation.",
-            "assessment_report": "Téléversez le rapport de l'évaluation, stocké dans votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d'accessibilité. Si le fichier est uniquement ”Disponible sur demande”, écrivez les instructions dans l'espace réservé. Pour voir les normes et les conventions de dénomination, <1>cliquer ici</ 1>.",
-            "assessment_questionnaire": "Téléversez l'évaluation du questionnaire, stocké dans votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d'accessibilité. Si le fichier est uniquement ”Disponible sur demande”, écrivez les instructions dans l'espace réservé. Pour voir les normes et les conventions de dénomination, <1>cliquer ici</ 1>",
-            "assessment_data": "Téléversez le fichier de donnée associé à l'évalutation, stocké dans votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d'accessibilité. Si le fichier est uniquement ”Disponible sur demande”, écrivez les instructions dans l'espace réservé. Pour voir les normes et les conventions de dénomination, <1>cliquer ici</ 1>"
-        }
-    },
     "infographic": {
         "helpers": {
             "title": "Taper le titre original de la carte/infographie. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
@@ -102,7 +47,7 @@
             "publication_date": "Indiquer la date inital de publication de la carte/infographie.",
             "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou l'urgence au(x) quelle(s) la carte/inforgraphie fait référence.",
             "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) la carte/infographie fait référence.",
-            "description": "Essayer de toujours adjouter le texte (en totalité ou en partie) de la carte/infographie. Si aucun texte est disponible, ajouter une description du(des) fichier(s) que vous allez publier.",
+            "description": "Essayer de toujours ajouter le texte (en totalité ou en partie) de la carte/infographie. Si aucun texte est disponible, ajouter une description du(des) fichier(s) que vous allez publier.",
             "language": "Sélectionner la langue de la carte/infographie",
             "spaces": "Cliquer sur le champ et sélectionner ou publier la carte/infographie (l'operation, le site regional ou thematique etc)",
             "document_type": "Sélectionner le type ou le sous-type de carte/infographie que mieux décrive la carte/infographie.",
@@ -113,39 +58,23 @@
         },
         "create": "Créer une carte/infographique"
     },
-    "offices": {
-      "create": "Créer bureau",
-      "edit": "Éditer bureau",
-      "helpers": {
-        "title": "Taper le titre original du bureau. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
-        "language": "Sélectionner la langue du bureau.",
-        "location": "Sélectionner à partir du menu le pays où le bureau est situé et indiquer un lieu plus précis en sélectionnant plusieurs niveaux (région, province, ville).",
-        "address": "Indiquer l'adresse du bureau",
-        "email": "Saisir le courriel",
-        "organizations": "Saisir et sélectionner les source(s) du bureau.",
-        "spaces": "Cliquer sur le champ et sélectionner où publier le bureau (l'operation, le site regional ou thematique etc).",
-        "phones": "Saisir les numéros de téléphone du bureau.",
-        "is_coordination_hub": "Ce bureau est un bureau de coordination.",
-        "is_not_coordination_hub": "Ce bureau n'est pas un bureau de coordination."
-      }
-    },
     "files": {
-        "files": "Fichier(s)",
-        "assessment_report": "Rapport d’évaluation",
-        "assessment_questionnaire": "Questionnaire d'évaluation",
-        "assessment_data": "Données d'évaluation",
         "new_file": "Nouveau fichier",
         "from_storage": "Depuis votre ordinateur",
         "from_dropbox": "Depuis Dropbox",
-        "accessibility": "Accessibilité",
         "language": "Langue du Fichier",
+        "files": "Fichier(s)",
+        "assessment_report": "Rapport d'évaluation",
+        "assessment_questionnaire": "Questionnaire d'évaluation",
+        "assessment_data": "Données d'évaluation",
+        "accessibility": "Accessibilité",
         "accessibilities": {
-          "instructions": "Instructions",
-          "available": "Disponibilité publique",
-          "request": "Disponible sur Demande",
-          "restricted": "Distribution limitée",
-          "not_available": "Indisponible",
-          "not_applicable": "Non Appliquable"
+            "instructions": "Instructions",
+            "available": "Disponible publiquement",
+            "request": "Disponible sur demande",
+            "restricted": "Distribution restreinte",
+            "not_available": "Pas disponible",
+            "not_applicable": "Pas applicable"
         }
     },
     "related_content": {
@@ -157,16 +86,241 @@
         },
         "related_content": "Contenu lié"
     },
+    "add_another": "Ajouter un(e) autre",
+    "bundles": {
+        "create": "Creer Group",
+        "parent_cluster": "Cluster parent",
+        "hid_access": {
+            "title": "Accès à HID\n",
+            "do_not_create": "Ne pas creer une liste",
+            "open": "Ouvert",
+            "closed": "Fermé"
+        },
+        "global_cluster": "Cluster Global",
+        "lead_agencies": "Organisation Chef",
+        "activation_document": "Document d'activation",
+        "partners": "Partenaires",
+        "participation": "Participation",
+        "ngo_participation": "Participation des ONGs",
+        "government_participation": "Participation du Gouvernement",
+        "inter_cluster": "Inter cluster",
+        "helpers": {
+            "title": "Taper le nom du group. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+            "type": "Selectionner dans le menu le type de cluster",
+            "hid_access": "Sélectionner \"Ouvert\" si vous voulez que les utilisateurs HID s'ajoutent à ce groupe. Sélectionnez \"Fermé\" si vous souhaitez que seuls les gestionnaires HID soient autorisés à ajouter des utilisateurs HID à ce groupe.",
+            "body": ""
+        }
+    },
+    "languages": {
+        "en": "Anglais",
+        "fr": "Français",
+        "es": "Espanol"
+    },
+    "edit": "Modifier",
+    "type": "Type",
+    "social_media": "Réseaux sociaux",
+    "website": "Site web",
+    "email": "Email",
+    "operation": "Operation",
+    "date": "Date",
+    "address": {
+        "country": "Pays",
+        "address_1": "Adresse 1",
+        "address_2": "Adresse 2",
+        "postal_code": "Code postal",
+        "city": "Ville",
+        "address": "Addresse"
+    },
+    "assessments": {
+        "status": {
+            "planned": "Planifié",
+            "ongoing": "En cours",
+            "draft": "Brouillon / Résultats préliminaires",
+            "field_work": "Travail sur le terrain terminé",
+            "report": "Dossier terminé"
+        }
+    },
+    "events": {
+        "create": "Creer un événement",
+        "venue": "Lieu de l'événement",
+        "contacts": "Contact(s)",
+        "agendas": "Ordre(s) du jour",
+        "meeting_minutes": "Compte(s)-rendu",
+        "category": {
+            "title": "Catégorie de l'événement ",
+            "meetings": "Rèunions",
+            "trainings": "Formations",
+            "workshops": "Ateliers",
+            "conferences": "Conférences"
+        },
+        "helpers": {
+            "title": "Taper le titre original de l'événement . Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+            "offices": "Cliquer sur le champ et sélectionner le(s) bureau(x) de coordination au(x) quel(s) l'événement fait référence.",
+            "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou l'urgence au(x) quelle(s) l'événement fait référence.",
+            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) l'événement fait référence.",
+            "category": "Selectionner dans la list le type d'événement.",
+            "date": "Indiuer la date de l'événement.",
+            "description": "Ajouter plus d'informations sur l'événement.",
+            "address": "Indiquer le lieu de l'événement.",
+            "language": "Selectionner la langue de l'événement.",
+            "spaces": "Cliquer sur le champ et sélectionner ou publier l'événement (l'operation, le site regional ou thematique etc).",
+            "organizations": "Taper et induiquer l'organisation responsable de l'événement.",
+            "contacts": "Indiquer la(les) personne(s) à contacter pour ce que concerne l'événement. Pour apparaître dans la liste, la personne doit avoir un profil en Humanitarian ID.",
+            "agendas": "Poublier le(s) ordre(s) du jour dans le documents et aprés adjouter ici le lien.",
+            "meeting_minutes": "Poublier le(s) compte(s)-rendu dans le documents et aprés adjouter ici le lien. ",
+            "locations": "Selectionner le pays dans la liste ou ",
+            "themes": "Sélectionner dans la lsite les pays concernés par l'événement et indiquez des emplacements plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
+            "related_content": "Ajouter le lien(s) d'autre contenu relatif à l'événement"
+        }
+    },
+    "region": "Région",
+    "status": "Condition",
+    "launch_date": "Date du lancement",
+    "cluster_configuration": "Configuration du cluster",
+    "managed_by": "Geré par",
+    "focal_points": "Responsable(s)",
+    "operations": {
+        "create": "Créer Opération",
+        "secure_hid": "Sécuriséer la Liste de contacts en Humanitarian ID?",
+        "status": {
+            "active": "Actif",
+            "archived": "Archivé",
+            "inactive": "Inactif"
+        },
+        "helpers": {
+            "title": "Ajouter le nome de l'opération",
+            "language": "Selectionner la langue",
+            "type": "Selectionner le type d'opération"
+        }
+    },
+    "name": "Nom",
+    "acronym": "Acronyme",
+    "fts_id": "FTS ID",
+    "form_organizations": {
+        "create": "Créer une organisation",
+        "helpers": {
+            "name": "Taper le nome de l'organisation",
+            "type": "Selectionner de la liste le type d'organisation"
+        }
+    },
+    "groups": "Cluster(s)/Secteur(s)",
+    "url": "URL",
+    "location": "Lieux",
+    "leading_organizations": "Organisation(s) chef de file",
+    "participating_organizations": "Organisation(s) participant(es)",
+    "other_location": "Autre lieu",
+    "population_types": "Type(s) de population",
+    "subject": "Sujet",
+    "methodology": "Méthodologie",
+    "key_findings": "Résultats Principaux",
+    "sample_size": "Taille de l'échantillon",
+    "geographic_level": "Niveau géographique",
+    "unit_measurement": "Unité(s) de mesure",
+    "collection_method": "Méthode(s) de collecte",
+    "contacts": "Contact(s)",
+    "assessment": {
+        "create": "Créer une Évaluation",
+        "status": {
+            "planned": "Planifié",
+            "ongoing": "En cours",
+            "draft": "Brouillon / Rèsultats Préliminaires",
+            "field_work": "Travail de terrain terminé",
+            "report": "Rapport terminé"
+        },
+        "collection_methods": {
+            "structured": "Entretien structuré",
+            "unstructured": "Entretien non structuré",
+            "key_informant": "Entretien avec informateurs clés",
+            "focus_group": "Discussion de groupe",
+            "observation": "Obesrvation",
+            "baseline_data": "Analyse de données de base",
+            "field_interview": "Entretien sur le terrain",
+            "email_interview": "Entretien par courriel / par email",
+            "mixed": "Mélangé",
+            "other": "Autre",
+            "phone_interview": "Interview par téléphone"
+        },
+        "unit_measurements": {
+            "community": "Communauté",
+            "settlements": "Établissement",
+            "individuals": "Individus",
+            "households": "Ménages"
+        },
+        "geographic_levels": {
+            "district": "District",
+            "national": "National",
+            "non_representative": "Non représentatif",
+            "other": "Autre",
+            "province": "Province",
+            "regional": "Régional",
+            "subdistrict": "Sous-district",
+            "village": "Village"
+        },
+        "helpers": {
+            "title": "Taper le tritre original de l'èvaluation. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+            "date": "Indiquer les dates de début / fin de l'évaluation.",
+            "spaces": "Cliquer sur le champ et sélectionner l'espace ou publier l'évaluation (opération, site régional ou site thématique).",
+            "status": "Indiquer la phase de l'évaluation. N'oubliez pas de mettre à jour ce champ quand les phases avancent.",
+            "leading_organizations": "Taper et sélectionner dans la liste la(les) organisation(s) qui réalise(nt) l'évaluation.",
+            "participating_organizations": "Taper et sélectionner la(les) organisation(s) prenant part à l’évaluation (mais qui ne la dirigeant pas).",
+            "locations": "Sélectionner dans le menu les pays concernés par l'évaluation et indiquez sites plus specifiques en sélectionnant plusieurs niveaux (région, province, ville).",
+            "other_location": "Vous pouvez spécifier ici un lieu pas disponible dans la liste des lieux.",
+            "population_types": "Cliquer sur le champ et sélectionnez le(s) segment(s) de la population ciblés par l'évaluation. Vous pouvez sélectionner plusieurs types de population.",
+            "subject": "Ajouter une brève description du sujet de l'évaluation et de ses objectifs.",
+            "methodology": "Ajouter une brève description des procédures et des techniques utilisées pour collecter, stocker et analyser les données.",
+            "key_findings": "Ajouter un bref résumé des résultats de l'évaluation.",
+            "bundles": "Indiquer le(s) cluster(s)/secteur(s) au(x) quel(s) l'évaluation fait référence.",
+            "themes": "Cliquer sur le champ et sélectionner le(s) theme(s) pertinent(s). Choisisser seulment les themes auquels l'évaluation fait une reference substantielle.",
+            "disasters": "Cliquer sur le champ et sélectionner la(les) catastrophe(s) ou l'urgence au(x) quelle(s) l'évaluationt fait référence.",
+            "collection_method": "Cliquer sur le champ et sélectionner le(s) methode(s) de collect utilisé(es)  pour recueillir les informations pendant l'évaluation.",
+            "unit_measurement": "Cliquer sur le champ et sélectionner le(s) unité(s) de mesure utilisé(es) pour l'évaluation",
+            "sample_size": "Indiquer le nombre de communautés / ménages / individus interrogés lors de l'évaluation.",
+            "geographic_level": "Sélectionner à quel niveau géographique l'évaluation est (a été) menée.",
+            "contacts": "Indiquer la(les) personne(s) à contacter pour ce que concerne l'évaluation. Pour apparaître dans la liste, la personne doit avoir un profil en Humanitarian ID.",
+            "agendas": "",
+            "meeting_minutes": "",
+            "related_content": "Ajouter des liens vers contenu liés à l'évaluation que vous êtes en train de publier en indiquant le titre du contenu et son url. Lorsque vous utilisez la fonction de recherche, effectuer une recherche par titre de contenu.",
+            "language": "Selectionner la langue de l'évaluation.",
+            "assessment_report": "Téléchargez le fichier de rapport d’évaluation, stocké sur votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d’accessibilité. Si le fichier est «Disponible sur demande», écrivez les instructions dans l'espace correspondant. Pour lire les normes de fichier et les conventions de dénomination, <1> cliquez ici </ 1>.",
+            "assessment_questionnaire": "Téléchargez le fichier du questionnaire de l'évaluation, stocké sur votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d’accessibilité. Si le fichier est «Disponible sur demande», écrivez les instructions dans l'espace correspondant. Pour afficher les normes de fichier et les conventions de dénomination, <1> cliquez ici </ 1>.",
+            "assessment_data": "Téléchargez le fichier des donnèes de l'évaluation, stocké sur votre ordinateur ou sur votre compte Dropbox, et indiquez son niveau d’accessibilité. Si le fichier est «Disponible sur demande», écrivez les instructions dans l'espace correspondant. Pour afficher les normes de fichier et les conventions de dénomination, <1> cliquez ici </ 1>.",
+            "frequency": "Indiquez la fréquence de l'évaluation dans le cas où cette évaluation est répétée dans le temps."
+        },
+        "frequencies": {
+            "weekly": "Hebdomadaire",
+            "monthly": "Mensuel",
+            "quarterly": "Trimestriel",
+            "yearly": "Annuel",
+            "other": "Autre"
+        }
+    },
+    "offices": {
+        "create": "Creer un bureau",
+        "edit": "Modifier le bureau",
+        "helpers": {
+            "title": "Taper le nom du bureau. Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",
+            "language": "Selectionner la langue du bureau",
+            "location": "Sélectionner dans le menu le pays ou le bureau se trouve et indiquer des lieux plus spécifiques en sélectionnant plusieurs couches (région, province, ville).",
+            "address": "Indiquer l'adresse du bureau",
+            "email": "Taper le courriel",
+            "organizations": "",
+            "spaces": "Cliquer sur le champ et sélectionner ou publier le bureau (l'operation, le site regional etc)",
+            "phones": "Taper le numero de téléphone du bureau",
+            "is_coordination_hub": "Ce bureau est un centre de coordination.",
+            "is_not_coordination_hub": "Ce bureau n'est pas un centre de coordination."
+        }
+    },
     "phones": {
-      "phones": "Téléphone(s)",
-      "type": "Type",
-      "dialling_code": "Indicatif",
-      "number": "Numéro",
-      "types": {
-        "work": "Travail",
-        "home": "Maison",
-        "mobile": "Mobile",
-        "fax": "Fax"
-      }
-    }
+        "phones": "Téléphone(s)",
+        "type": "Type",
+        "dialling_code": "Indicatif téléphonique",
+        "number": "Numéro de téléphone",
+        "types": {
+            "work": "Téléphone fixe (travail)",
+            "home": "Téléphone fixe (maison)",
+            "mobile": "Téléphone portable",
+            "fax": "Fax"
+        }
+    },
+    "frequency": "Fréquence"
 }
