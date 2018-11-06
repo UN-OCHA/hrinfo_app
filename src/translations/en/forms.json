@@ -93,6 +93,7 @@
           "focus_group": "Focus group discussion",
           "observation": "Observation",
           "baseline_data": "Baseline data analysis",
+          "phone_interview": "Phone Interview",
           "field_interview": "Field Interview",
           "email_interview": "Email / Mail Interview",
           "mixed": "Mixed",
