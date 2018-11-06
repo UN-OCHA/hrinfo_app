@@ -56,14 +56,13 @@ class AssessmentForm extends React.Component {
         { value: 'Individuals', label: t('assessment.unit_measurements.individuals')},
       ],
       geographic_levels  : [
-        { value: 'District', label: t('assessment.geographic_levels.district')},
-        { value: 'National', label: t('assessment.geographic_levels.national')},
-        { value: 'Non-representative', label: t('assessment.geographic_levels.non_representative')},
-        { value: 'Other', label: t('assessment.geographic_levels.other')},
-        { value: 'Province', label: t('assessment.geographic_levels.province')},
-        { value: 'Regional', label: t('assessment.geographic_levels.regional')},
-        { value: 'Sub-district', label: t('assessment.geographic_levels.subdistrict')},
-        { value: 'Village', label: t('assessment.geographic_levels.village')}
+        { value: 'admin0', label: t('assessment.geographic_levels.national')},
+        { value: 'admin1', label: t('assessment.geographic_levels.regional')},
+        { value: 'admin2', label: t('assessment.geographic_levels.district')},
+        { value: 'admin3', label: t('assessment.geographic_levels.subdistrict')},
+        { value: 'admin4', label: t('assessment.geographic_levels.village')},
+        { value: 'other', label: t('assessment.geographic_levels.other')},
+        { value: 'non-representative', label: t('assessment.geographic_levels.non_representative')},
       ],
       frequencies : [
         { value: 'Weekly', label: t('assessment.frequencies.weekly')},

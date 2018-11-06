@@ -247,12 +247,11 @@
             "households": "Households"
         },
         "geographic_levels": {
-            "district": "District",
+            "district": "District / Province / Locality / County",
             "national": "National",
             "non_representative": "Non-representative",
             "other": "Other",
-            "province": "Province",
-            "regional": "Regional",
+            "regional": "Governorate / State / Regional",
             "subdistrict": "Sub-district",
             "village": "Village"
         },
