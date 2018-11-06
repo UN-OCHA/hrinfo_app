@@ -43,6 +43,7 @@ class AssessmentForm extends React.Component {
         { value: 'Focus group discussion', label: t('assessment.collection_methods.focus_group')},
         { value: 'Observation', label: t('assessment.collection_methods.observation')},
         { value: 'Baseline data analysis', label: t('assessment.collection_methods.baseline_data')},
+        { value: 'Phone Interview', label: t('assessment.collection_methods.phone_interview')},
         { value: 'Field Interview', label: t('assessment.collection_methods.field_interview')},
         { value: 'Email / Mail Interview', label: t('assessment.collection_methods.email_interview')},
         { value: 'Mixed', label: t('assessment.collection_methods.mixed')},
