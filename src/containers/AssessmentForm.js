@@ -37,17 +37,17 @@ class AssessmentForm extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(),
       collection_methods : [
-        { value: 'Structured Interview', label: t('assessment.collection_methods.structured')},
-        { value: 'Unstructured Interview', label: t('assessment.collection_methods.unstructured')},
-        { value: 'Key Informant Interview', label: t('assessment.collection_methods.key_informant')},
-        { value: 'Focus group discussion', label: t('assessment.collection_methods.focus_group')},
-        { value: 'Observation', label: t('assessment.collection_methods.observation')},
-        { value: 'Baseline data analysis', label: t('assessment.collection_methods.baseline_data')},
-        { value: 'Phone Interview', label: t('assessment.collection_methods.phone_interview')},
-        { value: 'Field Interview', label: t('assessment.collection_methods.field_interview')},
-        { value: 'Email / Mail Interview', label: t('assessment.collection_methods.email_interview')},
-        { value: 'Mixed', label: t('assessment.collection_methods.mixed')},
-        { value: 'Other', label: t('assessment.collection_methods.other')}
+        { value: 'structured', label: t('assessment.collection_methods.structured')},
+        { value: 'unstructured', label: t('assessment.collection_methods.unstructured')},
+        { value: 'key_informant', label: t('assessment.collection_methods.key_informant')},
+        { value: 'focus_group', label: t('assessment.collection_methods.focus_group')},
+        { value: 'observation', label: t('assessment.collection_methods.observation')},
+        { value: 'baseline', label: t('assessment.collection_methods.baseline_data')},
+        { value: 'phone', label: t('assessment.collection_methods.phone_interview')},
+        { value: 'field', label: t('assessment.collection_methods.field_interview')},
+        { value: 'email', label: t('assessment.collection_methods.email_interview')},
+        { value: 'mixed', label: t('assessment.collection_methods.mixed')},
+        { value: 'other', label: t('assessment.collection_methods.other')}
       ],
       unit_measurements  : [
         { value: 'Community', label: t('assessment.unit_measurements.community')},
@@ -65,11 +65,11 @@ class AssessmentForm extends React.Component {
         { value: 'non-representative', label: t('assessment.geographic_levels.non_representative')},
       ],
       frequencies : [
-        { value: 'Weekly', label: t('assessment.frequencies.weekly')},
-        { value: 'Monthly', label: t('assessment.frequencies.monthly')},
-        { value: 'Quarterly', label: t('assessment.frequencies.quarterly')},
-        { value: 'Yearly', label: t('assessment.frequencies.yearly')},
-        { value: 'Other', label: t('assessment.frequencies.other')}
+        { value: 'weekly', label: t('assessment.frequencies.weekly')},
+        { value: 'monthly', label: t('assessment.frequencies.monthly')},
+        { value: 'quarterly', label: t('assessment.frequencies.quarterly')},
+        { value: 'yearly', label: t('assessment.frequencies.yearly')},
+        { value: 'other', label: t('assessment.frequencies.other')}
       ],
       status             : '',
       doc                : {},
