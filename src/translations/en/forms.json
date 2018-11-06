@@ -1,12 +1,10 @@
 {
     "coordination_hubs": "Coordination hub(s)",
-    "disasters": "Disaster(s)/Emergency",
-    "groups": "Cluster(s)/Sector(s)",
+    "disasters": "Disaster(s) / Emergency",
     "title": "Title",
-    "name": "Name",
     "description": "Description or Summary of Content",
     "language": "Language",
-    "spaces": "Operation(s)/Webspace(s)",
+    "spaces": "Operation(s) / Webspace(s)",
     "publication_date": "Original Publication Date",
     "document_type": "Document type",
     "map_type": "Map/Infographic type",
@@ -21,47 +19,10 @@
     "exclude_from_reliefweb": "Do not share with ReliefWeb",
     "add_more": "Add More Information",
     "hide_information": "Hide Optional Information",
-    "add_another": "Add Another",
-    "languages": {
-      "en": "English",
-      "fr": "French",
-      "es" : "Spanish"
-    },
-    "edit": "Edit",
-    "type": "Type",
-    "social_media": "Social media",
-    "website": "Website",
-    "email": "Email",
-    "operation": "Operation",
-    "date": "Date",
-    "region": "Region",
-    "status": "Status",
-    "launch_date": "Launch date",
-    "cluster_configuration": "Cluster configuration",
-    "managed_by": "Managed by",
-    "focal_points": "Focal points",
-    "acronym": "Acronym",
-    "fts_id": "FTS ID",
-    "url": "URL",
-    "location": "Location",
-    "leading_organizations": "Leading Organizations",
-    "participating_organizations": "Participating Organizations",
-    "other_location": "Other Location",
-    "population_types": "Population types",
-    "subject": "Subject",
-    "methodology": "Methodology",
-    "key_findings": "Key findings",
-    "sample_size": "Sample size",
-    "geographic_level": "Geographic level",
-    "frequency": "Frequency",
-    "unit_measurement": "Unit of measurement",
-    "collection_method": "Collection method",
-    "contacts": "Contacts",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },
     "document": {
-        "create": "Create document",
         "helpers": {
             "title": "Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
             "offices": "Click on the field and select the coordination hub(s) the document refers to (if any).",
@@ -76,52 +37,224 @@
             "locations": "Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).",
             "themes": "Click on the field and select all relevant themes. Choose only themes the document substantively refers to.",
             "related_content": "Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+        },
+        "create": "Create document"
+    },
+    "infographic": {
+        "helpers": {
+            "title": "Type the original title of the map/infographic. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+            "offices": "Click on the field and select the coordination hub(s) the map/infographic refers to (if any).",
+            "publication_date": "Indicate when the map/infographic has originally been published.",
+            "disasters": "Click on the field and select the disaster(s) or emergency the map/infographic refers to. ",
+            "bundles": "Indicate the cluster(s)/sector(s) the map/infographic refers to.",
+            "description": "Try to always include here the text (in full or part of it) of the map/infographic (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.",
+            "language": "Select the language of the map/infographic.",
+            "spaces": "Click on the field and select where to publish the map/infographic (operation, regional site or thematic site).",
+            "document_type": "Select the map/infographic type and sub-type that best describe the map/infographic.",
+            "organizations": "Type in and select the source(s) of the map/infographic.",
+            "locations": "Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town).",
+            "themes": "Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.",
+            "related_content": "Add links to content that is related to the map/infographicc you are publishing (example: language versions of the same infographic, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+        },
+        "create": "Create infographic"
+    },
+    "files": {
+        "new_file": "New file",
+        "from_storage": "From computer",
+        "from_dropbox": "From Dropbox",
+        "language": "File Language",
+        "files": "File(s)",
+        "assessment_report": "Assessment Report",
+        "assessment_questionnaire": "Assessment Questionnaire",
+        "assessment_data": "Assessment Data",
+        "accessibility": "Accessibility",
+        "accessibilities": {
+            "instructions": "Instructions",
+            "available": "Publicly Available",
+            "request": "Available on Request",
+            "restricted": "Restricted Distribution",
+            "not_available": "Not Available",
+            "not_applicable": "Not Applicable"
         }
     },
+    "related_content": {
+        "title": "Title",
+        "url": "URL",
+        "helpers": {
+            "title": "Type in the title of the related content.",
+            "url": "Type in the URL of the related content"
+        },
+        "related_content": "Related content"
+    },
+    "add_another": "Add Another",
+    "bundles": {
+        "create": "Create group",
+        "parent_cluster": "Parent Cluster",
+        "hid_access": {
+            "title": "HID Access",
+            "do_not_create": "Do not create a list",
+            "open": "Open",
+            "closed": "Closed"
+        },
+        "global_cluster": "Global Cluster",
+        "lead_agencies": "Lead Agencies",
+        "activation_document": "Activation document",
+        "partners": "Partners",
+        "participation": "Participation",
+        "ngo_participation": "NGO Participation",
+        "government_participation": "Government Participation",
+        "inter_cluster": "Inter cluster",
+        "helpers": {
+            "title": "Type the name of the group. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+            "type": "From the list, select the type of group you are creating.",
+            "hid_access": "Select 'Open' if you want HID users to add themselves to this group. Select 'Closed' if you want only HID managers to be allowed to add HID users to this group.",
+            "body": "Try to always include here the text (in full or part of it) of the group (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing."
+        }
+    },
+    "languages": {
+        "en": "English",
+        "fr": "French",
+        "es": "Spanish"
+    },
+    "edit": "Edit",
+    "type": "Type",
+    "social_media": "Social media",
+    "website": "Website",
+    "email": "Email",
+    "operation": "Operation",
+    "date": "Date",
+    "address": {
+        "country": "Country",
+        "address_1": "Address 1",
+        "address_2": "Address 2",
+        "postal_code": "Postal Code",
+        "city": "City",
+        "address": "Address"
+    },
+    "assessments": {
+        "status": {
+            "planned": "Planned",
+            "ongoing": "Ongoing",
+            "draft": "Draft / Preliminary Results",
+            "field_work": "Field work completed",
+            "report": "Report completed"
+        }
+    },
+    "events": {
+        "create": "Create event",
+        "venue": "Venue",
+        "contacts": "Contact(s)",
+        "agendas": "Agenda(s)",
+        "meeting_minutes": "Meeting Minute(s)",
+        "category": {
+            "title": "Event Category",
+            "meetings": "Meetings",
+            "trainings": "Trainings",
+            "workshops": "Workshops",
+            "conferences": "Conferences"
+        },
+        "helpers": {
+            "title": "Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
+            "offices": "Click on the field and select the coordination hub(s) the event refers to (if any).",
+            "disasters": "Click on the field and select the disaster(s) or emergency the event refers to.",
+            "bundles": "Indicate the cluster(s)/sector(s) the event refers to.",
+            "category": "From the list, select the kind of event you are creating.",
+            "date": "Indicate the date of the event.",
+            "description": "Add more information related to the event",
+            "address": "Indicate here where the event takes place.",
+            "language": "Select the language of the event.",
+            "spaces": "Click on the field and select where to publish the event (operation, regional site or thematic site).",
+            "organizations": "Type in and select the organization(s) facilitating the event.",
+            "contacts": "Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.",
+            "agendas": "Add the agenda of the event as a document first, and then reference this document from here.",
+            "meeting_minutes": "Add the meeting minutes of the event as a document first, and then reference this document from here.",
+            "locations": "Select from the menu the country(ies) the event is about and indicate more specific locations by selecting multiple layers (region, province, town).",
+            "themes": "Click on the field and select all relevant themes. Choose only themes the event substantively refers to.",
+            "related_content": "Add links to content that is related to the event you are publishing by indicating the title of the content and its url."
+        }
+    },
+    "region": "Region",
+    "status": "Status",
+    "launch_date": "Launch date",
+    "cluster_configuration": "Cluster configuration",
+    "managed_by": "Managed by",
+    "focal_points": "Focal points",
+    "operations": {
+        "create": "Create Operation",
+        "secure_hid": "Secure Humanitarian ID contact list ?",
+        "status": {
+            "active": "Active",
+            "archived": "Archived",
+            "inactive": "Inactive"
+        },
+        "helpers": {
+            "title": "Enter the operation name.",
+            "language": "Select a language.",
+            "type": "Select the type of the operation"
+        }
+    },
+    "name": "Name",
+    "acronym": "Acronym",
+    "fts_id": "FTS ID",
+    "form_organizations": {
+        "create": "Create organization",
+        "helpers": {
+            "name": "Type the name of the organization.",
+            "type": "From the list, select the type of organization you are creating."
+        }
+    },
+    "groups": "Cluster(s)/Sector(s)",
+    "url": "URL",
+    "location": "Location",
+    "leading_organizations": "Leading Organization(s)",
+    "participating_organizations": "Participating Organization(s)",
+    "other_location": "Other Location",
+    "population_types": "Population types",
+    "subject": "Subject",
+    "methodology": "Methodology",
+    "key_findings": "Key findings",
+    "sample_size": "Sample size",
+    "geographic_level": "Geographic level",
+    "unit_measurement": "Unit(s) of measurement",
+    "collection_method": "Collection method(s)",
+    "contacts": "Contact(s)",
     "assessment": {
         "create": "Create assessment",
         "status": {
-          "planned": "Planned",
-          "ongoing": "Ongoing",
-          "draft": "Draft / Preliminary Results",
-          "field_work": "Field work completed",
-          "report": "Report completed"
+            "planned": "Planned",
+            "ongoing": "Ongoing",
+            "draft": "Draft / Preliminary Results",
+            "field_work": "Field work completed",
+            "report": "Report completed"
         },
         "collection_methods": {
-          "structured": "Structured Interview",
-          "unstructured": "Unstructured Interview",
-          "key_informant": "Key Informant Interview",
-          "focus_group": "Focus group discussion",
-          "observation": "Observation",
-          "baseline_data": "Baseline data analysis",
-          "phone_interview": "Phone Interview",
-          "field_interview": "Field Interview",
-          "email_interview": "Email / Mail Interview",
-          "mixed": "Mixed",
-          "other": "Other"
+            "structured": "Structured Interview",
+            "unstructured": "Unstructured Interview",
+            "key_informant": "Key Informant Interview",
+            "focus_group": "Focus group discussion",
+            "observation": "Observation",
+            "baseline_data": "Baseline data analysis",
+            "field_interview": "Field Interview",
+            "email_interview": "Email / Mail Interview",
+            "mixed": "Mixed",
+            "other": "Other",
+            "phone_interview": "Phone Interview"
         },
         "unit_measurements": {
-          "community": "Community",
-          "settlements": "Settlements",
-          "individuals": "Individuals",
-          "households": "Households"
+            "community": "Community",
+            "settlements": "Settlements",
+            "individuals": "Individuals",
+            "households": "Households"
         },
         "geographic_levels": {
-          "district": "District",
-          "national": "National",
-          "non_representative": "Non-representative",
-          "other": "Other",
-          "province": "Province",
-          "regional": "Regional",
-          "subdistrict": "Sub-district",
-          "village": "Village"
-        },
-        "frequencies": {
-          "weekly": "Weekly",
-          "monthly": "Monthly",
-          "quarterly": "Quarterly",
-          "yearly": "Yearly",
-          "other": "Other"
+            "district": "District",
+            "national": "National",
+            "non_representative": "Non-representative",
+            "other": "Other",
+            "province": "Province",
+            "regional": "Regional",
+            "subdistrict": "Sub-district",
+            "village": "Village"
         },
         "helpers": {
             "title": "Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
@@ -143,184 +276,51 @@
             "unit_measurement": "Click on the field and select the unit(s) of measurement used for the assessment.",
             "sample_size": "Indicate the number of communities/households/individuals surveyed during the assessment.",
             "geographic_level": "Select at what geographical level the assessment is (has been) conducted.",
-            "contacts": "Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.",
+            "contacts": "Indicate the person(s) to contact for information regarding the assessment. To show up in the list, the person must have a HumanitarianID profile.",
             "agendas": "Add the agenda of the event as a document first, and then reference this document from here.",
             "meeting_minutes": "Add the meeting minutes of the event as a document first, and then reference this document from here.",
-            "related_content": "Add links to content that is related to the event you are creating by indicating the title of the content and its url. When using the Search function make sure to search by content title.",
+            "related_content": "Add links to content that is related to the assessment you are publishing by indicating the title of the content and its url. When using the Search function make sure to search by content title.",
             "language": "Select the language of the assessment.",
             "assessment_report": "Upload the assessment report file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>.",
             "assessment_questionnaire": "Upload the assessment questionnaire file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>.",
             "assessment_data": "Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <1>click here</1>.",
             "frequency": "Indicate the assessment frequency in case it is being repeated over time."
-        }
-    },
-    "infographic": {
-        "create": "Create infographic",
-        "helpers": {
-            "title": "Type the original title of the map/infographic. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
-            "offices": "Click on the field and select the coordination hub(s) the map/infographic refers to (if any).",
-            "publication_date": "Indicate when the map/infographic has originally been published.",
-            "disasters": "Click on the field and select the disaster(s) or emergency the map/infographic refers to. ",
-            "bundles": "Indicate the cluster(s)/sector(s) the map/infographic refers to.",
-            "description": "Try to always include here the text (in full or part of it) of the map/infographic (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.",
-            "language": "Select the language of the map/infographic.",
-            "spaces": "Click on the field and select where to publish the map/infographic (operation, regional site or thematic site).",
-            "document_type": "Select the map/infographic type and sub-type that best describe the map/infographic.",
-            "organizations": "Type in and select the source(s) of the map/infographic.",
-            "locations": "Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town).",
-            "themes": "Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.",
-            "related_content": "Add links to content that is related to the map/infographicc you are publishing (example: language versions of the same infographic, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
+        },
+        "frequencies": {
+            "weekly": "Weekly",
+            "monthly": "Monthly",
+            "quarterly": "Quarterly",
+            "yearly": "Yearly",
+            "other": "Other"
         }
     },
     "offices": {
         "create": "Create office",
         "edit": "Edit office",
         "helpers": {
-          "title": "Type the original title of the office. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
-          "language": "Select the language of the office.",
-          "location": "Select from the menu the country where the office is located and indicate more specific locations by selecting multiple layers (region, province, town).",
-          "address": "Indicate the address of the office",
-          "email": "Type in the email",
-          "organizations": "Type in and select the source(s) of the office.",
-          "spaces": "Click on the field and select where to publish the office (operation, regional site or thematic site).",
-          "phones": "Type in the phones of the office.",
-          "is_coordination_hub": "This office is a coordination hub.",
-          "is_not_coordination_hub": "This office is not a coordination hub."
+            "title": "Type the name of the office. Try not to use abbreviations. To see Standards and Naming Conventions <1>click here</1>.",
+            "language": "Select the language of the office.",
+            "location": "Select from the menu the country where the office is located and indicate more specific locations by selecting multiple layers (region, province, town).",
+            "address": "Indicate the address of the office",
+            "email": "Type in the email",
+            "organizations": "Type in and select the source(s) of the office.",
+            "spaces": "Click on the field and select where to publish the office (operation, regional site or thematic site).",
+            "phones": "Type in the phones of the office.",
+            "is_coordination_hub": "This office is a coordination hub.",
+            "is_not_coordination_hub": "This office is not a coordination hub."
         }
-    },
-    "files": {
-        "files": "File(s)",
-        "assessment_report": "Assessment Report",
-        "assessment_questionnaire": "Assessment Questionnaire",
-        "assessment_data": "Assessment Data",
-        "new_file": "New file",
-        "from_storage": "From storage",
-        "from_dropbox": "From Dropbox",
-        "accessibility": "Accessibility",
-        "language": "File Language",
-        "accessibilities": {
-          "instructions": "Instructions",
-          "available": "Publicly Available",
-          "request": "Available on Request",
-          "restricted": "Restricted Distribution",
-          "not_available": "Not Available",
-          "not_applicable": "Not Applicable"
-        }
-    },
-    "related_content": {
-      "related_content": "Related content",
-      "title": "Title",
-      "url": "URL",
-      "helpers": {
-        "title": "Type in the title of the related content.",
-        "url": "Type in the URL of the related content"
-      }
-    },
-    "address": {
-      "address": "Address",
-      "country": "Country",
-      "address_1": "Address 1",
-      "address_2": "Address 2",
-      "postal_code": "Postal Code",
-      "city": "City"
-    },
-    "assessments": {
-      "status": {
-        "planned": "Planned",
-        "ongoing": "Ongoing",
-        "draft": "Draft / Preliminary Results",
-        "field_work": "Field work completed",
-        "report": "Report completed"
-      }
-    },
-    "events": {
-      "create": "Create event",
-      "venue": "Venue",
-      "contacts": "Contact(s)",
-      "agendas": "Agenda(s)",
-      "meeting_minutes": "Meeting Minute(s)",
-      "category": {
-        "title": "Event Category",
-        "meetings": "Meetings",
-        "trainings": "Trainings",
-        "workshops": "Workshops",
-        "conferences": "Conferences"
-      },
-      "helpers": {
-        "title": "Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
-        "offices": "Click on the field and select the coordination hub(s) the document refers to (if any).",
-        "disasters": "Click on the field and select the disaster(s) or emergency the document refers to.",
-        "bundles": "Indicate the cluster(s)/sector(s) the document refers to.",
-        "category": "From the list, select the kind of event you are creating.",
-        "date": "Indicate the date of the event.",
-        "description": "Try to always include here the text (in full or part of it) of the event (example: use the introduction or the executive summary).",
-        "address": "Indicate here where the event takes place.",
-        "language": "Select the language of the event.",
-        "spaces": "Click on the field and select where to publish the event (operation, regional site or thematic site).",
-        "organizations": "Type in and select the source(s) of the event.",
-        "contacts": "Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a HumanitarianID profile.",
-        "agendas": "Add the agenda of the event as a document first, and then reference this document from here.",
-        "meeting_minutes": "Add the meeting minutes of the event as a document first, and then reference this document from here.",
-        "locations": "Select from the menu the country(ies) the event is about and indicate more specific locations by selecting multiple layers (region, province, town).",
-        "themes": "Click on the field and select all relevant themes. Choose only themes the event substantively refers to.",
-        "related_content": "Add links to content that is related to the event you are publishing (example: language versions of the same event, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url."
-      }
-    },
-    "bundles": {
-      "create": "Create group",
-      "parent_cluster": "Parent Cluster",
-      "hid_access": {
-        "title": "HID Access",
-        "do_not_create": "Do not create a list",
-        "open": "Open",
-        "closed": "Closed"
-      },
-      "global_cluster": "Global Cluster",
-      "lead_agencies": "Lead Agencies",
-      "activation_document": "Activation document",
-      "partners": "Partners",
-      "participation": "Participation",
-      "ngo_participation": "NGO Participation",
-      "government_participation": "Government Participation",
-      "inter_cluster": "Inter cluster",
-      "helpers": {
-        "title": "Type the original title of the group. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
-        "type": "From the list, select the type of group you are creating.",
-        "hid_access": "Select 'Open' if you want HID users to add themselves to this group. Select 'Closed' if you want only HID managers to be allowed to add HID users to this group.",
-        "body": "Try to always include here the text (in full or part of it) of the group (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing."
-      }
-    },
-    "operations": {
-      "create": "Create Operation",
-      "secure_hid": "Secure Humanitarian ID contact list ?",
-      "status": {
-        "active": "Active",
-        "archived": "Archived",
-        "inactive": "Inactive"
-      },
-      "helpers": {
-        "title": "Please enter the operation title.",
-        "language": "Please select a language.",
-        "type": "Please select the type of the operation"
-      }
-    },
-    "form_organizations": {
-      "create": "Create organization",
-      "helpers": {
-        "name": "Type the original title of the organization. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",
-        "type": "From the list, select the type of organization you are creating."
-      }
     },
     "phones": {
-      "phones": "Phone(s)",
-      "type": "Type",
-      "dialling_code": "Dialling code",
-      "number": "Number",
-      "types": {
-        "work": "Work",
-        "home": "Home",
-        "mobile": "Mobile",
-        "fax": "Fax"
-      }
-    }
+        "phones": "Phone(s)",
+        "type": "Type",
+        "dialling_code": "Dialling code",
+        "number": "Number",
+        "types": {
+            "work": "Work",
+            "home": "Home",
+            "mobile": "Mobile",
+            "fax": "Fax"
+        }
+    },
+    "frequency": "Frequency"
 }
