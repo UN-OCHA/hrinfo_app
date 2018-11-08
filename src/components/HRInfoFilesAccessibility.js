@@ -32,6 +32,7 @@ class HRInfoFilesAccessibility extends React.Component {
       instructions: '',
       url: ''
     };
+    this.fileId = 'file_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
     this.hrinfoAPI = new HRInfoAPI();
 
@@ -156,7 +157,6 @@ class HRInfoFilesAccessibility extends React.Component {
               </Typography>
               <TextField type      = "text"
                          name      = "instructions"
-                         id        = "instructions"
                          multiline = {true}
                          rowsMax   = "4"
                          fullWidth = {true}
@@ -169,7 +169,6 @@ class HRInfoFilesAccessibility extends React.Component {
               <Typography>{t('url')}</Typography>
                 <TextField type      = "text"
                            name      = "url"
-                           id        = "url"
                            fullWidth = {true}
                            value     = {this.state.url}
                            onChange  = { (s) => this.handleChange('url', s)}/>
@@ -179,11 +178,11 @@ class HRInfoFilesAccessibility extends React.Component {
             {this.state.accessibility && this.state.accessibility.value === t('files.accessibilities.available') ?
               <span className="file-container-actions">
                 <input type="file"
-                       id='file'
+                       id={this.fileId}
                        name='file'
                        className="none"
                        onChange={ (e) => this.handleChange('file', e.target.files) } />
-                <label htmlFor='file'>
+                <label htmlFor={this.fileId}>
                   <Button component="span" color="primary" variant="outlined" size="small">
                     {t('files.from_storage')}
                   </Button>

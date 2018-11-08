@@ -369,7 +369,6 @@ class AssessmentForm extends React.Component {
               <FormControl required fullWidth margin = "normal">
                 <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.report)}>{t('files.assessment_report')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('report', s)}
-                                          onInputChange={this.props.handleInputChange}
                                           value={this.props.doc.report} />
                 <FormHelperText id = "report-text">
                   <Trans i18nKey='assessment.helpers.assessment_report'>Upload the assessment report file, stored on your computer
