@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactGA from 'react-ga';
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';
 import {withRouter, NavLink} from "react-router-dom";
@@ -70,6 +71,9 @@ class App extends Component {
         this.isManagerOrEditor = this.isManagerOrEditor.bind(this);
         this.isManager = this.isManager.bind(this);
         this.isBundleMember = this.isBundleMember.bind(this);
+
+        ReactGA.initialize('UA-70934930-2');
+        ReactGA.pageview(window.location.pathname + window.location.search);
     }
 
     toggleMenu(event) {
