@@ -214,7 +214,7 @@
     "methodology": "Méthodologie",
     "key_findings": "Résultats Principaux",
     "sample_size": "Taille de l'échantillon",
-    "geographic_level": "Niveau géographique",
+    "geographic_level": "Niveau de représentation",
     "unit_measurement": "Unité(s) de mesure",
     "collection_method": "Méthode(s) de collecte",
     "contacts": "Contact(s)",
@@ -247,12 +247,12 @@
             "households": "Ménages"
         },
         "geographic_levels": {
-            "district": "District",
+            "district": "District / Province / Localité / Comté",
             "national": "National",
             "non_representative": "Non représentatif",
             "other": "Autre",
-            "province": "Province",
-            "regional": "Régional",
+            "province": "",
+            "regional": "Gouvernorat / Etat / Régional",
             "subdistrict": "Sous-district",
             "village": "Village"
         },
