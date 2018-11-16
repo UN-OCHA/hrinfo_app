@@ -46,7 +46,10 @@ class HRInfoSelect extends React.Component {
           let user = JSON.parse(localStorage.getItem('hid-user'));
           if ((type === 'spaces' || type === 'operations' || type === 'bundles') && user.hrinfo.roles.indexOf('administrator') === -1) {
             elts.forEach(function (elt) {
-              if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && (user.hrinfo.spaces[elt.id].indexOf('manager') !== -1 || user.hrinfo.space[elt.id].indexOf('editor') !== -1)) {
+              if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && (
+                user.hrinfo.spaces[elt.id].indexOf('manager') !== -1 ||
+                user.hrinfo.space[elt.id].indexOf('editor') !== -1 ||
+                user.hrinfo.space[elt.id].indexOf('bundle member'))) {
                 pushed.push(elt);
               }
             });
