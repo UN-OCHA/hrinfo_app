@@ -70,7 +70,21 @@ const withForm = function withForm(Component, hrinfoType, label) {
     }
 
     onEditorStateChange (editorState) {
-      let html = stateToHTML(editorState.getCurrentContent());
+      let htmlOptions = {
+        blockRenderers: {
+          'atomic': (block) => {
+            let key = block.getEntityAt(0);
+            let type = editorState.getCurrentContent().getEntity(key).type;
+            if (type === 'EMBEDDED_LINK') {
+              let url = editorState.getCurrentContent().getEntity(key).getData().src;
+              let width = editorState.getCurrentContent().getEntity(key).getData().width;
+              let height = editorState.getCurrentContent().getEntity(key).getData().height;
+              return '<div><iframe src="'+url+'" width="' + width + '" height="' + height + '" frameborder="0" allow="encrypted-media" allowfullscreen></iframe></div>';
+            }
+          },
+        },
+      };
+      let html = stateToHTML(editorState.getCurrentContent(), htmlOptions);
       let doc = this.state.doc;
       doc.body = html;
       this.setState({

@@ -2,6 +2,7 @@ import Cookies from 'universal-cookie';
 import i18next from 'i18next';
 
 let instance = null;
+const hrinfoUrl = 'https://www.humanitarianresponse.info/';
 
 class HRInfoAPI {
   constructor(token) {
@@ -19,7 +20,7 @@ class HRInfoAPI {
   }
 
   getItem(type, id) {
-    return fetch("https://www.humanitarianresponse.info/" + i18next.language + "/api/v1.0/" + type + "/" + id, {
+    return fetch(hrinfoUrl + i18next.language + "/api/v1.0/" + type + "/" + id, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
@@ -58,7 +59,7 @@ class HRInfoAPI {
   }
 
   get (type, params, anonymous = true) {
-    let url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type;
+    let url = hrinfoUrl + i18next.language + '/api/v1.0/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
       url += '?';
@@ -89,7 +90,7 @@ class HRInfoAPI {
   }
 
   getProfile () {
-    return fetch('https://www.humanitarianresponse.info/api/v1.0/user/me',
+    return fetch(hrinfoUrl + 'api/v1.0/user/me',
       {
         headers: {
           'Authorization': 'Bearer ' + this.token,
@@ -107,10 +108,10 @@ class HRInfoAPI {
 
   save(type, body) {
     let httpMethod = 'POST';
-    let url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type;
+    let url = hrinfoUrl + i18next.language + '/api/v1.0/' + type;
     if (body.id) {
       httpMethod = 'PATCH';
-      url = 'https://www.humanitarianresponse.info/' + i18next.language + '/api/v1.0/' + type + '/' + body.id;
+      url = hrinfoUrl + i18next.language + '/api/v1.0/' + type + '/' + body.id;
       delete body.created;
       delete body.changed;
       delete body.url;
@@ -134,7 +135,7 @@ class HRInfoAPI {
   }
 
   remove (type, id) {
-    return fetch('https://www.humanitarianresponse.info/api/v1.0/' + type + '/' + id, {
+    return fetch(hrinfoUrl + 'api/v1.0/' + type + '/' + id, {
         method: 'DELETE',
         headers: {
           'Authorization': 'Bearer ' + this.token,
@@ -145,10 +146,10 @@ class HRInfoAPI {
   }
 
   saveFieldCollection (body) {
-    let url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection';
+    let url = hrinfoUrl + 'api/v1.0/files_collection';
     let httpMethod = 'POST';
     if (body.item_id) {
-      url = 'https://www.humanitarianresponse.info/api/v1.0/files_collection/' + body.item_id;
+      url = hrinfoUrl + '/api/v1.0/files_collection/' + body.item_id;
       httpMethod = 'PATCH';
       delete body.item_id;
     }
@@ -188,7 +189,7 @@ class HRInfoAPI {
       };
     }
 
-    return fetch('https://www.humanitarianresponse.info/api/files', requestParams)
+    return fetch(hrinfoUrl + '/api/files', requestParams)
       .then((response) => {
         return response.json();
       })
