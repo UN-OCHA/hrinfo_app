@@ -49,7 +49,7 @@ class HRInfoSelect extends React.Component {
               if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && (
                 user.hrinfo.spaces[elt.id].indexOf('manager') !== -1 ||
                 user.hrinfo.space[elt.id].indexOf('editor') !== -1 ||
-                user.hrinfo.space[elt.id].indexOf('bundle member'))) {
+                user.hrinfo.space[elt.id].indexOf('bundle member') !== -1)) {
                 pushed.push(elt);
               }
             });
