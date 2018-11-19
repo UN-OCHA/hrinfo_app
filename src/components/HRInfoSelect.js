@@ -35,21 +35,24 @@ class HRInfoSelect extends React.Component {
             }
           });
         }
-        else if (type === 'bundles' || type === 'offices') {
-          elts.forEach(function (elt) {
-            elt.label = elt.label + " (" + operationLabel + ")";
-            elt.value = elt.label;
-            pushed.push(elt);
-          });
-        }
         else {
+          if (type === 'bundles' || type === 'offices') {
+            elts.forEach(function (elt) {
+              elt.label = elt.label + " (" + operationLabel + ")";
+              elt.value = elt.label;
+              if (type === 'offices') {
+                pushed.push(elt);
+              }
+            });
+          }
           let user = JSON.parse(localStorage.getItem('hid-user'));
           if ((type === 'spaces' || type === 'operations' || type === 'bundles') && user.hrinfo.roles.indexOf('administrator') === -1) {
             elts.forEach(function (elt) {
               if (user.hrinfo.spaces && user.hrinfo.spaces[elt.id] && (
                 user.hrinfo.spaces[elt.id].indexOf('manager') !== -1 ||
-                user.hrinfo.space[elt.id].indexOf('editor') !== -1 ||
-                user.hrinfo.space[elt.id].indexOf('bundle member') !== -1)) {
+                user.hrinfo.spaces[elt.id].indexOf('editor') !== -1 ||
+                user.hrinfo.spaces[elt.id].indexOf('bundle member') !== -1 ||
+                (type === 'bundles' && (user.hrinfo.spaces[operationId].indexOf('manager') !== -1 || user.hrinfo.spaces[operationId].indexOf('editor') !== -1)))) {
                 pushed.push(elt);
               }
             });

@@ -285,7 +285,7 @@ class App extends Component {
           if (content.bundles) {
             let isBundleManagerEditor = true;
             content.bundles.forEach(function (b) {
-              if (!that.isManagerOrEditor(b)) {
+              if (!b || !that.isManagerOrEditor(b)) {
                 isBundleManagerEditor = false;
               }
             });
