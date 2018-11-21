@@ -17,6 +17,7 @@ import LanguageSelect           from '../components/LanguageSelect';
 import RelatedContent           from '../components/RelatedContent';
 
 // Material plugin
+import { withStyles }   from '@material-ui/core/styles';
 import FormHelperText   from '@material-ui/core/FormHelperText';
 import FormControl      from '@material-ui/core/FormControl';
 import FormLabel        from '@material-ui/core/FormLabel';
@@ -98,6 +99,12 @@ class AssessmentForm extends React.Component {
 
   render() {
     const { t, i18n } = this.props;
+
+    const VisibleCollapse = withStyles({
+      entered: {
+        overflow: 'visible'
+      }
+    })(Collapse);
 
     const disasters = this.props.doc.hasOperation
     ? (
@@ -419,7 +426,7 @@ class AssessmentForm extends React.Component {
                 }
               </div>
 
-              <Collapse in={this.state.collapseSecondary}>
+              <VisibleCollapse in={this.state.collapseSecondary}>
                 {/* Theme(s) */}
                 <FormControl fullWidth margin = "normal">
                   <FormLabel>{t('themes')}</FormLabel>
@@ -496,7 +503,7 @@ class AssessmentForm extends React.Component {
                     {t('assessment.helpers.contacts')}
                   </FormHelperText>
                 </FormControl>
-              </Collapse>
+              </VisibleCollapse>
   					</Grid>
   				</Grid>
   			</Grid>
