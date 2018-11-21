@@ -30,7 +30,7 @@ class HRInfoAsyncSelect extends React.Component {
 			  if (type === 'organizations' && elt.acronym) {
 				  elt.label = elt.label + ' (' + elt.acronym + ')';
 			  }
-        if (type === 'bundles' && elt.operation) {
+        if ((type === 'bundles' || type === 'documents' || type === 'infographics') && elt.operation && elt.operation[0]) {
           elt.label = elt.label + ' (' + elt.operation[0].label + ')';
         }
         elt.value = elt.id;

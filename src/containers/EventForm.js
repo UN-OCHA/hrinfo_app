@@ -230,7 +230,8 @@ class EventForm extends React.Component {
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('agenda', s)}
                                  value    = {this.props.doc.agenda}
-                                  isMulti={true} />
+                                 isMulti={true}
+                                 fields='id,label,operation.label' />
               <FormHelperText>
                 {t('events.helpers.agendas')}
               </FormHelperText>
@@ -242,7 +243,8 @@ class EventForm extends React.Component {
               <HRInfoAsyncSelect type     = "documents"
                                  onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}
                                  value    = {this.props.doc.meeting_minutes}
-                                  isMulti = {true} />
+                                 isMulti = {true}
+                                 fields='id,label,operation.label' />
               <FormHelperText>
                 {t('events.helpers.meeting_minutes')}
               </FormHelperText>
