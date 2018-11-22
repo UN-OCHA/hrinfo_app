@@ -175,6 +175,32 @@ class EventForm extends React.Component {
                 {t('events.helpers.address')}
               </FormHelperText>
             </FormControl>
+
+          {/* Agenda(s) */}
+              <FormControl fullWidth margin="normal">
+                <FormLabel>{t('events.agendas')}</FormLabel>
+                <HRInfoAsyncSelect type     = "documents"
+                                   onChange = {(s) => this.props.handleSelectChange('agenda', s)}
+                                   value    = {this.props.doc.agenda}
+                                   isMulti={true}
+                                   fields='id,label,operation.label' />
+                <FormHelperText>
+                  {t('events.helpers.agendas')}
+                </FormHelperText>
+              </FormControl>
+
+          {/* Meeting minute(s) */}
+              <FormControl fullWidth margin="normal">
+                <FormLabel>{t('events.meeting_minutes')}</FormLabel>
+                <HRInfoAsyncSelect type     = "documents"
+                                   onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}
+                                   value    = {this.props.doc.meeting_minutes}
+                                   isMulti = {true}
+                                   fields='id,label,operation.label' />
+                <FormHelperText>
+                  {t('events.helpers.meeting_minutes')}
+                </FormHelperText>
+              </FormControl>
           </Grid>
 
           <Grid item md={3} xs={11}>
@@ -224,31 +250,6 @@ class EventForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
-        {/* Agenda(s) */}
-            <FormControl fullWidth margin="normal">
-              <FormLabel>{t('events.agendas')}</FormLabel>
-              <HRInfoAsyncSelect type     = "documents"
-                                 onChange = {(s) => this.props.handleSelectChange('agenda', s)}
-                                 value    = {this.props.doc.agenda}
-                                 isMulti={true}
-                                 fields='id,label,operation.label' />
-              <FormHelperText>
-                {t('events.helpers.agendas')}
-              </FormHelperText>
-            </FormControl>
-
-        {/* Meeting minute(s) */}
-            <FormControl fullWidth margin="normal">
-              <FormLabel>{t('events.meeting_minutes')}</FormLabel>
-              <HRInfoAsyncSelect type     = "documents"
-                                 onChange = {(s) => this.props.handleSelectChange('meeting_minutes', s)}
-                                 value    = {this.props.doc.meeting_minutes}
-                                 isMulti = {true}
-                                 fields='id,label,operation.label' />
-              <FormHelperText>
-                {t('events.helpers.meeting_minutes')}
-              </FormHelperText>
-            </FormControl>
 
               {bundles}
               {offices}
