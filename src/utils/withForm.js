@@ -4,7 +4,7 @@ import {stateToHTML} from 'draft-js-export-html';
 import moment from 'moment';
 import HRInfoAPI from '../api/HRInfoAPI';
 
-const withForm = function withForm(Component, hrinfoType, label) {
+const withForm = function withForm(Component, hrinfoType, label, isClone = false) {
   return class extends React.Component {
     constructor (props) {
       super(props);
@@ -533,6 +533,10 @@ const withForm = function withForm(Component, hrinfoType, label) {
             doc.disasters.forEach((disaster) => {
               disaster.id = disaster.glide;
             });
+          }
+          if (isClone) {
+            delete doc.id;
+            delete doc.files;
           }
         }
         else {

@@ -48,10 +48,11 @@ class ItemPage extends React.Component {
       if (this.state.doc && this.state.doc.id) {
         return (
           <Paper>
-            <Typography align = "right">
               {this.props.hasPermission('edit', this.state.doc) ?
-                <Button component={Link} to={'/' + this.state.doc.type + '/' + this.state.doc.id + '/edit'}><i className="icon-edit" /></Button> : ''}
-            </Typography>
+                <Typography align = "right">
+                  <Button component={Link} to={'/' + this.state.doc.type + '/' + this.state.doc.id + '/clone'}><i className="icon-copy" title="Clone" /></Button>
+                  <Button component={Link} to={'/' + this.state.doc.type + '/' + this.state.doc.id + '/edit'}><i className="icon-edit" title="Edit" /></Button>
+                </Typography> : ''}
             <Item item={this.state.doc} viewMode="full" user={this.props.user} />
           </Paper>
         );

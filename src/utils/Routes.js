@@ -49,20 +49,24 @@ export default ({ childProps }) =>
     <AuthenticatedRoute path="/documents/new"      exact component={withForm(DocumentForm, 'documents', 'document')} props={childProps} />
     <AuthenticatedRoute path="/documents/:id"      exact component={ItemPage}                                        props={childProps} />
     <AuthenticatedRoute path="/documents/:id/edit" exact component={withForm(DocumentForm, 'documents', 'document')} props={childProps} />
+    <AuthenticatedRoute path="/documents/:id/clone" exact component={withForm(DocumentForm, 'documents', 'document', true)} props={childProps} />
 
 {/* Infographics */}
     <AuthenticatedRoute path="/infographics/new"      exact component={withForm(DocumentForm, 'infographics', 'infographic')} props={childProps} />
     <AuthenticatedRoute path="/infographics/:id/edit" exact component={withForm(DocumentForm, 'infographics', 'infographic')} props={childProps} />
+    <AuthenticatedRoute path="/infographics/:id/clone" exact component={withForm(DocumentForm, 'infographics', 'infographic', true)} props={childProps} />
     <AuthenticatedRoute path="/infographics/:id"      exact component={ItemPage}                                              props={childProps} />
 
 {/* Events */}
     <AuthenticatedRoute path="/events/new"      exact component={withForm(EventForm, 'events', 'event')}  props={childProps} />
     <AuthenticatedRoute path="/events/:id/edit" exact component={withForm(EventForm, 'events', 'event')}  props={childProps} />
+    <AuthenticatedRoute path="/events/:id/clone" exact component={withForm(EventForm, 'events', 'event', true)}  props={childProps} />
     <AuthenticatedRoute path="/events/:id"      exact component={ItemPage}                                props={childProps} />
 
 {/* Assessments */}
     <AuthenticatedRoute path="/assessments/new"          exact component={withForm(AssessmentForm, 'assessments', 'assessment')}    props={childProps} />
     <AuthenticatedRoute path="/assessments/:id/edit"     exact component={withForm(AssessmentForm, 'assessments', 'assessment')}    props={childProps} />
+    <AuthenticatedRoute path="/assessments/:id/clone"     exact component={withForm(AssessmentForm, 'assessments', 'assessment', true)}    props={childProps} />
     <AuthenticatedRoute path="/assessments/:id"          exact component={ItemPage}                                props={childProps} />
 
 {/* Operations */}
