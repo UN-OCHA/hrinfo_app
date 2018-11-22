@@ -29,8 +29,8 @@ class EventDate extends React.Component {
       allDay  : false,
       repeats : false,
       val : {
-        value  : '',
-        value2    : '',
+        value  : new Date(),
+        value2    : new Date(),
         timezone    : 'UTC',
         offset      : 0,
         offset2     : 0,
@@ -70,7 +70,7 @@ class EventDate extends React.Component {
     }
     else if (target.name === 'endDate' && !value) {
       newState.val = this.state.val;
-      newState.val.value2 = (new Date(0, 0, 0));
+      newState.val.value2 = newState.val.value;
     }
     this.setState(newState);
   }
@@ -102,6 +102,10 @@ class EventDate extends React.Component {
         val.value2.setHours(value.split(":")[0]);
         val.value2.setMinutes(value.split(":")[1]);
       }
+    }
+
+    if (!this.state.endDate) {
+      val.value2 = val.value;
     }
 
     this.setState({
@@ -189,7 +193,7 @@ class EventDate extends React.Component {
       }
       let newState = {
         val       : val,
-        endDate   : this.state.endDate,
+        endDate   : val.value.getTime() !== val.value2.getTime(),
         allDay    : this.isAllDay(val.value, val.value2),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'
@@ -222,17 +226,19 @@ class EventDate extends React.Component {
                 }}
               />
             </MuiPickersUtilsProvider>
-            <TextField
-               id             = "time_from"
-               label          = "Time"
-               type           = "time"
-               disabled       = {!this.state.val.value}
-               value          = {this.state.val.value ? this.getTime(this.state.val.value) : ''}
-               onChange       = {(e) => this.handleChange(e, 'from')}
-               InputLabelProps={{
-                   shrink: true,
-               }}
-            />
+            {!this.state.allDay &&
+              <TextField
+                 id             = "time_from"
+                 label          = "Time"
+                 type           = "time"
+                 disabled       = {!this.state.val.value}
+                 value          = {this.state.val.value ? this.getTime(this.state.val.value) : ''}
+                 onChange       = {(e) => this.handleChange(e, 'from')}
+                 InputLabelProps={{
+                     shrink: true,
+                 }}
+              />
+            }
           </FormControl>
 
       {/* Date 'To'*/}
@@ -257,17 +263,19 @@ class EventDate extends React.Component {
                 }}
                 />
             </MuiPickersUtilsProvider>
-            <TextField
-               id             = "time_to"
-               label          = "Time"
-               type           = "time"
-               disabled       = {!this.state.val.value2}
-               value          = {this.state.val.value2 ? this.getTime(this.state.val.value2) : ''}
-               onChange       = {(e) => this.handleChange(e, 'to')}
-               InputLabelProps={{
-                   shrink: true,
-               }}
-            />
+            {!this.state.allDay &&
+              <TextField
+                 id             = "time_to"
+                 label          = "Time"
+                 type           = "time"
+                 disabled       = {!this.state.val.value2}
+                 value          = {this.state.val.value2 ? this.getTime(this.state.val.value2) : ''}
+                 onChange       = {(e) => this.handleChange(e, 'to')}
+                 InputLabelProps={{
+                     shrink: true,
+                 }}
+              />
+            }
           </FormControl>
         }
         </CardContent>
