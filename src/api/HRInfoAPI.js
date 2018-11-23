@@ -115,6 +115,10 @@ class HRInfoAPI {
       delete body.created;
       delete body.changed;
       delete body.url;
+      // TODO: this fixes an issue with the API, but will need to be removed at some point.
+      delete body.language;
+      delete body.published;
+      delete body.author;
     }
 
     return fetch(url, {
