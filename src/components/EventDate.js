@@ -64,13 +64,9 @@ class EventDate extends React.Component {
       newState.val.value2.setHours(0);
       newState.val.value2.setMinutes(0);
     }
-    if (target.name === 'endDate' && value) {
+    if (target.name === 'endDate') {
       newState.val = this.state.val;
-      newState.val.value2 = newState.val.value;
-    }
-    else if (target.name === 'endDate' && !value) {
-      newState.val = this.state.val;
-      newState.val.value2 = newState.val.value;
+      newState.val.value2 = new Date(newState.val.value.getTime());
     }
     this.setState(newState);
   }
