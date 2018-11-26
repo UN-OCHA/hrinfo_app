@@ -63,24 +63,27 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             }
           });
           // Check that all bundles are still valid
-          if (doc.bundles && doc.bundles.length) {
-            let toRemove = [];
-            for (let i = 0; i < doc.bundles.length; i++) {
-              const opId = doc.bundles[i].operation[0].id;
-              let found = false;
-              for (let j = 0; j < doc.spaces.length; j++) {
-                if (doc.spaces[j].id === opId) {
-                  found = true;
+          const opDeps = ['bundles', 'offices', 'disasters'];
+          opDeps.forEach(function (dep) {
+            if (doc[dep] && doc[dep].length) {
+              let toRemove = [];
+              for (let i = 0; i < doc[dep].length; i++) {
+                const opId = doc[dep][i].operation[0].id;
+                let found = false;
+                for (let j = 0; j < doc.spaces.length; j++) {
+                  if (doc.spaces[j].id === opId) {
+                    found = true;
+                  }
+                }
+                if (!found) {
+                  toRemove.push(i);
                 }
               }
-              if (!found) {
-                toRemove.push(i);
-              }
+              toRemove.forEach(function (index) {
+                doc[dep].splice(index, 1);
+              });
             }
-            toRemove.forEach(function (index) {
-              doc.bundles.splice(index, 1);
-            });
-          }
+          });
         }
         doc.hasOperation = hasOperation;
       }
