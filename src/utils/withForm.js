@@ -62,6 +62,25 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
               hasOperation = true;
             }
           });
+          // Check that all bundles are still valid
+          if (doc.bundles && doc.bundles.length) {
+            let toRemove = [];
+            for (let i = 0; i < doc.bundles.length; i++) {
+              const opId = doc.bundles[i].operation[0].id;
+              let found = false;
+              for (let j = 0; j < doc.spaces.length; j++) {
+                if (doc.spaces[j].id === opId) {
+                  found = true;
+                }
+              }
+              if (!found) {
+                toRemove.push(i);
+              }
+            }
+            toRemove.forEach(function (index) {
+              doc.bundles.splice(index, 1);
+            });
+          }
         }
         doc.hasOperation = hasOperation;
       }

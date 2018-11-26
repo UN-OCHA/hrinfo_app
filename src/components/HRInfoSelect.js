@@ -13,7 +13,7 @@ class HRInfoSelect extends React.Component {
     let params = {};
     params.sort = 'label';
     if (type !== 'document_types' && type !== 'infographic_types') {
-      params.fields = this.props.fields ? this.props.fields : 'id,label,operation';
+      params.fields = this.props.fields ? this.props.fields : 'id,label,operation.id';
     }
     if (operationId) {
       params['filter[operation]'] = operationId;
