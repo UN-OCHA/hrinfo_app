@@ -36,11 +36,13 @@ class EventForm extends React.Component {
     this.state = {
       collapse     : false,
       wasSubmitted : false,
+      timezone: ''
     };
 
     this.toggle    = this.toggle.bind(this);
     this.hideAlert = this.hideAlert.bind(this);
     this.submit    = this.submit.bind(this);
+    this.handleSpaceChange = this.handleSpaceChange.bind(this);
   }
 
   toggle() {
@@ -53,6 +55,15 @@ class EventForm extends React.Component {
 
   submit() {
     this.setState({ wasSubmitted: true });
+  }
+
+  handleSpaceChange(selected) {
+    this.props.handleSelectChange('spaces', selected);
+    if (selected[0] && selected[0].timezone) {
+      this.setState({
+        timezone: selected[0].timezone
+      });
+    }
   }
 
   render() {
@@ -147,6 +158,7 @@ class EventForm extends React.Component {
               <FormLabel focused error={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.date)}>{t('date')}</FormLabel>
               <EventDate value    = {this.props.doc.date}
                          onChange = {(val) => {this.props.handleSelectChange('date', val);}}
+                         timezone = {this.state.timezone}
                          required />
               <FormHelperText>
                 {t('events.helpers.date')}
@@ -219,7 +231,9 @@ class EventForm extends React.Component {
             <FormControl required fullWidth margin="normal">
               <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.spaces)}>{t('spaces')}</FormLabel>
               <HRInfoSelect type    = "spaces"
-                            isMulti = {true} onChange={(s) => this.props.handleSelectChange('spaces', s)}
+                            isMulti = {true}
+                            onChange={(s) => this.handleSpaceChange(s)}
+                            fields = 'id,label,timezone'
                             value   = {this.props.doc.spaces}/>
               <FormHelperText>
                 {t('events.helpers.spaces')}

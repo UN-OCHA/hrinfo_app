@@ -2,6 +2,7 @@ import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import moment from 'moment';
+import 'moment-timezone';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 const withForm = function withForm(Component, hrinfoType, label, isClone = false) {
@@ -254,10 +255,10 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           }
           body.date.forEach(function (d) {
             if (d && d.value) {
-              d.value = moment(d.value).format('YYYY-MM-DD HH:mm:ss');
+              d.value = moment(d.value).utc().format('YYYY-MM-DD HH:mm:ss');
             }
             if (d && d.value2) {
-              d.value2 = moment(d.value2).format('YYYY-MM-DD HH:mm:ss');
+              d.value2 = moment(d.value2).utc().format('YYYY-MM-DD HH:mm:ss');
             }
             if (d && d.timezone_db) {
               d.timezone_db = d.timezone_db.value;

@@ -29,13 +29,10 @@ class EventDate extends React.Component {
       allDay  : false,
       repeats : false,
       val : {
-        value  : new Date(),
-        value2    : new Date(),
-        timezone    : 'UTC',
-        offset      : 0,
-        offset2     : 0,
+        value  : moment(),
+        value2    : moment(),
+        timezone    : {value: 'UTC', label: 'UTC'},
         rrule       : '',
-        timezone_db : 'UTC'
       },
       rrule     : '',
       status    : 'initial',
@@ -58,15 +55,15 @@ class EventDate extends React.Component {
 
     if (target.name === 'allDay' && value) {
       newState.val        = this.state.val;
-      newState.val.value.setHours(0);
-      newState.val.value.setMinutes(0);
+      newState.val.value.hours(0);
+      newState.val.value.minutes(0);
 
-      newState.val.value2.setHours(0);
-      newState.val.value2.setMinutes(0);
+      newState.val.value2.hours(0);
+      newState.val.value2.minutes(0);
     }
     if (target.name === 'endDate') {
       newState.val = this.state.val;
-      newState.val.value2 = new Date(newState.val.value.getTime());
+      newState.val.value2 = moment(newState.val.value.unix());
     }
     this.setState(newState);
   }
@@ -76,27 +73,27 @@ class EventDate extends React.Component {
     let value: Date;
     let val = this.state.val;
     if (!event.target) {
-      value  = event.toDate();
+      //value  = event.utc().toDate();
       // FROM
       if (type === 'from') {
-        val.value = value;
+        val.value = event.utc();
       }
       // TO
       if (type === 'to') {
-        val.value2 = value;
+        val.value2 = event.utc();
       }
     }
     else {
       value = event.target.value;
       // FROM
       if (type === 'from') {
-        val.value.setHours(value.split(":")[0]);
-        val.value.setMinutes(value.split(":")[1]);
+        val.value.hours(value.split(":")[0]);
+        val.value.minutes(value.split(":")[1]);
       }
       // TO
       if (type === 'to') {
-        val.value2.setHours(value.split(":")[0]);
-        val.value2.setMinutes(value.split(":")[1]);
+        val.value2.hours(value.split(":")[0]);
+        val.value2.minutes(value.split(":")[1]);
       }
     }
 
@@ -132,23 +129,7 @@ class EventDate extends React.Component {
   // Set timezone from departure to arrival
   setTimezone (timezone) {
     let val         = this.state.val;
-    let dateVal     = new Date();
-    let date2Val    = new Date();
-
-    val.timezone_db  = timezone;
     val.timezone     = timezone;
-
-    if (val.value) {
-      dateVal = new Date(val.value);
-    }
-    val.offset = moment.tz.zone(timezone.value).utcOffset(dateVal.valueOf());
-    val.offset = -val.offset * 60;
-
-    if (val.value2) {
-      date2Val = new Date(val.value2);
-    }
-    val.offset2 = moment.tz.zone(timezone.value).utcOffset(date2Val.valueOf());
-    val.offset2 = -val.offset2 * 60;
 
     this.setState({
       val: val
@@ -160,36 +141,42 @@ class EventDate extends React.Component {
   }
 
   getTime(date) {
-    let hours   = ("0" + date.getHours()).slice(-2);
-    let minutes = ("0" + date.getMinutes()).slice(-2);
+    let hours   = ("0" + date.hours()).slice(-2);
+    let minutes = ("0" + date.minutes()).slice(-2);
     return (hours + ":" + minutes);
   }
 
   isAllDay(date_from, date_to) {
-    let sum_from = date_from ? date_from.getHours() + date_from.getMinutes() : 0;
-    let sum_to   = date_to ? date_to.getHours() + date_to.getMinutes() : 0;
+    let sum_from = date_from ? date_from.hours() + date_from.minutes() : 0;
+    let sum_to   = date_to ? date_to.hours() + date_to.minutes() : 0;
     return sum_from + sum_to === 0;
   }
 
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.timezone && prevProps.timezone !== this.props.timezone) {
+      let val = this.state.val;
+      val.timezone = {value: this.props.timezone, label: this.props.timezone};
+      this.setState({
+        val: val
+      });
+    }
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
       let val = this.props.value[0] ? this.props.value[0] : this.props.value;
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
-          val.timezone_db = {value: timezone, label: timezone};
         }
       });
       if (val.value && typeof val.value !== 'object') {
-        val.value = new Date(val.value);
+        val.value = moment.utc(val.value);
       }
       if (val.value2 && typeof val.value2 !== 'object') {
-        val.value2 = new Date(val.value2);
+        val.value2 = moment.utc(val.value2);
       }
       let newState = {
         val       : val,
-        endDate   : val.value.getTime() !== val.value2.getTime(),
+        endDate   : val.value.unix() !== val.value2.unix(),
         allDay    : this.isAllDay(val.value, val.value2),
         repeats   : (val.rrule ? true : false),
         status    : 'ready'
