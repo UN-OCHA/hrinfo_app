@@ -2,34 +2,37 @@ import React from 'react';
 import MaterialSelect from './MaterialSelect';
 
 class LanguageSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      options: [
-        { value: 'en', label: 'English'},
-        { value: 'fr', label: 'French' },
-        { value: 'es', label: 'Spanish' },
-        { value: 'ru', label: 'Russian' }
-      ],
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.getValue = this.getValue.bind(this);
-  }
+  state = {
+  };
 
-  getValue (val) {
+  options = [
+    { value: 'en', label: 'English'},
+    { value: 'fr', label: 'French' },
+    { value: 'es', label: 'Spanish' },
+    { value: 'ru', label: 'Russian' }
+  ];
+
+  getValue = (val) => {
     let out = {value: '', label: ''};
-    this.state.options.forEach(function (option) {
+    this.options.forEach(function (option) {
       if (option.value === val) {
         out = option;
       }
     });
     return out;
-  }
+  };
 
-  handleChange (selectedOption) {
+  handleChange = (selectedOption) => {
     if (this.props.onChange) {
       this.props.onChange(selectedOption ? selectedOption.value : selectedOption);
     }
+  };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.value !== this.props.value) {
+      return true;
+    }
+    return false;
   }
 
   render() {
@@ -38,7 +41,7 @@ class LanguageSelect extends React.Component {
           id="language"
           name="language"
           onChange={this.handleChange}
-          options={this.state.options}
+          options={this.options}
           value={this.getValue(this.props.value)}
           className={this.props.className} />
     );

@@ -134,6 +134,13 @@ class HRInfoSelect extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.value !== this.props.value || this.state.items.length !== nextState.items.length) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     return (
         <MaterialSelect

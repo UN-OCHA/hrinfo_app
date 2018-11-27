@@ -42,6 +42,13 @@ class HRInfoAsyncSelect extends React.Component {
       });
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.value !== this.props.value) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     return (
       <MaterialAsyncSelect
