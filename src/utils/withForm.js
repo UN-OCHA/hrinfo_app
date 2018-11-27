@@ -239,6 +239,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       let field_collections = [];
       let body = JSON.stringify(this.state.doc);
       body = JSON.parse(body);
+      delete body.isClone;
       if (hrinfoType !== 'organizations') {
         body.published = isDraft ? 0 : 1;
       }
@@ -560,6 +561,8 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           if (isClone) {
             delete doc.id;
             delete doc.files;
+            delete doc.body;
+            doc.isClone = true;
           }
         }
         else {

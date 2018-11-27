@@ -19,6 +19,8 @@
     "exclude_from_reliefweb": "Do not share with ReliefWeb",
     "add_more": "Add More Information",
     "hide_information": "Hide Optional Information",
+    "create": "Create",
+    "clone_of": "clone of",
     "helpers": {
         "files": "Upload the file to publish from your computer, and specify its language. It is best to publish one file per record, however you can add more if needed. To see Standards and Naming Conventions click <1>here</1>."
     },

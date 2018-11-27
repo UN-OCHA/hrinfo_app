@@ -117,6 +117,11 @@ class DocumentForm extends React.Component {
     if (this.props.doc.id) {
       title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
     }
+    else {
+      if (this.props.doc && this.props.doc.isClone) {
+        title = t('create') + ' ' + t('clone_of') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+      }
+    }
 
     return (
       <Grid container direction = "column" alignItems="center">
