@@ -71,7 +71,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
                 const opId = doc[dep][i].operation[0].id;
                 let found = false;
                 for (let j = 0; j < doc.spaces.length; j++) {
-                  if (doc.spaces[j].id === opId) {
+                  if (parseInt(doc.spaces[j].id, 10) === parseInt(opId, 10)) {
                     found = true;
                   }
                 }
