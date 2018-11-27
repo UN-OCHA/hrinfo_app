@@ -19,23 +19,17 @@ import Typography       from '@material-ui/core/Typography';
 import './EventForm.css';
 
 class OrganizationForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      wasSubmitted : false
-    };
+  state = {
+    wasSubmitted : false
+  };
 
-    this.hideAlert = this.hideAlert.bind(this);
-    this.submit    = this.submit.bind(this);
-  }
-
-  hideAlert() {
+  hideAlert = () => {
     this.setState({ wasSubmitted: false });
-  }
+  };
 
-  submit() {
+  submit = () => {
     this.setState({ wasSubmitted: true });
-  }
+  };
 
   render() {
     const {t, i18n} = this.props;

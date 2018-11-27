@@ -31,40 +31,32 @@ import Typography       from '@material-ui/core/Typography';
 import './EventForm.css';
 
 class EventForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      collapse     : false,
-      wasSubmitted : false,
-      timezone: ''
-    };
+  state = {
+    collapse: false,
+    wasSubmitted: false,
+    timezone: ''
+  };
 
-    this.toggle    = this.toggle.bind(this);
-    this.hideAlert = this.hideAlert.bind(this);
-    this.submit    = this.submit.bind(this);
-    this.handleSpaceChange = this.handleSpaceChange.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({ collapse: !this.state.collapse });
-  }
+  };
 
-  hideAlert() {
+  hideAlert = () => {
     this.setState({ wasSubmitted: false });
-  }
+  };
 
-  submit() {
+  submit = () => {
     this.setState({ wasSubmitted: true });
-  }
+  };
 
-  handleSpaceChange(selected) {
+  handleSpaceChange = (selected) => {
     this.props.handleSelectChange('spaces', selected);
     if (selected[0] && selected[0].timezone) {
       this.setState({
         timezone: selected[0].timezone
       });
     }
-  }
+  };
 
   render() {
     const { t, i18n } = this.props;

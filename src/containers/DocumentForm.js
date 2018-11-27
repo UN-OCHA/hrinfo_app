@@ -34,29 +34,22 @@ import DatePicker              from 'material-ui-pickers/DatePicker';
 import './DocumentForm.css';
 
 class DocumentForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      collapse     : false,
-      wasSubmitted : false
-    };
+  state = {
+    collapse : false,
+    wasSubmitted: false
+  };
 
-    this.toggle    = this.toggle.bind(this);
-    this.hideAlert = this.hideAlert.bind(this);
-    this.submit    = this.submit.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({ collapse: !this.state.collapse });
-  }
+  };
 
-  hideAlert() {
+  hideAlert = () => {
     this.setState({ wasSubmitted: false });
-  }
+  };
 
-  submit() {
+  submit = () => {
     this.setState({ wasSubmitted: true });
-  }
+  };
 
   render() {
     const { t, label, i18n } = this.props;

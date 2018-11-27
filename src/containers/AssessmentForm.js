@@ -80,22 +80,20 @@ class AssessmentForm extends React.Component {
     };
 
     this.hrinfoAPI      = new HRInfoAPI();
-
-    this.toggleCollapse = this.toggleCollapse.bind(this);
   }
 
-  toggleCollapse(collapse) {
+  toggleCollapse = (collapse) => {
     if (collapse === "secondary") {
       this.setState({collapseSecondary: !this.state.collapseSecondary});
     }
     else if (collapse === "main") {
       this.setState({collapseMain: !this.state.collapseMain});
     }
-  }
+  };
 
-  submit() {
+  submit = () => {
     this.setState({ wasSubmitted: true });
-  }
+  };
 
   render() {
     const { t, i18n } = this.props;
