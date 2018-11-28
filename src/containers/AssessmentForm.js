@@ -29,6 +29,12 @@ import Snackbar         from '@material-ui/core/Snackbar';
 import Typography       from '@material-ui/core/Typography';
 import Collapse         from "@material-ui/core/Collapse/Collapse";
 
+const VisibleCollapse = withStyles({
+  entered: {
+    overflow: 'visible'
+  }
+})(Collapse);
+
 class AssessmentForm extends React.Component {
   constructor(props) {
     super(props);
@@ -97,12 +103,6 @@ class AssessmentForm extends React.Component {
 
   render() {
     const { t, i18n } = this.props;
-
-    const VisibleCollapse = withStyles({
-      entered: {
-        overflow: 'visible'
-      }
-    })(Collapse);
 
     const disasters = this.props.doc.hasOperation
     ? (

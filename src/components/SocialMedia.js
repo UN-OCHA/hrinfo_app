@@ -37,7 +37,8 @@ class SocialMedia extends React.Component {
   handleChange = (number, evt) => {
     const target = evt.target;
     const value = target.value;
-    let val = {...this.state.value, number: {url: value}};
+    let val = lodash.cloneDeep(this.state.value);
+    val[number] = {url: value};
     this.setState({
       status: 'ready',
       value: val
@@ -48,19 +49,9 @@ class SocialMedia extends React.Component {
   };
 
   onAddBtnClick = (event) => {
-    let val = lodash.cloneDeep(this.state.value);
-    for (let i = 0; i < this.state.inputNumber + 1; i++) {
-      if (!val[i]) {
-        val[i] = {
-          url: '',
-          title: null,
-          attributes: []
-        };
-      }
-    }
     this.setState({
       inputNumber: this.state.inputNumber + 1,
-      value: val
+      value: this.state.value.concat({url: '', title: null, attributes: []})
     });
   };
 
@@ -82,7 +73,6 @@ class SocialMedia extends React.Component {
   }
 
   render () {
-    console.log('re rendering social media');
     let rows = [];
     for (let i = 0; i < this.state.inputNumber; i++) {
       rows.push(this.getRow(i));

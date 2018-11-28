@@ -66,9 +66,6 @@ class HidContacts extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('should component update');
-    console.log(JSON.stringify(this.state.contacts));
-    console.log(nextState.contacts);
     if (JSON.stringify(this.state.contacts) !== JSON.stringify(nextState.contacts)) {
       return true;
     }
