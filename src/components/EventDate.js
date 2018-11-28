@@ -1,4 +1,5 @@
 import React  from 'react';
+import lodash from 'lodash';
 
 import moment                  from 'moment';
 import MaterialSelect          from './MaterialSelect';
@@ -21,31 +22,24 @@ import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickers
 import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 class EventDate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items   : [],
-      endDate : true,
-      allDay  : false,
-      repeats : false,
-      val : {
-        value  : moment(),
-        value2    : moment(),
-        timezone    : {value: 'UTC', label: 'UTC'},
-        rrule       : '',
-      },
-      rrule     : '',
-      status    : 'initial',
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.setCheckbox  = this.setCheckbox.bind(this);
-    this.setRrule     = this.setRrule.bind(this);
-    this.setTimezone  = this.setTimezone.bind(this);
-    this.getTime      = this.getTime.bind(this);
-  }
+
+  state = {
+    items   : [],
+    endDate : true,
+    allDay  : false,
+    repeats : false,
+    val : {
+      value  : moment.utc(),
+      value2    : moment.utc(),
+      timezone    : {value: 'UTC', label: 'UTC'},
+      rrule       : '',
+    },
+    rrule     : '',
+    status    : 'initial',
+  };
 
   // Checkbox
-  setCheckbox (event) {
+  setCheckbox = (event) => {
     const target  = event.target;
     const value   = target.checked;
     const name    = target.name;
@@ -54,51 +48,56 @@ class EventDate extends React.Component {
     newState[name] = value;
 
     if (target.name === 'allDay' && value) {
-      newState.val        = this.state.val;
-      newState.val.value.hours(0);
-      newState.val.value.minutes(0);
+      let value = this.state.val.value.clone();
+      value.hours(0);
+      value.minutes(0);
 
-      newState.val.value2.hours(0);
-      newState.val.value2.minutes(0);
+      let value2 = this.state.val.value2.clone();
+      value2.hours(0);
+      value2.minutes(0);
+      newState.val = {...this.state.val, value: value, value2: value2};
     }
     if (target.name === 'endDate') {
-      newState.val = this.state.val;
-      newState.val.value2 = moment(newState.val.value.unix());
+      newState.val = {...this.state.val, value2: this.state.val.value.clone()};
     }
     this.setState(newState);
-  }
+  };
 
   //Changes
-  handleChange (event, type) {
+  handleChange = (event, type) => {
     let value: Date;
-    let val = this.state.val;
+    let val = {};
     if (!event.target) {
-      //value  = event.utc().toDate();
+      console.log(event);
       // FROM
       if (type === 'from') {
-        val.value = event.utc();
+        val = {...this.state.val, value: event};
       }
       // TO
       if (type === 'to') {
-        val.value2 = event.utc();
+        val = {...this.state.val, value2: event};
       }
     }
     else {
       value = event.target.value;
       // FROM
       if (type === 'from') {
-        val.value.hours(value.split(":")[0]);
-        val.value.minutes(value.split(":")[1]);
+        let from = this.state.val.value.clone();
+        from.hours(value.split(":")[0]);
+        from.minutes(value.split(":")[1]);
+        val = {...this.state.val, value: from};
       }
       // TO
       if (type === 'to') {
-        val.value2.hours(value.split(":")[0]);
-        val.value2.minutes(value.split(":")[1]);
+        let to = this.state.val.value2.clone();
+        to.hours(value.split(":")[0]);
+        to.minutes(value.split(":")[1]);
+        val = {...this.state.val, value2: to};
       }
     }
 
     if (!this.state.endDate) {
-      val.value2 = val.value;
+      val = {...this.state.val, value2: val.value.clone()};
     }
 
     this.setState({
@@ -110,12 +109,11 @@ class EventDate extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(val);
     }
-  }
+  };
 
   // rrule
-  setRrule (rrule) {
-    let val   = this.state.val;
-    val.rrule = rrule;
+  setRrule = (rrule) => {
+    let val   = {...this.state.val, rrule: rrule};
 
     this.setState({
       val : val
@@ -124,12 +122,11 @@ class EventDate extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(val);
     }
-  }
+  };
 
   // Set timezone from departure to arrival
-  setTimezone (timezone) {
-    let val         = this.state.val;
-    val.timezone     = timezone;
+  setTimezone = (timezone) => {
+    let val         = {...this.state.val, timezone: timezone};
 
     this.setState({
       val: val
@@ -138,31 +135,30 @@ class EventDate extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(val);
     }
-  }
+  };
 
-  getTime(date) {
+  getTime = (date) => {
     let hours   = ("0" + date.hours()).slice(-2);
     let minutes = ("0" + date.minutes()).slice(-2);
     return (hours + ":" + minutes);
-  }
+  };
 
-  isAllDay(date_from, date_to) {
+  isAllDay = (date_from, date_to) => {
     let sum_from = date_from ? date_from.hours() + date_from.minutes() : 0;
     let sum_to   = date_to ? date_to.hours() + date_to.minutes() : 0;
     return sum_from + sum_to === 0;
-  }
+  };
 
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.timezone && prevProps.timezone !== this.props.timezone) {
-      let val = this.state.val;
-      val.timezone = {value: this.props.timezone, label: this.props.timezone};
+      let val = {...this.state.val, timezone: {value: this.props.timezone, label: this.props.timezone}};
       this.setState({
         val: val
       });
     }
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
-      let val = this.props.value[0] ? this.props.value[0] : this.props.value;
+      let val = this.props.value[0] ? lodash.cloneDeep(this.props.value[0]) : lodash.cloneDeep(this.props.value);
       moment.tz.names().forEach (function (timezone) {
         if (timezone === val.timezone) {
           val.timezone = {value: timezone, label: timezone};
@@ -183,6 +179,13 @@ class EventDate extends React.Component {
       };
       this.setState(newState);
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+      return true;
+    }
+    return false;
   }
 
   render() {

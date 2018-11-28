@@ -10,49 +10,50 @@ import CardContent      from '@material-ui/core/CardContent';
 
 
 class Address extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        val     : {},
-        status  : 'initial'
-      };
-      this.handleChange = this.handleChange.bind(this);
-      this.setCountry = this.setCountry.bind(this);
-    }
 
-    setCountry (row, level, selectedOption) {
-      let val = this.state.val;
-      val['country'] = selectedOption;
+    state = {
+      val     : {},
+      status  : 'initial'
+    };
+
+    setCountry = (row, level, selectedOption) => {
+      let val = {...this.state.val, country: selectedOption};
       this.setState({
         val: val
       });
       if (this.props.onChange) {
         this.props.onChange(val);
       }
-    }
+    };
 
-    handleChange (event) {
+    handleChange = (event) => {
       const target = event.target;
       const value  = target.type === 'checkbox' ? target.checked : target.value;
       const name   = target.name;
 
-      let val      = this.state.val;
-      val[name]    = value;
+      let val      = {...this.state.val, [name]: value};
       this.setState({
         val : val
       });
       if (this.props.onChange) {
         this.props.onChange(val);
       }
-    }
+    };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-      if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
+      if (this.state.status === 'initial' && this.props.value && Object.keys(this.props.value).length) {
         this.setState({
           val    : this.props.value,
           status : 'ready'
         });
       }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+        return true;
+      }
+      return false;
     }
 
     render () {

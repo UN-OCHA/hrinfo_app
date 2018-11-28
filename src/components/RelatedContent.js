@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from 'react-i18next';
+import lodash from 'lodash';
 
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
@@ -10,22 +11,16 @@ import CardActions from "@material-ui/core/CardActions/CardActions";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 
 class RelatedContent extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        inputNumber: 1,
-        value: [{
-          title: '',
-          url: ''
-        }],
-        status: 'initial'
-      };
-      this.getRow = this.getRow.bind(this);
-      this.handleChange = this.handleChange.bind(this);
-      this.onAddBtnClick = this.onAddBtnClick.bind(this);
-    }
+    state = {
+      inputNumber: 1,
+      value: [{
+        title: '',
+        url: ''
+      }],
+      status: 'initial'
+    };
 
-    getRow (number) {
+    getRow = (number) => {
       const { t } = this.props;
       return (
 		  <Card key={number} className="card-container">
@@ -57,12 +52,12 @@ class RelatedContent extends React.Component {
 		  </Card>
 
       );
-    }
+    };
 
-    handleChange (number, elt, evt) {
+    handleChange = (number, elt, evt) => {
       const target = evt.target;
       const value = target.type === 'checkbox' ? target.checked : target.value;
-      let val = this.state.value;
+      let val = lodash.cloneDeep(this.state.value);
       val[number][elt] = value;
       this.setState({
         status: 'ready',
@@ -71,20 +66,19 @@ class RelatedContent extends React.Component {
       if (this.props.onChange) {
         this.props.onChange(val);
       }
-    }
+    };
 
-    removeRelatedContent (number) {
-      this.setState((prevState, props) => {
-        prevState.value.splice(number, 1);
-        return {
-          value: prevState.value,
-          inputNumber: prevState.inputNumber - 1
-        }
+    removeRelatedContent = (number) => {
+      this.setState({
+        value: this.state.value.filter(function (elt, index) {
+          return index !== number;
+        }),
+        inputNumber: this.state.inputNumber - 1
       });
-    }
+    };
 
-    onAddBtnClick (event) {
-      let val = this.state.value;
+    onAddBtnClick = (event) => {
+      let val = lodash.cloneDeep(this.state.value);
       for (let i = 0; i < this.state.inputNumber + 1; i++) {
         if (!val[i]) {
           val[i] = {
@@ -97,7 +91,7 @@ class RelatedContent extends React.Component {
         inputNumber: this.state.inputNumber + 1,
         value: val
       });
-    }
+    };
 
     componentDidUpdate() {
       if (this.props.value && this.state.status === 'initial') {
@@ -107,6 +101,13 @@ class RelatedContent extends React.Component {
           inputNumber: this.props.value.length
         });
       }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      if (JSON.stringify(this.state.value) !== JSON.stringify(nextState.value) || this.state.inputNumber !== nextState.inputNumber) {
+        return true;
+      }
+      return false;
     }
 
     render () {

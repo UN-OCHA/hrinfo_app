@@ -6,17 +6,18 @@ class EventCategorySelect extends React.Component {
   t = this.props.t;
 
   state = {
-    options: [
-      { value: '82', label: this.t('events.category.meetings')},
-      { value: '83', label: this.t('events.category.trainings')},
-      { value: '84', label: this.t('events.category.workshops')},
-      { value: '85', label: this.t('events.category.conferences')}
-    ],
   };
+
+  options = [
+    { value: '82', label: this.t('events.category.meetings')},
+    { value: '83', label: this.t('events.category.trainings')},
+    { value: '84', label: this.t('events.category.workshops')},
+    { value: '85', label: this.t('events.category.conferences')}
+  ];
 
   getValue = (val) => {
     let out = {value: '', label: ''};
-    this.state.options.forEach(function (option) {
+    this.options.forEach(function (option) {
       if (option.value === val) {
         out = option;
       }
@@ -30,13 +31,20 @@ class EventCategorySelect extends React.Component {
     }
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.props.value) !== JSON.stringify(nextProps.value)) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     return (
         <MaterialSelect
           id        = "eventCategory"
           name      = "eventCategory"
           onChange  = {this.handleChange}
-          options   = {this.state.options}
+          options   = {this.options}
           value     = {this.getValue(this.props.value)}
           className = {this.props.className} />
     );

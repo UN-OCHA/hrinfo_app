@@ -3,19 +3,16 @@ import MaterialSelect from '../components/MaterialSelect';
 import HRInfoAPI from '../api/HRInfoAPI';
 
 class HRInfoLocation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [],
-      val: "",
-      status: 'initial'
-    };
-    this.hrinfoAPI = new HRInfoAPI();
-    this.getOptions = this.getOptions.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
 
-  getOptions () {
+  state = {
+    items: [],
+    val: "",
+    status: 'initial'
+  };
+
+  hrinfoAPI = new HRInfoAPI();
+
+  getOptions = () => {
     let params = {};
     params.fields = 'id,label,pcode';
     params.sort   = 'label';
@@ -33,16 +30,16 @@ class HRInfoLocation extends React.Component {
       }).catch(function(err) {
           console.log("Fetch error: ", err);
       });
-  }
+  };
 
-  handleChange (selectedOption) {
+  handleChange = (selectedOption) => {
     this.setState({
       val: selectedOption
     });
     if (this.props.onChange) {
       this.props.onChange(this.props.row, this.props.level, selectedOption);
     }
-  }
+  };
 
   componentDidMount() {
     this.getOptions();
@@ -75,6 +72,13 @@ class HRInfoLocation extends React.Component {
         status: 'ready'
       });
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.state.val) !== JSON.stringify(nextState.val) || this.state.items.length !== nextState.items.length) {
+      return true;
+    }
+    return false;
   }
 
   render() {

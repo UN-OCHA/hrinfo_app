@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from 'react-i18next';
+import lodash from 'lodash';
 import HRInfoLocation from './HRInfoLocation';
 import HRInfoAPI from '../api/HRInfoAPI';
 
@@ -11,23 +12,14 @@ import IconButton from "@material-ui/core/IconButton/IconButton";
 
 class HRInfoLocations extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      locations: [[]],
-      inputNumber: 1,
-      status: 'initial'
-    };
-    this.hrinfoAPI = new HRInfoAPI();
-    this.getRow = this.getRow.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.removeLocation = this.removeLocation.bind(this);
-    this.onAddBtnClick = this.onAddBtnClick.bind(this);
-    this.getInitialLocations = this.getInitialLocations.bind(this);
-    this.getInitialLocation = this.getInitialLocation.bind(this);
-  }
+  state = {
+    locations: [[]],
+    inputNumber: 1,
+    status: 'initial'
+  };
+  hrinfoAPI = new HRInfoAPI();
 
-  getRow (number) {
+  getRow = (number) => {
     const locations1 = this.state.locations[number][0] ? (
       <HRInfoLocation level="1" parent={this.state.locations[number][0].id} row={number} onChange={this.handleChange} value={this.state.locations[number][1]}/>
     ) : '';
@@ -57,11 +49,11 @@ class HRInfoLocations extends React.Component {
         </CardActions>
       </Card>
     );
-  }
+  };
 
-  handleChange (row, level, selected) {
+  handleChange = (row, level, selected) => {
     let state = {};
-    state['locations'] = this.state.locations;
+    state['locations'] = lodash.cloneDeep(this.state.locations);
     for (let i = Number(level); i < 4; i++) {
       state["locations"][row][i] = '';
     }
@@ -73,9 +65,9 @@ class HRInfoLocations extends React.Component {
     if (this.props.onChange !== undefined) {
       this.props.onChange(state['locations']);
     }
-  }
+  };
 
-  removeLocation (number) {
+  removeLocation = (number) => {
     this.setState((prevState, props) => {
       prevState.locations.splice(number, 1);
       return {
@@ -83,10 +75,10 @@ class HRInfoLocations extends React.Component {
         inputNumber: prevState.inputNumber - 1
       }
     });
-  }
+  };
 
-  onAddBtnClick (event) {
-    let locations = this.state.locations;
+  onAddBtnClick = (event) => {
+    let locations = lodash.cloneDeep(this.state.locations);
     for (let i = 0; i < this.state.inputNumber + 1; i++) {
       if (!locations[i]) {
         locations[i] = [];
@@ -97,9 +89,9 @@ class HRInfoLocations extends React.Component {
       locations: locations,
       status: 'ready'
     });
-  }
+  };
 
-  getInitialLocation (loc) {
+  getInitialLocation = (loc) => {
     const that = this;
     return this.hrinfoAPI
       .getItem('locations', loc.id)
@@ -111,9 +103,9 @@ class HRInfoLocations extends React.Component {
         });
         return Promise.all(promises);
       });
-  }
+  };
 
-  getInitialLocations () {
+  getInitialLocations = () => {
     const that = this;
     let locations = [];
     if (this.props.isMulti) {
@@ -156,12 +148,19 @@ class HRInfoLocations extends React.Component {
           }
         });
     }
-  }
+  };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.value && this.state.status === 'initial') {
       this.getInitialLocations();
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.state.locations) !== JSON.stringify(nextState.locations) || this.state.inputNumber !== nextState.inputNumber) {
+      return true;
+    }
+    return false;
   }
 
   render () {

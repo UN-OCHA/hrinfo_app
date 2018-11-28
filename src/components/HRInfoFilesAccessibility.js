@@ -15,78 +15,66 @@ import Avatar from '@material-ui/core/Avatar';
 import TextField from "@material-ui/core/TextField/TextField";
 
 class HRInfoFilesAccessibility extends React.Component {
-  constructor(props) {
-    super(props);
-    const { t } = this.props;
-    this.accessibility = [
-      {value: t('files.accessibilities.available'), label: t('files.accessibilities.available') },
-      {value: t('files.accessibilities.request'), label: t('files.accessibilities.request') },
-      {value: t('files.accessibilities.restricted'), label: t('files.accessibilities.restricted') },
-      {value: t('files.accessibilities.not_available'), label: t('files.accessibilities.not_available') },
-      {value: t('files.accessibilities.not_applicable'), label: t('files.accessibilities.not_applicable') },
-    ];
-    this.state = {
-      file: '',
-      accessibility: '',
-      status: '',
-      instructions: '',
-      url: ''
-    };
-    this.fileId = 'file_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  t = this.props.t;
 
-    this.hrinfoAPI = new HRInfoAPI();
+  accessibility = [
+    {value: this.t('files.accessibilities.available'), label: this.t('files.accessibilities.available') },
+    {value: this.t('files.accessibilities.request'), label: this.t('files.accessibilities.request') },
+    {value: this.t('files.accessibilities.restricted'), label: this.t('files.accessibilities.restricted') },
+    {value: this.t('files.accessibilities.not_available'), label: this.t('files.accessibilities.not_available') },
+    {value: this.t('files.accessibilities.not_applicable'), label: this.t('files.accessibilities.not_applicable') },
+  ];
 
-    this.handleChange = this.handleChange.bind(this);
-    this.changeState = this.changeState.bind(this);
-  }
+  state = {
+    file: '',
+    accessibility: '',
+    status: '',
+    instructions: '',
+    url: ''
+  };
 
-  handleChange(type, v) {
+  fileId = 'file_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+  hrinfoAPI = new HRInfoAPI();
+
+  handleChange = (type, v) => {
     if (this.state.status === '') {
       this.setState({
         status: 'ready'
       });
     }
     if (type === 'file') {
-      let file = this.state.file;
       const that = this;
-      file = 'uploading';
       this.setState({
-        file: file
-      });
-
-      this.hrinfoAPI
-        .saveFile(v)
-        .then(doc => {
-          file = doc[0];
-          that.changeState({
-            file: file
+        file: 'uploading'
+      }, () => {
+        this.hrinfoAPI
+          .saveFile(v)
+          .then(doc => {
+            that.changeState({
+              file: doc[0]
+            });
           });
-        });
+      });
     }
     else if (type === 'instructions') {
-      let instructions = this.state.instructions;
-      instructions = v.target.value;
-      this.setState({
-        instructions: instructions
+      this.changeState({
+        instructions: v.target.value
       });
     }
     else if (type === 'url') {
-      let url = this.state.url;
-      url = v.target.value;
-      this.setState({
-        url: url
+      this.changeState({
+        url: v.target.value
       });
     }
     else {
-      let accessibility = this.state.accessibility;
-      accessibility = v;
       this.changeState({
-        accessibility: accessibility
+        accessibility: v
       });
     }
-  }
+  };
 
-  changeState(newState) {
+  changeState = (newState) => {
     this.setState(newState);
     if (this.props.onChange) {
       this.props.onChange({
@@ -96,7 +84,7 @@ class HRInfoFilesAccessibility extends React.Component {
         url: newState.url ? newState.url : this.state.url
       });
     }
-  }
+  };
 
   componentDidUpdate() {
     if (this.props.value && this.state.status === '') {
@@ -125,6 +113,13 @@ class HRInfoFilesAccessibility extends React.Component {
       }
       this.changeState(state);
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+      return true;
+    }
+    return false;
   }
 
   render () {

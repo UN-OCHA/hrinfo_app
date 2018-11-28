@@ -4,18 +4,14 @@ import MaterialAsyncSelect from '../components/MaterialAsyncSelect';
 import HidAPI from '../api/HidAPI';
 
 class HidContacts extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      contacts: [],
-      status: 'initial'
-    };
-    this.hidAPI = new HidAPI();
-    this.handleChange = this.handleChange.bind(this);
-    this.getOptions = this.getOptions.bind(this);
-  }
+  state = {
+    contacts: [],
+    status: 'initial'
+  };
 
-  getOptions (input) {
+  hidAPI = new HidAPI();
+
+  getOptions = (input) => {
     let params = {};
     params.limit = 10;
     params.offset = 0;
@@ -26,18 +22,18 @@ class HidContacts extends React.Component {
       .then(data => {
         return data.data;
       });
-  }
+  };
 
-  handleChange (selectedOption) {
+  handleChange = (selectedOption) => {
     this.setState({
       contacts: selectedOption
     });
     if (this.props.onChange) {
       this.props.onChange(selectedOption);
     }
-  }
+  };
 
-  async componentDidUpdate (prevProps, prevState, snapshot) {
+  componentDidUpdate (prevProps, prevState, snapshot) {
     const that = this;
     if (this.state.status === 'initial') {
       if (this.props.value) {
@@ -46,10 +42,12 @@ class HidContacts extends React.Component {
           this.props.value.forEach(function (v) {
             promises.push(that.hidAPI.getItem('user', v));
           });
-          let out = await Promise.all(promises);
-          this.setState({
-            contacts: out,
-            status: 'loaded'
+          this._asyncRequest = Promise.all(promises).then((values) => {
+            this._asyncRequest = null;
+            this.setState({
+              contacts: values,
+              status: 'loaded'
+            });
           });
         }
         else {
@@ -67,7 +65,18 @@ class HidContacts extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('should component update');
+    console.log(JSON.stringify(this.state.contacts));
+    console.log(nextState.contacts);
+    if (JSON.stringify(this.state.contacts) !== JSON.stringify(nextState.contacts)) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
+    console.log('re rendering hid contacts');
     return (
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
