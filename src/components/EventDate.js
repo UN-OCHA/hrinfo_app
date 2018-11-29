@@ -182,7 +182,7 @@ class EventDate extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+    if (JSON.stringify(this.state) !== JSON.stringify(nextState) || JSON.stringify(this.props) !== JSON.stringify(nextProps)) {
       return true;
     }
     return false;

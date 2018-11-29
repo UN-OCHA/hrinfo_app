@@ -73,7 +73,6 @@ class HidContacts extends React.Component {
   }
 
   render() {
-    console.log('re rendering hid contacts');
     return (
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
