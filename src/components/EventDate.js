@@ -38,6 +38,14 @@ class EventDate extends React.Component {
     status    : 'initial',
   };
 
+  changeState = (newState) => {
+    this.setState(newState);
+
+    if (this.props.onChange) {
+      this.props.onChange(newState.val);
+    }
+  };
+
   // Checkbox
   setCheckbox = (event) => {
     const target  = event.target;
@@ -55,12 +63,15 @@ class EventDate extends React.Component {
       let value2 = this.state.val.value2.clone();
       value2.hours(0);
       value2.minutes(0);
+      if (this.state.endDate === false) {
+        value2 = value.clone();
+      }
       newState.val = {...this.state.val, value: value, value2: value2};
     }
     if (target.name === 'endDate') {
       newState.val = {...this.state.val, value2: this.state.val.value.clone()};
     }
-    this.setState(newState);
+    this.changeState(newState);
   };
 
   //Changes
@@ -68,7 +79,6 @@ class EventDate extends React.Component {
     let value: Date;
     let val = {};
     if (!event.target) {
-      console.log(event);
       // FROM
       if (type === 'from') {
         val = {...this.state.val, value: event};
@@ -100,41 +110,29 @@ class EventDate extends React.Component {
       val = {...this.state.val, value2: val.value.clone()};
     }
 
-    this.setState({
+    this.changeState({
       val : val,
       // check if time has changed for all allDay
       allDay: this.isAllDay(val.value, val.value2)
     });
-
-    if (this.props.onChange) {
-      this.props.onChange(val);
-    }
   };
 
   // rrule
   setRrule = (rrule) => {
     let val   = {...this.state.val, rrule: rrule};
 
-    this.setState({
+    this.changeState({
       val : val
     });
-
-    if (this.props.onChange) {
-      this.props.onChange(val);
-    }
   };
 
   // Set timezone from departure to arrival
   setTimezone = (timezone) => {
     let val         = {...this.state.val, timezone: timezone};
 
-    this.setState({
+    this.changeState({
       val: val
     });
-
-    if (this.props.onChange) {
-      this.props.onChange(val);
-    }
   };
 
   getTime = (date) => {
@@ -152,10 +150,7 @@ class EventDate extends React.Component {
   // update component
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.timezone && prevProps.timezone !== this.props.timezone) {
-      let val = {...this.state.val, timezone: {value: this.props.timezone, label: this.props.timezone}};
-      this.setState({
-        val: val
-      });
+      this.setTimezone({value: this.props.timezone, label: this.props.timezone});
     }
     if (this.props.value && Object.keys(this.props.value).length && this.state.status === 'initial') {
       let val = this.props.value[0] ? lodash.cloneDeep(this.props.value[0]) : lodash.cloneDeep(this.props.value);

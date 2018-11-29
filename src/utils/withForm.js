@@ -278,15 +278,12 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           }
           body.date.forEach(function (d) {
             if (d && d.value) {
-              d.value = moment(d.value).utc().format('YYYY-MM-DD HH:mm:ss');
+              d.value = moment.utc(d.value).format('YYYY-MM-DD HH:mm:ss');
             }
             if (d && d.value2) {
-              d.value2 = moment(d.value2).utc().format('YYYY-MM-DD HH:mm:ss');
+              d.value2 = moment.utc(d.value2).format('YYYY-MM-DD HH:mm:ss');
             }
-            if (d && d.timezone_db) {
-              d.timezone_db = d.timezone_db.value;
-            }
-            if (d && d.timezone) {
+            if (d && d.timezone && d.timezone.value) {
               d.timezone = d.timezone.value;
             }
           });
