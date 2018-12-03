@@ -157,7 +157,9 @@ class HRInfoLocations extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.state.locations) !== JSON.stringify(nextState.locations) || this.state.inputNumber !== nextState.inputNumber) {
+    if (JSON.stringify(nextProps.value) !== JSON.stringify(this.props.value) ||
+      JSON.stringify(this.state.locations) !== JSON.stringify(nextState.locations) ||
+      this.state.inputNumber !== nextState.inputNumber) {
       return true;
     }
     return false;

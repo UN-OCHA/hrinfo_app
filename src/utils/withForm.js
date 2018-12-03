@@ -542,14 +542,6 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             }
             doc.locations = locations_fetched;
           }
-          if (doc['body-html']) {
-            const blocksFromHTML = convertFromHTML(doc['body-html']);
-            const contentState = ContentState.createFromBlockArray(
-              blocksFromHTML.contentBlocks,
-              blocksFromHTML.entityMap
-            );
-            this.state.editorState = EditorState.createWithContent(contentState);
-          }
           if (doc.disasters) {
             doc.disasters.forEach((disaster) => {
               disaster.id = disaster.glide;
@@ -559,7 +551,16 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             delete doc.id;
             delete doc.files;
             delete doc.body;
+            delete doc['body-html'];
             doc.isClone = true;
+          }
+          if (doc['body-html']) {
+            const blocksFromHTML = convertFromHTML(doc['body-html']);
+            const contentState = ContentState.createFromBlockArray(
+              blocksFromHTML.contentBlocks,
+              blocksFromHTML.entityMap
+            );
+            this.state.editorState = EditorState.createWithContent(contentState);
           }
         }
         else {

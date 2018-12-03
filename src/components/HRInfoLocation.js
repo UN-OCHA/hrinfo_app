@@ -75,7 +75,9 @@ class HRInfoLocation extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.state.val) !== JSON.stringify(nextState.val) || this.state.items.length !== nextState.items.length) {
+    if (JSON.stringify(this.state.val) !== JSON.stringify(nextState.val) ||
+      this.state.items.length !== nextState.items.length ||
+      JSON.stringify(this.props.value) !== JSON.stringify(nextProps.value)) {
       return true;
     }
     return false;
