@@ -112,7 +112,7 @@ class EventDate extends React.Component {
     }
 
     if (!this.state.endDate) {
-      val = {...this.state.val, value2: val.value.clone()};
+      val.value2 = val.value.clone();
     }
 
     this.changeState({
