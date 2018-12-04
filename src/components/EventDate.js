@@ -59,10 +59,13 @@ class EventDate extends React.Component {
       let value = this.state.val.value.clone();
       value.hours(0);
       value.minutes(0);
+      value.seconds(0);
 
       let value2 = this.state.val.value2.clone();
       value2.hours(0);
       value2.minutes(0);
+      value2.seconds(0);
+
       if (this.state.endDate === false) {
         value2 = value.clone();
       }
@@ -95,6 +98,7 @@ class EventDate extends React.Component {
         let from = this.state.val.value.clone();
         from.hours(value.split(":")[0]);
         from.minutes(value.split(":")[1]);
+        from.seconds(0);
         val = {...this.state.val, value: from};
       }
       // TO
@@ -102,6 +106,7 @@ class EventDate extends React.Component {
         let to = this.state.val.value2.clone();
         to.hours(value.split(":")[0]);
         to.minutes(value.split(":")[1]);
+        to.seconds(0);
         val = {...this.state.val, value2: to};
       }
     }
