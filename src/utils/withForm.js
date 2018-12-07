@@ -552,6 +552,22 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             delete doc.files;
             delete doc.body;
             delete doc['body-html'];
+            delete doc.publication_date;
+            delete doc.related_content;
+            delete doc.meeting_minutes;
+            delete doc.agenda;
+            delete doc.date;
+            delete doc.participating_organizations;
+            delete doc.report;
+            delete doc.questionnaire;
+            delete doc.data;
+            delete doc.other_location;
+            delete doc.subject;
+            delete doc.methodology;
+            delete doc.key_findings;
+            delete doc.unit_measurement;
+            delete doc.collection_method;
+            delete doc.sample_size;
             doc.isClone = true;
           }
           if (doc['body-html']) {
