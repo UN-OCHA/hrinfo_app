@@ -68,9 +68,9 @@ class ClusterForm extends React.Component {
     )
     : '';
 
-    let title = t('bundles.create') + ' [' + t('languages.' + i18n.language) + ']';
+    let title = t('bundles.create') + ' [' + t('languages.' + i18n.languages[0]) + ']';
     if (this.props.doc.id) {
-      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.languages[0]) + ']';
     }
 
     return (

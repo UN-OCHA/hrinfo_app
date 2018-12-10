@@ -140,13 +140,13 @@ class AssessmentForm extends React.Component {
     )
     : '';
 
-    let title = t('assessment.create') + ' [' + t('languages.' + i18n.language) + ']';
+    let title = t('assessment.create') + ' [' + t('languages.' + i18n.languages[0]) + ']';
     if (this.props.doc.id) {
-      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.languages[0]) + ']';
     }
     else {
       if (this.props.doc && this.props.doc.isClone) {
-        title = t('create') + ' ' + t('clone_of') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+        title = t('create') + ' ' + t('clone_of') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.languages[0]) + ']';
       }
     }
 

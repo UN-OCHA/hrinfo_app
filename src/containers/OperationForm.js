@@ -50,9 +50,9 @@ class OperationForm extends React.Component {
 
   render() {
     const {t, i18n} = this.props;
-    let title = t('operations.create') + ' [' + t('languages.' + i18n.language) + ']';
+    let title = t('operations.create') + ' [' + t('languages.' + i18n.languages[0]) + ']';
     if (this.props.doc.id) {
-      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.language) + ']';
+      title = t('edit') + ' ' + this.props.doc.label + ' [' + t('languages.' + i18n.languages[0]) + ']';
     }
     return (
       <Grid container direction="column" alignItems="center">
