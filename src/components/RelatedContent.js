@@ -16,8 +16,7 @@ class RelatedContent extends React.Component {
       value: [{
         title: '',
         url: ''
-      }],
-      status: 'initial'
+      }]
     };
 
     getRow = (number) => {
@@ -60,7 +59,6 @@ class RelatedContent extends React.Component {
       let val = lodash.cloneDeep(this.state.value);
       val[number][elt] = value;
       this.setState({
-        status: 'ready',
         value: val
       });
       if (this.props.onChange) {
@@ -94,17 +92,16 @@ class RelatedContent extends React.Component {
     };
 
     componentDidUpdate() {
-      if (this.props.value && this.state.status === 'initial') {
-        this.setState({
-          status: 'ready',
-          value: this.props.value,
-          inputNumber: this.props.value.length
-        });
-      }
+      this.setState({
+        value: this.props.value,
+        inputNumber: this.props.value.length
+      });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-      if (JSON.stringify(this.state.value) !== JSON.stringify(nextState.value) || this.state.inputNumber !== nextState.inputNumber) {
+      if (JSON.stringify(this.state.value) !== JSON.stringify(nextState.value) ||
+        this.state.inputNumber !== nextState.inputNumber ||
+        JSON.stringify(this.props.value) !== JSON.stringify(nextProps.value)) {
         return true;
       }
       return false;
