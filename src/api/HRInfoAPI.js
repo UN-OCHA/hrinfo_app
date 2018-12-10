@@ -20,7 +20,7 @@ class HRInfoAPI {
   }
 
   getItem(type, id) {
-    return fetch(hrinfoUrl + i18next.language + "/api/v1.0/" + type + "/" + id, {
+    return fetch(hrinfoUrl + i18next.languages[0] + "/api/v1.0/" + type + "/" + id, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
           'Accept': 'application/json',
@@ -59,7 +59,7 @@ class HRInfoAPI {
   }
 
   get (type, params, anonymous = true) {
-    let url = hrinfoUrl + i18next.language + '/api/v1.0/' + type;
+    let url = hrinfoUrl + i18next.languages[0] + '/api/v1.0/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
       url += '?';
@@ -108,10 +108,10 @@ class HRInfoAPI {
 
   save(type, body) {
     let httpMethod = 'POST';
-    let url = hrinfoUrl + i18next.language + '/api/v1.0/' + type;
+    let url = hrinfoUrl + i18next.languages[0] + '/api/v1.0/' + type;
     if (body.id) {
       httpMethod = 'PATCH';
-      url = hrinfoUrl + i18next.language + '/api/v1.0/' + type + '/' + body.id;
+      url = hrinfoUrl + i18next.languages[0] + '/api/v1.0/' + type + '/' + body.id;
       delete body.created;
       delete body.changed;
       delete body.url;
