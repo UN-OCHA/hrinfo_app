@@ -6262,6 +6262,13 @@ react-ga@^2.5.3:
     prop-types "^15.6.0"
     react "^15.6.2 || ^16.0"
 
+react-google-picker@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-google-picker/-/react-google-picker-0.1.0.tgz#f8a5a3ff7f48c99d1be35071f28a17d136ec0953"
+  integrity sha512-0y3TtinsdNwEx77Upsmh7Q4bXuBt/d/KntQDNxLOIf2v77UQQi0FBYAtAkjrkP28IOX7gfcXhdY5XXZRGHSODw==
+  dependencies:
+    load-script "^1.0.0"
+
 react-i18next@^7.10.1:
   version "7.10.1"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-7.10.1.tgz#9e119c15970eb401b9ef178336a2e09dd120bb15"
