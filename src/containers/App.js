@@ -365,7 +365,7 @@ class App extends Component {
 							</Paper>
 						</Hidden>
             <div>
-              <Button color="secondary" onClick={this.toggleMenuLanguage}>{i18n.language} <KeyboardArrowDown /> </Button>
+              <Button color="secondary" onClick={this.toggleMenuLanguage}>{i18n.languages[0]} <KeyboardArrowDown /> </Button>
               <Menu id="language-menu" anchorEl={this.state.anchorLanguage} onClose={this.toggleMenuLanguage} open={Boolean(this.state.anchorLanguage)}>
                 <MenuItem key='en' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('en'); }}>EN</MenuItem>
                 <MenuItem key='fr' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('fr'); }}>FR</MenuItem>

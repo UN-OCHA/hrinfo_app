@@ -8,6 +8,7 @@
     "draft-js": "^0.10.5",
     "draft-js-export-html": "^1.2.0",
     "i18next": "^11.6.0",
+    "i18next-browser-languagedetector": "^2.2.4",
     "lodash": "^4.17.10",
     "material-ui-pickers": "^1.0.0-rc.11",
     "moment": "^2.22.2",

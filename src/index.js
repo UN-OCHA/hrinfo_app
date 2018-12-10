@@ -5,6 +5,7 @@ import {CookiesProvider} from 'react-cookie';
 import App from './containers/App';
 import {I18nextProvider} from 'react-i18next';
 import i18next from 'i18next';
+import LngDetector from 'i18next-browser-languagedetector';
 import common_en from "./translations/en/common.json";
 import forms_en from "./translations/en/forms.json";
 import common_fr from "./translations/fr/common.json";
@@ -29,24 +30,30 @@ const theme = createMuiTheme({
 	}
 });
 
-i18next.init({
-  interpolation: { escapeValue: false },  // React already does escaping
-  lng: 'en',
-  resources: {
-    en: {
-      common: common_en,
-      forms: forms_en
-    },
-    fr: {
-      common: common_fr,
-      forms: forms_fr
-    },
-    es: {
-      common: common_es,
-      forms: forms_es
-    }
-  }
-});
+i18next
+	.use(LngDetector)
+	.init({
+	  interpolation: { escapeValue: false },  // React already does escaping
+		fallbackLng: 'en',
+		whitelist: ['en', 'fr', 'es'],
+		nonExplicitWhitelist: true,
+		load: 'languageOnly',
+	  resources: {
+	    en: {
+	      common: common_en,
+	      forms: forms_en
+	    },
+	    fr: {
+	      common: common_fr,
+	      forms: forms_fr
+	    },
+	    es: {
+	      common: common_es,
+	      forms: forms_es
+	    }
+	  }
+	}
+);
 
 ReactDOM.render(
 	<MuiThemeProvider theme={theme}>
