@@ -5,8 +5,6 @@ import HidAPI from '../api/HidAPI';
 
 class HidContacts extends React.Component {
   state = {
-    contacts: [],
-    status: 'initial'
   };
 
   hidAPI = new HidAPI();
@@ -25,9 +23,6 @@ class HidContacts extends React.Component {
   };
 
   handleChange = (selectedOption) => {
-    this.setState({
-      contacts: selectedOption
-    });
     if (this.props.onChange) {
       this.props.onChange(selectedOption);
     }
@@ -35,38 +30,24 @@ class HidContacts extends React.Component {
 
   componentDidUpdate (prevProps, prevState, snapshot) {
     const that = this;
-    if (this.state.status === 'initial') {
-      if (this.props.value) {
-        if (this.props.isMulti) {
-          let promises = [];
-          this.props.value.forEach(function (v) {
-            promises.push(that.hidAPI.getItem('user', v));
-          });
-          this._asyncRequest = Promise.all(promises).then((values) => {
-            this._asyncRequest = null;
-            this.setState({
-              contacts: values,
-              status: 'loaded'
-            });
-          });
+    if (this.props.value && this.props.isMulti) {
+      let promises = [];
+      this.props.value.forEach(function (v) {
+        if (typeof v === 'string') {
+          promises.push(that.hidAPI.getItem('user', v));
         }
-        else {
-          this.setState({
-            contacts: that.props.value,
-            status: 'loaded'
-          });
-        }
-      }
-      else {
-        this.setState({
-          status: 'loaded'
+      });
+      if (promises.length) {
+        this._asyncRequest = Promise.all(promises).then((values) => {
+          this._asyncRequest = null;
+          this.handleChange(values);
         });
       }
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.state.contacts) !== JSON.stringify(nextState.contacts)) {
+    if (JSON.stringify(this.props.value) !== JSON.stringify(nextProps.value)) {
       return true;
     }
     return false;
@@ -77,7 +58,7 @@ class HidContacts extends React.Component {
       <MaterialAsyncSelect
         isMulti={this.props.isMulti}
         loadOptions={this.getOptions}
-        value={this.state.contacts}
+        value={this.props.value}
         className={this.props.className}
         onChange={this.handleChange}
         getOptionLabel={(option) => {return option.name}}
