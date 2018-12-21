@@ -287,11 +287,6 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
               d.timezone = d.timezone.value;
             }
           });
-          if (body.contacts) {
-            body.contacts = body.contacts.map(function (c) {
-              return {cid: c.id};
-            });
-          }
           if (body.agenda) {
             body.agenda = body.agenda.map(function (a) {
               return a.id;
@@ -348,10 +343,10 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             else {
               delete body.report.file;
             }
-            if (body.report.url.length === 0) {
+            if (body.report.url && body.report.url.length === 0) {
               delete body.report.url;
             }
-            if (body.report.instructions.length === 0) {
+            if (body.report.instructions && body.report.instructions.length === 0) {
               delete body.report.instructions;
             }
           }
@@ -363,10 +358,10 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             else {
               delete body.data.file;
             }
-            if (body.data.url.length === 0) {
+            if (body.data.url && body.data.url.length === 0) {
               delete body.data.url;
             }
-            if (body.data.instructions.length === 0) {
+            if (body.data.instructions && body.data.instructions.length === 0) {
               delete body.data.instructions;
             }
           }
@@ -378,10 +373,10 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             else {
               delete body.questionnaire.file;
             }
-            if (body.questionnaire.url.length === 0) {
+            if (body.questionnaire.url && body.questionnaire.url.length === 0) {
               delete body.questionnaire.url;
             }
-            if (body.questionnaire.instructions.length === 0) {
+            if (body.questionnaire.instructions && body.questionnaire.instructions.length === 0) {
               delete body.questionnaire.instructions;
             }
           }
@@ -441,6 +436,11 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         }
         if (body.language && body.language.value === '' && body.language.label === '') {
           delete body.language;
+        }
+        if (body.contacts) {
+          body.contacts = body.contacts.map(function (c) {
+            return {cid: c.id};
+          });
         }
       }
       if (typeof body['body-html'] !== 'undefined') {
