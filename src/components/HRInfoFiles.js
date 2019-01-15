@@ -387,7 +387,7 @@ class HRInfoFiles extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-      if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+      if (JSON.stringify(this.state) !== JSON.stringify(nextState) || JSON.stringify(this.props.value) !== JSON.stringify(nextProps.value)) {
         return true;
       }
       return false;
