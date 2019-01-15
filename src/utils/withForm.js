@@ -172,7 +172,6 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           this.isValid(doc.spaces) &&
           this.isValid(doc.infographic_type) &&
           this.isValid(doc.publication_date) &&
-          this.isValid(doc.files) &&
           this.isValid(doc.organizations)
         ) {
           isValid = true;
@@ -543,11 +542,6 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             }
             doc.locations = locations_fetched;
           }
-          if (doc.disasters) {
-            doc.disasters.forEach((disaster) => {
-              disaster.id = disaster.glide;
-            });
-          }
           if (isClone) {
             delete doc.id;
             delete doc.files;
@@ -566,9 +560,10 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             delete doc.subject;
             delete doc.methodology;
             delete doc.key_findings;
-            delete doc.unit_measurement;
-            delete doc.collection_method;
             delete doc.sample_size;
+            if (hrinfoType === 'assessments') {
+              delete doc.locations;
+            }
             doc.isClone = true;
           }
           if (doc['body-html']) {
