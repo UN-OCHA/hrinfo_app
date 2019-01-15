@@ -164,7 +164,6 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           this.isValid(doc.spaces) &&
           this.isValid(doc.document_type) &&
           this.isValid(doc.publication_date) &&
-          this.isValid(doc.files) &&
           this.isValid(doc.organizations)
         ) {
           isValid = true;
@@ -246,20 +245,22 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       if (hrinfoType !== 'operations') {
         if (hrinfoType === 'infographics' || hrinfoType === 'documents') {
           body.publication_date = Math.floor(new Date(this.state.doc.publication_date).getTime() / 1000);
-          body.files.files.forEach(function (file, index) {
-            let fc = {};
-            if (body.files.languages[index]) {
-              fc.language = body.files.languages[index].value;
-            }
-            fc.file = file.id ? file.id : file.fid;
-            fc.file = parseInt(fc.file, 10);
-            fc.item_id = '';
-            if (body.files.collections[index]) {
-              fc.item_id = parseInt(body.files.collections[index], 10);
-            }
-            field_collections.push(fc);
-          });
-          delete body.files;
+          if (body.files) {
+            body.files.files.forEach(function (file, index) {
+              let fc = {};
+              if (body.files.languages[index]) {
+                fc.language = body.files.languages[index].value;
+              }
+              fc.file = file.id ? file.id : file.fid;
+              fc.file = parseInt(fc.file, 10);
+              fc.item_id = '';
+              if (body.files.collections[index]) {
+                fc.item_id = parseInt(body.files.collections[index], 10);
+              }
+              field_collections.push(fc);
+            });
+            delete body.files;
+          }
         }
         if (hrinfoType === 'infographics') {
           body.infographic_type = body.infographic_type.id;

@@ -150,7 +150,7 @@ class DocumentForm extends React.Component {
               </FormHelperText>
             </FormControl>
 
-            <FormControl required fullWidth margin = "normal">
+            <FormControl fullWidth margin = "normal">
               <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.files)}>{t('files.files')}</FormLabel>
               <HRInfoFiles onChange={(s) => this.props.handleSelectChange('files', s)} value={this.props.doc.files} />
               <FormHelperText id = "files-text">
