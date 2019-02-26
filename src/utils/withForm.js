@@ -468,6 +468,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       if (typeof body['body-html'] !== 'undefined') {
         delete body['body-html'];
       }
+      
       this.hrinfoAPI
         .save(hrinfoType, body)
         .then(doc => {
