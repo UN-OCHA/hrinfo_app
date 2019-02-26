@@ -1,6 +1,7 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
+import { RRule } from 'rrule';
 import moment from 'moment';
 import 'moment-timezone';
 import HRInfoAPI from '../api/HRInfoAPI';
@@ -274,7 +275,28 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             body.address.country = body.address.country.pcode;
           }
           if (!Array.isArray(body.date)) {
-            body.date = [body.date];
+            const tmpDate = body.date;
+            if (body.date.rrule) {
+              const options = RRule.parseString(body.date.rrule);
+              options.dtstart = moment.utc(body.date.value).toDate();
+              if (body.date.value2 && body.date.value2 !== body.date.value) {
+                options.until = moment.utc(body.date.value2).toDate();
+              }
+              const rrule = new RRule(options);
+              const dates = rrule.all();
+              body.date = [];
+              dates.forEach(function (date) {
+                body.date.push({
+                  value: date,
+                  value2: date,
+                  timezone: tmpDate.timezone.value,
+                  rrule: tmpDate.rrule
+                });
+              });
+            }
+            else {
+              body.date = [body.date];
+            }
           }
           body.date.forEach(function (d) {
             if (d && d.value) {

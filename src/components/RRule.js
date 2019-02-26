@@ -23,8 +23,8 @@ class RRule extends React.Component {
       rrule: '',
       freq: '',
       interval: '',
-      end: 'NEVER',
-      count: '',
+      end: 'COUNT',
+      count: 1,
       until: ''
     };
 
@@ -34,7 +34,11 @@ class RRule extends React.Component {
 
   handleChange(event, type = null) {
     const name  = event.target ? event.target.name  : 'until';
-    const value = event.target ? event.target.value : event.format();
+    let value = event.target ? event.target.value : event.format();
+    if (name === 'until') {
+      const parts = value.toString().split('T');
+      value = parts[0].replace(/-/gi, '') + 'T000000Z';
+    }
 
     let rrule = this.state.rrule;
 
@@ -90,14 +94,11 @@ class RRule extends React.Component {
       }
     }
     else {
-      if (/COUNT/.test(rrule)) {
-        return 'COUNT';
-      }
-      else if (/UNTIL/.test(rrule)) {
+      if (/UNTIL/.test(rrule)) {
         return 'UNTIL';
       }
       else {
-        return 'NEVER';
+        return 'COUNT';
       }
     }
   }
@@ -216,7 +217,6 @@ class RRule extends React.Component {
                       id: 'end',
                     }}
             >
-              <MenuItem value={'NEVER'}>Never</MenuItem>
               <MenuItem value={'COUNT'}>After</MenuItem>
               <MenuItem value={'UNTIL'}>On Date</MenuItem>
             </Select>
