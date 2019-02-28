@@ -1,4 +1,5 @@
 import React from 'react';
+import lodash from 'lodash';
 import PropTypes from 'prop-types';
 import Dashboard, { addWidget } from 'react-dazzle';
 import {Link} from 'react-router-dom';
@@ -9,6 +10,14 @@ import Paper from '@material-ui/core/Paper';
 
 import withSpace from '../utils/withSpace';
 import SelectWidget from '../components/SelectWidget';
+
+import FTSApi from '../api/FTSApi';
+import HidApi from '../api/HidAPI';
+
+import {DynamicContent} from '../widgets/DynamicContent';
+import {ReliefwebDynamicContent} from '../widgets/ReliefwebDynamicContent';
+import {FTSWidget} from '../widgets/FTS';
+import {HidNumberOfContacts} from '../widgets/HidNumberOfContacts';
 
 import 'react-dazzle/lib/style/style.css';
 
@@ -35,29 +44,84 @@ const styles = theme => ({
 
 class SpacePage extends React.Component {
 
+  layout = {
+    rows: [{
+      columns: [{
+        className: 'layout-header',
+        widgets: []
+      }, {
+        className: 'layout-first-column',
+        widgets: []
+      }, {
+        className: 'layout-second-column',
+        widgets: []
+      }, {
+        className: 'layout-footer',
+        widgets: []
+      }],
+    }]
+  };
+
+  ftsApi = new FTSApi();
+  hidApi = new HidApi();
+
   state = {
     widgets: {
+      LatestDocuments: {
+        title: "Latest Documents",
+        type: DynamicContent,
+        props: {
+          content: {value: 'documents', label: 'Documents'},
+          number: '5',
+        }
+      },
+      LatestInfographics: {
+        title: "Latest Infographics",
+        type: DynamicContent,
+        props: {
+          content: {value: 'infographics', label: 'Infographics'},
+          number: '5'
+        }
+      },
+      UpcomingEvents: {
+        title: "Upcoming Events",
+        type: DynamicContent,
+        props: {
+          content: {value: 'events', label: 'Events'},
+          number: '5'
+        }
+      },
+      LatestAssessments: {
+        title: "Latest Assessments",
+        type: DynamicContent,
+        props: {
+          content: {value: 'assessments', label: 'Assessments'},
+          number: '5'
+        }
+      },
+      ReliefwebUpdates: {
+        title: "Reliefweb Updates",
+        type: ReliefwebDynamicContent,
+        props: {
+          number: '5'
+        }
+      },
+      FTSFunding: {
+        title: 'Funding from FTS',
+        type: FTSWidget,
+        props: {
+          type: {id: 'pie', label: 'Pie'}
+        }
+      },
+      HidNumber: {
+        title: 'Contacts in HID',
+        type: HidNumberOfContacts,
+        props: {
+          list: { count: 256 }
+        },
+      }
     },
-    layout: {
-      rows: [{
-        columns: [{
-          className: 'layout-sidebar',
-          widgets: [],
-        }, {
-          className: 'layout-header',
-          widgets: []
-        }, {
-          className: 'layout-first-column',
-          widgets: []
-        }, {
-          className: 'layout-second-column',
-          widgets: []
-        }, {
-          className: 'layout-footer',
-          widgets: []
-        }],
-      }]
-    },
+    layout: this.layout,
     isEditable: false,
     isModalOpen: false,
     tempLayout: null,
@@ -126,6 +190,7 @@ class SpacePage extends React.Component {
 
     let widgets = this.state.widgets;
     widgets[name] = widget;
+    console.log(widgets);
     this.setState({
       widgets: widgets,
       editedWidget: null
@@ -143,6 +208,47 @@ class SpacePage extends React.Component {
     this.setState({
       editedWidget: null
     });
+  }
+
+  async componentDidUpdate() {
+    if (this.props.doc) {
+      const doc = this.props.doc;
+      let widgets = lodash.cloneDeep(this.state.widgets);
+      let layout = lodash.cloneDeep(this.state.layout);
+
+      const space = {id: this.props.doc.id, type: this.props.doc.type + 's', label: this.props.doc.label, value: this.props.label};
+      widgets.LatestDocuments.props.space = space;
+      widgets.LatestInfographics.props.space = space;
+      widgets.UpcomingEvents.props.space = space;
+      widgets.LatestAssessments.props.space = space;
+      widgets.ReliefwebUpdates.props.country = { value: this.props.doc.label };
+      layout.rows[0].columns[1].widgets = [{key: 'LatestDocuments'}, {key: 'LatestInfographics'}, {key: 'UpcomingEvents'}, {key: 'LatestAssessments'}, {key: 'ReliefwebUpdates'}];
+
+      const appeals = await this.ftsApi.getAppeals(2018);
+      let currentAppeal = {};
+      appeals.data.forEach(function (appeal) {
+        if (appeal.locations[0].iso3 === doc.country.iso3) {
+          currentAppeal = appeal;
+        }
+      });
+      if (currentAppeal) {
+        widgets.FTSFunding.props.appeal = currentAppeal;
+        layout.rows[0].columns[2].widgets = [{key: 'FTSFunding'}];
+      }
+      const lists = await this.hidApi.get('list', {type: 'operation', remote_id: doc.id});
+      if (lists.data.length) {
+        widgets.HidNumber.props.list = lists.data[0];
+        layout.rows[0].columns[2].widgets.push({key: 'HidNumber'});
+      }
+      this.setState({widgets: widgets, layout: layout});
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(this.props) !== JSON.stringify(nextProps) || JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+      return true;
+    }
+    return false;
   }
 
   render() {
