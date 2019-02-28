@@ -279,16 +279,24 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             if (body.date.rrule) {
               const options = RRule.parseString(body.date.rrule);
               options.dtstart = moment.utc(body.date.value).toDate();
+              const rruleStart = new RRule(options);
+              const datesStart = rruleStart.all();
+              let rruleEnd = {};
+              let datesEnd = [];
               if (body.date.value2 && body.date.value2 !== body.date.value) {
-                options.until = moment.utc(body.date.value2).toDate();
+                options.dtstart = moment.utc(body.date.value2).toDate();
+                rruleEnd = new RRule(options);
+                datesEnd = rruleEnd.all();
               }
-              const rrule = new RRule(options);
-              const dates = rrule.all();
               body.date = [];
-              dates.forEach(function (date) {
+              datesStart.forEach(function (date, index) {
+                let dateEnd = date;
+                if (datesEnd.length > 0) {
+                  dateEnd = datesEnd[index];
+                }
                 body.date.push({
                   value: date,
-                  value2: date,
+                  value2: dateEnd,
                   timezone: tmpDate.timezone.value,
                   rrule: tmpDate.rrule
                 });
@@ -468,7 +476,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       if (typeof body['body-html'] !== 'undefined') {
         delete body['body-html'];
       }
-      
+
       this.hrinfoAPI
         .save(hrinfoType, body)
         .then(doc => {

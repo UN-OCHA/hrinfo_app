@@ -39,6 +39,9 @@ class EventDate extends React.Component {
   };
 
   changeState = (newState) => {
+    if (this.state.status === 'initial') {
+      newState.status = 'ready';
+    }
     this.setState(newState);
 
     if (this.props.onChange) {

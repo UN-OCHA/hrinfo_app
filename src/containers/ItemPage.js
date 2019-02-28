@@ -23,11 +23,8 @@ class ItemPage extends React.Component {
         let type = this.props.match.url.replace(this.props.match.params.id, '');
         type = type.replace('/', '');
         type = type.replace('/', '');
-        const doc = await this.hrinfoAPI.getItem(type, this.props.match.params.id)
-          .then(doc => {
-            doc.type = type;
-            return doc;
-          });
+        const doc = await this.hrinfoAPI.getItem(type, this.props.match.params.id);
+        doc.type = type;
         this.setState({
           doc: doc
         });
@@ -35,7 +32,7 @@ class ItemPage extends React.Component {
     }
 
     async componentDidUpdate () {
-      if (this.state.doc.id && this.state.doc.id !== this.props.match.params.id) {
+      if (this.state.doc && this.state.doc.id && this.state.doc.id !== this.props.match.params.id) {
         const doc = await this.getDocument();
         this.setState({
           doc: doc,
