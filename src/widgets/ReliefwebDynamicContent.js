@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 
 import ReliefwebAPI from '../api/ReliefwebAPI';
 import ReliefwebSelect from '../components/ReliefwebSelect';
+import MaterialSelect from '../components/MaterialSelect';
 import Item from '../components/Item';
 
 class ReliefwebDynamicContent extends React.Component {
@@ -27,6 +28,7 @@ class ReliefwebDynamicContent extends React.Component {
   };
 
   getParamsFromProps = async () => {
+    const contentType = this.props.content ? this.props.content.value : 'reports';
     const props = this.props;
     const params = {
       appname: 'hrinfo',
@@ -36,13 +38,13 @@ class ReliefwebDynamicContent extends React.Component {
     };
     let index = 0;
     Object.keys(props).forEach(function (key) {
-      if (key !== 'title' && key !== 'number') {
+      if (key !== 'title' && key !== 'number' && key !== 'content') {
         params['filter[conditions][' + index + '][field]'] = key;
         params['filter[conditions][' + index + '][value]'] = props[key].value;
       }
     });
     this.setState({
-      documents: await this.reliefwebAPI.get(params)
+      documents: await this.reliefwebAPI.get(contentType, params)
     });
   };
 
@@ -74,6 +76,21 @@ class ReliefwebDynamicContent extends React.Component {
   }
 }
 
+const contentTypes = [
+  {
+    value: 'reports',
+    label: 'Reports'
+  },
+  {
+    value: 'jobs',
+    label: 'Jobs',
+  },
+  {
+    value: 'training',
+    label: 'Trainings'
+  },
+];
+
 class ReliefwebDynamicContentSettings extends React.Component {
 
   render () {
@@ -94,6 +111,10 @@ class ReliefwebDynamicContentSettings extends React.Component {
                 id       = "title"
                 value    = {this.props.title}
                 onChange = {(s) => {this.props.addWidgetSetting('title', s)}}/>
+            </FormControl>
+            <FormControl required fullWidth margin="normal">
+              <FormLabel>Content Type</FormLabel>
+              <MaterialSelect options={contentTypes} id="contentTypes" onChange={(s) => this.props.addWidgetSetting('content', s)} value={this.props.content} />
             </FormControl>
             <FormControl fullWidth margin="normal">
               <FormLabel>Country</FormLabel>

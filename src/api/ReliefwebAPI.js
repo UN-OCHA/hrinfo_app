@@ -48,8 +48,8 @@ class ReliefwebAPI {
       });
   }
 
-  get (params) {
-    let url = 'https://api.reliefweb.int/v1/reports';
+  get (type, params) {
+    let url = 'https://api.reliefweb.int/v1/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
       url += '?';

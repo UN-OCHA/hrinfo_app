@@ -51,7 +51,7 @@ class ReliefwebStaticContentSettings extends React.Component {
     };
     return this
       .reliefwebAPI
-      .get(params)
+      .get('reports', params)
       .then(data => {
         return data.data;
       });

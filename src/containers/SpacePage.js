@@ -13,11 +13,14 @@ import SelectWidget from '../components/SelectWidget';
 
 import FTSApi from '../api/FTSApi';
 import HidApi from '../api/HidAPI';
+import HdxAPI from '../api/HdxAPI';
 
 import {DynamicContent} from '../widgets/DynamicContent';
 import {ReliefwebDynamicContent} from '../widgets/ReliefwebDynamicContent';
 import {FTSWidget} from '../widgets/FTS';
 import {HidNumberOfContacts} from '../widgets/HidNumberOfContacts';
+import {HdxNumberOfDatasets} from '../widgets/HdxNumberOfDatasets';
+import {DigitalSitrepHighlights} from '../widgets/DigitalSitrepHighlights';
 
 import 'react-dazzle/lib/style/style.css';
 
@@ -64,6 +67,7 @@ class SpacePage extends React.Component {
 
   ftsApi = new FTSApi();
   hidApi = new HidApi();
+  hdxApi = new HdxAPI();
 
   state = {
     widgets: {
@@ -103,8 +107,25 @@ class SpacePage extends React.Component {
         title: "Reliefweb Updates",
         type: ReliefwebDynamicContent,
         props: {
+          content: {value: 'reports', label: 'Reports'},
           number: '5'
         }
+      },
+      ReliefwebJobs: {
+        title: "Reliefweb Jobs",
+        type: ReliefwebDynamicContent,
+        props: {
+          content: {value: 'jobs', label: 'Jobs'},
+          number: '5'
+        }
+      },
+      ReliefwebTrainings: {
+        title: 'Reliefweb Trainings',
+        type: ReliefwebDynamicContent,
+        props: {
+          content: {value: 'training', label: 'Trainings'},
+          number: '5'
+        },
       },
       FTSFunding: {
         title: 'Funding from FTS',
@@ -117,8 +138,17 @@ class SpacePage extends React.Component {
         title: 'Contacts in HID',
         type: HidNumberOfContacts,
         props: {
-          list: { count: 256 }
         },
+      },
+      HdxNumber: {
+        title: 'Datasets in HDX',
+        type: HdxNumberOfDatasets,
+        props: { }
+      },
+      DigitalSitrepHighlights: {
+        title: 'Highlights from the Digital Situation Report',
+        type: DigitalSitrepHighlights,
+        props: { }
       }
     },
     layout: this.layout,
@@ -216,13 +246,23 @@ class SpacePage extends React.Component {
       let widgets = lodash.cloneDeep(this.state.widgets);
       let layout = lodash.cloneDeep(this.state.layout);
 
+      widgets.DigitalSitrepHighlights.props.slug = this.props.doc.label.toLowerCase();
+      layout.rows[0].columns[0].widgets = [{key: 'DigitalSitrepHighlights'}];
+
       const space = {id: this.props.doc.id, type: this.props.doc.type + 's', label: this.props.doc.label, value: this.props.label};
       widgets.LatestDocuments.props.space = space;
       widgets.LatestInfographics.props.space = space;
       widgets.UpcomingEvents.props.space = space;
       widgets.LatestAssessments.props.space = space;
       widgets.ReliefwebUpdates.props.country = { value: this.props.doc.label };
-      layout.rows[0].columns[1].widgets = [{key: 'LatestDocuments'}, {key: 'LatestInfographics'}, {key: 'UpcomingEvents'}, {key: 'LatestAssessments'}, {key: 'ReliefwebUpdates'}];
+      widgets.ReliefwebTrainings.props.country = { value: this.props.doc.label };
+      layout.rows[0].columns[1].widgets = [{key: 'LatestDocuments'},
+        {key: 'LatestInfographics'},
+        {key: 'UpcomingEvents'},
+        {key: 'LatestAssessments'},
+        {key: 'ReliefwebUpdates'},
+        {key: 'ReliefwebTrainings'}
+      ];
 
       const appeals = await this.ftsApi.getAppeals(2018);
       let currentAppeal = {};
@@ -238,8 +278,19 @@ class SpacePage extends React.Component {
       const lists = await this.hidApi.get('list', {type: 'operation', remote_id: doc.id});
       if (lists.data.length) {
         widgets.HidNumber.props.list = lists.data[0];
+        widgets.HidNumber.props.doc = doc;
         layout.rows[0].columns[2].widgets.push({key: 'HidNumber'});
       }
+
+      const datasets = await this.hdxApi.get({ q: 'groups:' + doc.country.iso3.toLowerCase(), rows: 0});
+      if (datasets.count) {
+        widgets.HdxNumber.props.result = datasets;
+        widgets.HdxNumber.props.doc = doc;
+        layout.rows[0].columns[2].widgets.push({key: 'HdxNumber'});
+      }
+
+      widgets.ReliefwebJobs.props.country = { value: this.props.doc.label };
+      layout.rows[0].columns[2].widgets.push({key: 'ReliefwebJobs'});
       this.setState({widgets: widgets, layout: layout});
     }
   }
