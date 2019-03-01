@@ -2,10 +2,10 @@ import React from 'react';
 
 import DigitalSitrepAPI from '../api/DigitalSitrepAPI';
 
-class DigitalSitrepHighlights extends React.Component {
+class DigitalSitrepFigures extends React.Component {
 
   state = {
-    highlights: []
+    figures: []
   };
 
   dsAPI = new DigitalSitrepAPI();
@@ -15,13 +15,13 @@ class DigitalSitrepHighlights extends React.Component {
       "fields.slug": this.props.slug
     };
     const data = await this.dsAPI.get(params);
-    const highlights = [];
+    const figures = [];
     data.includes.Entry.forEach(function (entry) {
-      if  (entry.fields.keyMessage) {
-        highlights.push(entry.fields.keyMessage);
+      if  (entry.fields.figure) {
+        figures.push(entry.fields);
       }
     });
-    this.setState({highlights});
+    this.setState({figures});
   }
 
   async componentDidMount() {
@@ -35,14 +35,14 @@ class DigitalSitrepHighlights extends React.Component {
   }
 
   render() {
-    const highlights = this.state.highlights;
+    const figures = this.state.figures;
     return (
       <div>
-        {highlights ?
+        {figures ?
         <ul>
-            {highlights.map(function (highlight, index) {
+            {figures.map(function (figure, index) {
               return (
-                <li key={index}>{highlight}</li>
+                <li key={index}>{figure.figure} {figure.caption}</li>
               );
             })}
         </ul> : '' }
@@ -51,4 +51,4 @@ class DigitalSitrepHighlights extends React.Component {
   }
 }
 
-export { DigitalSitrepHighlights };
+export { DigitalSitrepFigures };

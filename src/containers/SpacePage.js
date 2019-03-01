@@ -21,6 +21,7 @@ import {FTSWidget} from '../widgets/FTS';
 import {HidNumberOfContacts} from '../widgets/HidNumberOfContacts';
 import {HdxNumberOfDatasets} from '../widgets/HdxNumberOfDatasets';
 import {DigitalSitrepHighlights} from '../widgets/DigitalSitrepHighlights';
+import {DigitalSitrepFigures} from '../widgets/DigitalSitrepFigures';
 
 import 'react-dazzle/lib/style/style.css';
 
@@ -149,6 +150,11 @@ class SpacePage extends React.Component {
         title: 'Highlights from the Digital Situation Report',
         type: DigitalSitrepHighlights,
         props: { }
+      },
+      DigitalSitrepFigures: {
+        title: 'Key Figures from the Digital Situation Report',
+        type: DigitalSitrepFigures,
+        props: { }
       }
     },
     layout: this.layout,
@@ -275,6 +281,8 @@ class SpacePage extends React.Component {
         widgets.FTSFunding.props.appeal = currentAppeal;
         layout.rows[0].columns[2].widgets = [{key: 'FTSFunding'}];
       }
+      widgets.DigitalSitrepFigures.props.slug = this.props.doc.label.toLowerCase();
+      layout.rows[0].columns[2].widgets.push({key: 'DigitalSitrepFigures'});
       const lists = await this.hidApi.get('list', {type: 'operation', remote_id: doc.id});
       if (lists.data.length) {
         widgets.HidNumber.props.list = lists.data[0];

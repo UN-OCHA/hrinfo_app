@@ -67,7 +67,7 @@ class ReliefwebDynamicContent extends React.Component {
         <List>
             {documents.data.map(function (doc) {
               return (
-                <Item item={doc} viewMode='link' />
+                <Item item={doc} viewMode='link' key={doc.id} />
               );
             })}
         </List> : '' }
