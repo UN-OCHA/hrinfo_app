@@ -5,6 +5,7 @@ import {withCookies, Cookies} from 'react-cookie';
 import {withRouter, NavLink} from "react-router-dom";
 import { translate } from 'react-i18next';
 // Material Components
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -18,9 +19,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Avatar from '@material-ui/core/Avatar';
-import ViewModule from '@material-ui/icons/ViewModule';
+import MenuIcon from '@material-ui/icons/Menu';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
-import Popover from '@material-ui/core/Popover';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
@@ -31,6 +31,35 @@ import IconLogo from '../components/IconLogo';
 import SpaceMenu from '../components/SpaceMenu';
 import Breadcrumb from '../components/Breadcrumb';
 import SearchInput from '../components/SearchInput';
+
+const styles = theme => ({
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(1240 + theme.spacing.unit * 3 * 2)]: {
+      width: 1240,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  appBarButton: {
+    color: 'white'
+  },
+  grow: {
+    flexGrow: 1
+  },
+  footerLink: {
+    color: 'white',
+    fontSize: '12px'
+  },
+  footer: {
+    backgroundColor: theme.palette.primary.main,
+    padding: `${theme.spacing.unit * 6}px 0`,
+    color: 'white',
+    fontSize: '12px'
+  },
+});
 
 class App extends Component {
     static propTypes = {
@@ -51,8 +80,7 @@ class App extends Component {
             searchTerms: '',
 			      searchEnabled: false,
             group: null,
-            openPopover: false,
-            anchorPopover: null,
+            spaceMenuOpen: false,
             breadcrumb: []
         };
 
@@ -65,7 +93,7 @@ class App extends Component {
         this.setAlert = this.setAlert.bind(this);
         this.hideAlert = this.hideAlert.bind(this);
         this.setGroup = this.setGroup.bind(this);
-        this.handlePopover = this.handlePopover.bind(this);
+        this.handleSpaceMenu = this.handleSpaceMenu.bind(this);
         this.setBreadcrumb = this.setBreadcrumb.bind(this);
         this.hasPermission = this.hasPermission.bind(this);
         this.isManagerOrEditor = this.isManagerOrEditor.bind(this);
@@ -141,10 +169,9 @@ class App extends Component {
         }
     }
 
-    handlePopover (event) {
+    handleSpaceMenu () {
       this.setState({
-        openPopover: !this.state.openPopover,
-        anchorPopover: event.currentTarget
+        spaceMenuOpen: !this.state.spaceMenuOpen
       });
     }
 
@@ -316,7 +343,7 @@ class App extends Component {
     }
 
     render() {
-        const {t, i18n} = this.props;
+        const {t, i18n, classes} = this.props;
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
             userHasAuthenticated: this.userHasAuthenticated,
@@ -328,67 +355,56 @@ class App extends Component {
             hasPermission: this.hasPermission
         };
 
-        const popover = this.state.group ? (
-          <Popover open={this.state.openPopover}
-            onClose={this.handlePopover}
-            anchorEl={this.state.anchorPopover}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}><SpaceMenu space={this.state.group} handlePopover={this.handlePopover} /></Popover>
-        ) : '';
-
-        const modulesButton = this.state.group ? (
-          <IconButton aria-label="Modules" onClick={this.handlePopover} color="secondary">
-            <ViewModule />
-          </IconButton>
-        ) : '';
-
-        const navbar = this.state.isAuthenticated ? (
-			<Grid item xs={12}>
-				<AppBar position="sticky" color="primary">
-	                <Toolbar className="toolbar">
-	                    <Typography variant="title" color="inherit">
-	                        <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
-	                        <Breadcrumb elts={this.state.breadcrumb} />
-	                    </Typography>
-						<Hidden xsDown>
-							<Paper elevation={0} className="paper">
+        const navbar = (
+          <Toolbar>
+            <Typography variant="headline" color="secondary">
+              <IconButton aria-label="Modules" onClick={this.handleSpaceMenu} color="secondary">
+                <MenuIcon />
+              </IconButton>
+              <SpaceMenu space={this.state.group} open={this.state.spaceMenuOpen} onClose={this.handleSpaceMenu} />
+              <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
+              <Breadcrumb elts={this.state.breadcrumb} />
+            </Typography>
+            <Hidden xsDown>
+  							<Paper elevation={0} className="paper">
                 <SearchInput
                   onChange={this.setSearch}
                   value={this.state.searchResult}
                   />
 							</Paper>
-						</Hidden>
-            <div>
-              <Button color="secondary" onClick={this.toggleMenuLanguage}>{i18n.languages[0]} <KeyboardArrowDown /> </Button>
-              <Menu id="language-menu" anchorEl={this.state.anchorLanguage} onClose={this.toggleMenuLanguage} open={Boolean(this.state.anchorLanguage)}>
-                <MenuItem key='en' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('en'); }}>EN</MenuItem>
-                <MenuItem key='fr' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('fr'); }}>FR</MenuItem>
-                <MenuItem key='es' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('es'); }}>ES</MenuItem>
-              </Menu>
-            </div>
-	                    <div>
-	                        {modulesButton}
-	                        <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
+            </Hidden>
+          </Toolbar>
+        );
+
+        const titlebar = (
+          <Toolbar>
+          <Typography variant="headline" color="secondary">
+            <IconButton aria-label="Modules" onClick={this.handleSpaceMenu} color="secondary">
+              <MenuIcon />
+            </IconButton>
+            <SpaceMenu space={this.state.group} open={this.state.spaceMenuOpen} onClose={this.handleSpaceMenu} />
+            <Breadcrumb elts={this.state.breadcrumb} color="secondary" />
+          </Typography>
+          </Toolbar>
+        );
+
+        const appbar = this.state.isAuthenticated ? (
+          <React.Fragment>
+          <AppBar position="sticky" color="primary" elevation={0}>
+            <Toolbar>
+              <Button className={classes.appBarButton}>OCHA Services <KeyboardArrowDown /></Button>
+              <div className={classes.grow}></div>
+              <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
 								aria-haspopup="true"
 								onClick={this.toggleMenu}
-								color="secondary"
+								color="primary"
 								variant="fab"
 								mini
 								classes={{flat: 'flat'}}>
-								{ this.state.user.picture ? (
-									<Avatar src={this.state.user.picture}></Avatar>
-								) : (
-									<Avatar>{this.state.user.name.substring(0,1)}</Avatar>
-								)}
-	                        </Button>
-	                        <Menu id="menu-appbar"
-								anchorEl={this.state.anchorEl}
+                { this.state.user.picture ? (<Avatar src={this.state.user.picture}></Avatar>) : (<Avatar>{this.state.user.name.substring(0,1)}</Avatar>)}
+              </Button>
+	            <Menu id="menu-appbar"
+                anchorEl={this.state.anchorEl}
 								anchorOrigin={{
 	                                vertical: 'top',
 	                                horizontal: 'right'
@@ -399,21 +415,26 @@ class App extends Component {
 	                            }}
 								open={Boolean(this.state.anchorEl)}
 								onClose={this.toggleMenu}>
-	                          <MenuItem onClick={this.toggleMenu}>
-	                              <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
-	                          </MenuItem>
-	                          <MenuItem onClick={this.toggleMenu}>
-	                              <NavLink to={'/admin'} className="link">Admin</NavLink>
-	                          </MenuItem>
-                            <MenuItem onClick={this.toggleMenu}>
-	                              <a href="mailto:info@humanitarianresponse.info" className="link">Feedback</a>
-	                          </MenuItem>
-	                          <Divider/>
-	                          <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-	                        </Menu>
-	                    </div>
-	                </Toolbar>
-	            </AppBar>
+                  <MenuItem onClick={this.toggleMenu}>
+                      <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
+                  </MenuItem>
+                  <MenuItem onClick={this.toggleMenu}>
+                      <NavLink to={'/admin'} className="link">Admin</NavLink>
+                  </MenuItem>
+                  <MenuItem onClick={this.toggleMenu}>
+                      <a href="mailto:info@humanitarianresponse.info" className="link">Feedback</a>
+                  </MenuItem>
+                  <Divider/>
+                  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+	            </Menu>
+              <Button className={classes.appBarButton} onClick={this.toggleMenuLanguage}>{i18n.languages[0]} <KeyboardArrowDown /> </Button>
+              <Menu id="language-menu" anchorEl={this.state.anchorLanguage} onClose={this.toggleMenuLanguage} open={Boolean(this.state.anchorLanguage)}>
+                <MenuItem key='en' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('en'); }}>EN</MenuItem>
+                <MenuItem key='fr' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('fr'); }}>FR</MenuItem>
+                <MenuItem key='es' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('es'); }}>ES</MenuItem>
+              </Menu>
+	          </Toolbar>
+	        </AppBar>
 				<Hidden smUp>
 					<AppBar position="sticky" color="secondary" elevation={0}>
 						<Toolbar variant="dense">
@@ -433,7 +454,7 @@ class App extends Component {
 						</Toolbar>
 					</AppBar>
 				</Hidden>
-			</Grid>
+        </React.Fragment>
 			)
             : (
 			<AppBar position="sticky" color="primary">
@@ -467,15 +488,29 @@ class App extends Component {
             : '';
 
             return (!this.state.isAuthenticating &&
-			<Grid container className="App" justify="center" alignItems="center">
-				{navbar}
-                {popover}
-                <Grid item className="container-fluid" sm={11}>
-                    {myAlert}
-                    <Routes childProps={childProps}/>
-                </Grid>
-            </Grid>);
+			<React.Fragment>
+        <div className={classes.layout}>
+  				{appbar}
+          <Paper elevation={0}>
+            {navbar}
+            {myAlert}
+            <Routes childProps={childProps}/>
+          </Paper>
+          <footer role="contentinfo" className={classes.footer}>
+            <div className="footer-left footer__logo">
+              <div>Service provided by</div>
+              <div>
+                <a className={classes.footerLink} href="http://www.unocha.org/"><img src={process.env.PUBLIC_URL + '/img/ocha-logo.svg'} alt="OCHA" className="img-responsive" /></a>
+                <span>OCHA coordinates the global emergency response to save lives and protect people in humanitarian crises. We advocate for effective and principled humanitarian action by all, for all.</span>
+              </div>
+            </div>
+            <div className="footer-right">
+              <p className="footer__licence">Except where otherwise noted, content on this site is licensed under a <a className={classes.footerLink} href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> International license. <span className="icon-creative-commons" aria-hidden="true"></span></p>
+            </div>
+          </footer>
+        </div>
+      </React.Fragment>);
     }
 }
 
-export default withRouter(withCookies(translate('common')(App)));
+export default withRouter(withCookies(translate('common')(withStyles(styles)(App))));

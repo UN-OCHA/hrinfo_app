@@ -80,7 +80,7 @@ class User extends React.Component {
         });
         const userVerified = <span><i className="icon-check-circle" /> This user has been verified</span>;
         return (
-          <Paper>
+          <React.Fragment>
             <Grid container>
               <Grid item xs={3}><img src={user.picture} alt={user.name} className="user-image" /></Grid>
               <Grid item xs={9}>
@@ -131,7 +131,7 @@ class User extends React.Component {
                 <hr />
               </Grid>
             </Grid>
-          </Paper>
+          </React.Fragment>
         );
       }
       else {

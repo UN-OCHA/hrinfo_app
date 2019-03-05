@@ -2,8 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 
 const styles = theme => ({
   root: {
@@ -83,29 +89,43 @@ const menus = {
   location: ['events', 'documents', 'infographics', 'assessments']
 };
 
-function TitlebarGridList(props) {
-  const { classes, space } = props;
+class SpaceMenu extends React.Component {
 
-  return (
-    <div className={classes.root}>
-      <GridList cellHeight={80} className={classes.gridList}>
-        {tileData.map(tile => (
-          menus[space.type].indexOf(tile.href) !== -1 ?
-            <Link to={'/' + space.type + 's/' + space.id + '/' + tile.href} key={tile.label}>
-              <GridListTile key={tile.label} className={classes.center} onClick={props.handlePopover}>
-                <h2 className={tile.icon}> </h2>
-                <h5>{tile.label}</h5>
-              </GridListTile>
-            </Link> : ''
-        ))}
-      </GridList>
-    </div>
-  );
+  render () {
+    const { classes, space, open, onClose} = this.props;
+
+    return space ? (
+      <Drawer
+        open={open}
+        onClose={onClose}>
+        <List>
+          {tileData.map(tile => (
+            menus[space.type].indexOf(tile.href) !== -1 ?
+              <ListItem color="secondary" button key={tile.label}>
+                <ListItemIcon>{<MailIcon />}</ListItemIcon>
+                <ListItemText color="secondary">
+                  <Link color="secondary" to={'/' + space.type + 's/' + space.id + '/' + tile.href} key={tile.label}>{tile.label}</Link>
+                </ListItemText>
+              </ListItem> : ''
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['Custom menu item 1', 'Custom menu item 2'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+    ) : '';
+  }
 }
 
-TitlebarGridList.propTypes = {
+SpaceMenu.propTypes = {
   classes: PropTypes.object.isRequired,
   space: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TitlebarGridList);
+export default withStyles(styles)(SpaceMenu);

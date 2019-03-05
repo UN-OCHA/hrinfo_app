@@ -315,7 +315,7 @@ class SpacePage extends React.Component {
 
     if (this.props.doc) {
       return (
-        <Paper className={classes.root}>
+        <React.Fragment>
           <Typography align = "right">
             {this.props.hasPermission('edit', this.props.doc) ?
               <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/edit'}><i className="icon-edit" /></Button> : ''}
@@ -346,7 +346,7 @@ class SpacePage extends React.Component {
               onWidgetSelect={this.handleWidgetSelection}
               editedWidget={this.state.editedWidget}
               onWidgetClose={this.onWidgetClose} /> : ''}
-      </Paper>);
+      </React.Fragment>);
     }
     else {
       return '';
