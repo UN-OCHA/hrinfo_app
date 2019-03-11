@@ -214,7 +214,7 @@ class App extends Component {
 
     isManagerOrEditor (space) {
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
-      const perms = hrinfo.spaces[space.id];
+      const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
       if (!perms) {
         return false;
       }
@@ -226,7 +226,7 @@ class App extends Component {
 
     isManager (space) {
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
-      const perms = hrinfo.spaces[space.id];
+      const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
       if (!perms) {
         return false;
       }
@@ -238,7 +238,7 @@ class App extends Component {
 
     isBundleMember (space) {
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
-      const perms = hrinfo.spaces[space.id];
+      const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
       if (!perms) {
         return false;
       }
@@ -257,7 +257,7 @@ class App extends Component {
       let isAllowed = false;
       if (action === 'add') {
         // Allow user to add if he is a manager, contributor or editor of the space
-        const perms = hrinfo.spaces[space.id];
+        const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
         if (perms &&
           content !== 'bundles' &&
           (perms.indexOf('editor') !== -1 || perms.indexOf('manager') !== -1 || perms.indexOf('contributor') !== -1)) {
