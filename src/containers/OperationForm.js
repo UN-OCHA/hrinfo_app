@@ -20,8 +20,8 @@ import TextField        from '@material-ui/core/TextField';
 import FormHelperText   from '@material-ui/core/FormHelperText';
 
 //Material date picker
-import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from '@date-io/moment';
+import MuiPickersUtilsProvider        from 'material-ui-pickers/MuiPickersUtilsProvider';
 import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 class OperationForm extends React.Component {
@@ -56,7 +56,7 @@ class OperationForm extends React.Component {
     }
     return (
       <Grid container direction="column" alignItems="center">
-        <Typography color="textSecondary" gutterBottom variant="headline">{title}</Typography>
+        <Typography gutterBottom variant="h2">{title}</Typography>
         <Grid item>
           <Grid container justify="space-around">
             <Grid item md={6} xs={11}>

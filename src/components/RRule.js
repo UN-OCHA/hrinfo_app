@@ -11,8 +11,8 @@ import Divider                from '@material-ui/core/Divider';
 import InputAdornment         from '@material-ui/core/InputAdornment';
 
 //Material date picker
-import MomentUtils             from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from '@date-io/moment';
+import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import DatePicker              from 'material-ui-pickers/DatePicker';
 
 class RRule extends React.Component {

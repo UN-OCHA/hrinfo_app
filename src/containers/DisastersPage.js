@@ -32,7 +32,7 @@ class DisastersPage extends React.Component {
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
       return (
-        <Paper className={classes.root}>
+        <React.Fragment>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -78,7 +78,7 @@ class DisastersPage extends React.Component {
               </TableRow>
             </TableFooter>
           </Table>
-        </Paper>
+        </React.Fragment>
       );
     }
 }

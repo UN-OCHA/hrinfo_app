@@ -10,8 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
 import FormControl      from '@material-ui/core/FormControl';
 import FormLabel        from '@material-ui/core/FormLabel';
-import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from '@date-io/moment';
+import MuiPickersUtilsProvider        from 'material-ui-pickers/MuiPickersUtilsProvider';
 import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 import HRInfoAPI from '../api/HRInfoAPI';

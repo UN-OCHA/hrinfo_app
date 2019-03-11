@@ -87,9 +87,9 @@ function SelectWrapped(props) {
     }}
 	  noOptionsMessage={() => <Typography>{'Type at least one character to see results'}</Typography>}
 	  loadingMessage={() => <Typography>{'Loading...'}</Typography>}
-    styles={customStyles}
     isClearable={true}
 	  isMulti={false}
+    styles={customStyles}
 	  getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
     getOptionLabel={(option) => { if (props.getOptionLabel) {return props.getOptionLabel(option)} else {return option.label}}}
 	  value={props.value}
@@ -109,7 +109,10 @@ const customStyles = {
     background: "transparent",
     "&:hover": {
       boxShadow: "none"
-    }
+    },
+  }),
+  valueContainer: () => ({
+    position: "initial"
   }),
   menu: () => ({
     backgroundColor: "white",

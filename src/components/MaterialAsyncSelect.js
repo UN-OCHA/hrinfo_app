@@ -72,9 +72,9 @@ function SelectWrapped(props) {
 	    LoadingIndicator: LoadingIndicator,
 	    Placeholder: () => {return (null);}
     }}
+    styles={customStyles}
     noOptionsMessage={() => <Typography>{'Type at least one character to see results'}</Typography>}
     loadingMessage={() => <Typography>{'Loading...'}</Typography>}
-    styles={customStyles}
     isClearable={true}
     isMulti={props.isMulti}
     getOptionValue={(option) => { if (props.getOptionValue) { return props.getOptionValue(option) } else { return option.id } }}
@@ -98,34 +98,11 @@ const styles = theme => ({
 });
 
 const customStyles = {
-  control: () => ({
-    display: "flex",
-    alignItems: "center",
+  control: (provided, state) => ({
+    ...provided,
     border: 0,
-    height: "auto",
-    background: "transparent",
-    "&:hover": {
-      boxShadow: "none"
-    }
+    boxShadow: 'none',
   }),
-  menu: () => ({
-    backgroundColor: "white",
-    boxShadow: "1px 2px 6px #888888", // should be changed as material-ui
-    position: "absolute",
-    left: 0,
-    top: `calc(100% + 1px)`,
-    width: "100%",
-    zIndex: 2,
-    maxHeight: ITEM_HEIGHT * 4.5
-  }),
-  menuList: () => ({
-    maxHeight: ITEM_HEIGHT * 4.5,
-    overflowY: "auto"
-  }),
-  multiValueLabel: (base) => ({
-	  ...base,
-	  whiteSpace: "normal"
-  })
 };
 
 class MaterialAsyncSelect extends React.Component {

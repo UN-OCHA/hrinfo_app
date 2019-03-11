@@ -122,17 +122,6 @@ const withSpace = function withSpace(Component, options) {
       let newState = {};
       newState.doc = await this.hrinfoAPI.getItem(this.hrinfoType, this.props.match.params.id);
       newState.doc.type = this.spaceType;
-      let breadcrumb = [];
-      if ((this.spaceType === 'group' || this.spaceType === 'office') && newState.doc.operation) {
-        breadcrumb.push({
-          href: '/operations/' + newState.doc.operation[0].id,
-          label: newState.doc.operation[0].label
-        });
-      }
-      breadcrumb.push({
-        href: '/' + this.spaceType + 's/' + newState.doc.id,
-        label: newState.doc.label
-      });
       if (options.contentType) {
         let params = {};
         if (options.sort) {
@@ -174,28 +163,22 @@ const withSpace = function withSpace(Component, options) {
           params['filter[' + this.hrinfoFilter + ']'] = this.props.match.params.id;
           newState.content = await this.hrinfoAPI.get(options.contentType, params);
         }
-        let contentType = options.contentType;
-        if (contentType === 'users') {
-          contentType = 'contacts';
-        }
-        breadcrumb.push({
-          href: '/' + this.spaceType + 's/' + newState.doc.id + '/' + contentType,
-          label: options.contentLabel
-        });
       }
-      return {
-        newState: newState,
-        breadcrumb: breadcrumb
-      };
+      return newState;
     }
 
 
     async componentDidMount() {
       if (this.props.match.params.id) {
-        const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
-        this.setState(stateAndBreadcrumb.newState);
-        this.props.setGroup(stateAndBreadcrumb.newState.doc);
-        this.props.setBreadcrumb(stateAndBreadcrumb.breadcrumb);
+        const newState = await this.getSpaceAndBreadcrumb();
+        this.setState(newState);
+        this.props.setItem(newState.doc);
+        if (options.contentType) {
+          this.props.setContentType({
+            slug: options.contentType,
+            label: options.contentLabel
+          });
+        }
       }
     }
 
@@ -203,12 +186,16 @@ const withSpace = function withSpace(Component, options) {
       if (prevProps.match.url !== this.props.match.url ||
         (prevState.status === '' && this.state.status === 'update')) {
         this.setFromUrl();
-        const stateAndBreadcrumb = await this.getSpaceAndBreadcrumb();
-        let newState = stateAndBreadcrumb.newState;
+        let newState = await this.getSpaceAndBreadcrumb();
         newState.status = '';
         this.setState(newState);
-        this.props.setGroup(stateAndBreadcrumb.newState.doc);
-        this.props.setBreadcrumb(stateAndBreadcrumb.breadcrumb);
+        this.props.setItem(newState.doc);
+        if (options.contentType) {
+          this.props.setContentType({
+            slug: options.contentType,
+            label: options.contentLabel
+          });
+        }
       }
       if (prevState.rowsPerPage !== this.state.rowsPerPage ||
         prevState.page !== this.state.page ||
@@ -370,8 +357,8 @@ const withSpace = function withSpace(Component, options) {
     }
 
     componentWillUnmount() {
-      this.props.setGroup(null);
-      this.props.setBreadcrumb([]);
+      this.props.setItem(null);
+      this.props.setContentType({});
     }
 
     render () {

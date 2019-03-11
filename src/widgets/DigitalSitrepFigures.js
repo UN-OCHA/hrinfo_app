@@ -16,11 +16,13 @@ class DigitalSitrepFigures extends React.Component {
     };
     const data = await this.dsAPI.get(params);
     const figures = [];
-    data.includes.Entry.forEach(function (entry) {
-      if  (entry.fields.figure) {
-        figures.push(entry.fields);
-      }
-    });
+    if (data && data.includes) {
+      data.includes.Entry.forEach(function (entry) {
+        if  (entry.fields.figure) {
+          figures.push(entry.fields);
+        }
+      });
+    }
     this.setState({figures});
   }
 

@@ -27,7 +27,6 @@ class GroupsPage extends React.Component {
       const { classes, content } = this.props;
 
       return (
-        <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -73,7 +72,6 @@ class GroupsPage extends React.Component {
               })}
             </TableBody>
           </Table>
-        </Paper>
       );
     }
 }

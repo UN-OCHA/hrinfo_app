@@ -62,9 +62,9 @@ function SelectWrapped(props) {
     		IndicatorSeparator: null,
     		Placeholder: () => {return (null);}
       }}
+      styles={customStyles}
   	  pageSize={2}
   	  noOptionsMessage={() => <Typography>{'No results found'}</Typography>}
-      styles={customStyles}
       className=""
       classNamePrefix=""
       isClearable={true}
@@ -86,38 +86,15 @@ const styles = theme => ({
   },
   chip: {
     margin: theme.spacing.unit / 4
-  }
+  },
 });
 
 const customStyles = {
-  control: () => ({
-    display: "flex",
-    alignItems: "center",
+  control: (provided, state) => ({
+    ...provided,
     border: 0,
-    height: "auto",
-    background: "transparent",
-    "&:hover": {
-      boxShadow: "none"
-    }
+    boxShadow: 'none',
   }),
-  menu: () => ({
-    backgroundColor: "white",
-    boxShadow: "1px 2px 6px #888888", // should be changed as material-ui
-    position: "absolute",
-    left: 0,
-    top: `calc(100% + 1px)`,
-    width: "100%",
-    zIndex: 2,
-    maxHeight: ITEM_HEIGHT * 4.5
-  }),
-  menuList: () => ({
-    maxHeight: ITEM_HEIGHT * 4.5,
-    overflowY: "auto"
-  }),
-  multiValueLabel: (base) => ({
-	  ...base,
-	  whiteSpace: "normal"
-  })
 };
 
 class MaterialSelect extends React.Component {

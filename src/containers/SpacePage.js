@@ -71,6 +71,7 @@ class SpacePage extends React.Component {
   hdxApi = new HdxAPI();
 
   state = {
+    status: 'initial',
     widgets: {
       LatestDocuments: {
         title: "Latest Documents",
@@ -158,7 +159,6 @@ class SpacePage extends React.Component {
       }
     },
     layout: this.layout,
-    isEditable: false,
     isModalOpen: false,
     tempLayout: null,
     rowIndex: null,
@@ -210,13 +210,6 @@ class SpacePage extends React.Component {
     });
   }
 
-  setEditable = () => {
-    const editable = this.state.isEditable;
-    this.setState({
-      isEditable: !editable
-    });
-  }
-
   /**
    * When user selects a widget from the modal dialog, this will be called.
    * By calling the 'addWidget' method, the widget could be added to the previous requested location.
@@ -226,7 +219,6 @@ class SpacePage extends React.Component {
 
     let widgets = this.state.widgets;
     widgets[name] = widget;
-    console.log(widgets);
     this.setState({
       widgets: widgets,
       editedWidget: null
@@ -247,7 +239,7 @@ class SpacePage extends React.Component {
   }
 
   async componentDidUpdate() {
-    if (this.props.doc) {
+    if (this.props.doc && this.state.status === 'initial') {
       const doc = this.props.doc;
       let widgets = lodash.cloneDeep(this.state.widgets);
       let layout = lodash.cloneDeep(this.state.layout);
@@ -299,7 +291,11 @@ class SpacePage extends React.Component {
 
       widgets.ReliefwebJobs.props.country = { value: this.props.doc.label };
       layout.rows[0].columns[2].widgets.push({key: 'ReliefwebJobs'});
-      this.setState({widgets: widgets, layout: layout});
+      this.setState({
+        widgets: widgets,
+        layout: layout,
+        status: 'ready'
+      });
     }
   }
 
@@ -316,27 +312,19 @@ class SpacePage extends React.Component {
     if (this.props.doc) {
       return (
         <React.Fragment>
-          <Typography align = "right">
-            {this.props.hasPermission('edit', this.props.doc) ?
-              <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/edit'}><i className="icon-edit" /></Button> : ''}
-            {this.props.hasPermission('customize', this.props.doc) ?
-              <Button onClick={this.setEditable}><i className="icon-eye" /></Button> : '' }
-            {this.props.hasPermission('customize', this.props.doc) && (this.props.doc.type === 'operation' || this.props.doc.type === 'group') ?
-              <Button component={Link} to={'/' + this.props.doc.type + 's/' + this.props.doc.id + '/manage'}><i className="icon-wheel" /></Button> : '' }
-          </Typography>
           <div className="container">
             <Dashboard
               frameComponent={CustomFrame}
               widgets={this.state.widgets}
               layout={this.state.layout}
-              editable={this.state.isEditable}
+              editable={this.props.isEditable}
               onAdd={this.onAdd}
               onRemove={this.onRemove}
               onMove={this.onMove}
               onEdit={this.onEdit}
               className='container' />
           </div>
-          {this.state.isEditable ?
+          {this.props.isEditable ?
             <SelectWidget
               layout={this.state.tempLayout}
               rowIndex={this.state.rowIndex}

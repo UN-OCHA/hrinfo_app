@@ -29,8 +29,11 @@ import './App.css';
 import Routes from '../utils/Routes';
 import IconLogo from '../components/IconLogo';
 import SpaceMenu from '../components/SpaceMenu';
-import Breadcrumb from '../components/Breadcrumb';
+import HRBreadcrumb from '../components/HRBreadcrumb';
+import HRToolbar from '../components/HRToolbar';
 import SearchInput from '../components/SearchInput';
+import UserMenu from '../components/UserMenu';
+import LanguageMenu from '../components/LanguageMenu';
 
 const styles = theme => ({
   layout: {
@@ -74,50 +77,29 @@ class App extends Component {
             isAuthenticating: true,
             user: {},
             token: '',
-            anchorEl: null,
-            anchorLanguage: null,
             alert: {},
             searchTerms: '',
 			      searchEnabled: false,
-            group: null,
-            spaceMenuOpen: false,
-            breadcrumb: []
+            isEditable: false,
+            item: null,
+            contentType: {}
         };
 
         this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
         this.userIsAuthenticated = this.userIsAuthenticated.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.setSearch = this.setSearch.bind(this);
-        this.toggleMenu = this.toggleMenu.bind(this);
-        this.toggleMenuLanguage = this.toggleMenuLanguage.bind(this);
         this.setAlert = this.setAlert.bind(this);
         this.hideAlert = this.hideAlert.bind(this);
-        this.setGroup = this.setGroup.bind(this);
-        this.handleSpaceMenu = this.handleSpaceMenu.bind(this);
-        this.setBreadcrumb = this.setBreadcrumb.bind(this);
+        this.setItem = this.setItem.bind(this);
         this.hasPermission = this.hasPermission.bind(this);
         this.isManagerOrEditor = this.isManagerOrEditor.bind(this);
         this.isManager = this.isManager.bind(this);
         this.isBundleMember = this.isBundleMember.bind(this);
+        this.setContentType = this.setContentType.bind(this);
 
         ReactGA.initialize('UA-70934930-2');
         ReactGA.pageview(window.location.pathname + window.location.search);
-    }
-
-    toggleMenu(event) {
-        if (this.state.anchorEl) {
-            this.setState({anchorEl: null});
-        } else {
-            this.setState({anchorEl: event.currentTarget});
-        }
-    }
-
-    toggleMenuLanguage(event) {
-      if (this.state.anchorLanguage) {
-        this.setState({anchorLanguage: null});
-      } else {
-        this.setState({anchorLanguage: event.currentTarget});
-      }
     }
 
     userHasAuthenticated(authenticated, user, token, setState = true) {
@@ -157,7 +139,6 @@ class App extends Component {
     handleLogout() {
         this.userHasAuthenticated(false);
         this.props.history.push('/');
-        this.toggleMenu();
     }
 
     componentDidMount() {
@@ -167,12 +148,6 @@ class App extends Component {
         } else {
             this.setState({isAuthenticating: false});
         }
-    }
-
-    handleSpaceMenu () {
-      this.setState({
-        spaceMenuOpen: !this.state.spaceMenuOpen
-      });
     }
 
     componentDidUpdate() {
@@ -222,17 +197,20 @@ class App extends Component {
         this.setState({alert: {}});
     }
 
-    setGroup (group) {
-      this.setState({
-        group: group
-      });
+    setItem (item) {
+      this.setState({item});
     }
 
-    setBreadcrumb (breadcrumb) {
-      this.setState({
-        breadcrumb: breadcrumb
-      });
+    setContentType (contentType) {
+      this.setState({contentType});
     }
+
+    setEditable = () => {
+      const editable = this.state.isEditable;
+      this.setState({
+        isEditable: !editable
+      });
+    };
 
     isManagerOrEditor (space) {
       const hrinfo = this.state.user ? this.state.user.hrinfo : {};
@@ -350,89 +328,33 @@ class App extends Component {
             userIsAuthenticated: this.userIsAuthenticated,
             setAlert: this.setAlert,
             user: this.state.user,
-            setGroup: this.setGroup,
-            setBreadcrumb: this.setBreadcrumb,
-            hasPermission: this.hasPermission
+            setItem: this.setItem,
+            hasPermission: this.hasPermission,
+            setContentType: this.setContentType,
+            isEditable: this.state.isEditable
         };
 
         const navbar = (
           <Toolbar>
-            <Typography variant="headline" color="secondary">
-              <IconButton aria-label="Modules" onClick={this.handleSpaceMenu} color="secondary">
-                <MenuIcon />
-              </IconButton>
-              <SpaceMenu space={this.state.group} open={this.state.spaceMenuOpen} onClose={this.handleSpaceMenu} />
-              <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
-              <Breadcrumb elts={this.state.breadcrumb} />
-            </Typography>
+            <SpaceMenu item={this.state.item} />
+            <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
             <Hidden xsDown>
-  							<Paper elevation={0} className="paper">
                 <SearchInput
                   onChange={this.setSearch}
                   value={this.state.searchResult}
                   />
-							</Paper>
             </Hidden>
           </Toolbar>
         );
 
-        const titlebar = (
-          <Toolbar>
-          <Typography variant="headline" color="secondary">
-            <IconButton aria-label="Modules" onClick={this.handleSpaceMenu} color="secondary">
-              <MenuIcon />
-            </IconButton>
-            <SpaceMenu space={this.state.group} open={this.state.spaceMenuOpen} onClose={this.handleSpaceMenu} />
-            <Breadcrumb elts={this.state.breadcrumb} color="secondary" />
-          </Typography>
-          </Toolbar>
-        );
-
-        const appbar = this.state.isAuthenticated ? (
+        const appbar = (
           <React.Fragment>
-          <AppBar position="sticky" color="primary" elevation={0}>
+          <AppBar position="static" color="primary" elevation={0}>
             <Toolbar>
               <Button className={classes.appBarButton}>OCHA Services <KeyboardArrowDown /></Button>
               <div className={classes.grow}></div>
-              <Button aria-owns={Boolean(this.state.anchorEl) ? 'menu-appbar' : null}
-								aria-haspopup="true"
-								onClick={this.toggleMenu}
-								color="primary"
-								variant="fab"
-								mini
-								classes={{flat: 'flat'}}>
-                { this.state.user.picture ? (<Avatar src={this.state.user.picture}></Avatar>) : (<Avatar>{this.state.user.name.substring(0,1)}</Avatar>)}
-              </Button>
-	            <Menu id="menu-appbar"
-                anchorEl={this.state.anchorEl}
-								anchorOrigin={{
-	                                vertical: 'top',
-	                                horizontal: 'right'
-	                            }}
-								transformOrigin={{
-	                                vertical: 'top',
-	                                horizontal: 'right'
-	                            }}
-								open={Boolean(this.state.anchorEl)}
-								onClose={this.toggleMenu}>
-                  <MenuItem onClick={this.toggleMenu}>
-                      <NavLink to={'/users/' + this.state.user.id} className="link">Profile</NavLink>
-                  </MenuItem>
-                  <MenuItem onClick={this.toggleMenu}>
-                      <NavLink to={'/admin'} className="link">Admin</NavLink>
-                  </MenuItem>
-                  <MenuItem onClick={this.toggleMenu}>
-                      <a href="mailto:info@humanitarianresponse.info" className="link">Feedback</a>
-                  </MenuItem>
-                  <Divider/>
-                  <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-	            </Menu>
-              <Button className={classes.appBarButton} onClick={this.toggleMenuLanguage}>{i18n.languages[0]} <KeyboardArrowDown /> </Button>
-              <Menu id="language-menu" anchorEl={this.state.anchorLanguage} onClose={this.toggleMenuLanguage} open={Boolean(this.state.anchorLanguage)}>
-                <MenuItem key='en' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('en'); }}>EN</MenuItem>
-                <MenuItem key='fr' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('fr'); }}>FR</MenuItem>
-                <MenuItem key='es' onClick={() => {this.toggleMenuLanguage(); i18n.changeLanguage('es'); }}>ES</MenuItem>
-              </Menu>
+              {this.state.isAuthenticated && <UserMenu user={this.state.user} handleLogout={this.handleLogout} /> }
+              <LanguageMenu />
 	          </Toolbar>
 	        </AppBar>
 				<Hidden smUp>
@@ -455,15 +377,7 @@ class App extends Component {
 					</AppBar>
 				</Hidden>
         </React.Fragment>
-			)
-            : (
-			<AppBar position="sticky" color="primary">
-                <Toolbar>
-                    <Typography variant="title" color="inherit" href="/home">
-                        <IconLogo />
-                    </Typography>
-                </Toolbar>
-            </AppBar>);
+			);
 
         const myAlert = this.state.alert.message
             ? (
@@ -494,6 +408,8 @@ class App extends Component {
           <Paper elevation={0}>
             {navbar}
             {myAlert}
+            {this.state.item && <HRToolbar item={this.state.item} contentType={this.state.contentType} hasPermission={this.hasPermission} setEditable={this.setEditable} goBack={this.props.history.goBack} /> }
+            {this.state.item && <HRBreadcrumb item={this.state.item} contentType={this.state.contentType} /> }
             <Routes childProps={childProps}/>
           </Paper>
           <footer role="contentinfo" className={classes.footer}>

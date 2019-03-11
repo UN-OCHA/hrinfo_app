@@ -34,52 +34,52 @@ class DatasetsPage extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
-        <Typography variant="subheading">
-          <strong>{content.count}</strong> elements found
-        </Typography>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Dataset</TableCell>
-              <TableCell>Last Updated</TableCell>
-              <TableCell>Source</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {content.data.map(n => {
-              return (
-                <TableRow key={n.id}>
-                  <TableCell component="th" scope="row">
-                    <a href={'https://data.humdata.org/dataset/' + n.id} target="__blank">{n.title}</a>
-                  </TableCell>
-                  <TableCell>{moment(n.metadata_modified).format('DD MMMM YYYY')}</TableCell>
-                  <TableCell>{n.dataset_source}</TableCell>
-                </TableRow>
-              );
-            })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 48 * emptyRows }}>
-                <TableCell colSpan={6} />
+      <React.Fragment>
+      <Typography variant="subheading">
+        <strong>{content.count}</strong> elements found
+      </Typography>
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Dataset</TableCell>
+            <TableCell>Last Updated</TableCell>
+            <TableCell>Source</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {content.data.map(n => {
+            return (
+              <TableRow key={n.id}>
+                <TableCell component="th" scope="row">
+                  <a href={'https://data.humdata.org/dataset/' + n.id} target="__blank">{n.title}</a>
+                </TableCell>
+                <TableCell>{moment(n.metadata_modified).format('DD MMMM YYYY')}</TableCell>
+                <TableCell>{n.dataset_source}</TableCell>
               </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                colSpan={3}
-                count={content.count}
-                rowsPerPage={rowsPerPage}
-                rowsPerPageOptions={[50,100,150,200]}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActionsWrapped}
-              />
+            );
+          })}
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 48 * emptyRows }}>
+              <TableCell colSpan={6} />
             </TableRow>
-          </TableFooter>
-        </Table>
-      </Paper>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              colSpan={3}
+              count={content.count}
+              rowsPerPage={rowsPerPage}
+              rowsPerPageOptions={[50,100,150,200]}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActionsWrapped}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+      </React.Fragment>
     );
   }
 }

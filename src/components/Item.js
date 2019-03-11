@@ -14,7 +14,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import Chip from '@material-ui/core/Chip';
 import moment from 'moment';
+
+import DownloadButton from './DownloadButton';
 
 const styles = {
   card: {
@@ -36,11 +39,16 @@ const styles = {
     width: 38,
   },
   gridList: {
-    padding: 5
+    padding: 5,
+    width: 400,
+    height: 400
   },
   gridImage: {
-    width: 400,
-    height: 280,
+    maxWidth: 300,
+    height: 'auto',
+  },
+  gridLink: {
+    display: 'block'
   }
 };
 
@@ -80,13 +88,13 @@ class Item extends React.Component {
       if (item[a] && Array.isArray(item[a])) {
         for (let i = 0; i < item[a].length; i++) {
           if (item[a][i]) {
-            badges.push(<ListItem key={a + '_' + item[a][i].id}>{item[a][i].label}</ListItem>);
+            badges.push(<Chip key={a + '_' + item[a][i].id} label={item[a][i].label} color="primary" />);
           }
         }
       }
       else {
         if (item[a]) {
-          badges.push(<ListItem key={a}>{item[a]}</ListItem>);
+          badges.push(<Chip key={a} label={item[a]} color="primary" />);
         }
       }
     });
@@ -102,39 +110,57 @@ class Item extends React.Component {
     else {
       image = item.files && item.files[0] && item.files[0].file.preview !== 'https://www.humanitarianresponse.info/' ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png';
     }
-    if (this.props.viewMode === 'full' || this.props.viewMode === 'search') {
+    if (this.props.viewMode === 'full') {
       return (
-        <Card className={classes.card}>
-          <CardMedia
-            className={classes.cover}
-            image={image}
-            title="Card Image"
-          />
-          <div className={classes.details}>
-            <CardContent>
-              <Typography gutterBottom variant="headline" component="h2">{item.label ? item.label : item.name}</Typography>
-              {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
-            </CardContent>
-            <CardActions>
-              {this.props.viewMode === 'search' ? <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
-              {item.type !== 'users' ? <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button> : ''}
-            </CardActions>
-          </div>
-          <List>
+        <Card elevation={0}>
+          <CardContent>
+            <Typography gutterBottom variant="h2">{item.label ? item.label : item.name}</Typography>
             {this.renderBadges()}
-          </List>
+            <Typography align="center">
+              <img src={image} alt={item.label} className={classes.cover} title={item.label} /><br />
+              <DownloadButton item={item} />
+            </Typography>
+            {this.props.viewMode === 'full' ? <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography> : ''}
+          </CardContent>
+          <CardActions>
+            {this.props.viewMode === 'search' ? <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
+            {item.type !== 'users' ? <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button> : ''}
+          </CardActions>
+        </Card>
+      );
+    }
+    else if (this.props.viewMode === 'search') {
+      return (
+        <Card>
+          <CardMedia
+            className={classes.gridImage}
+            image={image}
+            title={item.label}
+          />
+          <CardContent>
+            <Typography component="p">{item['body-html'] ? renderHTML(item['body-html']) : ''}</Typography>
+          </CardContent>
+          <CardActions>
+            {this.props.viewMode === 'search' ? <Button component={Link} variant='outlined' color='primary' to={'/' + item.type + '/' + item.id}>View more</Button> : '' }&nbsp;
+            {item.type !== 'users' ? <Button variant='outlined' color='primary' href={ 'https://www.humanitarianresponse.info/node/' + item.id }>View in HR.info</Button> : ''}
+          </CardActions>
         </Card>
       );
     }
     else if (this.props.viewMode === 'grid') {
+      let image = '';
+      if (item.type === 'users') {
+        image = item.picture ? item.picture : 'https://i2.wp.com/humanitarian.id/img/default-avatar.png?ssl=1';
+      }
+      else {
+        image = item.files ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png';
+      }
       return (
         <GridListTile key={item.id} className={classes.gridList}>
-          <Link to={'/' + item.type + '/' + item.id}>
-            <img src={item.files ? item.files[0].file.preview : 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/media-icons/default/application-octet-stream.png'} alt={item.label} className={classes.gridImage} />
-            <GridListTileBar
-              title={item.label}
-            />
+          <Link to={'/' + item.type + '/' + item.id} align='center' className={classes.gridLink}>
+            <img src={image} alt={item.label ? item.label : item.name} className={classes.gridImage} />
           </Link>
+          <GridListTileBar title={item.label ? item.label : item.name} />
         </GridListTile>
       );
     }

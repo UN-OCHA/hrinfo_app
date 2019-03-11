@@ -37,51 +37,49 @@ class OfficesPage extends React.Component {
       const { classes, content } = this.props;
 
       return (
-        <div>
-          <Paper className={classes.root}>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Phones</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Venue</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {content.data.map(n => {
-                  let venue = '';
-                  if (n.address) {
-                    if (n.address.thoroughfare) {
-                      venue += n.address.thoroughfare + ',';
-                    }
-                    if (n.address.locality) {
-                      venue += n.address.locality;
-                    }
+        <React.Fragment>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Phones</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Venue</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {content.data.map(n => {
+                let venue = '';
+                if (n.address) {
+                  if (n.address.thoroughfare) {
+                    venue += n.address.thoroughfare + ',';
                   }
-                  return (
-                    <TableRow key={n.id}>
-                      <TableCell component="th" scope="row">
-                        <Link to={'/offices/' + n.id}>{n.label}</Link>
-                      </TableCell>
-                      <TableCell>TODO</TableCell>
-                      <TableCell>{n.email ? n.email : ''}</TableCell>
-                      <TableCell>{n.location ? n.location.label : ''}</TableCell>
-                      <TableCell>{venue}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </Paper>
+                  if (n.address.locality) {
+                    venue += n.address.locality;
+                  }
+                }
+                return (
+                  <TableRow key={n.id}>
+                    <TableCell component="th" scope="row">
+                      <Link to={'/offices/' + n.id}>{n.label}</Link>
+                    </TableCell>
+                    <TableCell>TODO</TableCell>
+                    <TableCell>{n.email ? n.email : ''}</TableCell>
+                    <TableCell>{n.location ? n.location.label : ''}</TableCell>
+                    <TableCell>{venue}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
           {this.props.doc && this.props.hasPermission('add', 'office', this.props.doc) ?
             <Link to="/offices/new">
               <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
                 <AddIcon />
               </Button>
             </Link> : '' }
-        </div>
+        </React.Fragment>
       );
     }
 }

@@ -28,6 +28,7 @@ class ItemPage extends React.Component {
         this.setState({
           doc: doc
         });
+        this.props.setItem(doc);
       }
     }
 
@@ -38,24 +39,22 @@ class ItemPage extends React.Component {
           doc: doc,
           canEdit: this.canEdit(doc)
         });
+        this.props.setItem(doc);
       }
+    }
+
+    componentWillUnmount() {
+      this.props.setItem(null);
     }
 
     render() {
       if (this.state.doc && this.state.doc.id) {
         return (
-          <Paper>
-              {this.props.hasPermission('edit', this.state.doc) ?
-                <Typography align = "right">
-                  <Button component={Link} to={'/' + this.state.doc.type + '/' + this.state.doc.id + '/clone'}><i className="icon-copy" title="Clone" /></Button>
-                  <Button component={Link} to={'/' + this.state.doc.type + '/' + this.state.doc.id + '/edit'}><i className="icon-edit" title="Edit" /></Button>
-                </Typography> : ''}
-            <Item item={this.state.doc} viewMode="full" user={this.props.user} />
-          </Paper>
+          <Item item={this.state.doc} viewMode="full" user={this.props.user} />
         );
       }
       else {
-        return (<Paper>Not found !</Paper>);
+        return '';
       }
     }
 }

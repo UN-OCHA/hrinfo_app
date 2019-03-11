@@ -19,8 +19,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ViewModule from '@material-ui/icons/ViewModule';
 import ViewList from '@material-ui/icons/ViewList';
 import Moment from 'moment';
+import GridList from '@material-ui/core/GridList';
 
-
+import DownloadButton from '../components/DownloadButton';
 import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
 import withSpace from '../utils/withSpace';
 import {Filters, FilterChips} from '../components/Filters';
@@ -65,7 +66,7 @@ class InfographicsPage extends React.Component {
     const { anchorEl, openMenuId, view } = this.state;
 
     return (
-      <div>
+      <React.Fragment>
         <Filters
           contentType   = {contentType}
           spaceType     = {spaceType}
@@ -74,120 +75,91 @@ class InfographicsPage extends React.Component {
           toggleDrawer  = {toggleDrawer}
           drawerState   = {drawerState}
           doc           = {this.props.doc} />
-        <Paper className  = {classes.root}>
-          <Typography align = "right">
-            <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
-            <IconButton onClick={(v) => {this.setState({view: 'grid'})}}>
-              <ViewModule />
-            </IconButton>
-            <IconButton onClick={(v) => {this.setState({view: 'list'})}}>
-              <ViewList />
-            </IconButton>
-          </Typography>
-          <Typography variant="subheading">
-            <FilterChips filters={filters} removeFilter={removeFilter} />&nbsp;<strong>{content.count}</strong> elements found
-          </Typography>
-          {view === 'list' ?
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Infographic type</TableCell>
-                  <TableCell>Organizations</TableCell>
-                  <TableCell>Publication date</TableCell>
-                  <TableCell>Files</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {content.data.map(n => {
-                  let files = '';
-                  if (n.files) {
-                    if (n.files.length === 1) {
-                      files = <Button href={n.files[0].file.url} variant="outlined" color="primary">Download</Button>;
-                    }
-                    else {
-                      const that = this;
-                      const menuId = 'download-menu-' + n.id;
-                      files = <span><Button
-                        aria-owns={anchorEl ? menuId : null}
-                        aria-haspopup="true"
-                        onClick={(e) => {this.handleClick(e, menuId)}}
-                        variant="outlined"
-                        color="primary"
-                      >
-                        Download
-                      </Button>
-                      <Menu
-                        id={menuId}
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl) && openMenuId === menuId }
-                        onClose={this.handleClose}
-                      >
-                        {n.files.map(function (file) {
-                          return (<MenuItem key={file.file.fid} onClick={that.handleClose}><a href={file.file.url} className="link">{file.file.filename}</a></MenuItem>);
-                        })}
-                      </Menu></span>;
-                    }
-                  }
-                  return (
-                    <TableRow key={n.id}>
-                      <TableCell component="th" scope="row">
-                        <Link to={'/infographics/' + n.id}>{n.label}</Link>
-                      </TableCell>
-                      <TableCell>{n.infographic_type ? n.infographic_type.label : ''}</TableCell>
-                      <TableCell>{n.organizations && n.organizations.length ? n.organizations.map(o => {
-                        return (<Link key={o.id} to={'/organizations/' + o.id}>{o.label}</Link>);
-                      }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
-                      <TableCell>{n.publication_date ? Moment(n.publication_date).format('MMM DD YYYY') : ''}</TableCell>
-                      <TableCell>{files}</TableCell>
-                    </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 48 * emptyRows }}>
-                    <TableCell colSpan={6} />
+        <Typography align = "right">
+          <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
+          <IconButton onClick={(v) => {this.setState({view: 'grid'})}}>
+            <ViewModule />
+          </IconButton>
+          <IconButton onClick={(v) => {this.setState({view: 'list'})}}>
+            <ViewList />
+          </IconButton>
+        </Typography>
+        <Typography variant="subheading">
+          <FilterChips filters={filters} removeFilter={removeFilter} />&nbsp;<strong>{content.count}</strong> elements found
+        </Typography>
+        {view === 'list' ?
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Infographic type</TableCell>
+                <TableCell>Organizations</TableCell>
+                <TableCell>Publication date</TableCell>
+                <TableCell>Files</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {content.data.map(n => {
+                return (
+                  <TableRow key={n.id}>
+                    <TableCell component="th" scope="row">
+                      <Link to={'/infographics/' + n.id}>{n.label}</Link>
+                    </TableCell>
+                    <TableCell>{n.infographic_type ? n.infographic_type.label : ''}</TableCell>
+                    <TableCell>{n.organizations && n.organizations.length ? n.organizations.map(o => {
+                      return (<Link key={o.id} to={'/organizations/' + o.id}>{o.label}</Link>);
+                    }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
+                    <TableCell>{n.publication_date ? Moment(n.publication_date).format('MMM DD YYYY') : ''}</TableCell>
+                    <TableCell><DownloadButton item={n} /></TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    colSpan={3}
-                    count={content.count}
-                    rowsPerPage={rowsPerPage}
-                    rowsPerPageOptions={[50,100,150,200]}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActionsWrapped}
-                  />
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 48 * emptyRows }}>
+                  <TableCell colSpan={6} />
                 </TableRow>
-              </TableFooter>
-            </Table> : ''}
-          { view === 'grid' ?
-            <div>
-            {content.data.map(n => {
-              return (<Item item={n} viewMode="search" />);
-            })}
-            <TablePagination
-              count={content.count}
-              rowsPerPage={rowsPerPage}
-              rowsPerPageOptions={[50,100,150,200]}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActionsWrapped}
-            />
-            </div> : ''
-          }
-        </Paper>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  colSpan={3}
+                  count={content.count}
+                  rowsPerPage={rowsPerPage}
+                  rowsPerPageOptions={[50,100,150,200]}
+                  page={page}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActionsWrapped}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table> : ''}
+        { view === 'grid' ?
+          <React.Fragment>
+          <GridList>
+          {content.data.map(n => {
+            return (<Item item={n} viewMode="grid" />);
+          })}
+          </GridList>
+          <TablePagination
+            count={content.count}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[50,100,150,200]}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            ActionsComponent={TablePaginationActionsWrapped}
+          />
+          </React.Fragment> : ''
+        }
         {this.props.doc && this.props.hasPermission('add', 'infographic', this.props.doc) ?
           <Link to="/infographics/new">
             <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
               <AddIcon />
             </Button>
           </Link> : '' }
-      </div>
+      </React.Fragment>
     );
   }
 }

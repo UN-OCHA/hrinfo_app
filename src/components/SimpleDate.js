@@ -13,8 +13,8 @@ import Card         from '@material-ui/core/Card';
 import CardContent  from '@material-ui/core/CardContent';
 
 //Material date picker
-import MomentUtils                    from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider        from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from '@date-io/moment';
+import MuiPickersUtilsProvider        from 'material-ui-pickers/MuiPickersUtilsProvider';
 import DatePicker                     from 'material-ui-pickers/DatePicker';
 
 class SimpleDate extends React.Component {

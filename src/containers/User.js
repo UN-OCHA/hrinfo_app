@@ -26,6 +26,7 @@ class User extends React.Component {
     }
 
     async componentDidUpdate () {
+      console.log(this.props.match.params);
       if (this.state.user.id && this.state.user.id !== this.props.match.params.id) {
         const user = await this.hidAPI.getItem('user', this.props.match.params.id);
         this.setState({

@@ -10,6 +10,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = theme => ({
   root: {
@@ -91,41 +93,57 @@ const menus = {
 
 class SpaceMenu extends React.Component {
 
-  render () {
-    const { classes, space, open, onClose} = this.props;
+  state = {
+    open: false
+  };
 
-    return space ? (
-      <Drawer
-        open={open}
-        onClose={onClose}>
-        <List>
-          {tileData.map(tile => (
-            menus[space.type].indexOf(tile.href) !== -1 ?
-              <ListItem color="secondary" button key={tile.label}>
-                <ListItemIcon>{<MailIcon />}</ListItemIcon>
-                <ListItemText color="secondary">
-                  <Link color="secondary" to={'/' + space.type + 's/' + space.id + '/' + tile.href} key={tile.label}>{tile.label}</Link>
-                </ListItemText>
-              </ListItem> : ''
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['Custom menu item 1', 'Custom menu item 2'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+  onClose = () => {
+    this.setState({
+      open: !this.state.open
+    });
+  };
+
+  render () {
+    const { classes, item} = this.props;
+    const spaces = ['operation', 'disaster', 'office', 'bundle', 'organization'];
+
+    return item && spaces.indexOf(item.type) !== -1 ? (
+      <React.Fragment>
+        <IconButton aria-label="Modules" onClick={this.onClose} color="secondary">
+          <MenuIcon />
+        </IconButton>
+        <Drawer
+          open={this.state.open}
+          onClose={this.onClose}>
+          <List>
+            {tileData.map(tile => (
+              menus[item.type].indexOf(tile.href) !== -1 ?
+                <ListItem color="secondary" button key={tile.label}>
+                  <ListItemIcon>{<MailIcon />}</ListItemIcon>
+                  <ListItemText color="secondary">
+                    <Link color="secondary" to={'/' + item.type + 's/' + item.id + '/' + tile.href} key={tile.label}>{tile.label}</Link>
+                  </ListItemText>
+                </ListItem> : ''
+            ))}
+          </List>
+          <Divider />
+          <List>
+            {['Custom menu item 1', 'Custom menu item 2'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </React.Fragment>
     ) : '';
   }
 }
 
 SpaceMenu.propTypes = {
   classes: PropTypes.object.isRequired,
-  space: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(SpaceMenu);

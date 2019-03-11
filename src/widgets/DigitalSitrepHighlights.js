@@ -16,11 +16,13 @@ class DigitalSitrepHighlights extends React.Component {
     };
     const data = await this.dsAPI.get(params);
     const highlights = [];
-    data.includes.Entry.forEach(function (entry) {
-      if  (entry.fields.keyMessage) {
-        highlights.push(entry.fields.keyMessage);
-      }
-    });
+    if (data && data.includes) {
+      data.includes.Entry.forEach(function (entry) {
+        if  (entry.fields.keyMessage) {
+          highlights.push(entry.fields.keyMessage);
+        }
+      });
+    }
     this.setState({highlights});
   }
 

@@ -75,7 +75,7 @@ class ClusterForm extends React.Component {
 
     return (
       <Grid container direction = "column" alignItems = "center">
-      <Typography color = "textSecondary" gutterBottom variant = "headline">{title}</Typography>
+      <Typography gutterBottom variant = "h2">{title}</Typography>
       <Grid item>
         <Grid container justify = "space-around">
 

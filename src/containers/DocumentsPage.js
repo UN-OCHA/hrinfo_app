@@ -19,8 +19,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ViewModule from '@material-ui/icons/ViewModule';
 import ViewList from '@material-ui/icons/ViewList';
 import Moment from 'moment';
+import GridList from '@material-ui/core/GridList';
 
-
+import DownloadButton from '../components/DownloadButton';
 import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
 import withSpace from '../utils/withSpace';
 import {Filters, FilterChips} from '../components/Filters';
@@ -40,7 +41,7 @@ const styles = theme => ({
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
     color: 'white'
-  }
+  },
 });
 
 class DocumentsPage extends React.Component {
@@ -65,7 +66,7 @@ class DocumentsPage extends React.Component {
     const { anchorEl, openMenuId, view } = this.state;
 
     return (
-      <div>
+      <React.Fragment>
         <Filters
           contentType   = {contentType}
           spaceType     = {spaceType}
@@ -74,7 +75,6 @@ class DocumentsPage extends React.Component {
           toggleDrawer  = {toggleDrawer}
           drawerState   = {drawerState}
           doc           = {this.props.doc} />
-        <Paper className  = {classes.root}>
           <Typography align = "right">
             <Button onClick={toggleDrawer}><i className="icon-filter" /></Button>
             <IconButton onClick={(v) => {this.setState({view: 'grid'})}}>
@@ -100,35 +100,6 @@ class DocumentsPage extends React.Component {
               </TableHead>
               <TableBody>
                 {content.data.map(n => {
-                  let files = '';
-                  if (n.files) {
-                    if (n.files.length === 1) {
-                      files = <Button href={n.files[0].file.url} variant="outlined" color="primary">Download</Button>;
-                    }
-                    else {
-                      const that = this;
-                      const menuId = 'download-menu-' + n.id;
-                      files = <span><Button
-                        aria-owns={anchorEl ? menuId : null}
-                        aria-haspopup="true"
-                        onClick={(e) => {this.handleClick(e, menuId)}}
-                        variant="outlined"
-                        color="primary"
-                      >
-                        Download
-                      </Button>
-                      <Menu
-                        id={menuId}
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl) && openMenuId === menuId }
-                        onClose={this.handleClose}
-                      >
-                        {n.files.map(function (file) {
-                          return (<MenuItem key={file.file.fid} onClick={that.handleClose}><a href={file.file.url} className="link">{file.file.filename}</a></MenuItem>);
-                        })}
-                      </Menu></span>;
-                    }
-                  }
                   return (
                     <TableRow key={n.id}>
                       <TableCell component="th" scope="row">
@@ -139,7 +110,7 @@ class DocumentsPage extends React.Component {
                         return (<Link key={o.id} to={'/organizations/' + o.id}>{o.label}</Link>);
                       }).reduce((prev, curr) => [prev, ', ', curr]) : ''}</TableCell>
                       <TableCell>{n.publication_date ? Moment(n.publication_date).format('MMM DD YYYY') : ''}</TableCell>
-                      <TableCell>{files}</TableCell>
+                      <TableCell><DownloadButton item={n} /></TableCell>
                     </TableRow>
                   );
                 })}
@@ -165,10 +136,12 @@ class DocumentsPage extends React.Component {
               </TableFooter>
             </Table> : ''}
           { view === 'grid' ?
-            <div>
+            <React.Fragment>
+            <GridList>
             {content.data.map(n => {
-              return (<Item item={n} viewMode="search" />);
+              return (<Item item={n} viewMode="grid" />);
             })}
+            </GridList>
             <TablePagination
               count={content.count}
               rowsPerPage={rowsPerPage}
@@ -178,16 +151,15 @@ class DocumentsPage extends React.Component {
               onChangeRowsPerPage={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActionsWrapped}
             />
-            </div> : ''
+            </React.Fragment> : ''
           }
-        </Paper>
         {this.props.doc && this.props.hasPermission('add', 'document', this.props.doc) ?
           <Link to="/documents/new">
             <Button variant="fab" color="secondary" aria-label="Add" className={classes.fab}>
               <AddIcon />
             </Button>
           </Link> : '' }
-      </div>
+      </React.Fragment>
     );
   }
 }
