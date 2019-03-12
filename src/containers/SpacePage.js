@@ -261,11 +261,16 @@ class SpacePage extends React.Component {
       }
       widgets.DigitalSitrepFigures.props.slug = this.props.doc.label.toLowerCase();
       layout.rows[0].columns[2].widgets.push({key: 'DigitalSitrepFigures'});
-      const lists = await this.hidApi.get('list', {type: 'operation', remote_id: doc.id});
-      if (lists.data.length) {
-        widgets.HidNumber.props.list = lists.data[0];
-        widgets.HidNumber.props.doc = doc;
-        layout.rows[0].columns[2].widgets.push({key: 'HidNumber'});
+      try {
+        const lists = await this.hidApi.get('list', {type: 'operation', remote_id: doc.id});
+        if (lists.data.length) {
+          widgets.HidNumber.props.list = lists.data[0];
+          widgets.HidNumber.props.doc = doc;
+          layout.rows[0].columns[2].widgets.push({key: 'HidNumber'});
+        }
+      }
+      catch (err) {
+        // Do not do anything, the block will simply not be added
       }
 
       const datasets = await this.hdxApi.get({ q: 'groups:' + doc.country.iso3.toLowerCase(), rows: 0});

@@ -205,7 +205,10 @@ class App extends Component {
     };
 
     isManagerOrEditor (space) {
-      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const hrinfo = this.state.user ? this.state.user.hrinfo : false;
+      if (!hrinfo) {
+        return false;
+      }
       const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
       if (!perms) {
         return false;
@@ -217,7 +220,10 @@ class App extends Component {
     }
 
     isManager (space) {
-      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const hrinfo = this.state.user ? this.state.user.hrinfo : false;
+      if (!hrinfo) {
+        return false;
+      }
       const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
       if (!perms) {
         return false;
@@ -229,7 +235,10 @@ class App extends Component {
     }
 
     isBundleMember (space) {
-      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const hrinfo = this.state.user ? this.state.user.hrinfo : false;
+      if (!hrinfo) {
+        return false;
+      }
       const perms = hrinfo.spaces ? hrinfo.spaces[space.id] : false;
       if (!perms) {
         return false;
@@ -242,7 +251,10 @@ class App extends Component {
 
     hasPermission (action, content, space) {
       const that = this;
-      const hrinfo = this.state.user ? this.state.user.hrinfo : {};
+      const hrinfo = this.state.user ? this.state.user.hrinfo : false;
+      if (!hrinfo) {
+        return false;
+      }
       if (hrinfo.roles && hrinfo.roles.indexOf('administrator') !== -1 && content.type !== 'dataset' && content.type !== 'users') {
         return true;
       }

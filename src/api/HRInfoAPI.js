@@ -19,24 +19,22 @@ class HRInfoAPI {
     return instance;
   }
 
-  getItem(type, id) {
-    return fetch(hrinfoUrl + i18next.languages[0] + "/api/v1.0/" + type + "/" + id, {
-        headers: {
-          'Authorization': 'Bearer ' + this.token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }})
-        .then(results => {
-            return results.json();
-        })
-        .then(data => {
-          if (data.data) {
-            return data.data[0];
-          }
-          else {
-            return {};
-          }
-        });
+  async getItem(type, id) {
+    const options = {
+      headers: {
+        'Authorization': 'Bearer ' + this.token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(hrinfoUrl + i18next.languages[0] + "/api/v1.0/" + type + "/" + id, options);
+    const json = await results.json();
+    if (json.data) {
+      return json.data[0];
+    }
+    else {
+      return {};
+    }
   }
 
   async getAll (type, params) {
@@ -58,7 +56,7 @@ class HRInfoAPI {
       });
   }
 
-  get (type, params, anonymous = true) {
+  async get (type, params, anonymous = true) {
     let url = hrinfoUrl + i18next.languages[0] + '/api/v1.0/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
@@ -78,35 +76,36 @@ class HRInfoAPI {
         'Content-Type': 'application/json'
       };
     }
-    return fetch(url, queryParams)
-      .then(results => {
-        return results.json();
-      }).then(data => {
-        data.data.forEach(function (item) {
-          item.type = type;
-        });
-        return data;
-      });
+    const results = await fetch(url, queryParams);
+    const data = await results.json();
+    data.data.forEach(function (item) {
+      item.type = type;
+    });
+    return data;
   }
 
-  getProfile () {
-    return fetch(hrinfoUrl + 'api/v1.0/user/me',
-      {
-        headers: {
-          'Authorization': 'Bearer ' + this.token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        return data.data[0];
-      });
+  async getProfile () {
+    const options = {
+      headers: {
+        'Authorization': 'Bearer ' + this.token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    try {
+      const response = await fetch(hrinfoUrl + 'api/v1.0/user/me', options);
+      const json = await response.json();
+      return json.data[0];
+    }
+    catch (err) {
+      return {
+        roles: [],
+        spaces: [],
+      };
+    }
   }
 
-  save(type, body) {
+  async save(type, body) {
     let httpMethod = 'POST';
     let url = hrinfoUrl + i18next.languages[0] + '/api/v1.0/' + type;
     if (body.id) {
@@ -121,21 +120,18 @@ class HRInfoAPI {
       delete body.author;
     }
 
-    return fetch(url, {
-        method: httpMethod,
-        body: JSON.stringify(body),
-        headers: {
-          'Authorization': 'Bearer ' + this.token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        return data.data[0];
-      });
+    const options = {
+      method: httpMethod,
+      body: JSON.stringify(body),
+      headers: {
+        'Authorization': 'Bearer ' + this.token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    return data.data[0];
   }
 
   remove (type, id) {
@@ -168,7 +164,7 @@ class HRInfoAPI {
     });
   }
 
-  saveFile (files) {
+  async saveFile (files) {
     let requestParams = {};
     if (files instanceof FileList) {
       let data = new FormData();
@@ -193,13 +189,9 @@ class HRInfoAPI {
       };
     }
 
-    return fetch(hrinfoUrl + '/api/files', requestParams)
-      .then((response) => {
-        return response.json();
-      })
-      .then(data => {
-        return data.data[0];
-      });
+    const response = await fetch(hrinfoUrl + '/api/files', requestParams);
+    const data = await response.json();
+    return data.data[0];
   }
 }
 
