@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
 import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
-import ChevronRight from '@material-ui/icons/ChevronRight';
 import Toolbar from '@material-ui/core/Toolbar';
 
 class HRBreadcrumb extends React.Component {
@@ -13,7 +12,6 @@ class HRBreadcrumb extends React.Component {
 
   getBreadcrumb = () => {
     const {item, contentType} = this.props;
-    const spaces = ['operation', 'disaster', 'office', 'bundle', 'organization'];
     let breadcrumb = [];
     if ((item.type === 'group' || item.type === 'office') && item.operation) {
       breadcrumb.push({
@@ -57,7 +55,7 @@ class HRBreadcrumb extends React.Component {
   render () {
     let list = '';
     list = this.state.breadcrumb.map(function (elt, index) {
-      return <Link to={elt.href} className="link" variant="display1">{elt.label}</Link>;
+      return <Link to={elt.href} key={elt.href} className="link" variant="display1">{elt.label}</Link>;
     });
 
     return (

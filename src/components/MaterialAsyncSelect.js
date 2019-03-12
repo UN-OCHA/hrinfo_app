@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -85,18 +84,6 @@ function SelectWrapped(props) {
   );
 }
 
-const ITEM_HEIGHT = 48;
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    height: 200
-  },
-  chip: {
-    margin: theme.spacing.unit / 4
-  }
-});
-
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -148,4 +135,4 @@ class MaterialAsyncSelect extends React.Component {
   }
 }
 
-export default withStyles(styles)(MaterialAsyncSelect);
+export default MaterialAsyncSelect;

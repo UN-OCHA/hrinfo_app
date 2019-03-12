@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
-import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -12,26 +11,6 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
-  },
-  gridList: {
-    width: 500,
-    height: 450,
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
-  center: {
-    textAlign: 'center'
-  },
-});
 
 
 const tileData = [
@@ -94,7 +73,7 @@ const menus = {
 class SpaceMenu extends React.Component {
 
   state = {
-    open: false
+    open: true
   };
 
   onClose = () => {
@@ -104,7 +83,7 @@ class SpaceMenu extends React.Component {
   };
 
   render () {
-    const { classes, item} = this.props;
+    const { item} = this.props;
     const spaces = ['operation', 'disaster', 'office', 'bundle', 'organization'];
 
     return item && spaces.indexOf(item.type) !== -1 ? (
@@ -114,7 +93,8 @@ class SpaceMenu extends React.Component {
         </IconButton>
         <Drawer
           open={this.state.open}
-          onClose={this.onClose}>
+          onClose={this.onClose}
+          variant="persistent">
           <List>
             {tileData.map(tile => (
               menus[item.type].indexOf(tile.href) !== -1 ?
@@ -142,8 +122,7 @@ class SpaceMenu extends React.Component {
 }
 
 SpaceMenu.propTypes = {
-  classes: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SpaceMenu);
+export default SpaceMenu;

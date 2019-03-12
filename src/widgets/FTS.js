@@ -89,10 +89,12 @@ class FTSWidget extends React.Component {
       .ftsApi
       .getFlow(params)
       .then(data => {
-        this.setState({
-          flowData: data.data,
-          chartData: this.getFundingFromFlow(data.data)
-        });
+        if (data.data) {
+          this.setState({
+            flowData: data.data,
+            chartData: this.getFundingFromFlow(data.data)
+          });
+        }
       });
   }
 

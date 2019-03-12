@@ -1,13 +1,13 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
+import GridList from '@material-ui/core/GridList';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import TablePagination from '@material-ui/core/TablePagination';
+import Drawer from '@material-ui/core/Drawer';
 
 import TablePaginationActionsWrapped from '../components/TablePaginationActionsWrapped';
 import Item from '../components/Item';
@@ -23,7 +23,7 @@ class SearchPage extends React.Component {
       q: '',
       tab: 'documents',
       page: 0,
-      rowsPerPage: 10,
+      rowsPerPage: 50,
     };
     this.hrinfoAPI = new HRInfoAPI();
     this.hidAPI = new HidAPI();
@@ -100,86 +100,82 @@ class SearchPage extends React.Component {
 
   render() {
     return (
-      <Grid container spacing={24}>
-        <Grid item xs={12} sm={3}>
-          <Paper>
-            <List>
-              <ListItem button onClick={(e) => {this.setState({tab: 'documents', page: 0})}}>
-                <Avatar>
-                  <i className="icon-document" />
-                </Avatar>
-                <ListItemText primary="Documents" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'infographics', page: 0})}}>
-                <Avatar>
-                  <i className="icon-map-pin" />
-                </Avatar>
-                <ListItemText primary="Infographics" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'events', page: 0})}}>
-                <Avatar>
-                  <i className="icon-calendar" />
-                </Avatar>
-                <ListItemText primary="Events" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'assessments', page: 0})}}>
-                <Avatar>
-                  <i className="icon-folder" />
-                </Avatar>
-                <ListItemText primary="Assessments" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'contacts', page: 0})}}>
-                <Avatar>
-                  <i className="icon-users" />
-                </Avatar>
-                <ListItemText primary="Contacts" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'offices', page: 0})}}>
-                <Avatar>
-                  <i className="icon-flag" />
-                </Avatar>
-                <ListItemText primary="Offices" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'disasters', page: 0})}}>
-                <Avatar>
-                  <i className="icon-beaker" />
-                </Avatar>
-                <ListItemText primary="Disasters" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(e) => {this.setState({tab: 'organizations', page: 0})}}>
-                <Avatar>
-                  <i className="icon-beaker" />
-                </Avatar>
-                <ListItemText primary="Organizations" />
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={9}>
-          <Paper>
-            <Typography variant="display3">{this.state.count + ' ' + this.state.tab + ' found'}</Typography>
-            {this.state.items ? this.state.items.map((item) => {
-              return (<Item key={item.id} item={item} viewMode="search" />);
-            }) : ''}
-            <TablePagination
-              count={this.state.count}
-              rowsPerPage={this.state.rowsPerPage}
-              rowsPerPageOptions={[10,20,50]}
-              page={this.state.page}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActionsWrapped}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
+      <React.Fragment>
+        <Drawer open={true} variant="persistent">
+          <List>
+            <ListItem button onClick={(e) => {this.setState({tab: 'documents', page: 0})}}>
+              <Avatar>
+                <i className="icon-document" />
+              </Avatar>
+              <ListItemText primary="Documents" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'infographics', page: 0})}}>
+              <Avatar>
+                <i className="icon-map-pin" />
+              </Avatar>
+              <ListItemText primary="Infographics" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'events', page: 0})}}>
+              <Avatar>
+                <i className="icon-calendar" />
+              </Avatar>
+              <ListItemText primary="Events" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'assessments', page: 0})}}>
+              <Avatar>
+                <i className="icon-folder" />
+              </Avatar>
+              <ListItemText primary="Assessments" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'contacts', page: 0})}}>
+              <Avatar>
+                <i className="icon-users" />
+              </Avatar>
+              <ListItemText primary="Contacts" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'offices', page: 0})}}>
+              <Avatar>
+                <i className="icon-flag" />
+              </Avatar>
+              <ListItemText primary="Offices" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'disasters', page: 0})}}>
+              <Avatar>
+                <i className="icon-beaker" />
+              </Avatar>
+              <ListItemText primary="Disasters" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={(e) => {this.setState({tab: 'organizations', page: 0})}}>
+              <Avatar>
+                <i className="icon-beaker" />
+              </Avatar>
+              <ListItemText primary="Organizations" />
+            </ListItem>
+          </List>
+        </Drawer>
+        <Typography variant="display3">{this.state.count + ' ' + this.state.tab + ' found'}</Typography>
+        <GridList>
+        {this.state.items ? this.state.items.map((item) => {
+          return (<Item key={item.id} item={item} viewMode="grid" />);
+        }) : ''}
+        </GridList>
+        <TablePagination
+          count={this.state.count}
+          rowsPerPage={this.state.rowsPerPage}
+          rowsPerPageOptions={[10,20,50]}
+          page={this.state.page}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActionsWrapped}
+        />
+      </React.Fragment>
     );
   }
 }

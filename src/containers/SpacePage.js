@@ -1,12 +1,6 @@
 import React from 'react';
 import lodash from 'lodash';
-import PropTypes from 'prop-types';
 import Dashboard, { addWidget } from 'react-dazzle';
-import {Link} from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 
 import withSpace from '../utils/withSpace';
 import SelectWidget from '../components/SelectWidget';
@@ -37,14 +31,6 @@ const CustomFrame = ({title, editable, children, onRemove, onEdit }) => {
     </div>
   );
 };
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  }
-});
 
 class SpacePage extends React.Component {
 
@@ -239,7 +225,7 @@ class SpacePage extends React.Component {
   }
 
   async componentDidUpdate() {
-    if (this.props.doc && this.state.status === 'initial') {
+    if (this.props.doc && this.props.doc.type === 'operation' && this.state.status === 'initial') {
       const doc = this.props.doc;
       let widgets = lodash.cloneDeep(this.state.widgets);
       let layout = lodash.cloneDeep(this.state.layout);
@@ -307,7 +293,6 @@ class SpacePage extends React.Component {
   }
 
   render() {
-    const {classes} = this.props;
 
     if (this.props.doc) {
       return (
@@ -342,8 +327,4 @@ class SpacePage extends React.Component {
   }
 }
 
-SpacePage.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withSpace(withStyles(styles)(SpacePage), {});
+export default withSpace(SpacePage, {});

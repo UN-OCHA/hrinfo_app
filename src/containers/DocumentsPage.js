@@ -9,13 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import ViewModule from '@material-ui/icons/ViewModule';
 import ViewList from '@material-ui/icons/ViewList';
 import Moment from 'moment';
@@ -47,23 +44,13 @@ const styles = theme => ({
 class DocumentsPage extends React.Component {
 
   state = {
-    anchorEl: null,
-    openMenuId: null,
     view: 'grid'
-  };
-
-  handleClick = (event, id) => {
-    this.setState({ anchorEl: event.currentTarget, openMenuId: id });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
   };
 
   render() {
     const { classes, content, handleChangePage, handleChangeRowsPerPage , rowsPerPage, page, toggleDrawer, drawerState, contentType, spaceType, filters, removeFilter} = this.props;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, content.count - page * rowsPerPage);
-    const { anchorEl, openMenuId, view } = this.state;
+    const { view } = this.state;
 
     return (
       <React.Fragment>
