@@ -342,7 +342,7 @@ class App extends Component {
         const navbar = (
           <Toolbar>
             <SpaceMenu item={this.state.item} />
-            <NavLink to={'/home'} className="link"><IconLogo /></NavLink>
+            <NavLink to={'/'} className="link"><IconLogo /></NavLink>
             <Hidden xsDown>
                 <SearchInput
                   onChange={this.setSearch}

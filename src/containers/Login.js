@@ -63,7 +63,7 @@ class Login extends React.Component {
         this.props.history.push(redirect);
       }
       else {
-        this.props.history.push('/home');
+        this.props.history.push('/');
       }
     }
     catch (err) {

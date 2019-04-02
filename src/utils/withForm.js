@@ -126,10 +126,10 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         this.hrinfoAPI
           .remove(hrinfoType, this.props.match.params.id)
           .then(results => {
-            that.props.history.push('/home');
+            that.props.history.push('/');
             that.props.setAlert('success', label + ' deleted successfully');
           }).catch(function(err) {
-            that.props.history.push('/home');
+            that.props.history.push('/');
             that.props.setAlert('danger', 'There was an error deleting your ' + label);
           });
       }

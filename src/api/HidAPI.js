@@ -36,7 +36,6 @@ class HidAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    let count = 0;
     const options = {
       headers: {
         'Authorization': 'Bearer ' + this.token,
