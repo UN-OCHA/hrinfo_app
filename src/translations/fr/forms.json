@@ -148,10 +148,11 @@
         "meeting_minutes": "Compte(s)-rendu",
         "category": {
             "title": "Catégorie de l'événement ",
-            "meetings": "Rèunions",
+            "meetings": "Réunions",
             "trainings": "Formations",
             "workshops": "Ateliers",
-            "conferences": "Conférences"
+            "conferences": "Conférences",
+            "special": "Evénements spéciaux"
         },
         "helpers": {
             "title": "Taper le titre original de l'événement . Essayer de ne pas utiliser des abréviations. Pour voir les normes et les conventions de dénomination, cliquer <1> ici </ 1>.",

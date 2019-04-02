@@ -153,7 +153,8 @@
             "meetings": "Meetings",
             "trainings": "Trainings",
             "workshops": "Workshops",
-            "conferences": "Conferences"
+            "conferences": "Conferences",
+            "special": "Special Events"
         },
         "helpers": {
             "title": "Type the original title of the event. Try not to use abbreviations. To see Standards and Naming Conventions click <1>here</1>.",

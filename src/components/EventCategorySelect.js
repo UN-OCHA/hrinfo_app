@@ -9,6 +9,7 @@ class EventCategorySelect extends React.Component {
   };
 
   options = [
+    { value: '71377', label: this.t('events.category.special')},
     { value: '82', label: this.t('events.category.meetings')},
     { value: '83', label: this.t('events.category.trainings')},
     { value: '84', label: this.t('events.category.workshops')},
