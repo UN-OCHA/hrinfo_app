@@ -35,15 +35,15 @@ import withForm             from './withForm';
 
 export default ({ childProps }) =>
   <Switch>
-    <UnauthenticatedRoute path="/" exact component={Login} props={childProps} />
+    <UnauthenticatedRoute path="/" exact component={Home} props={childProps} />
 
 {/* General */}
-    <AuthenticatedRoute path="/home"                     exact component={Home}              props={childProps} />
     <AuthenticatedRoute path="/admin"                    exact component={Admin}             props={childProps} />
     <AuthenticatedRoute path="/admin/contributions"      exact component={ContributionsPage} props={childProps}  />
     <AuthenticatedRoute path="/admin/contributors"       exact component={ContributorsPage}  props={childProps}  />
     <AuthenticatedRoute path="/users/:id"                exact component={User}              props={childProps} />
     <UnauthenticatedRoute path="/search/:q"              exact component={SearchPage}        props={childProps} />
+    <UnauthenticatedRoute path="/login" exact component={Login} props={childProps} />
 
 {/* Documents */}
     <AuthenticatedRoute path="/documents/new"      exact component={withForm(DocumentForm, 'documents', 'document')} props={childProps} />

@@ -15,7 +15,7 @@ class DigitalSitrepAPI {
     return instance;
   }
 
-  get (params) {
+  async get (params) {
     let url = 'https://cdn.contentful.com/spaces/ejsx83ka8ylz/environments/master/entries?include=4&content_type=sitrep&';
     let keys = Object.keys(params);
     if (keys.length) {
@@ -23,16 +23,16 @@ class DigitalSitrepAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.token
-        }
-      })
-      .then(results => {
-        return results.json();
-      });
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.token
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    return data;
   }
 
 }

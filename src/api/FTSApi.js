@@ -1,7 +1,7 @@
 
 class FTSApi {
 
-  getFlow(params) {
+  async getFlow(params) {
     let url = 'https://api.hpc.tools/v1/public/fts/flow';
     let keys = Object.keys(params);
     if (keys.length) {
@@ -10,50 +10,41 @@ class FTSApi {
         url += key + '=' + params[key] + '&';
       });
     }
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        return data;
-      });
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    return data;
   }
 
-  getAppeals (year) {
+  async getAppeals (year) {
     let url = 'https://api.hpc.tools/v1/public/plan/year/' + year;
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        return data;
-      });
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    return data;
   }
 
-  getGlobalClusters() {
+  async getGlobalClusters() {
     let url = 'https://api.hpc.tools/v1/public/global-cluster';
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        return data;
-      });
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    return data;
   }
 
 }

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactGA from 'react-ga';
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';
-import {withRouter, NavLink} from "react-router-dom";
+import {withRouter, NavLink, Link} from "react-router-dom";
 import { translate } from 'react-i18next';
 // Material Components
 import { withStyles } from '@material-ui/core/styles';
@@ -39,7 +39,8 @@ const styles = theme => ({
     },
   },
   appBarButton: {
-    color: 'white'
+    color: 'white',
+    textDecoration: 'none'
   },
   grow: {
     flexGrow: 1
@@ -358,6 +359,7 @@ class App extends Component {
               <Button className={classes.appBarButton}>OCHA Services <KeyboardArrowDown /></Button>
               <div className={classes.grow}></div>
               {this.state.isAuthenticated && <UserMenu user={this.state.user} handleLogout={this.handleLogout} /> }
+              {!this.state.isAuthenticated && <Link to="/login" className={classes.appBarButton}>Login</Link>}
               <LanguageMenu />
 	          </Toolbar>
 	        </AppBar>

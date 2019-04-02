@@ -12,7 +12,7 @@ class HdxAPI {
     return instance;
   }
 
-  get (params) {
+  async get (params) {
     let url = 'https://data.humdata.org/api/3/action/package_search';
     let keys = Object.keys(params);
     if (keys.length) {
@@ -21,24 +21,21 @@ class HdxAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        data.result.results.forEach(function (item) {
-          item.type = 'dataset';
-        });
-        return {
-          count: data.result.count,
-          data: data.result.results
-        };
-      })
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    data.result.results.forEach(function (item) {
+      item.type = 'dataset';
+    });
+    return {
+      count: data.result.count,
+      data: data.result.results
+    };
   }
 
 }

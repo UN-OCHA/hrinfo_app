@@ -12,7 +12,7 @@ class ReliefwebAPI {
     return instance;
   }
 
-  getFilter (type) {
+  async getFilter (type) {
     let url = 'https://api.reliefweb.int/v1/reports';
     const params = {
       appname: 'hrinfo',
@@ -29,26 +29,23 @@ class ReliefwebAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        if (data.embedded && data.embedded.facets[type]) {
-          return data.embedded.facets[type].data;
-        }
-        else {
-          return null;
-        }
-      });
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    if (data.embedded && data.embedded.facets[type]) {
+      return data.embedded.facets[type].data;
+    }
+    else {
+      return null;
+    }
   }
 
-  get (type, params) {
+  async get (type, params) {
     let url = 'https://api.reliefweb.int/v1/' + type;
     let keys = Object.keys(params);
     if (keys.length) {
@@ -57,24 +54,21 @@ class ReliefwebAPI {
         url += key + '=' + params[key] + '&';
       });
     }
-    return fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        data.data.forEach(function (item) {
-          item.type = 'reports';
-        });
-        return {
-          count: data.totalCount,
-          data: data.data
-        };
-      });
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const results = await fetch(url, options);
+    const data = await results.json();
+    data.data.forEach(function (item) {
+      item.type = 'reports';
+    });
+    return {
+      count: data.totalCount,
+      data: data.data
+    };
   }
 
 }

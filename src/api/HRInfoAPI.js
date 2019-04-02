@@ -22,11 +22,13 @@ class HRInfoAPI {
   async getItem(type, id) {
     const options = {
       headers: {
-        'Authorization': 'Bearer ' + this.token,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     };
+    if (this.token) {
+      options.headers.Authorization = 'Bearer ' + this.token;
+    }
     const results = await fetch(hrinfoUrl + i18next.languages[0] + "/api/v1.0/" + type + "/" + id, options);
     const json = await results.json();
     if (json.data) {
