@@ -19,10 +19,7 @@ class HRInfoFilesAccessibility extends React.Component {
 
   accessibility = [
     {value: this.t('files.accessibilities.available'), label: this.t('files.accessibilities.available') },
-    {value: this.t('files.accessibilities.request'), label: this.t('files.accessibilities.request') },
-    {value: this.t('files.accessibilities.restricted'), label: this.t('files.accessibilities.restricted') },
-    {value: this.t('files.accessibilities.not_available'), label: this.t('files.accessibilities.not_available') },
-    {value: this.t('files.accessibilities.not_applicable'), label: this.t('files.accessibilities.not_applicable') },
+    {value: this.t('files.accessibilities.request'), label: this.t('files.accessibilities.request') }
   ];
 
   state = {
