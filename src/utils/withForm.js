@@ -360,13 +360,13 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             body.collection_method = collection_method;
           }
           if (body.geographic_level) {
-            body.geographic_level = body.geographic_level.label;
+            body.geographic_level = body.geographic_level.value;
           }
           if (body.status) {
-            body.status = body.status.label;
+            body.status = body.status.value;
           }
           if (body.report && body.report.accessibility) {
-            body.report.accessibility = body.report.accessibility.label;
+            body.report.accessibility = body.report.accessibility.value;
             if (body.report.file && typeof body.report.file === 'object') {
               body.report.file = body.report.file.id;
             }
@@ -381,7 +381,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             }
           }
           if (body.data && body.data.accessibility) {
-            body.data.accessibility = body.data.accessibility.label;
+            body.data.accessibility = body.data.accessibility.value;
             if (body.data.file && typeof body.data.file === 'object') {
               body.data.file = body.data.file.id;
             }
@@ -396,7 +396,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             }
           }
           if (body.questionnaire && body.questionnaire.accessibility) {
-            body.questionnaire.accessibility = body.questionnaire.accessibility.label;
+            body.questionnaire.accessibility = body.questionnaire.accessibility.value;
             if (body.questionnaire.file && typeof body.questionnaire.file === 'object') {
               body.questionnaire.file = body.questionnaire.file.id;
             }
