@@ -89,7 +89,8 @@ class SimpleDate extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+    if (JSON.stringify(this.props.value) !== JSON.stringify(nextProps.value) ||
+      JSON.stringify(this.state) !== JSON.stringify(nextState)) {
       return true;
     }
     return false;
