@@ -13,10 +13,6 @@
   background-color: #e6ecf1;
 }
 
-.rdw-editor-main {
-  height: 275px !important;
-}
-
 .was-validated .is-invalid__control {
   border-color: #dc3545 !important;
 }
@@ -76,6 +72,11 @@ footer {
   display: block;
   margin-top: 8px;
 }*/
+
+/* WYSIWYG editor */
+.rdw-editor-main {
+  height: 275px !important;
+}
 
 /* Grid */
 .row {
