@@ -1,7 +1,7 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-import { RRule } from 'rrule';
+import { RRule, RRuleSet } from 'rrule';
 import moment from 'moment';
 import 'moment-timezone';
 import HRInfoAPI from '../api/HRInfoAPI';
@@ -277,16 +277,21 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           if (!Array.isArray(body.date)) {
             const tmpDate = body.date;
             if (body.date.rrule) {
+              const rruleSetStart = new RRuleSet();
+              const rruleSetEnd = new RRuleSet();
               const options = RRule.parseString(body.date.rrule);
               options.dtstart = moment.utc(body.date.value).toDate();
-              const rruleStart = new RRule(options);
-              const datesStart = rruleStart.all();
+              rruleSetStart.rrule(new RRule(options));
+              //const exdate = new Date(Date.UTC(2019, 3, 26, 14));
+              //rruleSetStart.exdate(new Date(Date.UTC(2019, 3, 26, 14)));
+              const datesStart = rruleSetStart.all();
               let rruleEnd = {};
               let datesEnd = [];
               if (body.date.value2 && body.date.value2 !== body.date.value) {
                 options.dtstart = moment.utc(body.date.value2).toDate();
-                rruleEnd = new RRule(options);
-                datesEnd = rruleEnd.all();
+                rruleSetEnd.rrule(new RRule(options));
+                //rruleSetEnd.exdate(new Date(Date.UTC(2019, 3, 26, 15)));
+                datesEnd = rruleSetEnd.all();
               }
               body.date = [];
               datesStart.forEach(function (date, index) {
@@ -298,7 +303,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
                   value: date,
                   value2: dateEnd,
                   timezone: tmpDate.timezone.value,
-                  rrule: tmpDate.rrule
+                  rrule: rruleSetStart.valueOf().join("\r\n")
                 });
               });
             }
