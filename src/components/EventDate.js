@@ -48,13 +48,43 @@ class EventDate extends React.Component {
     if (this.props.onChange) {
       const dates = [];
       if (newState.val && typeof newState.val.rrule !== 'undefined' && newState.val.rrule !== '') {
+        const hasEndDate = newState.val.value2 && newState.val.value2 !== newState.val.value;
+        let endDate = '';
+        if (hasEndDate) {
+          endDate = moment.utc(newState.val.value2).toDate();
+        }
         const rruleSetStart = new RRuleSet();
         const rruleSetEnd = new RRuleSet();
         const optionsStart = {...newState.val.rrule, dtstart: moment.utc(newState.val.value).toDate()};
+        if (optionsStart.exclude) {
+          optionsStart.exDates.forEach(function (date) {
+            date.setHours(optionsStart.dtstart.getHours());
+            date.setMinutes(optionsStart.dtstart.getMinutes());
+            rruleSetStart.exdate(date);
+            rruleSetEnd.exdate(date);
+          });
+          delete optionsStart.exclude;
+          delete optionsStart.exDates;
+        }
+        if (optionsStart.include) {
+          optionsStart.inDates.forEach(function (date) {
+            date.setHours(optionsStart.dtstart.getHours());
+            date.setMinutes(optionsStart.dtstart.getMinutes());
+            rruleSetStart.rdate(date);
+            if (hasEndDate) {
+              const inEndDate = new Date(date.getTime());
+              inEndDate.setHours(endDate.getHours());
+              inEndDate.setMinutes(endDate.getMinutes());
+              rruleSetEnd.rdate(inEndDate);
+            }
+          });
+          delete optionsStart.include;
+          delete optionsStart.inDates;
+        }
         rruleSetStart.rrule(new RRule(optionsStart));
         let datesEnd = [];
-        if (newState.val.value2 && newState.val.value2 !== newState.val.value) {
-          const optionsEnd = {...newState.val.rrule, dtstart: moment.utc(newState.val.value2).toDate()};
+        if (hasEndDate) {
+          const optionsEnd = {...optionsStart, dtstart: endDate};
           rruleSetEnd.rrule(new RRule(optionsEnd));
           datesEnd = rruleSetEnd.all();
         }
@@ -64,15 +94,22 @@ class EventDate extends React.Component {
             dateEnd = datesEnd[index];
           }
           dates.push({
-            value: date,
-            value2: dateEnd,
+            value: moment.utc(date).format('YYYY-MM-DD HH:mm:ss'),
+            value2: moment.utc(dateEnd).format('YYYY-MM-DD HH:mm:ss'),
             timezone: newState.val.timezone.value,
             rrule: rruleSetStart.valueOf().join("\r\n")
           });
         });
       }
       else {
-        dates.push(newState.val);
+        const tmpDate = {
+          value: moment.utc(newState.val.value).format('YYYY-MM-DD HH:mm:ss'),
+          timezone: newState.val.timezone.value
+        };
+        if (newState.val.value2) {
+          tmpDate.value2 = moment.utc(newState.val.value).format('YYYY-MM-DD HH:mm:ss');
+        }
+        dates.push(tmpDate);
       }
       this.props.onChange(dates);
     }

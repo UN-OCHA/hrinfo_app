@@ -268,22 +268,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           body.document_type = body.document_type.id;
         }
         if (hrinfoType === 'events') {
-          //body.category = body.category.value;
-
           if (body.address && body.address.country && typeof body.address.country === 'object') {
             body.address.country = body.address.country.pcode;
           }
-          body.date.forEach(function (d) {
-            if (d && d.value) {
-              d.value = moment.utc(d.value).format('YYYY-MM-DD HH:mm:ss');
-            }
-            if (d && d.value2) {
-              d.value2 = moment.utc(d.value2).format('YYYY-MM-DD HH:mm:ss');
-            }
-            if (d && d.timezone && d.timezone.value) {
-              d.timezone = d.timezone.value;
-            }
-          });
           if (body.agenda) {
             body.agenda = body.agenda.map(function (a) {
               return a.id;
