@@ -1,7 +1,6 @@
 import React from 'react';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-import { RRule, RRuleSet } from 'rrule';
 import moment from 'moment';
 import 'moment-timezone';
 import HRInfoAPI from '../api/HRInfoAPI';
@@ -273,43 +272,6 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
 
           if (body.address && body.address.country && typeof body.address.country === 'object') {
             body.address.country = body.address.country.pcode;
-          }
-          if (!Array.isArray(body.date)) {
-            const tmpDate = body.date;
-            if (body.date.rrule) {
-              const rruleSetStart = new RRuleSet();
-              const rruleSetEnd = new RRuleSet();
-              const options = RRule.parseString(body.date.rrule);
-              options.dtstart = moment.utc(body.date.value).toDate();
-              rruleSetStart.rrule(new RRule(options));
-              //const exdate = new Date(Date.UTC(2019, 3, 26, 14));
-              //rruleSetStart.exdate(new Date(Date.UTC(2019, 3, 26, 14)));
-              const datesStart = rruleSetStart.all();
-              let rruleEnd = {};
-              let datesEnd = [];
-              if (body.date.value2 && body.date.value2 !== body.date.value) {
-                options.dtstart = moment.utc(body.date.value2).toDate();
-                rruleSetEnd.rrule(new RRule(options));
-                //rruleSetEnd.exdate(new Date(Date.UTC(2019, 3, 26, 15)));
-                datesEnd = rruleSetEnd.all();
-              }
-              body.date = [];
-              datesStart.forEach(function (date, index) {
-                let dateEnd = date;
-                if (datesEnd.length > 0) {
-                  dateEnd = datesEnd[index];
-                }
-                body.date.push({
-                  value: date,
-                  value2: dateEnd,
-                  timezone: tmpDate.timezone.value,
-                  rrule: rruleSetStart.valueOf().join("\r\n")
-                });
-              });
-            }
-            else {
-              body.date = [body.date];
-            }
           }
           body.date.forEach(function (d) {
             if (d && d.value) {

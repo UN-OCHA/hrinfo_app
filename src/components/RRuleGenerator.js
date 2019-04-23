@@ -1,4 +1,6 @@
 import React                  from 'react';
+import { RRule, rrulestr }    from 'rrule';
+import moment from 'moment';
 
 import FormControl            from '@material-ui/core/FormControl';
 import InputLabel             from '@material-ui/core/InputLabel';
@@ -9,117 +11,79 @@ import Select                 from '@material-ui/core/Select';
 import MenuItem               from '@material-ui/core/MenuItem';
 import Divider                from '@material-ui/core/Divider';
 import InputAdornment         from '@material-ui/core/InputAdornment';
+import FormControlLabel  from '@material-ui/core/FormControlLabel';
+import Checkbox     from '@material-ui/core/Checkbox';
 
 //Material date picker
 import MomentUtils from '@date-io/moment';
 import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import DatePicker              from 'material-ui-pickers/DatePicker';
 
-class RRule extends React.Component {
-  constructor(props) {
-    super(props);
+class RRuleGenerator extends React.Component {
 
-    this.state = {
-      rrule: '',
-      freq: '',
-      interval: '',
-      end: 'COUNT',
-      count: 1,
-      until: ''
-    };
+  state = {
+    rrule: '',
+    freq: '',
+    interval: '',
+    end: 'COUNT',
+    count: 1,
+    until: moment.utc().toString(),
+    exclude: false,
+    excludeDate: ''
+  };
 
-    this.handleChange = this.handleChange.bind(this);
-
-  }
-
-  handleChange(event, type = null) {
-    const name  = event.target ? event.target.name  : 'until';
+  handleChange = (event, type = null) => {
+    let name  = event.target ? event.target.name  : '';
     let value = event.target ? event.target.value : event.format();
-    if (name === 'until') {
+    if (name === 'exclude') {
+      value = event.target.checked;
+    }
+    if (name === '' && (type === 'UNTIL' || type === 'excludeDate')) {
       const parts = value.toString().split('T');
       value = parts[0].replace(/-/gi, '') + 'T000000Z';
-    }
-
-    let rrule = this.state.rrule;
-
-    if (type) {
-      /* Regular Expression to check if the type is already in rrule */
-      const regExp = new RegExp("^(.*" + type + "=)([A-Z0-9-=:+]+)(.*)$");
-      /* If YES replace */
-      if (regExp.test(rrule)) {
-        rrule = rrule.replace(regExp, "$1"+ value +"$3");
-      }
-      /* If NO add */
-      else {
-        rrule = rrule + (/(^$|;$)/.test(rrule) ? "" : ";") + type + "=" + value;
-      }
-
-      /* Handle special cases */
-      /* Remove INTERVAL if FREQ=YEARLY */
-      if (type === 'FREQ' && value === 'YEARLY') {
-        rrule = rrule.replace(/;INTERVAL=[0-9]+/, '');
-      }
-      /* Remove UNTIL if COUNT */
-      if (type === 'COUNT') {
-        rrule = rrule.replace(/;UNTIL=[A-Z0-9\-:+]+/, '');
-      }
-      /* Remove COUNT if UNTIL */
       if (type === 'UNTIL') {
-        rrule = rrule.replace(/;COUNT=[0-9]+/, '');
+        name = 'until';
       }
-
+      else {
+        name = 'excludeDate';
+      }
     }
 
-    this.setState(
-      {
-        [name]: value,
-        rrule : rrule
-      }
-    );
+    let newState = {...this.state, [name]: value};
+
+    this.setState(newState);
 
     if (this.props.onChange) {
-      this.props.onChange(rrule);
-    }
-  }
-
-  getElementFromRRule(rrule, type = null) {
-    if (type) {
-      const regExp = new RegExp("^(.*" + type + "=)([A-Z0-9-:+]+)(.*)$");
-      let match = regExp.exec(rrule);
-      if (match) {
-        return match[2];
+      const options = {
+        freq: newState.freq,
+        interval: newState.interval
+      };
+      if (newState.end === 'COUNT') {
+        options.count = newState.count;
       }
-      else {
-        return '';
+      if (newState.end === 'UNTIL' && newState.until !== '') {
+        options.until = moment(newState.until).toDate();
       }
-    }
-    else {
-      if (/UNTIL/.test(rrule)) {
-        return 'UNTIL';
-      }
-      else {
-        return 'COUNT';
-      }
+      this.props.onChange(options);
     }
   }
 
   componentDidMount() {
     if (this.props.value && Object.keys(this.props.value).length) {
-      let rrule = this.props.value;
+      let rrule = rrulestr(this.props.value);
       let newState = {
-        rrule: rrule,
-        freq: this.getElementFromRRule(rrule, 'FREQ'),
-        interval: this.getElementFromRRule(rrule, 'INTERVAL'),
-        end: this.getElementFromRRule(rrule),
-        count: this.getElementFromRRule(rrule, 'COUNT'),
-        until: this.getElementFromRRule(rrule, 'UNTIL')
+        freq: rrule.options.freq,
+        interval: rrule.options.interval,
+        end: rrule.options.count ? 'COUNT' : 'UNTIL',
+        count: rrule.options.count,
+        until: rrule.options.until
       };
       this.setState(newState);
     }
   }
 
   render() {
-    const interval = (this.state.freq !== 'YEARLY' && this.state.freq !== '') ?
+    const interval = (this.state.freq !== RRule.YEARLY && this.state.freq !== '') ?
     (
       <FormControl>
         <TextField id         = "interval"
@@ -129,13 +93,13 @@ class RRule extends React.Component {
                    onChange   = {(e) => this.handleChange(e, 'INTERVAL')}
                    InputProps = {{
                     startAdornment: <InputAdornment position="start">every</InputAdornment>,
-                    endAdornment:   this.state.freq === 'MONTHLY' ?
+                    endAdornment:   this.state.freq === RRule.MONTHLY ?
                                       <InputAdornment position="end">month(s)</InputAdornment>
-                                    : (this.state.freq === 'WEEKLY' ?
+                                    : (this.state.freq === RRule.WEEKLY ?
                                         <InputAdornment position="end">week(s)</InputAdornment>
-                                      : (this.state.freq === 'DAILY' ?
+                                      : (this.state.freq === RRule.DAILY ?
                                           <InputAdornment position="end">day(s)</InputAdornment>
-                                        : (this.state.freq === 'HOURLY' &&
+                                        : (this.state.freq === RRule.HOURLY &&
                                             <InputAdornment position="end">hour(s)</InputAdornment>
                                           : ''
                                         )
@@ -195,11 +159,11 @@ class RRule extends React.Component {
                       id: 'freq',
                     }}
             >
-              <MenuItem value={'YEARLY'}>Yearly</MenuItem>
-              <MenuItem value={'MONTHLY'}>Monthly</MenuItem>
-              <MenuItem value={'WEEKLY'}>Weekly</MenuItem>
-              <MenuItem value={'DAILY'}>Daily</MenuItem>
-              <MenuItem value={'HOURLY'}>Hourly</MenuItem>
+              <MenuItem value={RRule.YEARLY}>Yearly</MenuItem>
+              <MenuItem value={RRule.MONTHLY}>Monthly</MenuItem>
+              <MenuItem value={RRule.WEEKLY}>Weekly</MenuItem>
+              <MenuItem value={RRule.DAILY}>Daily</MenuItem>
+              <MenuItem value={RRule.HOURLY}>Hourly</MenuItem>
             </Select>
           </FormControl>
           {interval}
@@ -224,9 +188,43 @@ class RRule extends React.Component {
           {after}
           {ondate}
         </CardContent>
+        <CardContent>
+          <FormControlLabel
+             control = {
+               <Checkbox name     = "exclude"
+                         color    = "primary"
+                         onChange = {(e) => this.handleChange(e)}
+                         checked  = {this.state.exclude}
+               />
+             }
+             label = "Exclude dates"
+          />
+        {this.state.exclude === true &&
+          <div>
+            <FormControl margin = "normal">
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                  id             = "excludeDate"
+                  name           = "excludeDate"
+                  label          = "Date"
+                  format         = "DD/MM/YYYY"
+                  value          = {this.state.excludeDate ? this.state.excludeDate : ''}
+                  invalidLabel   = ""
+                  autoOk
+                  onChange       = {(e) => this.handleChange(e, 'excludeDate')}
+                  leftArrowIcon  = {<i className="icon-arrow-left" />}
+                  rightArrowIcon = {<i className="icon-arrow-right" />}
+                  InputLabelProps={{
+                      shrink: true,
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </FormControl>
+          </div> }
+        </CardContent>
       </Card>
     );
   }
 }
 
-export default RRule;
+export default RRuleGenerator;

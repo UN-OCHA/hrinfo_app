@@ -1,9 +1,10 @@
 import React  from 'react';
 import lodash from 'lodash';
+import { RRule, RRuleSet} from 'rrule';
 
 import moment                  from 'moment';
 import MaterialSelect          from './MaterialSelect';
-import RRule                   from './RRule';
+import RRuleGenerator                   from './RRuleGenerator';
 import 'moment-timezone';
 
 // Material
@@ -45,7 +46,35 @@ class EventDate extends React.Component {
     this.setState(newState);
 
     if (this.props.onChange) {
-      this.props.onChange(newState.val);
+      const dates = [];
+      if (newState.val && typeof newState.val.rrule !== 'undefined' && newState.val.rrule !== '') {
+        const rruleSetStart = new RRuleSet();
+        const rruleSetEnd = new RRuleSet();
+        const optionsStart = {...newState.val.rrule, dtstart: moment.utc(newState.val.value).toDate()};
+        rruleSetStart.rrule(new RRule(optionsStart));
+        let datesEnd = [];
+        if (newState.val.value2 && newState.val.value2 !== newState.val.value) {
+          const optionsEnd = {...newState.val.rrule, dtstart: moment.utc(newState.val.value2).toDate()};
+          rruleSetEnd.rrule(new RRule(optionsEnd));
+          datesEnd = rruleSetEnd.all();
+        }
+        rruleSetStart.all().forEach(function (date, index) {
+          let dateEnd = date;
+          if (datesEnd.length > 0) {
+            dateEnd = datesEnd[index];
+          }
+          dates.push({
+            value: date,
+            value2: dateEnd,
+            timezone: newState.val.timezone.value,
+            rrule: rruleSetStart.valueOf().join("\r\n")
+          });
+        });
+      }
+      else {
+        dates.push(newState.val);
+      }
+      this.props.onChange(dates);
     }
   };
 
@@ -306,9 +335,12 @@ class EventDate extends React.Component {
 
         {/* 'Repeat' div hidden */}
         {this.state.repeats === true &&
+          <React.Fragment>
           <CardContent className = "date-container">
-              <RRule onChange={(rrule) => this.setRrule(rrule)} value={this.state.val.rrule}/>
+              <RRuleGenerator onChange={(rrule) => this.setRrule(rrule)} value={this.state.val.rrule}/>
           </CardContent>
+
+          </React.Fragment>
         }
 
         {/* Timezone */}
