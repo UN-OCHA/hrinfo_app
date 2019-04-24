@@ -72,18 +72,18 @@ class ContributorsPage extends React.Component {
       });
       await this
         .hrinfoApi
-        .getAll('assessments', params)
+        .getAll('assessments', params, false)
         .then(assessments => {
           rawData = rawData.concat(assessments);
-          return this.hrinfoApi.getAll('events', params);
+          return this.hrinfoApi.getAll('events', params, false);
         })
         .then(events => {
           rawData = rawData.concat(events);
-          return this.hrinfoApi.getAll('documents', params);
+          return this.hrinfoApi.getAll('documents', params, false);
         })
         .then(documents => {
           rawData = rawData.concat(documents);
-          return this.hrinfoApi.getAll('infographics', params);
+          return this.hrinfoApi.getAll('infographics', params, false);
         })
         .then(infographics => {
           rawData = rawData.concat(infographics);
