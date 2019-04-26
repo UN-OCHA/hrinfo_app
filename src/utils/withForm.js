@@ -7,31 +7,18 @@ import HRInfoAPI from '../api/HRInfoAPI';
 
 const withForm = function withForm(Component, hrinfoType, label, isClone = false) {
   return class extends React.Component {
-    constructor (props) {
-      super(props);
+    state = {
+      doc: {
+        label: '',
+        language: {}
+      },
+      editorState: EditorState.createEmpty(),
+      status: ''
+    };
 
-      this.state = {
-        doc: {
-          label: '',
-          language: {}
-        },
-        editorState: EditorState.createEmpty(),
-        status: ''
-      };
+    hrinfoAPI = new HRInfoAPI();
 
-      this.hrinfoAPI = new HRInfoAPI();
-
-      this.handleInputChange = this.handleInputChange.bind(this);
-      this.handleSelectChange = this.handleSelectChange.bind(this);
-      this.onEditorStateChange = this.onEditorStateChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleDelete = this.handleDelete.bind(this);
-      this.isValid = this.isValid.bind(this);
-      this.validateForm = this.validateForm.bind(this);
-      this.postFieldCollections = this.postFieldCollections.bind(this);
-    }
-
-    handleInputChange(event) {
+    handleInputChange = (event) => {
 		let value = null;
 		let name = null;
   	if (event.target) {
@@ -48,9 +35,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
 			this.setState({
 				doc: doc
 			});
-    }
+    };
 
-    handleSelectChange (name, selected) {
+    handleSelectChange = (name, selected) => {
       let doc = this.state.doc;
       doc[name] = selected;
 
@@ -90,9 +77,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       this.setState({
         doc: doc
       });
-    }
+    };
 
-    onEditorStateChange (editorState) {
+    onEditorStateChange = (editorState) => {
       let htmlOptions = {
         blockRenderers: {
           'atomic': (block) => {
@@ -114,9 +101,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         editorState,
         doc: doc
       });
-    }
+    };
 
-    handleDelete () {
+    handleDelete = () => {
       if (this.props.match.params.id) {
         const that = this;
         this.setState({
@@ -132,9 +119,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
             that.props.setAlert('danger', 'There was an error deleting your ' + label);
           });
       }
-    }
+    };
 
-    isValid (value) {
+    isValid = (value) => {
       if (typeof value === 'undefined') {
         return false;
       }
@@ -151,9 +138,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         return false;
       }
       return true;
-    }
+    };
 
-    validateForm () {
+    validateForm = () => {
       const doc = this.state.doc;
       let isValid = false;
       if (this.isValid(doc.label)) {
@@ -205,9 +192,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         }
       }
       return isValid;
-    }
+    };
 
-    async postFieldCollections (docid, field_collections) {
+    postFieldCollections = async (docid, field_collections) => {
       for (const fc of field_collections) {
         let body = {
           file: fc.file,
@@ -220,9 +207,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         await this.hrinfoAPI.saveFieldCollection(body);
       }
       return docid;
-    }
+    };
 
-    handleSubmit(event, isDraft = 0) {
+    handleSubmit = (event, isDraft = 0) => {
       event.preventDefault();
       const isValid = this.validateForm();
       if (!isValid) {
@@ -453,7 +440,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         .catch(err => {
           this.props.setAlert('danger', 'There was an error uploading your ' + label);
         });
-    }
+    };
 
     async componentDidMount() {
       if (this.props.match.params.id) {
@@ -550,6 +537,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
               delete doc.locations;
             }
             doc.isClone = true;
+            doc.label = doc.label + ' [CLONED]';
           }
           if (doc['body-html']) {
             const blocksFromHTML = convertFromHTML(doc['body-html']);
