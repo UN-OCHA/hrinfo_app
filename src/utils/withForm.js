@@ -121,7 +121,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       }
     };
 
-    isValid = (value) => {
+    isValid = (value, attribute = '') => {
       if (typeof value === 'undefined') {
         return false;
       }
@@ -137,13 +137,16 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       if (typeof value === 'string' && value === 'und') {
         return false;
       }
+      if (typeof value === 'string' && attribute === 'label' && value.indexOf('[CLONED]') !== -1) {
+        return false;
+      }
       return true;
     };
 
     validateForm = () => {
       const doc = this.state.doc;
       let isValid = false;
-      if (this.isValid(doc.label)) {
+      if (this.isValid(doc.label, 'label')) {
         if (hrinfoType === 'operations' || hrinfoType === 'organizations') {
           isValid = true;
         }
