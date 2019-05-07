@@ -212,6 +212,17 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
       return docid;
     };
 
+    isBundlesRequired = () => {
+      let isBundlesRequired = false;
+      const user = JSON.parse(localStorage.getItem('hid-user'));
+      this.state.doc.spaces.forEach(function (space) {
+        if (user.hrinfo.spaces && user.hrinfo.spaces[space.id] && user.hrinfo.spaces[space.id].indexOf('bundle member') !== -1) {
+          isBundlesRequired = true;
+        }
+      });
+      return isBundlesRequired;
+    };
+
     handleSubmit = (event, isDraft = 0) => {
       event.preventDefault();
       const isValid = this.validateForm();
@@ -581,6 +592,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
         isValid: this.isValid,
         status: this.state.status,
         hrinfoType,
+        isBundlesRequired: this.isBundlesRequired,
         label
       };
       return <Component {...this.props} {...newProps} />;

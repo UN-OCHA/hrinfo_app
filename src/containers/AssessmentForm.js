@@ -123,22 +123,24 @@ class AssessmentForm extends React.Component {
     )
     : '';
 
-    const bundles = this.props.doc.hasOperation
-    ? (
-      <FormControl fullWidth margin="normal">
-        <FormLabel>{t('groups')}</FormLabel>
-        <HRInfoSelect
-          type     =  "bundles"
-          spaces   =  {this.props.doc.spaces}
-          isMulti =  {true}
-          onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
-          value =  {this.props.doc.bundles}/>
-        <FormHelperText id="bundles-text">
-          {t('assessment.helpers.bundles')}
-        </FormHelperText>
-      </FormControl>
-    )
-    : '';
+    let bundles = '';
+    if (this.props.doc.hasOperation) {
+      const isBundlesRequired = this.props.isBundlesRequired();
+      bundles = (
+        <FormControl required={isBundlesRequired} fullWidth margin="normal">
+          <FormLabel>{t('groups')}</FormLabel>
+          <HRInfoSelect
+            type     =  "bundles"
+            spaces   =  {this.props.doc.spaces}
+            isMulti =  {true}
+            onChange  =  {(s) => this.props.handleSelectChange('bundles', s)}
+            value =  {this.props.doc.bundles}/>
+          <FormHelperText id="bundles-text">
+            {t('assessments.helpers.bundles')}
+          </FormHelperText>
+        </FormControl>
+      );
+    }
 
     let title = t('assessment.create') + ' [' + t('languages.' + i18n.languages[0]) + ']';
     if (this.props.doc.id) {
