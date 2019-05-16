@@ -555,11 +555,13 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           }
           if (doc['body-html']) {
             const blocksFromHTML = convertFromHTML(doc['body-html']);
-            const contentState = ContentState.createFromBlockArray(
-              blocksFromHTML.contentBlocks,
-              blocksFromHTML.entityMap
-            );
-            this.state.editorState = EditorState.createWithContent(contentState);
+            if (blocksFromHTML.contentBlocks && blocksFromHTML.entityMap) {
+              const contentState = ContentState.createFromBlockArray(
+                blocksFromHTML.contentBlocks,
+                blocksFromHTML.entityMap
+              );
+              this.state.editorState = EditorState.createWithContent(contentState);
+            }
           }
         }
         else {
