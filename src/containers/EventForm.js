@@ -97,7 +97,7 @@ class EventForm extends React.Component {
       const isBundlesRequired = this.props.isBundlesRequired();
       bundles = (
         <FormControl required={isBundlesRequired} fullWidth margin="normal">
-          <FormLabel>{t('groups')}</FormLabel>
+          <FormLabel focused={isBundlesRequired}>{t('groups')}</FormLabel>
           <HRInfoSelect
             type     =  "bundles"
             spaces   =  {this.props.doc.spaces}
