@@ -144,7 +144,7 @@ class HRInfoFilesAccessibility extends React.Component {
                             onChange={ (s) => this.handleChange('accessibility', s)}
                             value={this.state.accessibility} />
           </CardContent>
-          {this.state.accessibility && this.state.accessibility.value === t('files.accessibilities.request') ?
+          {this.state.accessibility && this.state.accessibility.value === "Available on Request" ?
             <CardContent className="file-container-language">
               <Typography>
                 {t('files.accessibilities.instructions')}
@@ -158,7 +158,7 @@ class HRInfoFilesAccessibility extends React.Component {
                          onChange  = { (s) => this.handleChange('instructions', s)}/>
             </CardContent> : ''
           }
-          {this.state.accessibility && this.state.accessibility.value === t('files.accessibilities.available') ?
+          {this.state.accessibility && this.state.accessibility.value === "Publicly Available" ?
             <CardContent className="file-container-language">
               <Typography>{t('url')}</Typography>
                 <TextField type      = "text"
@@ -169,7 +169,7 @@ class HRInfoFilesAccessibility extends React.Component {
             </CardContent> : ''
           }
           <CardActions className="file-container-language">
-            {this.state.accessibility && this.state.accessibility.value === t('files.accessibilities.available') ?
+            {this.state.accessibility && this.state.accessibility.value === "Publicly Available" ?
               <span className="file-container-actions">
                 <input type="file"
                        id={this.fileId}
