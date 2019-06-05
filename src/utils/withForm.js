@@ -145,6 +145,7 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
 
     validateForm = () => {
       const doc = this.state.doc;
+      const bundlesRequired = this.isBundlesRequired();
       let isValid = false;
       if (this.isValid(doc.label, 'label')) {
         if (hrinfoType === 'operations' || hrinfoType === 'organizations') {
@@ -154,7 +155,8 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           this.isValid(doc.spaces) &&
           this.isValid(doc.document_type) &&
           this.isValid(doc.publication_date) &&
-          this.isValid(doc.organizations)
+          this.isValid(doc.organizations) &&
+          (bundlesRequired && this.isValid(doc.bundles) || !bundlesRequired)
         ) {
           isValid = true;
         }
@@ -162,14 +164,17 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           this.isValid(doc.spaces) &&
           this.isValid(doc.infographic_type) &&
           this.isValid(doc.publication_date) &&
-          this.isValid(doc.organizations)
+          this.isValid(doc.organizations) &&
+          (bundlesRequired && this.isValid(doc.bundles) || !bundlesRequired)
         ) {
           isValid = true;
         }
         if (hrinfoType === 'events' &&
           this.isValid(doc.spaces) &&
           this.isValid(doc.category) &&
-          this.isValid(doc.date)) {
+          this.isValid(doc.date) &&
+          (bundlesRequired && this.isValid(doc.bundles) || !bundlesRequired)
+        ) {
           isValid = true;
         }
         if (hrinfoType === 'assessments' &&
@@ -179,7 +184,9 @@ const withForm = function withForm(Component, hrinfoType, label, isClone = false
           this.isValid(doc.organizations) &&
           this.isValid(doc.locations) &&
           this.isValid(doc.population_types) &&
-          this.isValid(doc.language)) {
+          this.isValid(doc.language) &&
+          (bundlesRequired && this.isValid(doc.bundles) || !bundlesRequired)
+        ) {
           isValid = true;
         }
         if (hrinfoType === 'offices' &&

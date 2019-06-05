@@ -379,7 +379,7 @@ class AssessmentForm extends React.Component {
 
               {/* Report */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.report)}>{t('files.assessment_report')}</FormLabel>
+                <FormLabel>{t('files.assessment_report')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('report', s)}
                                           value={this.props.doc.report} />
                 <FormHelperText id = "report-text">
@@ -407,7 +407,7 @@ class AssessmentForm extends React.Component {
 
               {/* Data */}
               <FormControl fullWidth margin = "normal">
-                <FormLabel focused error ={this.props.status === 'was-validated' && !this.props.isValid(this.props.doc.data)}>{t('files.assessment_data')}</FormLabel>
+                <FormLabel>{t('files.assessment_data')}</FormLabel>
                 <HRInfoFilesAccessibility onChange={(s) => this.props.handleSelectChange('data', s)}
                                           value={this.props.doc.data} />
                 <FormHelperText id = "data-text">
