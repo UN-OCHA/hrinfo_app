@@ -51,7 +51,7 @@ class HRInfoAPI {
         items = items.concat(data.data);
         if (data.next) {
           clonedParams.page = clonedParams.page + 1;
-          let newItems = await that.getAll(type, clonedParams);
+          let newItems = await that.getAll(type, clonedParams, anonymous);
           items = items.concat(newItems);
         }
         return items;
