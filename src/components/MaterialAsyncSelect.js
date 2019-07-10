@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { components } from 'react-select';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import Clear from '@material-ui/icons/Clear';
