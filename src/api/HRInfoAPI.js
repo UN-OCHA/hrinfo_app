@@ -2,7 +2,7 @@ import Cookies from 'universal-cookie';
 import i18next from 'i18next';
 
 let instance = null;
-const hrinfoUrl = process.env.REACT_APP_HRINFO_URL;
+const hrinfoUrl = window.__env.hrinfoUrl;
 
 class HRInfoAPI {
   constructor(token) {
